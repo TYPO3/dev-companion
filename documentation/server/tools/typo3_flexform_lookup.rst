@@ -1,4 +1,4 @@
-.. _typo3_flexform_lookup:
+:navigation-title: flexform_lookup
 
 ``typo3_flexform_lookup``
 =========================
@@ -22,9 +22,13 @@ comes back with the keys and the record fields that would have resolved. For the
 columns the table itself gets, ask typo3_schema_lookup; for what a content
 element registers, typo3_extension_describe. Answers from: installation.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -221,156 +225,160 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tt_content",
-        "field": "pi_flexform",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "tt_content",
+                "field": "pi_flexform",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    tt_content.pi_flexform resolves to this data structure in this installation, for a record with CType=acme_events_teaser.
+        .. code-block:: text
 
-    Identifier: {"type":"tca","tableName":"tt_content","fieldName":"pi_flexform","dataStructureKey":"acme_events_teaser"}
+            tt_content.pi_flexform resolves to this data structure in this installation, for a record with CType=acme_events_teaser.
 
-    Sheet sDEF — LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.teaser
-      - settings.headline (input) LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.headline — required
-      - settings.layout (select) LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.layout — items: wide, narrow
-      - settings.slides (section) LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slides
-        container slide
-          - settings.slide.title (input) LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slide.title
+            Identifier: {"type":"tca","tableName":"tt_content","fieldName":"pi_flexform","dataStructureKey":"acme_events_teaser"}
 
-    This went through the installation's own FlexFormTools, so it is what the backend form builds rather than what the referenced file says: a listener may have replaced it, a sheet in a file of its own is resolved, and every field is migrated and prepared. The record was emulated from the values above and no row was read. What is listed per field is what writing or reading the FlexForm needs; the rest of each field's prepared TCA is not carried.
+            Sheet sDEF — LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.teaser
+              - settings.headline (input) LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.headline — required
+              - settings.layout (select) LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.layout — items: wide, narrow
+              - settings.slides (section) LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slides
+                container slide
+                  - settings.slide.title (input) LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slide.title
 
-Data:
+            This went through the installation's own FlexFormTools, so it is what the backend form builds rather than what the referenced file says: a listener may have replaced it, a sheet in a file of its own is resolved, and every field is migrated and prepared. The record was emulated from the values above and no row was read. What is listed per field is what writing or reading the FlexForm needs; the rest of each field's prepared TCA is not carried.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tt_content",
-        "field": "pi_flexform",
-        "resolved": true,
-        "identifier": "{\"type\":\"tca\",\"tableName\":\"tt_content\",\"fieldName\":\"pi_flexform\",\"dataStructureKey\":\"acme_events_teaser\"}",
-        "decoded": {
-            "type": "tca",
-            "tableName": "tt_content",
-            "fieldName": "pi_flexform",
-            "dataStructureKey": "acme_events_teaser"
-        },
-        "sheets": [
+        .. code-block:: json
+
             {
-                "sheet": "sDEF",
-                "title": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.teaser",
-                "description": "",
-                "fields": [
+                "table": "tt_content",
+                "field": "pi_flexform",
+                "resolved": true,
+                "identifier": "{\"type\":\"tca\",\"tableName\":\"tt_content\",\"fieldName\":\"pi_flexform\",\"dataStructureKey\":\"acme_events_teaser\"}",
+                "decoded": {
+                    "type": "tca",
+                    "tableName": "tt_content",
+                    "fieldName": "pi_flexform",
+                    "dataStructureKey": "acme_events_teaser"
+                },
+                "sheets": [
                     {
-                        "field": "settings.headline",
-                        "label": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.headline",
+                        "sheet": "sDEF",
+                        "title": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.teaser",
                         "description": "",
-                        "type": "input",
-                        "renderType": "",
-                        "required": true,
-                        "default": null,
-                        "items": [],
-                        "containers": []
-                    },
-                    {
-                        "field": "settings.layout",
-                        "label": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.layout",
-                        "description": "",
-                        "type": "select",
-                        "renderType": "selectSingle",
-                        "required": false,
-                        "default": "wide",
-                        "items": [
+                        "fields": [
                             {
-                                "value": "wide",
-                                "label": "Wide"
+                                "field": "settings.headline",
+                                "label": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.headline",
+                                "description": "",
+                                "type": "input",
+                                "renderType": "",
+                                "required": true,
+                                "default": null,
+                                "items": [],
+                                "containers": []
                             },
                             {
-                                "value": "narrow",
-                                "label": "Narrow"
-                            }
-                        ],
-                        "containers": []
-                    },
-                    {
-                        "field": "settings.slides",
-                        "label": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slides",
-                        "description": "",
-                        "type": "section",
-                        "renderType": "",
-                        "required": false,
-                        "default": null,
-                        "items": [],
-                        "containers": [
-                            {
-                                "container": "slide",
-                                "title": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slide",
-                                "fields": [
+                                "field": "settings.layout",
+                                "label": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.layout",
+                                "description": "",
+                                "type": "select",
+                                "renderType": "selectSingle",
+                                "required": false,
+                                "default": "wide",
+                                "items": [
                                     {
-                                        "field": "settings.slide.title",
-                                        "label": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slide.title",
-                                        "description": "",
-                                        "type": "input",
-                                        "renderType": "",
-                                        "required": false,
-                                        "default": null,
-                                        "items": [],
-                                        "containers": []
+                                        "value": "wide",
+                                        "label": "Wide"
+                                    },
+                                    {
+                                        "value": "narrow",
+                                        "label": "Narrow"
+                                    }
+                                ],
+                                "containers": []
+                            },
+                            {
+                                "field": "settings.slides",
+                                "label": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slides",
+                                "description": "",
+                                "type": "section",
+                                "renderType": "",
+                                "required": false,
+                                "default": null,
+                                "items": [],
+                                "containers": [
+                                    {
+                                        "container": "slide",
+                                        "title": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slide",
+                                        "fields": [
+                                            {
+                                                "field": "settings.slide.title",
+                                                "label": "LLL:EXT:acme_events/Resources/Private/Language/locallang_db.xlf:flexform.slide.title",
+                                                "description": "",
+                                                "type": "input",
+                                                "renderType": "",
+                                                "required": false,
+                                                "default": null,
+                                                "items": [],
+                                                "containers": []
+                                            }
+                                        ]
                                     }
                                 ]
                             }
                         ]
                     }
-                ]
+                ],
+                "failure": "",
+                "declaration": {
+                    "type": "flex",
+                    "recordTypeField": "CType",
+                    "keys": [
+                        "default",
+                        "acme_events_teaser"
+                    ],
+                    "pointerFields": [],
+                    "flexFields": [
+                        "pi_flexform"
+                    ]
+                },
+                "answeredBy": "installation",
+                "owed": []
             }
-        ],
-        "failure": "",
-        "declaration": {
-            "type": "flex",
-            "recordTypeField": "CType",
-            "keys": [
-                "default",
-                "acme_events_teaser"
-            ],
-            "pointerFields": [],
-            "flexFields": [
-                "pi_flexform"
-            ]
-        },
-        "answeredBy": "installation",
-        "owed": []
-    }
 
 flexform: a column that is not one
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -387,70 +395,74 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tt_content",
-        "field": "bodytext",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "tt_content",
+                "field": "bodytext",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    tt_content.bodytext is type=text in this installation, not type=flex, so there is no data structure behind it.
+        .. code-block:: text
 
-    The resolution said: RuntimeException (1732198004): TCA misconfiguration in table "tt_content" field "bodytext" config section: The field is either not configured as type="flex" or no valid data structure is defined.
+            tt_content.bodytext is type=text in this installation, not type=flex, so there is no data structure behind it.
 
-    The flex columns of tt_content: pi_flexform.
+            The resolution said: RuntimeException (1732198004): TCA misconfiguration in table "tt_content" field "bodytext" config section: The field is either not configured as type="flex" or no valid data structure is defined.
 
-Data:
+            The flex columns of tt_content: pi_flexform.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tt_content",
-        "field": "bodytext",
-        "resolved": false,
-        "identifier": "",
-        "decoded": null,
-        "sheets": [],
-        "failure": "RuntimeException (1732198004): TCA misconfiguration in table \"tt_content\" field \"bodytext\" config section: The field is either not configured as type=\"flex\" or no valid data structure is defined.",
-        "declaration": {
-            "type": "text",
-            "recordTypeField": "CType",
-            "keys": [],
-            "pointerFields": [],
-            "flexFields": [
-                "pi_flexform"
-            ]
-        },
-        "answeredBy": "installation",
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "table": "tt_content",
+                "field": "bodytext",
+                "resolved": false,
+                "identifier": "",
+                "decoded": null,
+                "sheets": [],
+                "failure": "RuntimeException (1732198004): TCA misconfiguration in table \"tt_content\" field \"bodytext\" config section: The field is either not configured as type=\"flex\" or no valid data structure is defined.",
+                "declaration": {
+                    "type": "text",
+                    "recordTypeField": "CType",
+                    "keys": [],
+                    "pointerFields": [],
+                    "flexFields": [
+                        "pi_flexform"
+                    ]
+                },
+                "answeredBy": "installation",
+                "owed": []
+            }

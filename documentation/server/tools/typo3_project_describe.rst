@@ -1,4 +1,4 @@
-.. _typo3_project_describe:
+:navigation-title: project_describe
 
 ``typo3_project_describe``
 ==========================
@@ -24,9 +24,13 @@ a task told not to change files may run. What one of the extensions it lists
 registers — its tables, content elements, backend modules and icons — is
 typo3_extension_describe. Answers from: packages.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`packages <answer-sources-packages>`.
+    :Answers from: :ref:`packages <answer-sources-packages>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -548,809 +552,813 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    <installation> — core-checkout, TYPO3 14.3.8-dev, PHP ^8.2, and the installed core requires ^8.2 — the lowest a package here may declare
+        .. code-block:: text
 
-    There is a composer.lock here and no Composer metadata below the vendor directory it declares, so the packages it names are not on disk at all. Run "CI=true ./Build/Scripts/runTests.sh -s composerInstall" before any suite here. What a run reports otherwise is the absent install rather than the code.
+            <installation> — core-checkout, TYPO3 14.3.8-dev, PHP ^8.2, and the installed core requires ^8.2 — the lowest a package here may declare
 
-    Those PHP numbers, as they stand to each other. This project promises 8.2. The installed core requires 8.2 as well, so the two agree. No environment here states a PHP, so there is nothing to say which of the versions in that range gets run. Nothing here bounds the interpreter — there is no composer/platform_check.php below the vendor directory to read one out of — so no PHP version stops a command below from starting. All of it read from these files. Nothing was executed on any of these versions, and only the floors were compared — a version over what a constraint's own upper bound allows reads here like one inside it.
+            There is a composer.lock here and no Composer metadata below the vendor directory it declares, so the packages it names are not on disk at all. Run "CI=true ./Build/Scripts/runTests.sh -s composerInstall" before any suite here. What a run reports otherwise is the absent install rather than the code.
 
-    Extensions: none beyond TYPO3's own.
+            Those PHP numbers, as they stand to each other. This project promises 8.2. The installed core requires 8.2 as well, so the two agree. No environment here states a PHP, so there is nothing to say which of the versions in that range gets run. Nothing here bounds the interpreter — there is no composer/platform_check.php below the vendor directory to read one out of — so no PHP version stops a command below from starting. All of it read from these files. Nothing was executed on any of these versions, and only the floors were compared — a version over what a constraint's own upper bound allows reads here like one inside it.
 
-    Sites: none configured below config/sites/.
+            Extensions: none beyond TYPO3's own.
 
-    Commands this repository declares — these exist here, the core's testing suites do not. The core's suites are run by Build/Scripts/runTests.sh, which no manifest here declares. typo3_test_run_guide names the ones a change needs, with the invocation. What each one does to the sources is read off its body, never by running it: a check reports and leaves them as they are, a change rewrites something, and unknown is a body that does not say — a test suite runs the project's own code, and no declaration covers that. A task told not to change files can run the checks and nothing else. A check may still write a cache of its own; what it does not do is hand the code back different.
-    Nothing in this repository configures an environment of its own — .ddev/config.yaml and TYPO3_DEV_COMPANION_CONSOLE are what this reads — so these run wherever you run them.
-    - composer gerrit:setup (composer.json) — unknown: @gerrit:setup:commitMessageHook:enable && @gerrit:setup:preCommitHook:enable
-    - composer gerrit:setup:commitMessageHook:enable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::enableCommitMessageHook
-    - composer gerrit:setup:preCommitHook:enable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::enablePreCommitHook
-    - composer gerrit:setup:preCommitHook:disable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::disablePreCommitHook
-    - npm --prefix Build run build (Build/package.json) — change: ./node_modules/.bin/grunt Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run build-css (Build/package.json) — change: ./node_modules/.bin/grunt css Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run build-js (Build/package.json) — change: ./node_modules/.bin/grunt scripts Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run build-flags (Build/package.json) — change: ./node_modules/.bin/grunt flags-build Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run build-fonts (Build/package.json) — change: ./node_modules/.bin/grunt fonts Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run update (Build/package.json) — change: ./node_modules/.bin/grunt update Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run lint (Build/package.json) — change: ./node_modules/.bin/grunt lint Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run test (Build/package.json) — unknown: wtr Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run playwright:install (Build/package.json) — unknown: playwright install Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run playwright:open (Build/package.json) — unknown: playwright test --ui Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run playwright:run (Build/package.json) — unknown: playwright test Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run playwright:codegen (Build/package.json) — unknown: playwright codegen --ignore-https-errors Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run watch:build (Build/package.json) — change: grunt watch Run it through Build/Scripts/runTests.sh -s <suite>.
-    - npm --prefix Build run watch:test (Build/package.json) — unknown: wtr --watch Run it through Build/Scripts/runTests.sh -s <suite>.
+            Sites: none configured below config/sites/.
 
-    The Node those npm commands run on. This repository declares 24.14, in Build/.nvmrc. Its Build/package.json admits >=24.14.0 <25.0.0, which that pin is the lowest version of. No workflow below .github/workflows/ sets Node up, so nothing here says which one CI runs them on. All of it read from these files. Nothing was run to find it out, and the Node your own shell has is not among them.
+            Commands this repository declares — these exist here, the core's testing suites do not. The core's suites are run by Build/Scripts/runTests.sh, which no manifest here declares. typo3_test_run_guide names the ones a change needs, with the invocation. What each one does to the sources is read off its body, never by running it: a check reports and leaves them as they are, a change rewrites something, and unknown is a body that does not say — a test suite runs the project's own code, and no declaration covers that. A task told not to change files can run the checks and nothing else. A check may still write a cache of its own; what it does not do is hand the code back different.
+            Nothing in this repository configures an environment of its own — .ddev/config.yaml and TYPO3_DEV_COMPANION_CONSOLE are what this reads — so these run wherever you run them.
+            - composer gerrit:setup (composer.json) — unknown: @gerrit:setup:commitMessageHook:enable && @gerrit:setup:preCommitHook:enable
+            - composer gerrit:setup:commitMessageHook:enable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::enableCommitMessageHook
+            - composer gerrit:setup:preCommitHook:enable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::enablePreCommitHook
+            - composer gerrit:setup:preCommitHook:disable (composer.json) — unknown: TYPO3\CMS\Composer\Scripts\InstallerScripts::disablePreCommitHook
+            - npm --prefix Build run build (Build/package.json) — change: ./node_modules/.bin/grunt Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run build-css (Build/package.json) — change: ./node_modules/.bin/grunt css Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run build-js (Build/package.json) — change: ./node_modules/.bin/grunt scripts Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run build-flags (Build/package.json) — change: ./node_modules/.bin/grunt flags-build Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run build-fonts (Build/package.json) — change: ./node_modules/.bin/grunt fonts Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run update (Build/package.json) — change: ./node_modules/.bin/grunt update Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run lint (Build/package.json) — change: ./node_modules/.bin/grunt lint Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run test (Build/package.json) — unknown: wtr Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run playwright:install (Build/package.json) — unknown: playwright install Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run playwright:open (Build/package.json) — unknown: playwright test --ui Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run playwright:run (Build/package.json) — unknown: playwright test Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run playwright:codegen (Build/package.json) — unknown: playwright codegen --ignore-https-errors Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run watch:build (Build/package.json) — change: grunt watch Run it through Build/Scripts/runTests.sh -s <suite>.
+            - npm --prefix Build run watch:test (Build/package.json) — unknown: wtr --watch Run it through Build/Scripts/runTests.sh -s <suite>.
 
-    Whole procedures this server carries, each one typo3_rule_lookup with that documentId — no resource list needed, and none of them is answered by a search over sections. Read the one whose sentence names the work you are about to do:
-    - any/assets/how-an-asset-reaches-a-page (any) — How a Package's Asset Reaches a Page. After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.
-    - any/backend/using-the-styleguide (any) — Using the Backend Styleguide. Before you write backend markup or borrow a core backend class or icon into a package. It names what the styleguide settles and what it leaves open, so you do not read a demo as a contract for the parts it happens to include.
-    - any/icons/drawing-a-content-icon (any) — Drawing a Content Icon, and a Set of Them. When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier was refused. To register one, or to ask whether an identifier resolves, call typo3_icon_lookup.
-    - any/security/reporting-a-vulnerability (any) — Reporting a TYPO3 Vulnerability. When a finding in the TYPO3 core or in an extension is a security defect, before you write anything about it where the public can read it.
-    - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.
-    - any/testing/proving-a-condition (any) — Proving a TypoScript Condition Verdict. When you have to show that a TypoScript condition matched in the frontend, or stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition gets at evaluation time and how an extension registers one are hints instead.
-    - any/testing/proving-a-rendering-held (any) — Proving a Rendering Held Across a Change. When a change rewrites how pages render rather than what one page contains — a replaced rendering frame, a dropped dependency the site renders through, a moved template root, a rewritten layout — and you have to show that nothing else moved. To prove one unknown value a checkout does not produce, use the core rendering probe instead. To prove that one TypoScript condition matched, use the condition page.
-    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
-    - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
-    - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When you write or amend the message of a patch to the core, which is the only repository these rules describe.
-    - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
-    - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.
-    - core/contribution/rebasing-a-stale-patch (core) — Rebasing a Stale Patch. Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.
-    - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.
-    - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.
-    - core/contribution/sources (core) — TYPO3 Contribution Sources. When a question goes past what the bundled documents answer and you have to read the official guide.
-    - core/testing/exercising-asset-publishing (core) — Exercising Asset Publishing in a Functional Test. When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.
-    - core/testing/proving-a-rendering (core) — Proving What a Rendering Change Renders. When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.
-    - core/testing/scripts (core) — TYPO3 Core Script Help. When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.
-    - core/testing/timing-a-code-path (core) — Timing a Code Path Between Two Revisions. When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.
-    - extension/compatibility/a-declared-major-that-is-not-installed (extension) — Settling an API Question on a Declared Major That Is Not Installed. When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.
-    - extension/compatibility/running-on-a-declared-major-that-is-not-installed (extension) — Running a Package on a Declared Major That Is Not Installed. When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.
-    - extension/documentation/manual (extension) — Setting Up an Extension Manual. When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.
-    - extension/testing/phpunit (extension) — Setting Up PHPUnit in a TYPO3 Extension. When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.
-    - project/installation/booting-a-clone (project) — Booting a Clone Into a Running Installation. When you have to bring a repository that declares its own environment up locally and nothing is installed below it yet — a fresh clone, or one whose installation somebody tore down. For a package that declares no procedure, you create an installation instead, which starts a step earlier.
-    - project/refactoring/renaming-an-installed-extension (project) — Renaming an Extension That Already Holds Content. When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.
-    - project/testing/playwright (project) — Setting Up Playwright in a TYPO3 Project. When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither. It runs no script and speaks no HTTP.
+            The Node those npm commands run on. This repository declares 24.14, in Build/.nvmrc. Its Build/package.json admits >=24.14.0 <25.0.0, which that pin is the lowest version of. No workflow below .github/workflows/ sets Node up, so nothing here says which one CI runs them on. All of it read from these files. Nothing was run to find it out, and the Node your own shell has is not among them.
 
-Data:
+            Whole procedures this server carries, each one typo3_rule_lookup with that documentId — no resource list needed, and none of them is answered by a search over sections. Read the one whose sentence names the work you are about to do:
+            - any/assets/how-an-asset-reaches-a-page (any) — How a Package's Asset Reaches a Page. After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.
+            - any/backend/using-the-styleguide (any) — Using the Backend Styleguide. Before you write backend markup or borrow a core backend class or icon into a package. It names what the styleguide settles and what it leaves open, so you do not read a demo as a contract for the parts it happens to include.
+            - any/icons/drawing-a-content-icon (any) — Drawing a Content Icon, and a Set of Them. When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier was refused. To register one, or to ask whether an identifier resolves, call typo3_icon_lookup.
+            - any/security/reporting-a-vulnerability (any) — Reporting a TYPO3 Vulnerability. When a finding in the TYPO3 core or in an extension is a security defect, before you write anything about it where the public can read it.
+            - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.
+            - any/testing/proving-a-condition (any) — Proving a TypoScript Condition Verdict. When you have to show that a TypoScript condition matched in the frontend, or stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition gets at evaluation time and how an extension registers one are hints instead.
+            - any/testing/proving-a-rendering-held (any) — Proving a Rendering Held Across a Change. When a change rewrites how pages render rather than what one page contains — a replaced rendering frame, a dropped dependency the site renders through, a moved template root, a rewritten layout — and you have to show that nothing else moved. To prove one unknown value a checkout does not produce, use the core rendering probe instead. To prove that one TypoScript condition matched, use the condition page.
+            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+            - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
+            - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When you write or amend the message of a patch to the core, which is the only repository these rules describe.
+            - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
+            - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.
+            - core/contribution/rebasing-a-stale-patch (core) — Rebasing a Stale Patch. Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.
+            - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.
+            - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.
+            - core/contribution/sources (core) — TYPO3 Contribution Sources. When a question goes past what the bundled documents answer and you have to read the official guide.
+            - core/testing/exercising-asset-publishing (core) — Exercising Asset Publishing in a Functional Test. When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.
+            - core/testing/proving-a-rendering (core) — Proving What a Rendering Change Renders. When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.
+            - core/testing/scripts (core) — TYPO3 Core Script Help. When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.
+            - core/testing/timing-a-code-path (core) — Timing a Code Path Between Two Revisions. When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.
+            - extension/compatibility/a-declared-major-that-is-not-installed (extension) — Settling an API Question on a Declared Major That Is Not Installed. When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.
+            - extension/compatibility/running-on-a-declared-major-that-is-not-installed (extension) — Running a Package on a Declared Major That Is Not Installed. When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.
+            - extension/documentation/manual (extension) — Setting Up an Extension Manual. When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.
+            - extension/testing/phpunit (extension) — Setting Up PHPUnit in a TYPO3 Extension. When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.
+            - project/installation/booting-a-clone (project) — Booting a Clone Into a Running Installation. When you have to bring a repository that declares its own environment up locally and nothing is installed below it yet — a fresh clone, or one whose installation somebody tore down. For a package that declares no procedure, you create an installation instead, which starts a step earlier.
+            - project/refactoring/renaming-an-installed-extension (project) — Renaming an Extension That Already Holds Content. When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.
+            - project/testing/playwright (project) — Setting Up Playwright in a TYPO3 Project. When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither. It runs no script and speaks no HTTP.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "root": "<installation>",
-        "kind": "core-checkout",
-        "installed": true,
-        "installedAgainstLock": {
-            "state": "not-installed",
-            "packages": []
-        },
-        "typo3Version": "14.3.8-dev",
-        "phpConstraint": "^8.2",
-        "coreConstraint": null,
-        "corePhpConstraint": "^8.2",
-        "installedPhpBound": null,
-        "phpRelation": {
-            "floor": "8.2",
-            "coreFloor": "8.2",
-            "againstCore": "same",
-            "inEnvironment": null,
-            "bound": null,
-            "environmentAgainstBound": null
-        },
-        "node": {
-            "engines": ">=24.14.0 <25.0.0",
-            "enginesIn": "Build/package.json",
-            "nvmrc": "v24.14",
-            "nvmrcIn": "Build/.nvmrc",
-            "environment": null,
-            "ci": [],
-            "relation": {
-                "declared": "24.14",
-                "declaredBy": "Build/.nvmrc",
-                "nvmrcAgainstEngines": "same",
-                "inEnvironment": null,
-                "ci": null,
-                "inCi": null
+        .. code-block:: json
+
+            {
+                "root": "<installation>",
+                "kind": "core-checkout",
+                "installed": true,
+                "installedAgainstLock": {
+                    "state": "not-installed",
+                    "packages": []
+                },
+                "typo3Version": "14.3.8-dev",
+                "phpConstraint": "^8.2",
+                "coreConstraint": null,
+                "corePhpConstraint": "^8.2",
+                "installedPhpBound": null,
+                "phpRelation": {
+                    "floor": "8.2",
+                    "coreFloor": "8.2",
+                    "againstCore": "same",
+                    "inEnvironment": null,
+                    "bound": null,
+                    "environmentAgainstBound": null
+                },
+                "node": {
+                    "engines": ">=24.14.0 <25.0.0",
+                    "enginesIn": "Build/package.json",
+                    "nvmrc": "v24.14",
+                    "nvmrcIn": "Build/.nvmrc",
+                    "environment": null,
+                    "ci": [],
+                    "relation": {
+                        "declared": "24.14",
+                        "declaredBy": "Build/.nvmrc",
+                        "nvmrcAgainstEngines": "same",
+                        "inEnvironment": null,
+                        "ci": null,
+                        "inCi": null
+                    }
+                },
+                "environment": null,
+                "extensions": [],
+                "sites": [],
+                "database": null,
+                "commands": [
+                    {
+                        "command": "composer gerrit:setup",
+                        "source": "composer.json",
+                        "invocation": "composer gerrit:setup",
+                        "declares": "@gerrit:setup:commitMessageHook:enable && @gerrit:setup:preCommitHook:enable",
+                        "runs": "unknown",
+                        "runThrough": null
+                    },
+                    {
+                        "command": "composer gerrit:setup:commitMessageHook:enable",
+                        "source": "composer.json",
+                        "invocation": "composer gerrit:setup:commitMessageHook:enable",
+                        "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::enableCommitMessageHook",
+                        "runs": "unknown",
+                        "runThrough": null
+                    },
+                    {
+                        "command": "composer gerrit:setup:preCommitHook:enable",
+                        "source": "composer.json",
+                        "invocation": "composer gerrit:setup:preCommitHook:enable",
+                        "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::enablePreCommitHook",
+                        "runs": "unknown",
+                        "runThrough": null
+                    },
+                    {
+                        "command": "composer gerrit:setup:preCommitHook:disable",
+                        "source": "composer.json",
+                        "invocation": "composer gerrit:setup:preCommitHook:disable",
+                        "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::disablePreCommitHook",
+                        "runs": "unknown",
+                        "runThrough": null
+                    },
+                    {
+                        "command": "npm --prefix Build run build",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run build",
+                        "declares": "./node_modules/.bin/grunt",
+                        "runs": "change",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run build-css",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run build-css",
+                        "declares": "./node_modules/.bin/grunt css",
+                        "runs": "change",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run build-js",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run build-js",
+                        "declares": "./node_modules/.bin/grunt scripts",
+                        "runs": "change",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run build-flags",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run build-flags",
+                        "declares": "./node_modules/.bin/grunt flags-build",
+                        "runs": "change",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run build-fonts",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run build-fonts",
+                        "declares": "./node_modules/.bin/grunt fonts",
+                        "runs": "change",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run update",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run update",
+                        "declares": "./node_modules/.bin/grunt update",
+                        "runs": "change",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run lint",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run lint",
+                        "declares": "./node_modules/.bin/grunt lint",
+                        "runs": "change",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run test",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run test",
+                        "declares": "wtr",
+                        "runs": "unknown",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run playwright:install",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run playwright:install",
+                        "declares": "playwright install",
+                        "runs": "unknown",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run playwright:open",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run playwright:open",
+                        "declares": "playwright test --ui",
+                        "runs": "unknown",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run playwright:run",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run playwright:run",
+                        "declares": "playwright test",
+                        "runs": "unknown",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run playwright:codegen",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run playwright:codegen",
+                        "declares": "playwright codegen --ignore-https-errors",
+                        "runs": "unknown",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run watch:build",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run watch:build",
+                        "declares": "grunt watch",
+                        "runs": "change",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    },
+                    {
+                        "command": "npm --prefix Build run watch:test",
+                        "source": "Build/package.json",
+                        "invocation": "npm --prefix Build run watch:test",
+                        "declares": "wtr --watch",
+                        "runs": "unknown",
+                        "runThrough": "Build/Scripts/runTests.sh -s <suite>"
+                    }
+                ],
+                "uncheckedKinds": [],
+                "patches": [],
+                "installedAgainstLockOwed": "Run \"CI=true ./Build/Scripts/runTests.sh -s composerInstall\" before any suite here.",
+                "newProjectLine": null,
+                "newProjectLineOwed": "",
+                "guides": [
+                    {
+                        "id": "any/assets/how-an-asset-reaches-a-page",
+                        "title": "How a Package's Asset Reaches a Page",
+                        "when": "After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/backend/using-the-styleguide",
+                        "title": "Using the Backend Styleguide",
+                        "when": "Before you write backend markup or borrow a core backend class or icon into a package. It names what the styleguide settles and what it leaves open, so you do not read a demo as a contract for the parts it happens to include.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/icons/drawing-a-content-icon",
+                        "title": "Drawing a Content Icon, and a Set of Them",
+                        "when": "When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier was refused. To register one, or to ask whether an identifier resolves, call typo3_icon_lookup.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/security/reporting-a-vulnerability",
+                        "title": "Reporting a TYPO3 Vulnerability",
+                        "when": "When a finding in the TYPO3 core or in an extension is a security defect, before you write anything about it where the public can read it.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/testing/browser-check",
+                        "title": "Looking at a Change in a Real Browser",
+                        "when": "When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/testing/proving-a-condition",
+                        "title": "Proving a TypoScript Condition Verdict",
+                        "when": "When you have to show that a TypoScript condition matched in the frontend, or stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition gets at evaluation time and how an extension registers one are hints instead.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/testing/proving-a-rendering-held",
+                        "title": "Proving a Rendering Held Across a Change",
+                        "when": "When a change rewrites how pages render rather than what one page contains — a replaced rendering frame, a dropped dependency the site renders through, a moved template root, a rewritten layout — and you have to show that nothing else moved. To prove one unknown value a checkout does not produce, use the core rendering probe instead. To prove that one TypoScript condition matched, use the condition page.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/writing/the-prose-a-patch-carries",
+                        "title": "The Prose a Patch Carries",
+                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/changelog",
+                        "title": "The Changelog Entry a Core Patch Owes",
+                        "when": "When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/commit-messages",
+                        "title": "TYPO3 Core Commit Message Rules",
+                        "when": "When you write or amend the message of a patch to the core, which is the only repository these rules describe.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/committed-build-output",
+                        "title": "The Build Output the Core Commits",
+                        "when": "When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/gerrit-workflow",
+                        "title": "TYPO3 Gerrit Workflow",
+                        "when": "When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/rebasing-a-stale-patch",
+                        "title": "Rebasing a Stale Patch",
+                        "when": "Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/reporting-an-issue",
+                        "title": "Filing a TYPO3 Core Bug Report",
+                        "when": "When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/rules",
+                        "title": "TYPO3 Core Contribution Rules",
+                        "when": "Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/sources",
+                        "title": "TYPO3 Contribution Sources",
+                        "when": "When a question goes past what the bundled documents answer and you have to read the official guide.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/testing/exercising-asset-publishing",
+                        "title": "Exercising Asset Publishing in a Functional Test",
+                        "when": "When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/testing/proving-a-rendering",
+                        "title": "Proving What a Rendering Change Renders",
+                        "when": "When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/testing/scripts",
+                        "title": "TYPO3 Core Script Help",
+                        "when": "When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/testing/timing-a-code-path",
+                        "title": "Timing a Code Path Between Two Revisions",
+                        "when": "When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "extension/compatibility/a-declared-major-that-is-not-installed",
+                        "title": "Settling an API Question on a Declared Major That Is Not Installed",
+                        "when": "When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.",
+                        "scope": "extension",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "extension/compatibility/running-on-a-declared-major-that-is-not-installed",
+                        "title": "Running a Package on a Declared Major That Is Not Installed",
+                        "when": "When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.",
+                        "scope": "extension",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "extension/documentation/manual",
+                        "title": "Setting Up an Extension Manual",
+                        "when": "When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.",
+                        "scope": "extension",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "extension/testing/phpunit",
+                        "title": "Setting Up PHPUnit in a TYPO3 Extension",
+                        "when": "When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.",
+                        "scope": "extension",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "project/installation/booting-a-clone",
+                        "title": "Booting a Clone Into a Running Installation",
+                        "when": "When you have to bring a repository that declares its own environment up locally and nothing is installed below it yet — a fresh clone, or one whose installation somebody tore down. For a package that declares no procedure, you create an installation instead, which starts a step earlier.",
+                        "scope": "project",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "project/refactoring/renaming-an-installed-extension",
+                        "title": "Renaming an Extension That Already Holds Content",
+                        "when": "When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.",
+                        "scope": "project",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "project/testing/playwright",
+                        "title": "Setting Up Playwright in a TYPO3 Project",
+                        "when": "When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither. It runs no script and speaks no HTTP.",
+                        "scope": "project",
+                        "tool": "typo3_rule_lookup"
+                    }
+                ],
+                "answeredBy": "packages",
+                "owed": [
+                    "The core's suites are run by Build/Scripts/runTests.sh, which no manifest here declares. typo3_test_run_guide names the ones a change needs, with the invocation."
+                ]
             }
-        },
-        "environment": null,
-        "extensions": [],
-        "sites": [],
-        "database": null,
-        "commands": [
-            {
-                "command": "composer gerrit:setup",
-                "source": "composer.json",
-                "invocation": "composer gerrit:setup",
-                "declares": "@gerrit:setup:commitMessageHook:enable && @gerrit:setup:preCommitHook:enable",
-                "runs": "unknown",
-                "runThrough": null
-            },
-            {
-                "command": "composer gerrit:setup:commitMessageHook:enable",
-                "source": "composer.json",
-                "invocation": "composer gerrit:setup:commitMessageHook:enable",
-                "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::enableCommitMessageHook",
-                "runs": "unknown",
-                "runThrough": null
-            },
-            {
-                "command": "composer gerrit:setup:preCommitHook:enable",
-                "source": "composer.json",
-                "invocation": "composer gerrit:setup:preCommitHook:enable",
-                "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::enablePreCommitHook",
-                "runs": "unknown",
-                "runThrough": null
-            },
-            {
-                "command": "composer gerrit:setup:preCommitHook:disable",
-                "source": "composer.json",
-                "invocation": "composer gerrit:setup:preCommitHook:disable",
-                "declares": "TYPO3\\CMS\\Composer\\Scripts\\InstallerScripts::disablePreCommitHook",
-                "runs": "unknown",
-                "runThrough": null
-            },
-            {
-                "command": "npm --prefix Build run build",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run build",
-                "declares": "./node_modules/.bin/grunt",
-                "runs": "change",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run build-css",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run build-css",
-                "declares": "./node_modules/.bin/grunt css",
-                "runs": "change",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run build-js",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run build-js",
-                "declares": "./node_modules/.bin/grunt scripts",
-                "runs": "change",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run build-flags",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run build-flags",
-                "declares": "./node_modules/.bin/grunt flags-build",
-                "runs": "change",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run build-fonts",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run build-fonts",
-                "declares": "./node_modules/.bin/grunt fonts",
-                "runs": "change",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run update",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run update",
-                "declares": "./node_modules/.bin/grunt update",
-                "runs": "change",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run lint",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run lint",
-                "declares": "./node_modules/.bin/grunt lint",
-                "runs": "change",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run test",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run test",
-                "declares": "wtr",
-                "runs": "unknown",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run playwright:install",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run playwright:install",
-                "declares": "playwright install",
-                "runs": "unknown",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run playwright:open",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run playwright:open",
-                "declares": "playwright test --ui",
-                "runs": "unknown",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run playwright:run",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run playwright:run",
-                "declares": "playwright test",
-                "runs": "unknown",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run playwright:codegen",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run playwright:codegen",
-                "declares": "playwright codegen --ignore-https-errors",
-                "runs": "unknown",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run watch:build",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run watch:build",
-                "declares": "grunt watch",
-                "runs": "change",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            },
-            {
-                "command": "npm --prefix Build run watch:test",
-                "source": "Build/package.json",
-                "invocation": "npm --prefix Build run watch:test",
-                "declares": "wtr --watch",
-                "runs": "unknown",
-                "runThrough": "Build/Scripts/runTests.sh -s <suite>"
-            }
-        ],
-        "uncheckedKinds": [],
-        "patches": [],
-        "installedAgainstLockOwed": "Run \"CI=true ./Build/Scripts/runTests.sh -s composerInstall\" before any suite here.",
-        "newProjectLine": null,
-        "newProjectLineOwed": "",
-        "guides": [
-            {
-                "id": "any/assets/how-an-asset-reaches-a-page",
-                "title": "How a Package's Asset Reaches a Page",
-                "when": "After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/backend/using-the-styleguide",
-                "title": "Using the Backend Styleguide",
-                "when": "Before you write backend markup or borrow a core backend class or icon into a package. It names what the styleguide settles and what it leaves open, so you do not read a demo as a contract for the parts it happens to include.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/icons/drawing-a-content-icon",
-                "title": "Drawing a Content Icon, and a Set of Them",
-                "when": "When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier was refused. To register one, or to ask whether an identifier resolves, call typo3_icon_lookup.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/security/reporting-a-vulnerability",
-                "title": "Reporting a TYPO3 Vulnerability",
-                "when": "When a finding in the TYPO3 core or in an extension is a security defect, before you write anything about it where the public can read it.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/testing/browser-check",
-                "title": "Looking at a Change in a Real Browser",
-                "when": "When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/testing/proving-a-condition",
-                "title": "Proving a TypoScript Condition Verdict",
-                "when": "When you have to show that a TypoScript condition matched in the frontend, or stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition gets at evaluation time and how an extension registers one are hints instead.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/testing/proving-a-rendering-held",
-                "title": "Proving a Rendering Held Across a Change",
-                "when": "When a change rewrites how pages render rather than what one page contains — a replaced rendering frame, a dropped dependency the site renders through, a moved template root, a rewritten layout — and you have to show that nothing else moved. To prove one unknown value a checkout does not produce, use the core rendering probe instead. To prove that one TypoScript condition matched, use the condition page.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/writing/the-prose-a-patch-carries",
-                "title": "The Prose a Patch Carries",
-                "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/changelog",
-                "title": "The Changelog Entry a Core Patch Owes",
-                "when": "When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/commit-messages",
-                "title": "TYPO3 Core Commit Message Rules",
-                "when": "When you write or amend the message of a patch to the core, which is the only repository these rules describe.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/committed-build-output",
-                "title": "The Build Output the Core Commits",
-                "when": "When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/gerrit-workflow",
-                "title": "TYPO3 Gerrit Workflow",
-                "when": "When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/rebasing-a-stale-patch",
-                "title": "Rebasing a Stale Patch",
-                "when": "Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/reporting-an-issue",
-                "title": "Filing a TYPO3 Core Bug Report",
-                "when": "When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/rules",
-                "title": "TYPO3 Core Contribution Rules",
-                "when": "Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/sources",
-                "title": "TYPO3 Contribution Sources",
-                "when": "When a question goes past what the bundled documents answer and you have to read the official guide.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/testing/exercising-asset-publishing",
-                "title": "Exercising Asset Publishing in a Functional Test",
-                "when": "When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/testing/proving-a-rendering",
-                "title": "Proving What a Rendering Change Renders",
-                "when": "When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/testing/scripts",
-                "title": "TYPO3 Core Script Help",
-                "when": "When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/testing/timing-a-code-path",
-                "title": "Timing a Code Path Between Two Revisions",
-                "when": "When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "extension/compatibility/a-declared-major-that-is-not-installed",
-                "title": "Settling an API Question on a Declared Major That Is Not Installed",
-                "when": "When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.",
-                "scope": "extension",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "extension/compatibility/running-on-a-declared-major-that-is-not-installed",
-                "title": "Running a Package on a Declared Major That Is Not Installed",
-                "when": "When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.",
-                "scope": "extension",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "extension/documentation/manual",
-                "title": "Setting Up an Extension Manual",
-                "when": "When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.",
-                "scope": "extension",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "extension/testing/phpunit",
-                "title": "Setting Up PHPUnit in a TYPO3 Extension",
-                "when": "When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.",
-                "scope": "extension",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "project/installation/booting-a-clone",
-                "title": "Booting a Clone Into a Running Installation",
-                "when": "When you have to bring a repository that declares its own environment up locally and nothing is installed below it yet — a fresh clone, or one whose installation somebody tore down. For a package that declares no procedure, you create an installation instead, which starts a step earlier.",
-                "scope": "project",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "project/refactoring/renaming-an-installed-extension",
-                "title": "Renaming an Extension That Already Holds Content",
-                "when": "When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.",
-                "scope": "project",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "project/testing/playwright",
-                "title": "Setting Up Playwright in a TYPO3 Project",
-                "when": "When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither. It runs no script and speaks no HTTP.",
-                "scope": "project",
-                "tool": "typo3_rule_lookup"
-            }
-        ],
-        "answeredBy": "packages",
-        "owed": [
-            "The core's suites are run by Build/Scripts/runTests.sh, which no manifest here declares. typo3_test_run_guide names the ones a change needs, with the invocation."
-        ]
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    <installation> — composer-project, TYPO3 14.3.0, PHP ^8.2, and the installed core requires ^8.2 — the lowest a package here may declare
+        .. code-block:: text
 
-    There is no composer.lock here, so nothing states which versions this project fixed and nothing says whether what is installed below the vendor directory is still them.
+            <installation> — composer-project, TYPO3 14.3.0, PHP ^8.2, and the installed core requires ^8.2 — the lowest a package here may declare
 
-    Those PHP numbers, as they stand to each other. This project promises 8.2. The installed core requires 8.2 as well, so the two agree. No environment here states a PHP, so there is nothing to say which of the versions in that range gets run. Nothing here bounds the interpreter — there is no composer/platform_check.php below the vendor directory to read one out of — so no PHP version stops a command below from starting. All of it read from these files. Nothing was executed on any of these versions, and only the floors were compared — a version over what a constraint's own upper bound allows reads here like one inside it.
+            There is no composer.lock here, so nothing states which versions this project fixed and nothing says whether what is installed below the vendor directory is still them.
 
-    Extensions that are not TYPO3's own:
-    - acme_events (project) — packages/acme_events
+            Those PHP numbers, as they stand to each other. This project promises 8.2. The installed core requires 8.2 as well, so the two agree. No environment here states a PHP, so there is nothing to say which of the versions in that range gets run. Nothing here bounds the interpreter — there is no composer/platform_check.php below the vendor directory to read one out of — so no PHP version stops a command below from starting. All of it read from these files. Nothing was executed on any of these versions, and only the floors were compared — a version over what a constraint's own upper bound allows reads here like one inside it.
 
-    Files core has stopped reading, or is stopping, in the extensions this repository owns:
-    - acme_events/ext_tables.php (#109438) — The file is there and this package is not a system extension. Deprecated in v14.3. Loading it raises an E_USER_DEPRECATED, on an uncached request and while the compiled ext_tables cache entry is written; a request served from that cache raises nothing, so a functional suite with failOnDeprecation is usually what surfaces it. From v15.0 nothing reads the file, and a backend module, a route or a user setting registered there is lost without a report.
-    Four predicates are checked, each off the extension's own tree: ext_tables.php, ext_emconf.php, ext_icon.svg/.png/.gif, and ext_typoscript_setup.txt beside ext_typoscript_constants.txt. One of them missing above was looked at rather than skipped — the extension ships no such file, or what core reads first stands beside it. It is not an upgrade check: nothing else these extensions ship was read for a deprecation, and typo3_changelog_lookup is what answers that. typo3_extension_describe carries the same verdict beside everything one extension registers.
+            Extensions that are not TYPO3's own:
+            - acme_events (project) — packages/acme_events
 
-    Sites, with the sets each one depends on:
-    - fixture at https://fixture.example.org/, root page 1, sets: typo3/fluid-styled-content, acme/acme-events
+            Files core has stopped reading, or is stopping, in the extensions this repository owns:
+            - acme_events/ext_tables.php (#109438) — The file is there and this package is not a system extension. Deprecated in v14.3. Loading it raises an E_USER_DEPRECATED, on an uncached request and while the compiled ext_tables cache entry is written; a request served from that cache raises nothing, so a functional suite with failOnDeprecation is usually what surfaces it. From v15.0 nothing reads the file, and a backend module, a route or a user setting registered there is lost without a report.
+            Four predicates are checked, each off the extension's own tree: ext_tables.php, ext_emconf.php, ext_icon.svg/.png/.gif, and ext_typoscript_setup.txt beside ext_typoscript_constants.txt. One of them missing above was looked at rather than skipped — the extension ships no such file, or what core reads first stands beside it. It is not an upgrade check: nothing else these extensions ship was read for a deprecation, and typo3_changelog_lookup is what answers that. typo3_extension_describe carries the same verdict beside everything one extension registers.
 
-    Commands this repository declares — these exist here, the core's testing suites do not. One of them runs PHPUnit, and its functional half stops before the first assertion where nothing gave it database credentials — an error that reads like a broken suite rather than like a missing setting. typo3_hint_lookup with id=project-extension-tests is what such a run needs: the variables, an account allowed to create one database per test class, and the interpreter it is run on. What each one does to the sources is read off its body, never by running it: a check reports and leaves them as they are, a change rewrites something, and unknown is a body that does not say — a test suite runs the project's own code, and no declaration covers that. A task told not to change files can run the checks and nothing else. A check may still write a cache of its own; what it does not do is hand the code back different.
-    Nothing in this repository configures an environment of its own — .ddev/config.yaml and TYPO3_DEV_COMPANION_CONSOLE are what this reads — so these run wherever you run them.
-    These packages ship XLIFF and no declared command names a checker for it. That is what is not covered rather than what this repository should add, and it is read off the checkers named in the bodies above — a tool this server does not know contributes no coverage.
-    - composer cgl (composer.json) — change: php-cs-fixer fix
-    - composer cgl:ci (composer.json) — check: php-cs-fixer fix --dry-run --diff
-    - composer test (composer.json) — unknown: phpunit -c Build/phpunit.xml
+            Sites, with the sets each one depends on:
+            - fixture at https://fixture.example.org/, root page 1, sets: typo3/fluid-styled-content, acme/acme-events
 
-    Whole procedures this server carries, each one typo3_rule_lookup with that documentId — no resource list needed, and none of them is answered by a search over sections. Read the one whose sentence names the work you are about to do:
-    - any/assets/how-an-asset-reaches-a-page (any) — How a Package's Asset Reaches a Page. After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.
-    - any/backend/using-the-styleguide (any) — Using the Backend Styleguide. Before you write backend markup or borrow a core backend class or icon into a package. It names what the styleguide settles and what it leaves open, so you do not read a demo as a contract for the parts it happens to include.
-    - any/icons/drawing-a-content-icon (any) — Drawing a Content Icon, and a Set of Them. When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier was refused. To register one, or to ask whether an identifier resolves, call typo3_icon_lookup.
-    - any/security/reporting-a-vulnerability (any) — Reporting a TYPO3 Vulnerability. When a finding in the TYPO3 core or in an extension is a security defect, before you write anything about it where the public can read it.
-    - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.
-    - any/testing/proving-a-condition (any) — Proving a TypoScript Condition Verdict. When you have to show that a TypoScript condition matched in the frontend, or stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition gets at evaluation time and how an extension registers one are hints instead.
-    - any/testing/proving-a-rendering-held (any) — Proving a Rendering Held Across a Change. When a change rewrites how pages render rather than what one page contains — a replaced rendering frame, a dropped dependency the site renders through, a moved template root, a rewritten layout — and you have to show that nothing else moved. To prove one unknown value a checkout does not produce, use the core rendering probe instead. To prove that one TypoScript condition matched, use the condition page.
-    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
-    - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
-    - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When you write or amend the message of a patch to the core, which is the only repository these rules describe.
-    - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
-    - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.
-    - core/contribution/rebasing-a-stale-patch (core) — Rebasing a Stale Patch. Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.
-    - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.
-    - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.
-    - core/contribution/sources (core) — TYPO3 Contribution Sources. When a question goes past what the bundled documents answer and you have to read the official guide.
-    - core/testing/exercising-asset-publishing (core) — Exercising Asset Publishing in a Functional Test. When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.
-    - core/testing/proving-a-rendering (core) — Proving What a Rendering Change Renders. When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.
-    - core/testing/scripts (core) — TYPO3 Core Script Help. When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.
-    - core/testing/timing-a-code-path (core) — Timing a Code Path Between Two Revisions. When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.
-    - extension/compatibility/a-declared-major-that-is-not-installed (extension) — Settling an API Question on a Declared Major That Is Not Installed. When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.
-    - extension/compatibility/running-on-a-declared-major-that-is-not-installed (extension) — Running a Package on a Declared Major That Is Not Installed. When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.
-    - extension/documentation/manual (extension) — Setting Up an Extension Manual. When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.
-    - extension/testing/phpunit (extension) — Setting Up PHPUnit in a TYPO3 Extension. When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.
-    - project/installation/booting-a-clone (project) — Booting a Clone Into a Running Installation. When you have to bring a repository that declares its own environment up locally and nothing is installed below it yet — a fresh clone, or one whose installation somebody tore down. For a package that declares no procedure, you create an installation instead, which starts a step earlier.
-    - project/refactoring/renaming-an-installed-extension (project) — Renaming an Extension That Already Holds Content. When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.
-    - project/testing/playwright (project) — Setting Up Playwright in a TYPO3 Project. When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither. It runs no script and speaks no HTTP.
+            Commands this repository declares — these exist here, the core's testing suites do not. One of them runs PHPUnit, and its functional half stops before the first assertion where nothing gave it database credentials — an error that reads like a broken suite rather than like a missing setting. typo3_hint_lookup with id=project-extension-tests is what such a run needs: the variables, an account allowed to create one database per test class, and the interpreter it is run on. What each one does to the sources is read off its body, never by running it: a check reports and leaves them as they are, a change rewrites something, and unknown is a body that does not say — a test suite runs the project's own code, and no declaration covers that. A task told not to change files can run the checks and nothing else. A check may still write a cache of its own; what it does not do is hand the code back different.
+            Nothing in this repository configures an environment of its own — .ddev/config.yaml and TYPO3_DEV_COMPANION_CONSOLE are what this reads — so these run wherever you run them.
+            These packages ship XLIFF and no declared command names a checker for it. That is what is not covered rather than what this repository should add, and it is read off the checkers named in the bodies above — a tool this server does not know contributes no coverage.
+            - composer cgl (composer.json) — change: php-cs-fixer fix
+            - composer cgl:ci (composer.json) — check: php-cs-fixer fix --dry-run --diff
+            - composer test (composer.json) — unknown: phpunit -c Build/phpunit.xml
 
-Data:
+            Whole procedures this server carries, each one typo3_rule_lookup with that documentId — no resource list needed, and none of them is answered by a search over sections. Read the one whose sentence names the work you are about to do:
+            - any/assets/how-an-asset-reaches-a-page (any) — How a Package's Asset Reaches a Page. After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.
+            - any/backend/using-the-styleguide (any) — Using the Backend Styleguide. Before you write backend markup or borrow a core backend class or icon into a package. It names what the styleguide settles and what it leaves open, so you do not read a demo as a contract for the parts it happens to include.
+            - any/icons/drawing-a-content-icon (any) — Drawing a Content Icon, and a Set of Them. When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier was refused. To register one, or to ask whether an identifier resolves, call typo3_icon_lookup.
+            - any/security/reporting-a-vulnerability (any) — Reporting a TYPO3 Vulnerability. When a finding in the TYPO3 core or in an extension is a security defect, before you write anything about it where the public can read it.
+            - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.
+            - any/testing/proving-a-condition (any) — Proving a TypoScript Condition Verdict. When you have to show that a TypoScript condition matched in the frontend, or stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition gets at evaluation time and how an extension registers one are hints instead.
+            - any/testing/proving-a-rendering-held (any) — Proving a Rendering Held Across a Change. When a change rewrites how pages render rather than what one page contains — a replaced rendering frame, a dropped dependency the site renders through, a moved template root, a rewritten layout — and you have to show that nothing else moved. To prove one unknown value a checkout does not produce, use the core rendering probe instead. To prove that one TypoScript condition matched, use the condition page.
+            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+            - core/contribution/changelog (core) — The Changelog Entry a Core Patch Owes. When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.
+            - core/contribution/commit-messages (core) — TYPO3 Core Commit Message Rules. When you write or amend the message of a patch to the core, which is the only repository these rules describe.
+            - core/contribution/committed-build-output (core) — The Build Output the Core Commits. When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
+            - core/contribution/gerrit-workflow (core) — TYPO3 Gerrit Workflow. When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.
+            - core/contribution/rebasing-a-stale-patch (core) — Rebasing a Stale Patch. Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.
+            - core/contribution/reporting-an-issue (core) — Filing a TYPO3 Core Bug Report. When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.
+            - core/contribution/rules (core) — TYPO3 Core Contribution Rules. Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.
+            - core/contribution/sources (core) — TYPO3 Contribution Sources. When a question goes past what the bundled documents answer and you have to read the official guide.
+            - core/testing/exercising-asset-publishing (core) — Exercising Asset Publishing in a Functional Test. When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.
+            - core/testing/proving-a-rendering (core) — Proving What a Rendering Change Renders. When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.
+            - core/testing/scripts (core) — TYPO3 Core Script Help. When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.
+            - core/testing/timing-a-code-path (core) — Timing a Code Path Between Two Revisions. When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.
+            - extension/compatibility/a-declared-major-that-is-not-installed (extension) — Settling an API Question on a Declared Major That Is Not Installed. When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.
+            - extension/compatibility/running-on-a-declared-major-that-is-not-installed (extension) — Running a Package on a Declared Major That Is Not Installed. When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.
+            - extension/documentation/manual (extension) — Setting Up an Extension Manual. When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.
+            - extension/testing/phpunit (extension) — Setting Up PHPUnit in a TYPO3 Extension. When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.
+            - project/installation/booting-a-clone (project) — Booting a Clone Into a Running Installation. When you have to bring a repository that declares its own environment up locally and nothing is installed below it yet — a fresh clone, or one whose installation somebody tore down. For a package that declares no procedure, you create an installation instead, which starts a step earlier.
+            - project/refactoring/renaming-an-installed-extension (project) — Renaming an Extension That Already Holds Content. When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.
+            - project/testing/playwright (project) — Setting Up Playwright in a TYPO3 Project. When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither. It runs no script and speaks no HTTP.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "root": "<installation>",
-        "kind": "composer-project",
-        "installed": true,
-        "installedAgainstLock": {
-            "state": "no-lock",
-            "packages": []
-        },
-        "typo3Version": "14.3.0",
-        "phpConstraint": "^8.2",
-        "coreConstraint": "^14.3",
-        "corePhpConstraint": "^8.2",
-        "installedPhpBound": null,
-        "phpRelation": {
-            "floor": "8.2",
-            "coreFloor": "8.2",
-            "againstCore": "same",
-            "inEnvironment": null,
-            "bound": null,
-            "environmentAgainstBound": null
-        },
-        "node": null,
-        "environment": null,
-        "extensions": [
+        .. code-block:: json
+
             {
-                "key": "acme_events",
-                "path": "packages/acme_events",
-                "origin": "project",
-                "deprecatedFiles": [
+                "root": "<installation>",
+                "kind": "composer-project",
+                "installed": true,
+                "installedAgainstLock": {
+                    "state": "no-lock",
+                    "packages": []
+                },
+                "typo3Version": "14.3.0",
+                "phpConstraint": "^8.2",
+                "coreConstraint": "^14.3",
+                "corePhpConstraint": "^8.2",
+                "installedPhpBound": null,
+                "phpRelation": {
+                    "floor": "8.2",
+                    "coreFloor": "8.2",
+                    "againstCore": "same",
+                    "inEnvironment": null,
+                    "bound": null,
+                    "environmentAgainstBound": null
+                },
+                "node": null,
+                "environment": null,
+                "extensions": [
                     {
-                        "file": "ext_tables.php",
-                        "changelog": "#109438",
-                        "predicate": "The file is there and this package is not a system extension.",
-                        "cost": "Deprecated in v14.3. Loading it raises an E_USER_DEPRECATED, on an uncached request and while the compiled ext_tables cache entry is written; a request served from that cache raises nothing, so a functional suite with failOnDeprecation is usually what surfaces it. From v15.0 nothing reads the file, and a backend module, a route or a user setting registered there is lost without a report."
+                        "key": "acme_events",
+                        "path": "packages/acme_events",
+                        "origin": "project",
+                        "deprecatedFiles": [
+                            {
+                                "file": "ext_tables.php",
+                                "changelog": "#109438",
+                                "predicate": "The file is there and this package is not a system extension.",
+                                "cost": "Deprecated in v14.3. Loading it raises an E_USER_DEPRECATED, on an uncached request and while the compiled ext_tables cache entry is written; a request served from that cache raises nothing, so a functional suite with failOnDeprecation is usually what surfaces it. From v15.0 nothing reads the file, and a backend module, a route or a user setting registered there is lost without a report."
+                            }
+                        ]
                     }
+                ],
+                "sites": [
+                    {
+                        "identifier": "fixture",
+                        "base": "https://fixture.example.org/",
+                        "rootPageId": 1,
+                        "sets": [
+                            "typo3/fluid-styled-content",
+                            "acme/acme-events"
+                        ],
+                        "languages": [
+                            "English"
+                        ],
+                        "served": null
+                    }
+                ],
+                "database": null,
+                "commands": [
+                    {
+                        "command": "composer cgl",
+                        "source": "composer.json",
+                        "invocation": "composer cgl",
+                        "declares": "php-cs-fixer fix",
+                        "runs": "change",
+                        "runThrough": null
+                    },
+                    {
+                        "command": "composer cgl:ci",
+                        "source": "composer.json",
+                        "invocation": "composer cgl:ci",
+                        "declares": "php-cs-fixer fix --dry-run --diff",
+                        "runs": "check",
+                        "runThrough": null
+                    },
+                    {
+                        "command": "composer test",
+                        "source": "composer.json",
+                        "invocation": "composer test",
+                        "declares": "phpunit -c Build/phpunit.xml",
+                        "runs": "unknown",
+                        "runThrough": null
+                    }
+                ],
+                "uncheckedKinds": [
+                    "XLIFF"
+                ],
+                "patches": [],
+                "installedAgainstLockOwed": "",
+                "newProjectLine": null,
+                "newProjectLineOwed": "",
+                "guides": [
+                    {
+                        "id": "any/assets/how-an-asset-reaches-a-page",
+                        "title": "How a Package's Asset Reaches a Page",
+                        "when": "After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/backend/using-the-styleguide",
+                        "title": "Using the Backend Styleguide",
+                        "when": "Before you write backend markup or borrow a core backend class or icon into a package. It names what the styleguide settles and what it leaves open, so you do not read a demo as a contract for the parts it happens to include.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/icons/drawing-a-content-icon",
+                        "title": "Drawing a Content Icon, and a Set of Them",
+                        "when": "When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier was refused. To register one, or to ask whether an identifier resolves, call typo3_icon_lookup.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/security/reporting-a-vulnerability",
+                        "title": "Reporting a TYPO3 Vulnerability",
+                        "when": "When a finding in the TYPO3 core or in an extension is a security defect, before you write anything about it where the public can read it.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/testing/browser-check",
+                        "title": "Looking at a Change in a Real Browser",
+                        "when": "When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/testing/proving-a-condition",
+                        "title": "Proving a TypoScript Condition Verdict",
+                        "when": "When you have to show that a TypoScript condition matched in the frontend, or stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition gets at evaluation time and how an extension registers one are hints instead.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/testing/proving-a-rendering-held",
+                        "title": "Proving a Rendering Held Across a Change",
+                        "when": "When a change rewrites how pages render rather than what one page contains — a replaced rendering frame, a dropped dependency the site renders through, a moved template root, a rewritten layout — and you have to show that nothing else moved. To prove one unknown value a checkout does not produce, use the core rendering probe instead. To prove that one TypoScript condition matched, use the condition page.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/writing/the-prose-a-patch-carries",
+                        "title": "The Prose a Patch Carries",
+                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/changelog",
+                        "title": "The Changelog Entry a Core Patch Owes",
+                        "when": "When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/commit-messages",
+                        "title": "TYPO3 Core Commit Message Rules",
+                        "when": "When you write or amend the message of a patch to the core, which is the only repository these rules describe.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/committed-build-output",
+                        "title": "The Build Output the Core Commits",
+                        "when": "When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/gerrit-workflow",
+                        "title": "TYPO3 Gerrit Workflow",
+                        "when": "When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/rebasing-a-stale-patch",
+                        "title": "Rebasing a Stale Patch",
+                        "when": "Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/reporting-an-issue",
+                        "title": "Filing a TYPO3 Core Bug Report",
+                        "when": "When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/rules",
+                        "title": "TYPO3 Core Contribution Rules",
+                        "when": "Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/contribution/sources",
+                        "title": "TYPO3 Contribution Sources",
+                        "when": "When a question goes past what the bundled documents answer and you have to read the official guide.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/testing/exercising-asset-publishing",
+                        "title": "Exercising Asset Publishing in a Functional Test",
+                        "when": "When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/testing/proving-a-rendering",
+                        "title": "Proving What a Rendering Change Renders",
+                        "when": "When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/testing/scripts",
+                        "title": "TYPO3 Core Script Help",
+                        "when": "When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "core/testing/timing-a-code-path",
+                        "title": "Timing a Code Path Between Two Revisions",
+                        "when": "When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.",
+                        "scope": "core",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "extension/compatibility/a-declared-major-that-is-not-installed",
+                        "title": "Settling an API Question on a Declared Major That Is Not Installed",
+                        "when": "When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.",
+                        "scope": "extension",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "extension/compatibility/running-on-a-declared-major-that-is-not-installed",
+                        "title": "Running a Package on a Declared Major That Is Not Installed",
+                        "when": "When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.",
+                        "scope": "extension",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "extension/documentation/manual",
+                        "title": "Setting Up an Extension Manual",
+                        "when": "When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.",
+                        "scope": "extension",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "extension/testing/phpunit",
+                        "title": "Setting Up PHPUnit in a TYPO3 Extension",
+                        "when": "When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.",
+                        "scope": "extension",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "project/installation/booting-a-clone",
+                        "title": "Booting a Clone Into a Running Installation",
+                        "when": "When you have to bring a repository that declares its own environment up locally and nothing is installed below it yet — a fresh clone, or one whose installation somebody tore down. For a package that declares no procedure, you create an installation instead, which starts a step earlier.",
+                        "scope": "project",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "project/refactoring/renaming-an-installed-extension",
+                        "title": "Renaming an Extension That Already Holds Content",
+                        "when": "When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.",
+                        "scope": "project",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "project/testing/playwright",
+                        "title": "Setting Up Playwright in a TYPO3 Project",
+                        "when": "When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither. It runs no script and speaks no HTTP.",
+                        "scope": "project",
+                        "tool": "typo3_rule_lookup"
+                    }
+                ],
+                "answeredBy": "packages",
+                "owed": [
+                    "One of them runs PHPUnit, and its functional half stops before the first assertion where nothing gave it database credentials — an error that reads like a broken suite rather than like a missing setting. typo3_hint_lookup with id=project-extension-tests is what such a run needs: the variables, an account allowed to create one database per test class, and the interpreter it is run on.",
+                    "It is not an upgrade check: nothing else these extensions ship was read for a deprecation, and typo3_changelog_lookup is what answers that. typo3_extension_describe carries the same verdict beside everything one extension registers."
                 ]
             }
-        ],
-        "sites": [
-            {
-                "identifier": "fixture",
-                "base": "https://fixture.example.org/",
-                "rootPageId": 1,
-                "sets": [
-                    "typo3/fluid-styled-content",
-                    "acme/acme-events"
-                ],
-                "languages": [
-                    "English"
-                ],
-                "served": null
-            }
-        ],
-        "database": null,
-        "commands": [
-            {
-                "command": "composer cgl",
-                "source": "composer.json",
-                "invocation": "composer cgl",
-                "declares": "php-cs-fixer fix",
-                "runs": "change",
-                "runThrough": null
-            },
-            {
-                "command": "composer cgl:ci",
-                "source": "composer.json",
-                "invocation": "composer cgl:ci",
-                "declares": "php-cs-fixer fix --dry-run --diff",
-                "runs": "check",
-                "runThrough": null
-            },
-            {
-                "command": "composer test",
-                "source": "composer.json",
-                "invocation": "composer test",
-                "declares": "phpunit -c Build/phpunit.xml",
-                "runs": "unknown",
-                "runThrough": null
-            }
-        ],
-        "uncheckedKinds": [
-            "XLIFF"
-        ],
-        "patches": [],
-        "installedAgainstLockOwed": "",
-        "newProjectLine": null,
-        "newProjectLineOwed": "",
-        "guides": [
-            {
-                "id": "any/assets/how-an-asset-reaches-a-page",
-                "title": "How a Package's Asset Reaches a Page",
-                "when": "After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/backend/using-the-styleguide",
-                "title": "Using the Backend Styleguide",
-                "when": "Before you write backend markup or borrow a core backend class or icon into a package. It names what the styleguide settles and what it leaves open, so you do not read a demo as a contract for the parts it happens to include.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/icons/drawing-a-content-icon",
-                "title": "Drawing a Content Icon, and a Set of Them",
-                "when": "When an extension registers content elements or record types of its own and needs icons for them, and when a borrowed core identifier was refused. To register one, or to ask whether an identifier resolves, call typo3_icon_lookup.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/security/reporting-a-vulnerability",
-                "title": "Reporting a TYPO3 Vulnerability",
-                "when": "When a finding in the TYPO3 core or in an extension is a security defect, before you write anything about it where the public can read it.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/testing/browser-check",
-                "title": "Looking at a Change in a Real Browser",
-                "when": "When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/testing/proving-a-condition",
-                "title": "Proving a TypoScript Condition Verdict",
-                "when": "When you have to show that a TypoScript condition matched in the frontend, or stopped matching — a repair judged before and after, or a template swap that may never have fired. What a condition gets at evaluation time and how an extension registers one are hints instead.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/testing/proving-a-rendering-held",
-                "title": "Proving a Rendering Held Across a Change",
-                "when": "When a change rewrites how pages render rather than what one page contains — a replaced rendering frame, a dropped dependency the site renders through, a moved template root, a rewritten layout — and you have to show that nothing else moved. To prove one unknown value a checkout does not produce, use the core rendering probe instead. To prove that one TypoScript condition matched, use the condition page.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/writing/the-prose-a-patch-carries",
-                "title": "The Prose a Patch Carries",
-                "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/changelog",
-                "title": "The Changelog Entry a Core Patch Owes",
-                "when": "When a core change adds, removes, deprecates or announces something an installation notices, and when a review asks for the entry.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/commit-messages",
-                "title": "TYPO3 Core Commit Message Rules",
-                "when": "When you write or amend the message of a patch to the core, which is the only repository these rules describe.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/committed-build-output",
-                "title": "The Build Output the Core Commits",
-                "when": "When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/gerrit-workflow",
-                "title": "TYPO3 Gerrit Workflow",
-                "when": "When a change is ready to leave the checkout, when you have to read or try out a patch under review locally, when you have to change a patch already under review — your own or another author's — or when you have to answer a reviewer's comment and keep its thread open or resolve it.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/rebasing-a-stale-patch",
-                "title": "Rebasing a Stale Patch",
-                "when": "Before you report that a patch rebased onto current code still holds — a change hundreds of commits behind its base, or one that rewrites, moves or deletes a class rather than edits it. typo3-core-patch-checkout says what a conflicting hunk means and where to stop; this page says what survives a rebase that raised no conflict at all.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/reporting-an-issue",
-                "title": "Filing a TYPO3 Core Bug Report",
-                "when": "When you write the title and the description of a core bug report, or fill in the new-issue form on forge.typo3.org — the report a patch's Resolves: trailer points at included.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/rules",
-                "title": "TYPO3 Core Contribution Rules",
-                "when": "Before you write or review a patch to the TYPO3 core, to know what makes it ready to merge.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/contribution/sources",
-                "title": "TYPO3 Contribution Sources",
-                "when": "When a question goes past what the bundled documents answer and you have to read the official guide.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/testing/exercising-asset-publishing",
-                "title": "Exercising Asset Publishing in a Functional Test",
-                "when": "When a functional test has to drive the system resource publisher rather than stub it — to prove that a publishing failure reaches a caller, or that it does not. It holds from TYPO3 14, where the SystemResource namespace arrived. How a package registers its public resources is a hint instead.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/testing/proving-a-rendering",
-                "title": "Proving What a Rendering Change Renders",
-                "when": "When a finding turns on what a rendering contains and nothing in the checkout produces it, so the value is the unknown rather than the expectation. A TypoScript change whose diff does not say what it renders is one case. A PHP change to the frontend request pipeline, an error handler or a page renderer caller is the same one. To assert a response whose expected value you already know, use the frontend request hint instead.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/testing/scripts",
-                "title": "TYPO3 Core Script Help",
-                "when": "When you run a suite inside a core checkout. typo3_test_run_guide says which suite a change needs, and it filters them by version.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "core/testing/timing-a-code-path",
-                "title": "Timing a Code Path Between Two Revisions",
-                "when": "When a finding turns on whether a change is slower or faster than the code it replaces, and nothing in the checkout measures it. A review that asks about performance is the case. To find out what a rendering contains rather than what it costs, use the rendering probe instead.",
-                "scope": "core",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "extension/compatibility/a-declared-major-that-is-not-installed",
-                "title": "Settling an API Question on a Declared Major That Is Not Installed",
-                "when": "When the code has to run on more than one declared major and one of them is installed — before you write against an API the installed copy happens to have. It hands you the invocation per symbol: one git call against the branch that is not installed, or that major's released package where no checkout is at hand. Nothing here bundles a per-version list of identifiers, because the branch is what carries the shape.",
-                "scope": "extension",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "extension/compatibility/running-on-a-declared-major-that-is-not-installed",
-                "title": "Running a Package on a Declared Major That Is Not Installed",
-                "when": "When a change has to hold on more than one declared major and the installation supplies one of them — before you write the claim about the other one down. It says what CI already covers, where the second Composer root goes, what it costs the installation, and how you tell a cell that could have failed from one that could not.",
-                "scope": "extension",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "extension/documentation/manual",
-                "title": "Setting Up an Extension Manual",
-                "when": "When an extension has no manual yet, or has one older than guides.xml. The hint below says what a manual is for and where it lives; this page says what goes in the directory.",
-                "scope": "extension",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "extension/testing/phpunit",
-                "title": "Setting Up PHPUnit in a TYPO3 Extension",
-                "when": "When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.",
-                "scope": "extension",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "project/installation/booting-a-clone",
-                "title": "Booting a Clone Into a Running Installation",
-                "when": "When you have to bring a repository that declares its own environment up locally and nothing is installed below it yet — a fresh clone, or one whose installation somebody tore down. For a package that declares no procedure, you create an installation instead, which starts a step earlier.",
-                "scope": "project",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "project/refactoring/renaming-an-installed-extension",
-                "title": "Renaming an Extension That Already Holds Content",
-                "when": "When an extension key, a table name, a CType or a vendor prefix changes in a project whose installation already has records — the mirror of booting a clone, where the code moved out from under a database that stayed.",
-                "scope": "project",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "project/testing/playwright",
-                "title": "Setting Up Playwright in a TYPO3 Project",
-                "when": "When a repository that serves a TYPO3 site has no browser suite yet, for what a visitor gets and for what an editor does. A rendering test through a functional test is neither. It runs no script and speaks no HTTP.",
-                "scope": "project",
-                "tool": "typo3_rule_lookup"
-            }
-        ],
-        "answeredBy": "packages",
-        "owed": [
-            "One of them runs PHPUnit, and its functional half stops before the first assertion where nothing gave it database credentials — an error that reads like a broken suite rather than like a missing setting. typo3_hint_lookup with id=project-extension-tests is what such a run needs: the variables, an account allowed to create one database per test class, and the interpreter it is run on.",
-            "It is not an upgrade check: nothing else these extensions ship was read for a deprecation, and typo3_changelog_lookup is what answers that. typo3_extension_describe carries the same verdict beside everything one extension registers."
-        ]
-    }

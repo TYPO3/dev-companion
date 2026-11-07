@@ -1,4 +1,4 @@
-.. _typo3_feedback_list:
+:navigation-title: feedback_list
 
 ``typo3_feedback_list``
 =======================
@@ -11,9 +11,13 @@ about. The archive keeps a feedback a session worked off, so status="closed"
 answers "what became of what I reported". That is the feedback as it arrived,
 plus the commit that closed it. Answers from: checkout.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`checkout <answer-sources-checkout>`.
+    :Answers from: :ref:`checkout <answer-sources-checkout>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----

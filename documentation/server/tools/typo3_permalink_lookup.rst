@@ -1,4 +1,4 @@
-.. _typo3_permalink_lookup:
+:navigation-title: permalink_lookup
 
 ``typo3_permalink_lookup``
 ==========================
@@ -21,9 +21,13 @@ does not say so. This answers where a link points and not what a manual says
 about a subject — for the prose, ask typo3_documentation_lookup. Answers from:
 network.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
+.. facts::
 
-Answers from :ref:`network <answer-sources-network>`.
+    :Answers from: :ref:`network <answer-sources-network>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``true``
 
 Takes
 -----
@@ -178,136 +182,138 @@ Called with:
         "targetVersion": "14.3"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    docs.typo3.org permalinks for TYPO3 14.3.
-    Source: https://docs.typo3.org
+        .. code-block:: text
 
-    ## t3tca:columns-onchange — resolves
-    TCA Reference · 14.3 · https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#confval-columns-onchange
-    Registered as: std:confval
-    The same target is also confval-columns-onchange (std:label). Write t3tca:columns-onchange.
+            docs.typo3.org permalinks for TYPO3 14.3.
+            Source: https://docs.typo3.org
 
-    ## typo3-cms-lowlevel:start — does not resolve
-    Low Level registers no "start" on 14.3.
+            ## t3tca:columns-onchange — resolves
+            TCA Reference · 14.3 · https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#confval-columns-onchange
+            Registered as: std:confval
+            The same target is also confval-columns-onchange (std:label). Write t3tca:columns-onchange.
 
-    ## https://docs.typo3.org/m/typo3/reference-tca/11.5/en-us/Columns/Properties/OnChange.html
-    TCA Reference at 14.3 has no page Columns/Properties/OnChange.html. The near names below are what its inventory carries.
-    - t3tca:columns-properties-onchange (std:label) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#columns-properties-onChange
-    - t3tca:columns-onchange (std:confval) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#confval-columns-onchange
-    - t3tca:columns-properties (std:label) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#columns-properties
-    - t3tca:columns-file-properties (std:label) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/ColumnsConfig/Type/File/Index.html#columns-file-properties
-    - t3tca:columns-flex-properties (std:label) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/ColumnsConfig/Type/Flex/Index.html#columns-flex-properties
+            ## typo3-cms-lowlevel:start — does not resolve
+            Low Level registers no "start" on 14.3.
 
-Data:
+            ## https://docs.typo3.org/m/typo3/reference-tca/11.5/en-us/Columns/Properties/OnChange.html
+            TCA Reference at 14.3 has no page Columns/Properties/OnChange.html. The near names below are what its inventory carries.
+            - t3tca:columns-properties-onchange (std:label) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#columns-properties-onChange
+            - t3tca:columns-onchange (std:confval) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#confval-columns-onchange
+            - t3tca:columns-properties (std:label) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#columns-properties
+            - t3tca:columns-file-properties (std:label) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/ColumnsConfig/Type/File/Index.html#columns-file-properties
+            - t3tca:columns-flex-properties (std:label) — https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/ColumnsConfig/Type/Flex/Index.html#columns-flex-properties
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "answered",
-        "targetVersion": "14.3",
-        "source": "https://docs.typo3.org",
-        "identifiers": [
+        .. code-block:: json
+
             {
-                "identifier": "t3tca:columns-onchange",
-                "shortcode": "t3tca",
-                "name": "columns-onchange",
-                "branch": "14.3",
-                "resolved": true,
-                "manual": "typo3/reference-tca",
-                "manualTitle": "TCA Reference",
-                "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#confval-columns-onchange",
-                "page": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html",
-                "anchor": "confval-columns-onchange",
-                "roles": [
-                    "std:confval"
-                ],
-                "alsoKnownAs": [
+                "status": "answered",
+                "targetVersion": "14.3",
+                "source": "https://docs.typo3.org",
+                "identifiers": [
                     {
-                        "name": "confval-columns-onchange",
-                        "roles": [
-                            "std:label"
-                        ]
-                    }
-                ],
-                "preferred": "columns-onchange",
-                "answeredBranch": "14.3",
-                "reason": null
-            },
-            {
-                "identifier": "typo3-cms-lowlevel:start",
-                "shortcode": "typo3-cms-lowlevel",
-                "name": "start",
-                "branch": "14.3",
-                "resolved": false,
-                "manual": "typo3/cms-lowlevel",
-                "manualTitle": "Low Level",
-                "url": null,
-                "page": null,
-                "anchor": null,
-                "roles": [],
-                "alsoKnownAs": [],
-                "preferred": null,
-                "answeredBranch": "14.3",
-                "reason": "Low Level registers no \"start\" on 14.3."
-            }
-        ],
-        "urls": [
-            {
-                "url": "https://docs.typo3.org/m/typo3/reference-tca/11.5/en-us/Columns/Properties/OnChange.html",
-                "shortcode": "t3tca",
-                "manual": "typo3/reference-tca",
-                "branch": "14.3",
-                "urlBranch": "11.5",
-                "page": "Columns/Properties/OnChange.html",
-                "anchor": null,
-                "identifiers": [],
-                "nearest": [
-                    {
-                        "name": "columns-properties-onchange",
-                        "roles": [
-                            "std:label"
-                        ],
-                        "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#columns-properties-onChange"
-                    },
-                    {
+                        "identifier": "t3tca:columns-onchange",
+                        "shortcode": "t3tca",
                         "name": "columns-onchange",
+                        "branch": "14.3",
+                        "resolved": true,
+                        "manual": "typo3/reference-tca",
+                        "manualTitle": "TCA Reference",
+                        "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#confval-columns-onchange",
+                        "page": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html",
+                        "anchor": "confval-columns-onchange",
                         "roles": [
                             "std:confval"
                         ],
-                        "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#confval-columns-onchange"
+                        "alsoKnownAs": [
+                            {
+                                "name": "confval-columns-onchange",
+                                "roles": [
+                                    "std:label"
+                                ]
+                            }
+                        ],
+                        "preferred": "columns-onchange",
+                        "answeredBranch": "14.3",
+                        "reason": null
                     },
                     {
-                        "name": "columns-properties",
-                        "roles": [
-                            "std:label"
-                        ],
-                        "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#columns-properties"
-                    },
-                    {
-                        "name": "columns-file-properties",
-                        "roles": [
-                            "std:label"
-                        ],
-                        "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/ColumnsConfig/Type/File/Index.html#columns-file-properties"
-                    },
-                    {
-                        "name": "columns-flex-properties",
-                        "roles": [
-                            "std:label"
-                        ],
-                        "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/ColumnsConfig/Type/Flex/Index.html#columns-flex-properties"
+                        "identifier": "typo3-cms-lowlevel:start",
+                        "shortcode": "typo3-cms-lowlevel",
+                        "name": "start",
+                        "branch": "14.3",
+                        "resolved": false,
+                        "manual": "typo3/cms-lowlevel",
+                        "manualTitle": "Low Level",
+                        "url": null,
+                        "page": null,
+                        "anchor": null,
+                        "roles": [],
+                        "alsoKnownAs": [],
+                        "preferred": null,
+                        "answeredBranch": "14.3",
+                        "reason": "Low Level registers no \"start\" on 14.3."
                     }
                 ],
-                "answeredBranch": "14.3",
-                "reason": "TCA Reference at 14.3 has no page Columns/Properties/OnChange.html. The near names below are what its inventory carries."
+                "urls": [
+                    {
+                        "url": "https://docs.typo3.org/m/typo3/reference-tca/11.5/en-us/Columns/Properties/OnChange.html",
+                        "shortcode": "t3tca",
+                        "manual": "typo3/reference-tca",
+                        "branch": "14.3",
+                        "urlBranch": "11.5",
+                        "page": "Columns/Properties/OnChange.html",
+                        "anchor": null,
+                        "identifiers": [],
+                        "nearest": [
+                            {
+                                "name": "columns-properties-onchange",
+                                "roles": [
+                                    "std:label"
+                                ],
+                                "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#columns-properties-onChange"
+                            },
+                            {
+                                "name": "columns-onchange",
+                                "roles": [
+                                    "std:confval"
+                                ],
+                                "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#confval-columns-onchange"
+                            },
+                            {
+                                "name": "columns-properties",
+                                "roles": [
+                                    "std:label"
+                                ],
+                                "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/Columns/Index.html#columns-properties"
+                            },
+                            {
+                                "name": "columns-file-properties",
+                                "roles": [
+                                    "std:label"
+                                ],
+                                "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/ColumnsConfig/Type/File/Index.html#columns-file-properties"
+                            },
+                            {
+                                "name": "columns-flex-properties",
+                                "roles": [
+                                    "std:label"
+                                ],
+                                "url": "https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/ColumnsConfig/Type/Flex/Index.html#columns-flex-properties"
+                            }
+                        ],
+                        "answeredBranch": "14.3",
+                        "reason": "TCA Reference at 14.3 has no page Columns/Properties/OnChange.html. The near names below are what its inventory carries."
+                    }
+                ],
+                "unavailable": null,
+                "owed": []
             }
-        ],
-        "unavailable": null,
-        "owed": []
-    }
 
 permalink: no manual is known for the shortcode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -323,48 +329,50 @@ Called with:
         "targetVersion": "14.3"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    docs.typo3.org permalinks for TYPO3 14.3.
-    Source: https://docs.typo3.org
-    Could not answer: No manual named by this call could be read from docs.typo3.org.
+        .. code-block:: text
 
-Data:
+            docs.typo3.org permalinks for TYPO3 14.3.
+            Source: https://docs.typo3.org
+            Could not answer: No manual named by this call could be read from docs.typo3.org.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "unavailable",
-        "targetVersion": "14.3",
-        "source": "https://docs.typo3.org",
-        "identifiers": [
+        .. code-block:: json
+
             {
-                "identifier": "quantumflux:start",
-                "shortcode": "quantumflux",
-                "name": "start",
-                "branch": "14.3",
-                "resolved": false,
-                "manual": null,
-                "manualTitle": null,
-                "url": null,
-                "page": null,
-                "anchor": null,
-                "roles": [],
-                "alsoKnownAs": [],
-                "preferred": null,
-                "answeredBranch": null,
-                "reason": "No manual is known for the shortcode \"quantumflux\". The named ones are t3coreapi, t3tsref, t3tca, t3viewhelper, changelog, t3start, t3sitepackage, t3editors, t3contribute, h2document, t3renderguides, fluid, and a system extension is addressed by its Composer package name, for example typo3/cms-felogin or typo3-cms-felogin."
+                "status": "unavailable",
+                "targetVersion": "14.3",
+                "source": "https://docs.typo3.org",
+                "identifiers": [
+                    {
+                        "identifier": "quantumflux:start",
+                        "shortcode": "quantumflux",
+                        "name": "start",
+                        "branch": "14.3",
+                        "resolved": false,
+                        "manual": null,
+                        "manualTitle": null,
+                        "url": null,
+                        "page": null,
+                        "anchor": null,
+                        "roles": [],
+                        "alsoKnownAs": [],
+                        "preferred": null,
+                        "answeredBranch": null,
+                        "reason": "No manual is known for the shortcode \"quantumflux\". The named ones are t3coreapi, t3tsref, t3tca, t3viewhelper, changelog, t3start, t3sitepackage, t3editors, t3contribute, h2document, t3renderguides, fluid, and a system extension is addressed by its Composer package name, for example typo3/cms-felogin or typo3-cms-felogin."
+                    }
+                ],
+                "urls": [],
+                "unavailable": {
+                    "cause": "source-not-answering",
+                    "reason": "No manual named by this call could be read from docs.typo3.org."
+                },
+                "owed": []
             }
-        ],
-        "urls": [],
-        "unavailable": {
-            "cause": "source-not-answering",
-            "reason": "No manual named by this call could be read from docs.typo3.org."
-        },
-        "owed": []
-    }
 
 permalink: unsupported version
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -380,27 +388,29 @@ Called with:
         "targetVersion": "999"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    docs.typo3.org permalinks for TYPO3 999.
-    Source: https://docs.typo3.org
-    Could not answer: TYPO3 999 is outside the covered versions: 12.4, 13.4, 14.3, main.
+        .. code-block:: text
 
-Data:
+            docs.typo3.org permalinks for TYPO3 999.
+            Source: https://docs.typo3.org
+            Could not answer: TYPO3 999 is outside the covered versions: 12.4, 13.4, 14.3, main.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "unavailable",
-        "targetVersion": "999",
-        "source": "https://docs.typo3.org",
-        "identifiers": [],
-        "urls": [],
-        "unavailable": {
-            "cause": "version-not-covered",
-            "reason": "TYPO3 999 is outside the covered versions: 12.4, 13.4, 14.3, main."
-        },
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "status": "unavailable",
+                "targetVersion": "999",
+                "source": "https://docs.typo3.org",
+                "identifiers": [],
+                "urls": [],
+                "unavailable": {
+                    "cause": "version-not-covered",
+                    "reason": "TYPO3 999 is outside the covered versions: 12.4, 13.4, 14.3, main."
+                },
+                "owed": []
+            }

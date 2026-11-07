@@ -1,4 +1,4 @@
-.. _typo3_icon_lookup:
+:navigation-title: icon_lookup
 
 ``typo3_icon_lookup``
 =====================
@@ -20,10 +20,13 @@ Identifiers spell shapes rather than intents, so the search maps concept words:
 the identifiers and <core:icon> renders them, and a frontend template can use
 neither. Answers from: installation, packages.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`,
-:ref:`packages <answer-sources-packages>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`, :ref:`packages <answer-sources-packages>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -194,473 +197,477 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.
+        .. code-block:: text
 
-    "actions-open" is registered in <installation>; 22 related identifier(s) follow as suggestions:
-    - actions-open
-      matched: name part "open", exact identifier
-    - actions-document-history-open
-      alias of actions-history
-      matched: name part "open"
-    - actions-document-open
-      alias of actions-document-edit
-      matched: name part "open"
-    - actions-document-open-read-only
-      alias of actions-document-readonly
-      matched: name part "open"
-    - actions-envelope-open
-      matched: name part "open"
-    - actions-envelope-open-text
-      matched: name part "open"
-    - actions-page-open
-      alias of actions-file-edit
-      matched: name part "open"
-    - actions-system-help-open
-      alias of actions-question
-      matched: name part "open"
-    - actions-system-list-open
-      alias of actions-list-alternative
-      matched: name part "open"
-    - actions-system-pagemodule-open
-      alias of actions-file-search
-      matched: name part "open"
-    - actions-system-tree-search-open
-      alias of actions-filter
-      matched: name part "open"
-    - actions-system-typoscript-documentation-open
-      alias of actions-notebook-typoscript
-      matched: name part "open"
-    - actions-version-page-open
-      alias of actions-file-edit
-      matched: name part "open"
-    - actions-window-open
-      matched: name part "open"
-    - mimetypes-open-document-database
-      matched: name part "open"
-    - mimetypes-open-document-drawing
-      matched: name part "open"
-    - mimetypes-open-document-formula
-      matched: name part "open"
-    - mimetypes-open-document-presentation
-      matched: name part "open"
-    - mimetypes-open-document-spreadsheet
-      matched: name part "open"
-    - mimetypes-open-document-text
-      matched: name part "open"
-    - actions-file-openoffice
-      matched: substring "open"
-    - apps-filetree-folder-opened
-      matched: substring "open"
-    - apps-toolbar-menu-opendocs
-      alias of actions-file
-      matched: substring "open"
+            These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.
 
-Data:
+            "actions-open" is registered in <installation>; 22 related identifier(s) follow as suggestions:
+            - actions-open
+              matched: name part "open", exact identifier
+            - actions-document-history-open
+              alias of actions-history
+              matched: name part "open"
+            - actions-document-open
+              alias of actions-document-edit
+              matched: name part "open"
+            - actions-document-open-read-only
+              alias of actions-document-readonly
+              matched: name part "open"
+            - actions-envelope-open
+              matched: name part "open"
+            - actions-envelope-open-text
+              matched: name part "open"
+            - actions-page-open
+              alias of actions-file-edit
+              matched: name part "open"
+            - actions-system-help-open
+              alias of actions-question
+              matched: name part "open"
+            - actions-system-list-open
+              alias of actions-list-alternative
+              matched: name part "open"
+            - actions-system-pagemodule-open
+              alias of actions-file-search
+              matched: name part "open"
+            - actions-system-tree-search-open
+              alias of actions-filter
+              matched: name part "open"
+            - actions-system-typoscript-documentation-open
+              alias of actions-notebook-typoscript
+              matched: name part "open"
+            - actions-version-page-open
+              alias of actions-file-edit
+              matched: name part "open"
+            - actions-window-open
+              matched: name part "open"
+            - mimetypes-open-document-database
+              matched: name part "open"
+            - mimetypes-open-document-drawing
+              matched: name part "open"
+            - mimetypes-open-document-formula
+              matched: name part "open"
+            - mimetypes-open-document-presentation
+              matched: name part "open"
+            - mimetypes-open-document-spreadsheet
+              matched: name part "open"
+            - mimetypes-open-document-text
+              matched: name part "open"
+            - actions-file-openoffice
+              matched: substring "open"
+            - apps-filetree-folder-opened
+              matched: substring "open"
+            - apps-toolbar-menu-opendocs
+              alias of actions-file
+              matched: substring "open"
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "actions-open",
-        "matchCount": 1,
-        "suggestionCount": 22,
-        "exactMatch": true,
-        "icons": [
+        .. code-block:: json
+
             {
-                "identifier": "actions-open",
-                "category": "actions",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
+                "query": "actions-open",
+                "matchCount": 1,
+                "suggestionCount": 22,
+                "exactMatch": true,
+                "icons": [
+                    {
+                        "identifier": "actions-open",
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 1004,
+                        "why": [
+                            "name part \"open\"",
+                            "exact identifier"
+                        ]
+                    },
+                    {
+                        "identifier": "actions-document-history-open",
+                        "category": "actions",
+                        "aliasOf": "actions-history",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-document-open",
+                        "category": "actions",
+                        "aliasOf": "actions-document-edit",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-document-open-read-only",
+                        "category": "actions",
+                        "aliasOf": "actions-document-readonly",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-envelope-open",
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-envelope-open-text",
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-page-open",
+                        "category": "actions",
+                        "aliasOf": "actions-file-edit",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-system-help-open",
+                        "category": "actions",
+                        "aliasOf": "actions-question",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-system-list-open",
+                        "category": "actions",
+                        "aliasOf": "actions-list-alternative",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-system-pagemodule-open",
+                        "category": "actions",
+                        "aliasOf": "actions-file-search",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-system-tree-search-open",
+                        "category": "actions",
+                        "aliasOf": "actions-filter",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-system-typoscript-documentation-open",
+                        "category": "actions",
+                        "aliasOf": "actions-notebook-typoscript",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-version-page-open",
+                        "category": "actions",
+                        "aliasOf": "actions-file-edit",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-window-open",
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "mimetypes-open-document-database",
+                        "category": "mimetypes",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "mimetypes-open-document-drawing",
+                        "category": "mimetypes",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "mimetypes-open-document-formula",
+                        "category": "mimetypes",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "mimetypes-open-document-presentation",
+                        "category": "mimetypes",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "mimetypes-open-document-spreadsheet",
+                        "category": "mimetypes",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "mimetypes-open-document-text",
+                        "category": "mimetypes",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "actions-file-openoffice",
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 2,
+                        "why": [
+                            "substring \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "apps-filetree-folder-opened",
+                        "category": "apps",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 2,
+                        "why": [
+                            "substring \"open\""
+                        ]
+                    },
+                    {
+                        "identifier": "apps-toolbar-menu-opendocs",
+                        "category": "apps",
+                        "aliasOf": "actions-file",
+                        "source": "t3icons",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 2,
+                        "why": [
+                            "substring \"open\""
+                        ]
+                    }
                 ],
-                "score": 1004,
-                "why": [
-                    "name part \"open\"",
-                    "exact identifier"
-                ]
-            },
-            {
-                "identifier": "actions-document-history-open",
-                "category": "actions",
-                "aliasOf": "actions-history",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-document-open",
-                "category": "actions",
-                "aliasOf": "actions-document-edit",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-document-open-read-only",
-                "category": "actions",
-                "aliasOf": "actions-document-readonly",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-envelope-open",
-                "category": "actions",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-envelope-open-text",
-                "category": "actions",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-page-open",
-                "category": "actions",
-                "aliasOf": "actions-file-edit",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-system-help-open",
-                "category": "actions",
-                "aliasOf": "actions-question",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-system-list-open",
-                "category": "actions",
-                "aliasOf": "actions-list-alternative",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-system-pagemodule-open",
-                "category": "actions",
-                "aliasOf": "actions-file-search",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-system-tree-search-open",
-                "category": "actions",
-                "aliasOf": "actions-filter",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-system-typoscript-documentation-open",
-                "category": "actions",
-                "aliasOf": "actions-notebook-typoscript",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-version-page-open",
-                "category": "actions",
-                "aliasOf": "actions-file-edit",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-window-open",
-                "category": "actions",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "mimetypes-open-document-database",
-                "category": "mimetypes",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "mimetypes-open-document-drawing",
-                "category": "mimetypes",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "mimetypes-open-document-formula",
-                "category": "mimetypes",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "mimetypes-open-document-presentation",
-                "category": "mimetypes",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "mimetypes-open-document-spreadsheet",
-                "category": "mimetypes",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "mimetypes-open-document-text",
-                "category": "mimetypes",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
-            },
-            {
-                "identifier": "actions-file-openoffice",
-                "category": "actions",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 2,
-                "why": [
-                    "substring \"open\""
-                ]
-            },
-            {
-                "identifier": "apps-filetree-folder-opened",
-                "category": "apps",
-                "aliasOf": null,
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 2,
-                "why": [
-                    "substring \"open\""
-                ]
-            },
-            {
-                "identifier": "apps-toolbar-menu-opendocs",
-                "category": "apps",
-                "aliasOf": "actions-file",
-                "source": "t3icons",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 2,
-                "why": [
-                    "substring \"open\""
-                ]
+                "terms": [],
+                "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
+                "answeredBy": "packages",
+                "owed": []
             }
-        ],
-        "terms": [],
-        "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
-        "answeredBy": "packages",
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.
+        .. code-block:: text
 
-    "actions-open" is registered in <installation>; 1 related identifier(s) follow as suggestions:
-    - actions-open
-      registered in EXT:backend/Configuration/Icons.php
-      matched: name part "open", exact identifier
-    - actions-document-open
-      registered in EXT:backend/Resources/Public/Icons/actions-document-open.svg
-      matched: name part "open"
+            These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.
 
-Data:
+            "actions-open" is registered in <installation>; 1 related identifier(s) follow as suggestions:
+            - actions-open
+              registered in EXT:backend/Configuration/Icons.php
+              matched: name part "open", exact identifier
+            - actions-document-open
+              registered in EXT:backend/Resources/Public/Icons/actions-document-open.svg
+              matched: name part "open"
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "actions-open",
-        "matchCount": 1,
-        "suggestionCount": 1,
-        "exactMatch": true,
-        "icons": [
+        .. code-block:: json
+
             {
-                "identifier": "actions-open",
-                "category": "actions",
-                "aliasOf": null,
-                "source": "EXT:backend/Configuration/Icons.php",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
+                "query": "actions-open",
+                "matchCount": 1,
+                "suggestionCount": 1,
+                "exactMatch": true,
+                "icons": [
+                    {
+                        "identifier": "actions-open",
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "EXT:backend/Configuration/Icons.php",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 1004,
+                        "why": [
+                            "name part \"open\"",
+                            "exact identifier"
+                        ]
+                    },
+                    {
+                        "identifier": "actions-document-open",
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "EXT:backend/Resources/Public/Icons/actions-document-open.svg",
+                        "matched": 1,
+                        "matchedTerms": [
+                            "open"
+                        ],
+                        "score": 4,
+                        "why": [
+                            "name part \"open\""
+                        ]
+                    }
                 ],
-                "score": 1004,
-                "why": [
-                    "name part \"open\"",
-                    "exact identifier"
-                ]
-            },
-            {
-                "identifier": "actions-document-open",
-                "category": "actions",
-                "aliasOf": null,
-                "source": "EXT:backend/Resources/Public/Icons/actions-document-open.svg",
-                "matched": 1,
-                "matchedTerms": [
-                    "open"
-                ],
-                "score": 4,
-                "why": [
-                    "name part \"open\""
-                ]
+                "terms": [],
+                "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
+                "answeredBy": "installation",
+                "owed": []
             }
-        ],
-        "terms": [],
-        "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
-        "answeredBy": "installation",
-        "owed": []
-    }
 
 icons: several validated at once
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -680,123 +687,127 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.
+        .. code-block:: text
 
-    2 of 3 identifier(s) are registered in <installation>:
-    - actions-open: registered
-    - actions-cog: registered
-    - acme-events-teaser: NOT registered
-      did you mean: content-text-teaser
+            These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.
 
-Data:
+            2 of 3 identifier(s) are registered in <installation>:
+            - actions-open: registered
+            - actions-cog: registered
+            - acme-events-teaser: NOT registered
+              did you mean: content-text-teaser
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "",
-        "matchCount": 2,
-        "suggestionCount": 1,
-        "exactMatch": false,
-        "icons": [],
-        "validated": [
+        .. code-block:: json
+
             {
-                "identifier": "actions-open",
-                "registered": true,
-                "category": "actions",
-                "aliasOf": null,
-                "source": "t3icons",
-                "usedBy": [],
-                "suggestions": []
-            },
-            {
-                "identifier": "actions-cog",
-                "registered": true,
-                "category": "actions",
-                "aliasOf": null,
-                "source": "t3icons",
-                "usedBy": [],
-                "suggestions": []
-            },
-            {
-                "identifier": "acme-events-teaser",
-                "registered": false,
-                "category": "",
-                "aliasOf": null,
-                "source": "",
-                "usedBy": [],
-                "suggestions": [
-                    "content-text-teaser"
-                ]
+                "query": "",
+                "matchCount": 2,
+                "suggestionCount": 1,
+                "exactMatch": false,
+                "icons": [],
+                "validated": [
+                    {
+                        "identifier": "actions-open",
+                        "registered": true,
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "usedBy": [],
+                        "suggestions": []
+                    },
+                    {
+                        "identifier": "actions-cog",
+                        "registered": true,
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "t3icons",
+                        "usedBy": [],
+                        "suggestions": []
+                    },
+                    {
+                        "identifier": "acme-events-teaser",
+                        "registered": false,
+                        "category": "",
+                        "aliasOf": null,
+                        "source": "",
+                        "usedBy": [],
+                        "suggestions": [
+                            "content-text-teaser"
+                        ]
+                    }
+                ],
+                "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
+                "answeredBy": "packages",
+                "owed": []
             }
-        ],
-        "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
-        "answeredBy": "packages",
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.
+        .. code-block:: text
 
-    2 of 3 identifier(s) are registered in <installation>:
-    - actions-open: registered
-      registered in EXT:backend/Configuration/Icons.php
-    - actions-cog: NOT registered
-    - acme-events-teaser: registered
-      registered in EXT:acme_events/Configuration/Icons.php
+            These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.
 
-Data:
+            2 of 3 identifier(s) are registered in <installation>:
+            - actions-open: registered
+              registered in EXT:backend/Configuration/Icons.php
+            - actions-cog: NOT registered
+            - acme-events-teaser: registered
+              registered in EXT:acme_events/Configuration/Icons.php
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "",
-        "matchCount": 2,
-        "suggestionCount": 0,
-        "exactMatch": false,
-        "icons": [],
-        "validated": [
+        .. code-block:: json
+
             {
-                "identifier": "actions-open",
-                "registered": true,
-                "category": "actions",
-                "aliasOf": null,
-                "source": "EXT:backend/Configuration/Icons.php",
-                "usedBy": [],
-                "suggestions": []
-            },
-            {
-                "identifier": "actions-cog",
-                "registered": false,
-                "category": "",
-                "aliasOf": null,
-                "source": "",
-                "usedBy": [],
-                "suggestions": []
-            },
-            {
-                "identifier": "acme-events-teaser",
-                "registered": true,
-                "category": "acme",
-                "aliasOf": null,
-                "source": "EXT:acme_events/Configuration/Icons.php",
-                "usedBy": [],
-                "suggestions": []
+                "query": "",
+                "matchCount": 2,
+                "suggestionCount": 0,
+                "exactMatch": false,
+                "icons": [],
+                "validated": [
+                    {
+                        "identifier": "actions-open",
+                        "registered": true,
+                        "category": "actions",
+                        "aliasOf": null,
+                        "source": "EXT:backend/Configuration/Icons.php",
+                        "usedBy": [],
+                        "suggestions": []
+                    },
+                    {
+                        "identifier": "actions-cog",
+                        "registered": false,
+                        "category": "",
+                        "aliasOf": null,
+                        "source": "",
+                        "usedBy": [],
+                        "suggestions": []
+                    },
+                    {
+                        "identifier": "acme-events-teaser",
+                        "registered": true,
+                        "category": "acme",
+                        "aliasOf": null,
+                        "source": "EXT:acme_events/Configuration/Icons.php",
+                        "usedBy": [],
+                        "suggestions": []
+                    }
+                ],
+                "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
+                "answeredBy": "installation",
+                "owed": []
             }
-        ],
-        "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
-        "answeredBy": "installation",
-        "owed": []
-    }
 
 icons: everything
 ~~~~~~~~~~~~~~~~~
@@ -810,208 +821,212 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.
+        .. code-block:: text
 
-    Icon categories in this installation: actions, apps, avatar, content, default, empty, files, flags, form, information, install, mimetypes, miscellaneous, module, modulegroup, overlay, provider, share, spinner, status, sysnote, tcarecords, theme.
+            These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.
 
-    Concept words that map to a shape: warning, caution, error, danger, info, notice, help, success, confirm, add, new, create, edit, delete, remove, save, search, filter, settings, configuration, user, permission, lock, hidden, visibility, preview, view, upload, download, refresh, reload, sort, close, cancel, copy, duplicate, move, link, translation, localization, language, folder, page, record, history, undo, import, export, message, notification, mail, calendar, time, list, menu, workspace, cache, bookmark, extension.
+            Icon categories in this installation: actions, apps, avatar, content, default, empty, files, flags, form, information, install, mimetypes, miscellaneous, module, modulegroup, overlay, provider, share, spinner, status, sysnote, tcarecords, theme.
 
-Data:
+            Concept words that map to a shape: warning, caution, error, danger, info, notice, help, success, confirm, add, new, create, edit, delete, remove, save, search, filter, settings, configuration, user, permission, lock, hidden, visibility, preview, view, upload, download, refresh, reload, sort, close, cancel, copy, duplicate, move, link, translation, localization, language, folder, page, record, history, undo, import, export, message, notification, mail, calendar, time, list, menu, workspace, cache, bookmark, extension.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "",
-        "matchCount": 0,
-        "suggestionCount": 0,
-        "exactMatch": false,
-        "icons": [],
-        "categories": [
-            "actions",
-            "apps",
-            "avatar",
-            "content",
-            "default",
-            "empty",
-            "files",
-            "flags",
-            "form",
-            "information",
-            "install",
-            "mimetypes",
-            "miscellaneous",
-            "module",
-            "modulegroup",
-            "overlay",
-            "provider",
-            "share",
-            "spinner",
-            "status",
-            "sysnote",
-            "tcarecords",
-            "theme"
-        ],
-        "concepts": [
-            "warning",
-            "caution",
-            "error",
-            "danger",
-            "info",
-            "notice",
-            "help",
-            "success",
-            "confirm",
-            "add",
-            "new",
-            "create",
-            "edit",
-            "delete",
-            "remove",
-            "save",
-            "search",
-            "filter",
-            "settings",
-            "configuration",
-            "user",
-            "permission",
-            "lock",
-            "hidden",
-            "visibility",
-            "preview",
-            "view",
-            "upload",
-            "download",
-            "refresh",
-            "reload",
-            "sort",
-            "close",
-            "cancel",
-            "copy",
-            "duplicate",
-            "move",
-            "link",
-            "translation",
-            "localization",
-            "language",
-            "folder",
-            "page",
-            "record",
-            "history",
-            "undo",
-            "import",
-            "export",
-            "message",
-            "notification",
-            "mail",
-            "calendar",
-            "time",
-            "list",
-            "menu",
-            "workspace",
-            "cache",
-            "bookmark",
-            "extension"
-        ],
-        "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
-        "answeredBy": "packages",
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "query": "",
+                "matchCount": 0,
+                "suggestionCount": 0,
+                "exactMatch": false,
+                "icons": [],
+                "categories": [
+                    "actions",
+                    "apps",
+                    "avatar",
+                    "content",
+                    "default",
+                    "empty",
+                    "files",
+                    "flags",
+                    "form",
+                    "information",
+                    "install",
+                    "mimetypes",
+                    "miscellaneous",
+                    "module",
+                    "modulegroup",
+                    "overlay",
+                    "provider",
+                    "share",
+                    "spinner",
+                    "status",
+                    "sysnote",
+                    "tcarecords",
+                    "theme"
+                ],
+                "concepts": [
+                    "warning",
+                    "caution",
+                    "error",
+                    "danger",
+                    "info",
+                    "notice",
+                    "help",
+                    "success",
+                    "confirm",
+                    "add",
+                    "new",
+                    "create",
+                    "edit",
+                    "delete",
+                    "remove",
+                    "save",
+                    "search",
+                    "filter",
+                    "settings",
+                    "configuration",
+                    "user",
+                    "permission",
+                    "lock",
+                    "hidden",
+                    "visibility",
+                    "preview",
+                    "view",
+                    "upload",
+                    "download",
+                    "refresh",
+                    "reload",
+                    "sort",
+                    "close",
+                    "cancel",
+                    "copy",
+                    "duplicate",
+                    "move",
+                    "link",
+                    "translation",
+                    "localization",
+                    "language",
+                    "folder",
+                    "page",
+                    "record",
+                    "history",
+                    "undo",
+                    "import",
+                    "export",
+                    "message",
+                    "notification",
+                    "mail",
+                    "calendar",
+                    "time",
+                    "list",
+                    "menu",
+                    "workspace",
+                    "cache",
+                    "bookmark",
+                    "extension"
+                ],
+                "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file. This list is read from the package files rather than from the booted installation — <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both. Identifiers a package builds in a loop or registers from ext_localconf.php, and the ones TYPO3 derives from TCA, are not in it.",
+                "answeredBy": "packages",
+                "owed": []
+            }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.
+        .. code-block:: text
 
-    Icon categories in this installation: acme, actions, content, mimetypes.
+            These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.
 
-    Concept words that map to a shape: warning, caution, error, danger, info, notice, help, success, confirm, add, new, create, edit, delete, remove, save, search, filter, settings, configuration, user, permission, lock, hidden, visibility, preview, view, upload, download, refresh, reload, sort, close, cancel, copy, duplicate, move, link, translation, localization, language, folder, page, record, history, undo, import, export, message, notification, mail, calendar, time, list, menu, workspace, cache, bookmark, extension.
+            Icon categories in this installation: acme, actions, content, mimetypes.
 
-Data:
+            Concept words that map to a shape: warning, caution, error, danger, info, notice, help, success, confirm, add, new, create, edit, delete, remove, save, search, filter, settings, configuration, user, permission, lock, hidden, visibility, preview, view, upload, download, refresh, reload, sort, close, cancel, copy, duplicate, move, link, translation, localization, language, folder, page, record, history, undo, import, export, message, notification, mail, calendar, time, list, menu, workspace, cache, bookmark, extension.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "",
-        "matchCount": 0,
-        "suggestionCount": 0,
-        "exactMatch": false,
-        "icons": [],
-        "categories": [
-            "acme",
-            "actions",
-            "content",
-            "mimetypes"
-        ],
-        "concepts": [
-            "warning",
-            "caution",
-            "error",
-            "danger",
-            "info",
-            "notice",
-            "help",
-            "success",
-            "confirm",
-            "add",
-            "new",
-            "create",
-            "edit",
-            "delete",
-            "remove",
-            "save",
-            "search",
-            "filter",
-            "settings",
-            "configuration",
-            "user",
-            "permission",
-            "lock",
-            "hidden",
-            "visibility",
-            "preview",
-            "view",
-            "upload",
-            "download",
-            "refresh",
-            "reload",
-            "sort",
-            "close",
-            "cancel",
-            "copy",
-            "duplicate",
-            "move",
-            "link",
-            "translation",
-            "localization",
-            "language",
-            "folder",
-            "page",
-            "record",
-            "history",
-            "undo",
-            "import",
-            "export",
-            "message",
-            "notification",
-            "mail",
-            "calendar",
-            "time",
-            "list",
-            "menu",
-            "workspace",
-            "cache",
-            "bookmark",
-            "extension"
-        ],
-        "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
-        "answeredBy": "installation",
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "query": "",
+                "matchCount": 0,
+                "suggestionCount": 0,
+                "exactMatch": false,
+                "icons": [],
+                "categories": [
+                    "acme",
+                    "actions",
+                    "content",
+                    "mimetypes"
+                ],
+                "concepts": [
+                    "warning",
+                    "caution",
+                    "error",
+                    "danger",
+                    "info",
+                    "notice",
+                    "help",
+                    "success",
+                    "confirm",
+                    "add",
+                    "new",
+                    "create",
+                    "edit",
+                    "delete",
+                    "remove",
+                    "save",
+                    "search",
+                    "filter",
+                    "settings",
+                    "configuration",
+                    "user",
+                    "permission",
+                    "lock",
+                    "hidden",
+                    "visibility",
+                    "preview",
+                    "view",
+                    "upload",
+                    "download",
+                    "refresh",
+                    "reload",
+                    "sort",
+                    "close",
+                    "cancel",
+                    "copy",
+                    "duplicate",
+                    "move",
+                    "link",
+                    "translation",
+                    "localization",
+                    "language",
+                    "folder",
+                    "page",
+                    "record",
+                    "history",
+                    "undo",
+                    "import",
+                    "export",
+                    "message",
+                    "notification",
+                    "mail",
+                    "calendar",
+                    "time",
+                    "list",
+                    "menu",
+                    "workspace",
+                    "cache",
+                    "bookmark",
+                    "extension"
+                ],
+                "scope": "These identifiers address the backend icon registry. They are resolved by IconFactory and rendered by the backend <core:icon> ViewHelper; frontend rendering reaches neither, and needs its own inline SVG or asset file.",
+                "answeredBy": "installation",
+                "owed": []
+            }

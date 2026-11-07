@@ -1,4 +1,4 @@
-.. _typo3_record_lookup:
+:navigation-title: record_lookup
 
 ``typo3_record_lookup``
 =======================
@@ -27,9 +27,13 @@ to see which ones it will read. It reads with the shell user's database access
 rather than a backend user's, so no permission, workspace or language filter
 narrows what comes back. It never writes. Answers from: installation.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -252,66 +256,70 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tx_acme_events_event",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "tx_acme_events_event",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: the installation booted and could not read tx_acme_events_event: Error: Class "TYPO3\CMS\Core\Database\ConnectionPool" not found.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: the installation booted and could not read tx_acme_events_event: Error: Class "TYPO3\CMS\Core\Database\ConnectionPool" not found.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tx_acme_events_event",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "the installation booted and could not read tx_acme_events_event: Error: Class \"TYPO3\\CMS\\Core\\Database\\ConnectionPool\" not found",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "tx_acme_events_event",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "the installation booted and could not read tx_acme_events_event: Error: Class \"TYPO3\\CMS\\Core\\Database\\ConnectionPool\" not found",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 records: counted rather than read
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -328,66 +336,70 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tx_acme_events_event",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "tx_acme_events_event",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: the installation booted and could not read tx_acme_events_event: Error: Class "TYPO3\CMS\Core\Database\ConnectionPool" not found.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: the installation booted and could not read tx_acme_events_event: Error: Class "TYPO3\CMS\Core\Database\ConnectionPool" not found.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tx_acme_events_event",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "the installation booted and could not read tx_acme_events_event: Error: Class \"TYPO3\\CMS\\Core\\Database\\ConnectionPool\" not found",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "tx_acme_events_event",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "the installation booted and could not read tx_acme_events_event: Error: Class \"TYPO3\\CMS\\Core\\Database\\ConnectionPool\" not found",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 records: what one column holds
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -405,76 +417,80 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tx_acme_events_event",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "tx_acme_events_event",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    tx_acme_events_event has no column venue, so nothing was read. A filter names columns of the table it filters, and typo3_schema_lookup with table="tx_acme_events_event" lists the ones it has.
+        .. code-block:: text
 
-Data:
+            tx_acme_events_event has no column venue, so nothing was read. A filter names columns of the table it filters, and typo3_schema_lookup with table="tx_acme_events_event" lists the ones it has.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tx_acme_events_event",
-        "matchCount": 0,
-        "answeredBy": "installation",
-        "where": [],
-        "counts": null,
-        "groups": [],
-        "groupDefault": null,
-        "departing": [],
-        "pages": [],
-        "records": [],
-        "countable": [
-            {
-                "table": "pages",
-                "extension": "core"
-            },
-            {
-                "table": "tt_content",
-                "extension": "frontend"
-            },
+        .. code-block:: json
+
             {
                 "table": "tx_acme_events_event",
-                "extension": "acme_events"
+                "matchCount": 0,
+                "answeredBy": "installation",
+                "where": [],
+                "counts": null,
+                "groups": [],
+                "groupDefault": null,
+                "departing": [],
+                "pages": [],
+                "records": [],
+                "countable": [
+                    {
+                        "table": "pages",
+                        "extension": "core"
+                    },
+                    {
+                        "table": "tt_content",
+                        "extension": "frontend"
+                    },
+                    {
+                        "table": "tx_acme_events_event",
+                        "extension": "acme_events"
+                    }
+                ],
+                "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.",
+                "owed": []
             }
-        ],
-        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.",
-        "owed": []
-    }
 
 records: a table it will not read
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -490,77 +506,81 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "cache_pages",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "cache_pages",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    "cache_pages" is not a table this installation has TCA for, so nothing was read. What TCA does not describe is the caches, the queues and the session store, and none of those holds a record.
-    It has TCA for 3 tables, listed by the same call with no table named.
+        .. code-block:: text
 
-Data:
+            "cache_pages" is not a table this installation has TCA for, so nothing was read. What TCA does not describe is the caches, the queues and the session store, and none of those holds a record.
+            It has TCA for 3 tables, listed by the same call with no table named.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "cache_pages",
-        "matchCount": 0,
-        "answeredBy": "installation",
-        "where": [],
-        "counts": null,
-        "groups": [],
-        "groupDefault": null,
-        "departing": [],
-        "pages": [],
-        "records": [],
-        "countable": [
+        .. code-block:: json
+
             {
-                "table": "pages",
-                "extension": "core"
-            },
-            {
-                "table": "tt_content",
-                "extension": "frontend"
-            },
-            {
-                "table": "tx_acme_events_event",
-                "extension": "acme_events"
+                "table": "cache_pages",
+                "matchCount": 0,
+                "answeredBy": "installation",
+                "where": [],
+                "counts": null,
+                "groups": [],
+                "groupDefault": null,
+                "departing": [],
+                "pages": [],
+                "records": [],
+                "countable": [
+                    {
+                        "table": "pages",
+                        "extension": "core"
+                    },
+                    {
+                        "table": "tt_content",
+                        "extension": "frontend"
+                    },
+                    {
+                        "table": "tx_acme_events_event",
+                        "extension": "acme_events"
+                    }
+                ],
+                "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.",
+                "owed": []
             }
-        ],
-        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.",
-        "owed": []
-    }
 
 records: what it reads
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -574,77 +594,81 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": null,
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": null,
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This installation has TCA for 3 tables. Name one to read what is in it.
+        .. code-block:: text
 
-    - pages (core)
-    - tt_content (frontend)
-    - tx_acme_events_event (acme_events)
+            This installation has TCA for 3 tables. Name one to read what is in it.
 
-Data:
+            - pages (core)
+            - tt_content (frontend)
+            - tx_acme_events_event (acme_events)
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "matchCount": 3,
-        "table": null,
-        "answeredBy": "installation",
-        "where": [],
-        "counts": null,
-        "groups": [],
-        "groupDefault": null,
-        "departing": [],
-        "pages": [],
-        "records": [],
-        "countable": [
+        .. code-block:: json
+
             {
-                "table": "pages",
-                "extension": "core"
-            },
-            {
-                "table": "tt_content",
-                "extension": "frontend"
-            },
-            {
-                "table": "tx_acme_events_event",
-                "extension": "acme_events"
+                "matchCount": 3,
+                "table": null,
+                "answeredBy": "installation",
+                "where": [],
+                "counts": null,
+                "groups": [],
+                "groupDefault": null,
+                "departing": [],
+                "pages": [],
+                "records": [],
+                "countable": [
+                    {
+                        "table": "pages",
+                        "extension": "core"
+                    },
+                    {
+                        "table": "tt_content",
+                        "extension": "frontend"
+                    },
+                    {
+                        "table": "tx_acme_events_event",
+                        "extension": "acme_events"
+                    }
+                ],
+                "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.",
+                "owed": []
             }
-        ],
-        "readWith": "Read with the shell user's database access, with no backend permissions applied and no workspace or language filter, so this is every row in the table rather than what a backend user would see.",
-        "owed": []
-    }

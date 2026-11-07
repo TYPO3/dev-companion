@@ -1,4 +1,4 @@
-.. _typo3_translation_domain_lookup:
+:navigation-title: translation_domain_lookup
 
 ``typo3_translation_domain_lookup``
 ===================================
@@ -21,9 +21,13 @@ under which id, is typo3_label_lookup. The answer also carries the specifier a
 backend JavaScript module imports that domain under, which is the same value in
 the form that module needs. Answers from: knowledge.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`knowledge <answer-sources-knowledge>`.
+    :Answers from: :ref:`knowledge <answer-sources-knowledge>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -94,31 +98,33 @@ Called with:
         "path": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf resolves to the translation domain:
+        .. code-block:: text
 
-      backend.alt_doc
+            EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf resolves to the translation domain:
 
-    Reference a label in it as "backend.alt_doc:<trans-unit id>" — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
-    A backend JavaScript module writes the same value as an import: import labels from "~labels/backend.alt_doc", then labels.get("<trans-unit id>").
-    Composed for the installation here, TYPO3 14.3.8-dev. State targetVersion where the label is being written for another branch.
-    Which trans-units the file actually holds is a property of your checkout: read the file, and remember that an installation can override it through LANG/resourceOverrides.
+              backend.alt_doc
 
-Data:
+            Reference a label in it as "backend.alt_doc:<trans-unit id>" — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
+            A backend JavaScript module writes the same value as an import: import labels from "~labels/backend.alt_doc", then labels.get("<trans-unit id>").
+            Composed for the installation here, TYPO3 14.3.8-dev. State targetVersion where the label is being written for another branch.
+            Which trans-units the file actually holds is a property of your checkout: read the file, and remember that an installation can override it through LANG/resourceOverrides.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "path": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
-        "targetVersion": 14,
-        "domain": "backend.alt_doc",
-        "domainOnNewerVersions": null,
-        "moduleImport": "~labels/backend.alt_doc",
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "path": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
+                "targetVersion": 14,
+                "domain": "backend.alt_doc",
+                "domainOnNewerVersions": null,
+                "moduleImport": "~labels/backend.alt_doc",
+                "owed": []
+            }
 
 domain: checkout path
 ~~~~~~~~~~~~~~~~~~~~~
@@ -131,31 +137,33 @@ Called with:
         "path": "typo3/sysext/core/Resources/Private/Language/locallang.xlf"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    typo3/sysext/core/Resources/Private/Language/locallang.xlf resolves to the translation domain:
+        .. code-block:: text
 
-      core.messages
+            typo3/sysext/core/Resources/Private/Language/locallang.xlf resolves to the translation domain:
 
-    Reference a label in it as "core.messages:<trans-unit id>" — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
-    A backend JavaScript module writes the same value as an import: import labels from "~labels/core.messages", then labels.get("<trans-unit id>").
-    Composed for the installation here, TYPO3 14.3.8-dev. State targetVersion where the label is being written for another branch.
-    Which trans-units the file actually holds is a property of your checkout: read the file, and remember that an installation can override it through LANG/resourceOverrides.
+              core.messages
 
-Data:
+            Reference a label in it as "core.messages:<trans-unit id>" — in TCA, in LanguageService::sL(), and in f:translate as separate domain and key attributes.
+            A backend JavaScript module writes the same value as an import: import labels from "~labels/core.messages", then labels.get("<trans-unit id>").
+            Composed for the installation here, TYPO3 14.3.8-dev. State targetVersion where the label is being written for another branch.
+            Which trans-units the file actually holds is a property of your checkout: read the file, and remember that an installation can override it through LANG/resourceOverrides.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "path": "typo3/sysext/core/Resources/Private/Language/locallang.xlf",
-        "targetVersion": 14,
-        "domain": "core.messages",
-        "domainOnNewerVersions": null,
-        "moduleImport": "~labels/core.messages",
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "path": "typo3/sysext/core/Resources/Private/Language/locallang.xlf",
+                "targetVersion": 14,
+                "domain": "core.messages",
+                "domainOnNewerVersions": null,
+                "moduleImport": "~labels/core.messages",
+                "owed": []
+            }
 
 domain: on an older target
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -169,27 +177,29 @@ Called with:
         "targetVersion": "13.4"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    TYPO3 13, which you asked about, has no translation domains: the API that resolves them arrived after it. Reference the file itself instead:
+        .. code-block:: text
 
-      LLL:EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf:<trans-unit id>
+            TYPO3 13, which you asked about, has no translation domains: the API that resolves them arrived after it. Reference the file itself instead:
 
-    For the record, the domain this path would resolve to on a version that has them is "backend.alt_doc". Writing it into a label there renders nothing, and fails at runtime rather than at build time.
+              LLL:EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf:<trans-unit id>
 
-Data:
+            For the record, the domain this path would resolve to on a version that has them is "backend.alt_doc". Writing it into a label there renders nothing, and fails at runtime rather than at build time.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "path": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
-        "targetVersion": 13,
-        "domain": null,
-        "domainOnNewerVersions": "backend.alt_doc",
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "path": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
+                "targetVersion": 13,
+                "domain": null,
+                "domainOnNewerVersions": "backend.alt_doc",
+                "owed": []
+            }
 
 domain: miss
 ~~~~~~~~~~~~
@@ -202,20 +212,22 @@ Called with:
         "path": "somewhere/else.xlf"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    "somewhere/else.xlf" names no extension, so no translation domain follows from it.
-    Pass either an EXT: reference ("EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf") or a checkout path ("typo3/sysext/backend/Resources/Private/Language/locallang_alt_doc.xlf").
+        .. code-block:: text
 
-Data:
+            "somewhere/else.xlf" names no extension, so no translation domain follows from it.
+            Pass either an EXT: reference ("EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf") or a checkout path ("typo3/sysext/backend/Resources/Private/Language/locallang_alt_doc.xlf").
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "path": "somewhere/else.xlf",
-        "targetVersion": 14,
-        "domain": null,
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "path": "somewhere/else.xlf",
+                "targetVersion": 14,
+                "domain": null,
+                "owed": []
+            }

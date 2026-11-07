@@ -1,3 +1,5 @@
+:navigation-title: Installation answers
+
 Asking the installation
 =======================
 

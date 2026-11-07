@@ -1,4 +1,4 @@
-.. _typo3_changelog_lookup:
+:navigation-title: changelog_lookup
 
 ``typo3_changelog_lookup``
 ==========================
@@ -27,10 +27,13 @@ entry. Any other identifier, a constant or a configuration key, does so only
 where the installation answers for the version, from the text on disk. Answers
 from: packages, network.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
+.. facts::
 
-Answers from :ref:`packages <answer-sources-packages>`,
-:ref:`network <answer-sources-network>`.
+    :Answers from: :ref:`packages <answer-sources-packages>`, :ref:`network <answer-sources-network>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``true``
 
 Takes
 -----
@@ -274,363 +277,367 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    1 changelog entry carrying "ext_tables.php":
-    - 14.3 Deprecation: ext_tables.php in extensions (#109438) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html — PHP-API, NotScanned, ext:core
+        .. code-block:: text
 
-    Migration
-    Move all registration from `ext_tables.php` to the appropriate
-    configuration files.
+            1 changelog entry carrying "ext_tables.php":
+            - 14.3 Deprecation: ext_tables.php in extensions (#109438) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html — PHP-API, NotScanned, ext:core
 
-    ### User settings {#user-settings}
+            Migration
+            Move all registration from `ext_tables.php` to the appropriate
+            configuration files.
 
-    User settings previously registered via
-    `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings()` in
-    `ext_tables.php` should now be registered via
-    `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserSetting()` in
-    [`Configuration/TCA/Overrides/be_users.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).
+            ### User settings {#user-settings}
 
-    Before:
+            User settings previously registered via
+            `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings()` in
+            `ext_tables.php` should now be registered via
+            `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserSetting()` in
+            [`Configuration/TCA/Overrides/be_users.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).
 
-    **ext_tables.php**
+            Before:
 
-    ```php
-    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+            **ext_tables.php**
 
-    $GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [
-        'type' => 'check',
-        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',
-    ];
-    ExtensionManagementUtility::addFieldsToUserSettings(
-        'myCustomSetting',
-        'after:emailMeAtLogin'
-    );
-    ```
+            ```php
+            use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-    After:
-
-    **Configuration/TCA/Overrides/be_users.php**
-
-    ```php
-    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-
-    ExtensionManagementUtility::addUserSetting(
-        'myCustomSetting',
-        [
-            'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',
-            'config' => [
+            $GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [
                 'type' => 'check',
-                'renderType' => 'checkboxToggle',
-            ],
-        ],
-        'after:emailMeAtLogin'
-    );
-    ```
+                'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',
+            ];
+            ExtensionManagementUtility::addFieldsToUserSettings(
+                'myCustomSetting',
+                'after:emailMeAtLogin'
+            );
+            ```
 
-    ### Page doktype allowed record types {#page-doktype-allowed-record-types}
+            After:
 
-    Page doktypes previously registered via `\TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry->add()` in
-    `ext_tables.php` should now use the TCA option
-    `allowedRecordTypes` in [`Configuration/TCA/Overrides/pages.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).
+            **Configuration/TCA/Overrides/be_users.php**
 
-    Before:
+            ```php
+            use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-    **ext_tables.php**
-
-    ```php
-    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-        \TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry::class
-    )->add(116, [
-        'allowedTables' => ['tt_content', 'my_custom_record'],
-    ]);
-    ```
-
-    After:
-
-    **Configuration/TCA/Overrides/pages.php**
-
-    ```php
-    $GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [
-        'tt_content',
-        'my_custom_record',
-    ];
-    ```
-
-    Once all registrations have been moved, the `ext_tables.php` file
-    can be removed from the extension.
-
-    The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
-    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
-    A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
-
-Data:
-
-.. code-block:: json
-
-    {
-        "query": "ext_tables.php",
-        "matchCount": 1,
-        "matchedIn": "name",
-        "tags": [],
-        "entries": [
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109438",
-                "title": "ext_tables.php in extensions",
-                "name": "Deprecation-109438-ExtTablesPhpInExtensions",
-                "removal": "15.0",
-                "migration": "Move all registration from `ext_tables.php` to the appropriate\nconfiguration files.\n\n### User settings {#user-settings}\n\nUser settings previously registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addFieldsToUserSettings()` in\n`ext_tables.php` should now be registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addUserSetting()` in\n[`Configuration/TCA/Overrides/be_users.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).\n\nBefore:\n\n**ext_tables.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\n$GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [\n    'type' => 'check',\n    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n];\nExtensionManagementUtility::addFieldsToUserSettings(\n    'myCustomSetting',\n    'after:emailMeAtLogin'\n);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/be_users.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\nExtensionManagementUtility::addUserSetting(\n    'myCustomSetting',\n    [\n        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n        'config' => [\n            'type' => 'check',\n            'renderType' => 'checkboxToggle',\n        ],\n    ],\n    'after:emailMeAtLogin'\n);\n```\n\n### Page doktype allowed record types {#page-doktype-allowed-record-types}\n\nPage doktypes previously registered via `\\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry->add()` in\n`ext_tables.php` should now use the TCA option\n`allowedRecordTypes` in [`Configuration/TCA/Overrides/pages.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).\n\nBefore:\n\n**ext_tables.php**\n\n```php\n\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\n    \\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry::class\n)->add(116, [\n    'allowedTables' => ['tt_content', 'my_custom_record'],\n]);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/pages.php**\n\n```php\n$GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [\n    'tt_content',\n    'my_custom_record',\n];\n```\n\nOnce all registrations have been moved, the `ext_tables.php` file\ncan be removed from the extension.",
-                "tags": [
-                    "PHP-API",
-                    "NotScanned",
-                    "ext:core"
+            ExtensionManagementUtility::addUserSetting(
+                'myCustomSetting',
+                [
+                    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',
+                    'config' => [
+                        'type' => 'check',
+                        'renderType' => 'checkboxToggle',
+                    ],
                 ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html",
-                "publishedIn": "manual"
+                'after:emailMeAtLogin'
+            );
+            ```
+
+            ### Page doktype allowed record types {#page-doktype-allowed-record-types}
+
+            Page doktypes previously registered via `\TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry->add()` in
+            `ext_tables.php` should now use the TCA option
+            `allowedRecordTypes` in [`Configuration/TCA/Overrides/pages.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).
+
+            Before:
+
+            **ext_tables.php**
+
+            ```php
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry::class
+            )->add(116, [
+                'allowedTables' => ['tt_content', 'my_custom_record'],
+            ]);
+            ```
+
+            After:
+
+            **Configuration/TCA/Overrides/pages.php**
+
+            ```php
+            $GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [
+                'tt_content',
+                'my_custom_record',
+            ];
+            ```
+
+            Once all registrations have been moved, the `ext_tables.php` file
+            can be removed from the extension.
+
+            The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+            An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
+            A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
+
+    .. tab:: Data
+
+        .. code-block:: json
+
+            {
+                "query": "ext_tables.php",
+                "matchCount": 1,
+                "matchedIn": "name",
+                "tags": [],
+                "entries": [
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109438",
+                        "title": "ext_tables.php in extensions",
+                        "name": "Deprecation-109438-ExtTablesPhpInExtensions",
+                        "removal": "15.0",
+                        "migration": "Move all registration from `ext_tables.php` to the appropriate\nconfiguration files.\n\n### User settings {#user-settings}\n\nUser settings previously registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addFieldsToUserSettings()` in\n`ext_tables.php` should now be registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addUserSetting()` in\n[`Configuration/TCA/Overrides/be_users.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).\n\nBefore:\n\n**ext_tables.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\n$GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [\n    'type' => 'check',\n    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n];\nExtensionManagementUtility::addFieldsToUserSettings(\n    'myCustomSetting',\n    'after:emailMeAtLogin'\n);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/be_users.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\nExtensionManagementUtility::addUserSetting(\n    'myCustomSetting',\n    [\n        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n        'config' => [\n            'type' => 'check',\n            'renderType' => 'checkboxToggle',\n        ],\n    ],\n    'after:emailMeAtLogin'\n);\n```\n\n### Page doktype allowed record types {#page-doktype-allowed-record-types}\n\nPage doktypes previously registered via `\\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry->add()` in\n`ext_tables.php` should now use the TCA option\n`allowedRecordTypes` in [`Configuration/TCA/Overrides/pages.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).\n\nBefore:\n\n**ext_tables.php**\n\n```php\n\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\n    \\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry::class\n)->add(116, [\n    'allowedTables' => ['tt_content', 'my_custom_record'],\n]);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/pages.php**\n\n```php\n$GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [\n    'tt_content',\n    'my_custom_record',\n];\n```\n\nOnce all registrations have been moved, the `ext_tables.php` file\ncan be removed from the extension.",
+                        "tags": [
+                            "PHP-API",
+                            "NotScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html",
+                        "publishedIn": "manual"
+                    }
+                ],
+                "versions": [
+                    "14.3",
+                    "14.3.x",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.4.x",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0",
+                    "11.5",
+                    "11.5.x",
+                    "11.4",
+                    "11.3",
+                    "11.2",
+                    "11.1",
+                    "11.0",
+                    "10.4",
+                    "10.4.x",
+                    "10.3",
+                    "10.2",
+                    "10.1",
+                    "10.0",
+                    "9.5",
+                    "9.5.x",
+                    "9.4",
+                    "9.3",
+                    "9.2",
+                    "9.1",
+                    "9.0",
+                    "8.7",
+                    "8.7.x",
+                    "8.6",
+                    "8.5",
+                    "8.4",
+                    "8.3",
+                    "8.2",
+                    "8.1",
+                    "8.0",
+                    "7.6",
+                    "7.6.x",
+                    "7.5",
+                    "7.4",
+                    "7.3",
+                    "7.2",
+                    "7.1",
+                    "7.0"
+                ],
+                "answeredBy": "packages",
+                "versionsFromTheManual": [
+                    "15.0",
+                    "14.3",
+                    "14.3.x",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.4.x",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0"
+                ],
+                "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
+                "owed": [
+                    "The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
+                ]
             }
-        ],
-        "versions": [
-            "14.3",
-            "14.3.x",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.4.x",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0",
-            "11.5",
-            "11.5.x",
-            "11.4",
-            "11.3",
-            "11.2",
-            "11.1",
-            "11.0",
-            "10.4",
-            "10.4.x",
-            "10.3",
-            "10.2",
-            "10.1",
-            "10.0",
-            "9.5",
-            "9.5.x",
-            "9.4",
-            "9.3",
-            "9.2",
-            "9.1",
-            "9.0",
-            "8.7",
-            "8.7.x",
-            "8.6",
-            "8.5",
-            "8.4",
-            "8.3",
-            "8.2",
-            "8.1",
-            "8.0",
-            "7.6",
-            "7.6.x",
-            "7.5",
-            "7.4",
-            "7.3",
-            "7.2",
-            "7.1",
-            "7.0"
-        ],
-        "answeredBy": "packages",
-        "versionsFromTheManual": [
-            "15.0",
-            "14.3",
-            "14.3.x",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.4.x",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0"
-        ],
-        "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
-        "owed": [
-            "The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
-        ]
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    1 changelog entry carrying "ext_tables.php":
-    - 14.3 Deprecation: ext_tables.php in extensions (#109438) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html — PHP-API, NotScanned, ext:core
+        .. code-block:: text
 
-    Migration
-    Move all registration from `ext_tables.php` to the appropriate
-    configuration files.
+            1 changelog entry carrying "ext_tables.php":
+            - 14.3 Deprecation: ext_tables.php in extensions (#109438) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html — PHP-API, NotScanned, ext:core
 
-    ### User settings {#user-settings}
+            Migration
+            Move all registration from `ext_tables.php` to the appropriate
+            configuration files.
 
-    User settings previously registered via
-    `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings()` in
-    `ext_tables.php` should now be registered via
-    `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserSetting()` in
-    [`Configuration/TCA/Overrides/be_users.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).
+            ### User settings {#user-settings}
 
-    Before:
+            User settings previously registered via
+            `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToUserSettings()` in
+            `ext_tables.php` should now be registered via
+            `\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserSetting()` in
+            [`Configuration/TCA/Overrides/be_users.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).
 
-    **ext_tables.php**
+            Before:
 
-    ```php
-    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+            **ext_tables.php**
 
-    $GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [
-        'type' => 'check',
-        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',
-    ];
-    ExtensionManagementUtility::addFieldsToUserSettings(
-        'myCustomSetting',
-        'after:emailMeAtLogin'
-    );
-    ```
+            ```php
+            use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-    After:
-
-    **Configuration/TCA/Overrides/be_users.php**
-
-    ```php
-    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-
-    ExtensionManagementUtility::addUserSetting(
-        'myCustomSetting',
-        [
-            'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',
-            'config' => [
+            $GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [
                 'type' => 'check',
-                'renderType' => 'checkboxToggle',
-            ],
-        ],
-        'after:emailMeAtLogin'
-    );
-    ```
+                'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',
+            ];
+            ExtensionManagementUtility::addFieldsToUserSettings(
+                'myCustomSetting',
+                'after:emailMeAtLogin'
+            );
+            ```
 
-    ### Page doktype allowed record types {#page-doktype-allowed-record-types}
+            After:
 
-    Page doktypes previously registered via `\TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry->add()` in
-    `ext_tables.php` should now use the TCA option
-    `allowedRecordTypes` in [`Configuration/TCA/Overrides/pages.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).
+            **Configuration/TCA/Overrides/be_users.php**
 
-    Before:
+            ```php
+            use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-    **ext_tables.php**
-
-    ```php
-    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-        \TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry::class
-    )->add(116, [
-        'allowedTables' => ['tt_content', 'my_custom_record'],
-    ]);
-    ```
-
-    After:
-
-    **Configuration/TCA/Overrides/pages.php**
-
-    ```php
-    $GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [
-        'tt_content',
-        'my_custom_record',
-    ];
-    ```
-
-    Once all registrations have been moved, the `ext_tables.php` file
-    can be removed from the extension.
-
-    The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
-    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
-    A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
-
-Data:
-
-.. code-block:: json
-
-    {
-        "query": "ext_tables.php",
-        "matchCount": 1,
-        "matchedIn": "name",
-        "tags": [],
-        "entries": [
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109438",
-                "title": "ext_tables.php in extensions",
-                "name": "Deprecation-109438-ExtTablesPhpInExtensions",
-                "removal": "15.0",
-                "migration": "Move all registration from `ext_tables.php` to the appropriate\nconfiguration files.\n\n### User settings {#user-settings}\n\nUser settings previously registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addFieldsToUserSettings()` in\n`ext_tables.php` should now be registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addUserSetting()` in\n[`Configuration/TCA/Overrides/be_users.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).\n\nBefore:\n\n**ext_tables.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\n$GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [\n    'type' => 'check',\n    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n];\nExtensionManagementUtility::addFieldsToUserSettings(\n    'myCustomSetting',\n    'after:emailMeAtLogin'\n);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/be_users.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\nExtensionManagementUtility::addUserSetting(\n    'myCustomSetting',\n    [\n        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n        'config' => [\n            'type' => 'check',\n            'renderType' => 'checkboxToggle',\n        ],\n    ],\n    'after:emailMeAtLogin'\n);\n```\n\n### Page doktype allowed record types {#page-doktype-allowed-record-types}\n\nPage doktypes previously registered via `\\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry->add()` in\n`ext_tables.php` should now use the TCA option\n`allowedRecordTypes` in [`Configuration/TCA/Overrides/pages.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).\n\nBefore:\n\n**ext_tables.php**\n\n```php\n\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\n    \\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry::class\n)->add(116, [\n    'allowedTables' => ['tt_content', 'my_custom_record'],\n]);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/pages.php**\n\n```php\n$GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [\n    'tt_content',\n    'my_custom_record',\n];\n```\n\nOnce all registrations have been moved, the `ext_tables.php` file\ncan be removed from the extension.",
-                "tags": [
-                    "PHP-API",
-                    "NotScanned",
-                    "ext:core"
+            ExtensionManagementUtility::addUserSetting(
+                'myCustomSetting',
+                [
+                    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',
+                    'config' => [
+                        'type' => 'check',
+                        'renderType' => 'checkboxToggle',
+                    ],
                 ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html",
-                "publishedIn": "manual"
+                'after:emailMeAtLogin'
+            );
+            ```
+
+            ### Page doktype allowed record types {#page-doktype-allowed-record-types}
+
+            Page doktypes previously registered via `\TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry->add()` in
+            `ext_tables.php` should now use the TCA option
+            `allowedRecordTypes` in [`Configuration/TCA/Overrides/pages.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).
+
+            Before:
+
+            **ext_tables.php**
+
+            ```php
+            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                \TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry::class
+            )->add(116, [
+                'allowedTables' => ['tt_content', 'my_custom_record'],
+            ]);
+            ```
+
+            After:
+
+            **Configuration/TCA/Overrides/pages.php**
+
+            ```php
+            $GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [
+                'tt_content',
+                'my_custom_record',
+            ];
+            ```
+
+            Once all registrations have been moved, the `ext_tables.php` file
+            can be removed from the extension.
+
+            The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+            An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
+            A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
+
+    .. tab:: Data
+
+        .. code-block:: json
+
+            {
+                "query": "ext_tables.php",
+                "matchCount": 1,
+                "matchedIn": "name",
+                "tags": [],
+                "entries": [
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109438",
+                        "title": "ext_tables.php in extensions",
+                        "name": "Deprecation-109438-ExtTablesPhpInExtensions",
+                        "removal": "15.0",
+                        "migration": "Move all registration from `ext_tables.php` to the appropriate\nconfiguration files.\n\n### User settings {#user-settings}\n\nUser settings previously registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addFieldsToUserSettings()` in\n`ext_tables.php` should now be registered via\n`\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility::addUserSetting()` in\n[`Configuration/TCA/Overrides/be_users.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).\n\nBefore:\n\n**ext_tables.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\n$GLOBALS['TYPO3_USER_SETTINGS']['columns']['myCustomSetting'] = [\n    'type' => 'check',\n    'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n];\nExtensionManagementUtility::addFieldsToUserSettings(\n    'myCustomSetting',\n    'after:emailMeAtLogin'\n);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/be_users.php**\n\n```php\nuse TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility;\n\nExtensionManagementUtility::addUserSetting(\n    'myCustomSetting',\n    [\n        'label' => 'LLL:EXT:my_ext/Resources/Private/Language/locallang.xlf:myCustomSetting',\n        'config' => [\n            'type' => 'check',\n            'renderType' => 'checkboxToggle',\n        ],\n    ],\n    'after:emailMeAtLogin'\n);\n```\n\n### Page doktype allowed record types {#page-doktype-allowed-record-types}\n\nPage doktypes previously registered via `\\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry->add()` in\n`ext_tables.php` should now use the TCA option\n`allowedRecordTypes` in [`Configuration/TCA/Overrides/pages.php`](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/FileStructure/Configuration/TCA/Index.html#file-extension-configuration-tca-overridessomefile-php).\n\nBefore:\n\n**ext_tables.php**\n\n```php\n\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility::makeInstance(\n    \\TYPO3\\CMS\\Core\\DataHandling\\PageDoktypeRegistry::class\n)->add(116, [\n    'allowedTables' => ['tt_content', 'my_custom_record'],\n]);\n```\n\nAfter:\n\n**Configuration/TCA/Overrides/pages.php**\n\n```php\n$GLOBALS['TCA']['pages']['types']['116']['allowedRecordTypes'] = [\n    'tt_content',\n    'my_custom_record',\n];\n```\n\nOnce all registrations have been moved, the `ext_tables.php` file\ncan be removed from the extension.",
+                        "tags": [
+                            "PHP-API",
+                            "NotScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109438-ExtTablesPhpInExtensions.html",
+                        "publishedIn": "manual"
+                    }
+                ],
+                "versions": [
+                    "14.3"
+                ],
+                "answeredBy": "packages",
+                "versionsFromTheManual": [
+                    "15.0",
+                    "14.3",
+                    "14.3.x",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.4.x",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0"
+                ],
+                "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
+                "owed": [
+                    "The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
+                ]
             }
-        ],
-        "versions": [
-            "14.3"
-        ],
-        "answeredBy": "packages",
-        "versionsFromTheManual": [
-            "15.0",
-            "14.3",
-            "14.3.x",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.4.x",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0"
-        ],
-        "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
-        "owed": [
-            "The migration above is the entry's own section. Read the file for the rest of the description. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
-        ]
-    }
 
 changelog: swept by tag
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -647,1026 +654,1030 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    392 of the 982 entries narrowed by version and type are tagged "FullyScanned" — showing the first 20:
-    - 15.0 Deprecation: StringUtility::multibyteStringPad() method (#110202) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html — PHP-API, FullyScanned, ext:core
-    - 15.0 Deprecation: DataHandler->setCorrelationId() (#110285) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html — PHP-API, FullyScanned, ext:core
-    - 15.0 Deprecation: AbstractXmlSitemapDataProvider (#110334) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html — PHP-API, FullyScanned, ext:seo
-    - 15.0 Deprecation: LazyLoadingProxy and LazyObjectStorage (#110347) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html — PHP-API, FullyScanned, ext:extbase
-    - 15.0 Deprecation: CommandRegistry->getSchedulableCommands() (#110477) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html — CLI, FullyScanned, PHP-API, ext:core
-    - 15.0 Deprecation: ResourceStorage->getStorageRecord() (#110762)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html — FAL, PHP-API, FullyScanned, ext:core
-    - 15.0 Deprecation: PathUtility basename(), dirname(), pathinfo() (#110966) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html — PHP-API, FullyScanned, ext:core
-    - 15.0 Deprecation: BackendUtility::getModuleData() (#111116)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html — Backend, PHP-API, FullyScanned, ext:backend
-    - 14.3 Deprecation: Lowlevel DatabaseIntegrityCheck class (#107931) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html — PHP-API, FullyScanned, ext:lowlevel
-    - 14.3 Deprecation: BackendUtility item list label methods (#109519) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html — PHP-API, FullyScanned, ext:backend
-    - 14.3 Deprecation: GeneralUtility::isOnCurrentHost() without PSR-7 request (#109523)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html — PHP-API, FullyScanned, ext:core
-    - 14.3 Deprecation: GeneralUtility::sanitizeLocalUrl() needs PSR-7 request (#109544)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html — PHP-API, FullyScanned, ext:core
-    - 14.3 Deprecation: GeneralUtility::locationHeaderUrl() without PSR-7 request (#109548)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html — PHP-API, FullyScanned, ext:core
-    - 14.3 Deprecation: GeneralUtility::getIndpEnv() (#109551)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html — PHP-API, FullyScanned, ext:core
-    - 14.2 Deprecation: BackendUserAuthentication::recordEditAccessInternals() and $errorMsg (#108568)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html — PHP-API, FullyScanned, ext:core
-    - 14.2 Deprecation: BackendUtility TSconfig-related methods (#108761) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html — PHP-API, FullyScanned, ext:backend
-    - 14.2 Deprecation: BackendUtility localization-related methods (#108810) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html — PHP-API, FullyScanned, ext:backend
-    - 14.2 Deprecation: ExtensionManagementUtility::addFieldsToUserSettings (#108843) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html — PHP-API, FullyScanned, ext:core
-    - 14.2 Deprecation: Deprecate PageRenderer->addInlineLanguageDomain() (#108963)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html — Backend, JavaScript, FullyScanned, ext:backend
-    - 14.2 Deprecation: Move language:update command and events to EXT:core (#109027) — removed in v15
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html — CLI, PHP-API, FullyScanned, ext:install
+        .. code-block:: text
 
-    Read the file for the description and the migration, or ask again with the name of one entry as the query, such as "Deprecation-110202-StringUtilityMultibyteStringPad". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
-    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
-    A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
+            392 of the 982 entries narrowed by version and type are tagged "FullyScanned" — showing the first 20:
+            - 15.0 Deprecation: StringUtility::multibyteStringPad() method (#110202) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html — PHP-API, FullyScanned, ext:core
+            - 15.0 Deprecation: DataHandler->setCorrelationId() (#110285) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html — PHP-API, FullyScanned, ext:core
+            - 15.0 Deprecation: AbstractXmlSitemapDataProvider (#110334) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html — PHP-API, FullyScanned, ext:seo
+            - 15.0 Deprecation: LazyLoadingProxy and LazyObjectStorage (#110347) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html — PHP-API, FullyScanned, ext:extbase
+            - 15.0 Deprecation: CommandRegistry->getSchedulableCommands() (#110477) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html — CLI, FullyScanned, PHP-API, ext:core
+            - 15.0 Deprecation: ResourceStorage->getStorageRecord() (#110762)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html — FAL, PHP-API, FullyScanned, ext:core
+            - 15.0 Deprecation: PathUtility basename(), dirname(), pathinfo() (#110966) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html — PHP-API, FullyScanned, ext:core
+            - 15.0 Deprecation: BackendUtility::getModuleData() (#111116)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html — Backend, PHP-API, FullyScanned, ext:backend
+            - 14.3 Deprecation: Lowlevel DatabaseIntegrityCheck class (#107931) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html — PHP-API, FullyScanned, ext:lowlevel
+            - 14.3 Deprecation: BackendUtility item list label methods (#109519) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html — PHP-API, FullyScanned, ext:backend
+            - 14.3 Deprecation: GeneralUtility::isOnCurrentHost() without PSR-7 request (#109523)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html — PHP-API, FullyScanned, ext:core
+            - 14.3 Deprecation: GeneralUtility::sanitizeLocalUrl() needs PSR-7 request (#109544)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html — PHP-API, FullyScanned, ext:core
+            - 14.3 Deprecation: GeneralUtility::locationHeaderUrl() without PSR-7 request (#109548)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html — PHP-API, FullyScanned, ext:core
+            - 14.3 Deprecation: GeneralUtility::getIndpEnv() (#109551)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html — PHP-API, FullyScanned, ext:core
+            - 14.2 Deprecation: BackendUserAuthentication::recordEditAccessInternals() and $errorMsg (#108568)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html — PHP-API, FullyScanned, ext:core
+            - 14.2 Deprecation: BackendUtility TSconfig-related methods (#108761) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html — PHP-API, FullyScanned, ext:backend
+            - 14.2 Deprecation: BackendUtility localization-related methods (#108810) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html — PHP-API, FullyScanned, ext:backend
+            - 14.2 Deprecation: ExtensionManagementUtility::addFieldsToUserSettings (#108843) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html — PHP-API, FullyScanned, ext:core
+            - 14.2 Deprecation: Deprecate PageRenderer->addInlineLanguageDomain() (#108963)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html — Backend, JavaScript, FullyScanned, ext:backend
+            - 14.2 Deprecation: Move language:update command and events to EXT:core (#109027) — removed in v15
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html — CLI, PHP-API, FullyScanned, ext:install
 
-Data:
+            Read the file for the description and the migration, or ask again with the name of one entry as the query, such as "Deprecation-110202-StringUtilityMultibyteStringPad". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+            An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
+            A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "",
-        "matchCount": 392,
-        "matchedIn": "name",
-        "tags": [
-            "Backend",
-            "CLI",
-            "Database",
-            "FAL",
-            "FileList",
-            "FlexForm",
-            "Fluid",
-            "Frontend",
-            "FullyScanned",
-            "JavaScript",
-            "LocalConfiguration",
-            "NotScanned",
-            "PHP-API",
-            "PartiallyScanned",
-            "RTE",
-            "Scheduler",
-            "TCA",
-            "TSConfig",
-            "TypoScript",
-            "YAML",
-            "ext:adminpanel",
-            "ext:backend",
-            "ext:core",
-            "ext:css_styled_content",
-            "ext:dashboard",
-            "ext:dbal",
-            "ext:extbase",
-            "ext:extensionmanager",
-            "ext:feedit",
-            "ext:felogin",
-            "ext:filelist",
-            "ext:fluid",
-            "ext:fluid_styled_content",
-            "ext:form",
-            "ext:frontend",
-            "ext:impexp",
-            "ext:indexed_search",
-            "ext:info",
-            "ext:install",
-            "ext:lang",
-            "ext:linkvalidator",
-            "ext:lowlevel",
-            "ext:recordlist",
-            "ext:recycler",
-            "ext:redirects",
-            "ext:reports",
-            "ext:rsaauth",
-            "ext:rte_ckeditor",
-            "ext:saltedpasswords",
-            "ext:scheduler",
-            "ext:seo",
-            "ext:setup",
-            "ext:t3editor",
-            "ext:taskcenter",
-            "ext:tstemplate",
-            "ext:workspaces"
-        ],
-        "entries": [
+        .. code-block:: json
+
             {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110202",
-                "title": "StringUtility::multibyteStringPad() method",
-                "name": "Deprecation-110202-StringUtilityMultibyteStringPad",
-                "removal": "16.0",
-                "migration": "",
+                "query": "",
+                "matchCount": 392,
+                "matchedIn": "name",
                 "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110285",
-                "title": "DataHandler->setCorrelationId()",
-                "name": "Deprecation-110285-DataHandlerSetCorrelationId",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110334",
-                "title": "AbstractXmlSitemapDataProvider",
-                "name": "Deprecation-110334-AbstractXmlSitemapDataProvider",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:seo"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110347",
-                "title": "LazyLoadingProxy and LazyObjectStorage",
-                "name": "Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:extbase"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110477",
-                "title": "CommandRegistry->getSchedulableCommands()",
-                "name": "Deprecation-110477-CommandRegistryGetSchedulableCommands",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
+                    "Backend",
                     "CLI",
-                    "FullyScanned",
-                    "PHP-API",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110762",
-                "title": "ResourceStorage->getStorageRecord()",
-                "name": "Deprecation-110762-ResourceStorageGetStorageRecord",
-                "removal": "",
-                "migration": "",
-                "tags": [
+                    "Database",
                     "FAL",
-                    "PHP-API",
+                    "FileList",
+                    "FlexForm",
+                    "Fluid",
+                    "Frontend",
                     "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110966",
-                "title": "PathUtility basename(), dirname(), pathinfo()",
-                "name": "Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "111116",
-                "title": "BackendUtility::getModuleData()",
-                "name": "Deprecation-111116-BackendUtilityGetModuleData",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "Backend",
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "107931",
-                "title": "Lowlevel DatabaseIntegrityCheck class",
-                "name": "Deprecation-107931-LowlevelDatabaseIntegrityCheck",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:lowlevel"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109519",
-                "title": "BackendUtility item list label methods",
-                "name": "Deprecation-109519-BackendUtilityItemListLabelMethods",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109523",
-                "title": "GeneralUtility::isOnCurrentHost() without PSR-7 request",
-                "name": "Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109544",
-                "title": "GeneralUtility::sanitizeLocalUrl() needs PSR-7 request",
-                "name": "Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109548",
-                "title": "GeneralUtility::locationHeaderUrl() without PSR-7 request",
-                "name": "Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109551",
-                "title": "GeneralUtility::getIndpEnv()",
-                "name": "Deprecation-109551-GeneralUtilityGetIndpEnv",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108568",
-                "title": "BackendUserAuthentication::recordEditAccessInternals() and $errorMsg",
-                "name": "Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108761",
-                "title": "BackendUtility TSconfig-related methods",
-                "name": "Deprecation-108761-BackendUtilityTSconfigMethods",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108810",
-                "title": "BackendUtility localization-related methods",
-                "name": "Deprecation-108810-BackendUtilityLocalizationMethods",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108843",
-                "title": "ExtensionManagementUtility::addFieldsToUserSettings",
-                "name": "Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108963",
-                "title": "Deprecate PageRenderer->addInlineLanguageDomain()",
-                "name": "Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "Backend",
                     "JavaScript",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "109027",
-                "title": "Move language:update command and events to EXT:core",
-                "name": "Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore",
-                "removal": "15",
-                "migration": "",
-                "tags": [
-                    "CLI",
+                    "LocalConfiguration",
+                    "NotScanned",
                     "PHP-API",
-                    "FullyScanned",
-                    "ext:install"
+                    "PartiallyScanned",
+                    "RTE",
+                    "Scheduler",
+                    "TCA",
+                    "TSConfig",
+                    "TypoScript",
+                    "YAML",
+                    "ext:adminpanel",
+                    "ext:backend",
+                    "ext:core",
+                    "ext:css_styled_content",
+                    "ext:dashboard",
+                    "ext:dbal",
+                    "ext:extbase",
+                    "ext:extensionmanager",
+                    "ext:feedit",
+                    "ext:felogin",
+                    "ext:filelist",
+                    "ext:fluid",
+                    "ext:fluid_styled_content",
+                    "ext:form",
+                    "ext:frontend",
+                    "ext:impexp",
+                    "ext:indexed_search",
+                    "ext:info",
+                    "ext:install",
+                    "ext:lang",
+                    "ext:linkvalidator",
+                    "ext:lowlevel",
+                    "ext:recordlist",
+                    "ext:recycler",
+                    "ext:redirects",
+                    "ext:reports",
+                    "ext:rsaauth",
+                    "ext:rte_ckeditor",
+                    "ext:saltedpasswords",
+                    "ext:scheduler",
+                    "ext:seo",
+                    "ext:setup",
+                    "ext:t3editor",
+                    "ext:taskcenter",
+                    "ext:tstemplate",
+                    "ext:workspaces"
                 ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html",
-                "publishedIn": "manual"
+                "entries": [
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110202",
+                        "title": "StringUtility::multibyteStringPad() method",
+                        "name": "Deprecation-110202-StringUtilityMultibyteStringPad",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110285",
+                        "title": "DataHandler->setCorrelationId()",
+                        "name": "Deprecation-110285-DataHandlerSetCorrelationId",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110334",
+                        "title": "AbstractXmlSitemapDataProvider",
+                        "name": "Deprecation-110334-AbstractXmlSitemapDataProvider",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:seo"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110347",
+                        "title": "LazyLoadingProxy and LazyObjectStorage",
+                        "name": "Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:extbase"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110477",
+                        "title": "CommandRegistry->getSchedulableCommands()",
+                        "name": "Deprecation-110477-CommandRegistryGetSchedulableCommands",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "CLI",
+                            "FullyScanned",
+                            "PHP-API",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110762",
+                        "title": "ResourceStorage->getStorageRecord()",
+                        "name": "Deprecation-110762-ResourceStorageGetStorageRecord",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "FAL",
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110966",
+                        "title": "PathUtility basename(), dirname(), pathinfo()",
+                        "name": "Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "111116",
+                        "title": "BackendUtility::getModuleData()",
+                        "name": "Deprecation-111116-BackendUtilityGetModuleData",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "Backend",
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "107931",
+                        "title": "Lowlevel DatabaseIntegrityCheck class",
+                        "name": "Deprecation-107931-LowlevelDatabaseIntegrityCheck",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:lowlevel"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109519",
+                        "title": "BackendUtility item list label methods",
+                        "name": "Deprecation-109519-BackendUtilityItemListLabelMethods",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109523",
+                        "title": "GeneralUtility::isOnCurrentHost() without PSR-7 request",
+                        "name": "Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109544",
+                        "title": "GeneralUtility::sanitizeLocalUrl() needs PSR-7 request",
+                        "name": "Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109548",
+                        "title": "GeneralUtility::locationHeaderUrl() without PSR-7 request",
+                        "name": "Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109551",
+                        "title": "GeneralUtility::getIndpEnv()",
+                        "name": "Deprecation-109551-GeneralUtilityGetIndpEnv",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108568",
+                        "title": "BackendUserAuthentication::recordEditAccessInternals() and $errorMsg",
+                        "name": "Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108761",
+                        "title": "BackendUtility TSconfig-related methods",
+                        "name": "Deprecation-108761-BackendUtilityTSconfigMethods",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108810",
+                        "title": "BackendUtility localization-related methods",
+                        "name": "Deprecation-108810-BackendUtilityLocalizationMethods",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108843",
+                        "title": "ExtensionManagementUtility::addFieldsToUserSettings",
+                        "name": "Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108963",
+                        "title": "Deprecate PageRenderer->addInlineLanguageDomain()",
+                        "name": "Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "Backend",
+                            "JavaScript",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "109027",
+                        "title": "Move language:update command and events to EXT:core",
+                        "name": "Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore",
+                        "removal": "15",
+                        "migration": "",
+                        "tags": [
+                            "CLI",
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:install"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html",
+                        "publishedIn": "manual"
+                    }
+                ],
+                "versions": [
+                    "14.3",
+                    "14.3.x",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.4.x",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0",
+                    "11.5",
+                    "11.5.x",
+                    "11.4",
+                    "11.3",
+                    "11.2",
+                    "11.1",
+                    "11.0",
+                    "10.4",
+                    "10.4.x",
+                    "10.3",
+                    "10.2",
+                    "10.1",
+                    "10.0",
+                    "9.5",
+                    "9.5.x",
+                    "9.4",
+                    "9.3",
+                    "9.2",
+                    "9.1",
+                    "9.0",
+                    "8.7",
+                    "8.7.x",
+                    "8.6",
+                    "8.5",
+                    "8.4",
+                    "8.3",
+                    "8.2",
+                    "8.1",
+                    "8.0",
+                    "7.6",
+                    "7.6.x",
+                    "7.5",
+                    "7.4",
+                    "7.3",
+                    "7.2",
+                    "7.1",
+                    "7.0"
+                ],
+                "answeredBy": "packages",
+                "versionsFromTheManual": [
+                    "15.0",
+                    "14.3",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0"
+                ],
+                "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
+                "owed": [
+                    "Read the file for the description and the migration, or ask again with the name of one entry as the query, such as \"Deprecation-110202-StringUtilityMultibyteStringPad\". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
+                ]
             }
-        ],
-        "versions": [
-            "14.3",
-            "14.3.x",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.4.x",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0",
-            "11.5",
-            "11.5.x",
-            "11.4",
-            "11.3",
-            "11.2",
-            "11.1",
-            "11.0",
-            "10.4",
-            "10.4.x",
-            "10.3",
-            "10.2",
-            "10.1",
-            "10.0",
-            "9.5",
-            "9.5.x",
-            "9.4",
-            "9.3",
-            "9.2",
-            "9.1",
-            "9.0",
-            "8.7",
-            "8.7.x",
-            "8.6",
-            "8.5",
-            "8.4",
-            "8.3",
-            "8.2",
-            "8.1",
-            "8.0",
-            "7.6",
-            "7.6.x",
-            "7.5",
-            "7.4",
-            "7.3",
-            "7.2",
-            "7.1",
-            "7.0"
-        ],
-        "answeredBy": "packages",
-        "versionsFromTheManual": [
-            "15.0",
-            "14.3",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0"
-        ],
-        "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
-        "owed": [
-            "Read the file for the description and the migration, or ask again with the name of one entry as the query, such as \"Deprecation-110202-StringUtilityMultibyteStringPad\". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
-        ]
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    142 of the 284 entries narrowed by version and type are tagged "FullyScanned" — showing the first 20:
-    - 15.0 Deprecation: StringUtility::multibyteStringPad() method (#110202) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html — PHP-API, FullyScanned, ext:core
-    - 15.0 Deprecation: DataHandler->setCorrelationId() (#110285) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html — PHP-API, FullyScanned, ext:core
-    - 15.0 Deprecation: AbstractXmlSitemapDataProvider (#110334) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html — PHP-API, FullyScanned, ext:seo
-    - 15.0 Deprecation: LazyLoadingProxy and LazyObjectStorage (#110347) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html — PHP-API, FullyScanned, ext:extbase
-    - 15.0 Deprecation: CommandRegistry->getSchedulableCommands() (#110477) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html — CLI, FullyScanned, PHP-API, ext:core
-    - 15.0 Deprecation: ResourceStorage->getStorageRecord() (#110762)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html — FAL, PHP-API, FullyScanned, ext:core
-    - 15.0 Deprecation: PathUtility basename(), dirname(), pathinfo() (#110966) — removed in v16.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html — PHP-API, FullyScanned, ext:core
-    - 15.0 Deprecation: BackendUtility::getModuleData() (#111116)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html — Backend, PHP-API, FullyScanned, ext:backend
-    - 14.3 Deprecation: Lowlevel DatabaseIntegrityCheck class (#107931) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html — PHP-API, FullyScanned, ext:lowlevel
-    - 14.3 Deprecation: BackendUtility item list label methods (#109519) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html — PHP-API, FullyScanned, ext:backend
-    - 14.3 Deprecation: GeneralUtility::isOnCurrentHost() without PSR-7 request (#109523)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html — PHP-API, FullyScanned, ext:core
-    - 14.3 Deprecation: GeneralUtility::sanitizeLocalUrl() needs PSR-7 request (#109544)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html — PHP-API, FullyScanned, ext:core
-    - 14.3 Deprecation: GeneralUtility::locationHeaderUrl() without PSR-7 request (#109548)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html — PHP-API, FullyScanned, ext:core
-    - 14.3 Deprecation: GeneralUtility::getIndpEnv() (#109551)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html — PHP-API, FullyScanned, ext:core
-    - 14.2 Deprecation: BackendUserAuthentication::recordEditAccessInternals() and $errorMsg (#108568)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html — PHP-API, FullyScanned, ext:core
-    - 14.2 Deprecation: BackendUtility TSconfig-related methods (#108761) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html — PHP-API, FullyScanned, ext:backend
-    - 14.2 Deprecation: BackendUtility localization-related methods (#108810) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html — PHP-API, FullyScanned, ext:backend
-    - 14.2 Deprecation: ExtensionManagementUtility::addFieldsToUserSettings (#108843) — removed in v15.0
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html — PHP-API, FullyScanned, ext:core
-    - 14.2 Deprecation: Deprecate PageRenderer->addInlineLanguageDomain() (#108963)
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html — Backend, JavaScript, FullyScanned, ext:backend
-    - 14.2 Deprecation: Move language:update command and events to EXT:core (#109027) — removed in v15
-      https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html — CLI, PHP-API, FullyScanned, ext:install
+        .. code-block:: text
 
-    Read the file for the description and the migration, or ask again with the name of one entry as the query, such as "Deprecation-110202-StringUtilityMultibyteStringPad". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
-    An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
-    A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
+            142 of the 284 entries narrowed by version and type are tagged "FullyScanned" — showing the first 20:
+            - 15.0 Deprecation: StringUtility::multibyteStringPad() method (#110202) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html — PHP-API, FullyScanned, ext:core
+            - 15.0 Deprecation: DataHandler->setCorrelationId() (#110285) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html — PHP-API, FullyScanned, ext:core
+            - 15.0 Deprecation: AbstractXmlSitemapDataProvider (#110334) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html — PHP-API, FullyScanned, ext:seo
+            - 15.0 Deprecation: LazyLoadingProxy and LazyObjectStorage (#110347) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html — PHP-API, FullyScanned, ext:extbase
+            - 15.0 Deprecation: CommandRegistry->getSchedulableCommands() (#110477) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html — CLI, FullyScanned, PHP-API, ext:core
+            - 15.0 Deprecation: ResourceStorage->getStorageRecord() (#110762)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html — FAL, PHP-API, FullyScanned, ext:core
+            - 15.0 Deprecation: PathUtility basename(), dirname(), pathinfo() (#110966) — removed in v16.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html — PHP-API, FullyScanned, ext:core
+            - 15.0 Deprecation: BackendUtility::getModuleData() (#111116)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html — Backend, PHP-API, FullyScanned, ext:backend
+            - 14.3 Deprecation: Lowlevel DatabaseIntegrityCheck class (#107931) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html — PHP-API, FullyScanned, ext:lowlevel
+            - 14.3 Deprecation: BackendUtility item list label methods (#109519) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html — PHP-API, FullyScanned, ext:backend
+            - 14.3 Deprecation: GeneralUtility::isOnCurrentHost() without PSR-7 request (#109523)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html — PHP-API, FullyScanned, ext:core
+            - 14.3 Deprecation: GeneralUtility::sanitizeLocalUrl() needs PSR-7 request (#109544)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html — PHP-API, FullyScanned, ext:core
+            - 14.3 Deprecation: GeneralUtility::locationHeaderUrl() without PSR-7 request (#109548)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html — PHP-API, FullyScanned, ext:core
+            - 14.3 Deprecation: GeneralUtility::getIndpEnv() (#109551)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html — PHP-API, FullyScanned, ext:core
+            - 14.2 Deprecation: BackendUserAuthentication::recordEditAccessInternals() and $errorMsg (#108568)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html — PHP-API, FullyScanned, ext:core
+            - 14.2 Deprecation: BackendUtility TSconfig-related methods (#108761) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html — PHP-API, FullyScanned, ext:backend
+            - 14.2 Deprecation: BackendUtility localization-related methods (#108810) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html — PHP-API, FullyScanned, ext:backend
+            - 14.2 Deprecation: ExtensionManagementUtility::addFieldsToUserSettings (#108843) — removed in v15.0
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html — PHP-API, FullyScanned, ext:core
+            - 14.2 Deprecation: Deprecate PageRenderer->addInlineLanguageDomain() (#108963)
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html — Backend, JavaScript, FullyScanned, ext:backend
+            - 14.2 Deprecation: Move language:update command and events to EXT:core (#109027) — removed in v15
+              https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html — CLI, PHP-API, FullyScanned, ext:install
 
-Data:
+            Read the file for the description and the migration, or ask again with the name of one entry as the query, such as "Deprecation-110202-StringUtilityMultibyteStringPad". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you.
+            An entry marked manual is what docs.typo3.org renders today, after every merge, and it links by URL. For a major that is not released yet it is still being written. An identifier search reaches it by the PHP classes and methods it names, and by no other identifier.
+            A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "",
-        "matchCount": 142,
-        "matchedIn": "name",
-        "tags": [
-            "Backend",
-            "CLI",
-            "Database",
-            "FAL",
-            "FileList",
-            "FlexForm",
-            "Fluid",
-            "Frontend",
-            "FullyScanned",
-            "JavaScript",
-            "LocalConfiguration",
-            "NotScanned",
-            "PHP-API",
-            "PartiallyScanned",
-            "RTE",
-            "Scheduler",
-            "TCA",
-            "TSConfig",
-            "TypoScript",
-            "YAML",
-            "ext:backend",
-            "ext:core",
-            "ext:dashboard",
-            "ext:extbase",
-            "ext:extensionmanager",
-            "ext:felogin",
-            "ext:filelist",
-            "ext:fluid",
-            "ext:form",
-            "ext:frontend",
-            "ext:impexp",
-            "ext:indexed_search",
-            "ext:install",
-            "ext:lowlevel",
-            "ext:redirects",
-            "ext:rte_ckeditor",
-            "ext:scheduler",
-            "ext:seo",
-            "ext:t3editor"
-        ],
-        "entries": [
+        .. code-block:: json
+
             {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110202",
-                "title": "StringUtility::multibyteStringPad() method",
-                "name": "Deprecation-110202-StringUtilityMultibyteStringPad",
-                "removal": "16.0",
-                "migration": "",
+                "query": "",
+                "matchCount": 142,
+                "matchedIn": "name",
                 "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110285",
-                "title": "DataHandler->setCorrelationId()",
-                "name": "Deprecation-110285-DataHandlerSetCorrelationId",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110334",
-                "title": "AbstractXmlSitemapDataProvider",
-                "name": "Deprecation-110334-AbstractXmlSitemapDataProvider",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:seo"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110347",
-                "title": "LazyLoadingProxy and LazyObjectStorage",
-                "name": "Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:extbase"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110477",
-                "title": "CommandRegistry->getSchedulableCommands()",
-                "name": "Deprecation-110477-CommandRegistryGetSchedulableCommands",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
+                    "Backend",
                     "CLI",
-                    "FullyScanned",
-                    "PHP-API",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110762",
-                "title": "ResourceStorage->getStorageRecord()",
-                "name": "Deprecation-110762-ResourceStorageGetStorageRecord",
-                "removal": "",
-                "migration": "",
-                "tags": [
+                    "Database",
                     "FAL",
-                    "PHP-API",
+                    "FileList",
+                    "FlexForm",
+                    "Fluid",
+                    "Frontend",
                     "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "110966",
-                "title": "PathUtility basename(), dirname(), pathinfo()",
-                "name": "Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo",
-                "removal": "16.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "15.0",
-                "issue": "111116",
-                "title": "BackendUtility::getModuleData()",
-                "name": "Deprecation-111116-BackendUtilityGetModuleData",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "Backend",
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "107931",
-                "title": "Lowlevel DatabaseIntegrityCheck class",
-                "name": "Deprecation-107931-LowlevelDatabaseIntegrityCheck",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:lowlevel"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109519",
-                "title": "BackendUtility item list label methods",
-                "name": "Deprecation-109519-BackendUtilityItemListLabelMethods",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109523",
-                "title": "GeneralUtility::isOnCurrentHost() without PSR-7 request",
-                "name": "Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109544",
-                "title": "GeneralUtility::sanitizeLocalUrl() needs PSR-7 request",
-                "name": "Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109548",
-                "title": "GeneralUtility::locationHeaderUrl() without PSR-7 request",
-                "name": "Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.3",
-                "issue": "109551",
-                "title": "GeneralUtility::getIndpEnv()",
-                "name": "Deprecation-109551-GeneralUtilityGetIndpEnv",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108568",
-                "title": "BackendUserAuthentication::recordEditAccessInternals() and $errorMsg",
-                "name": "Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108761",
-                "title": "BackendUtility TSconfig-related methods",
-                "name": "Deprecation-108761-BackendUtilityTSconfigMethods",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108810",
-                "title": "BackendUtility localization-related methods",
-                "name": "Deprecation-108810-BackendUtilityLocalizationMethods",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108843",
-                "title": "ExtensionManagementUtility::addFieldsToUserSettings",
-                "name": "Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings",
-                "removal": "15.0",
-                "migration": "",
-                "tags": [
-                    "PHP-API",
-                    "FullyScanned",
-                    "ext:core"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "108963",
-                "title": "Deprecate PageRenderer->addInlineLanguageDomain()",
-                "name": "Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain",
-                "removal": "",
-                "migration": "",
-                "tags": [
-                    "Backend",
                     "JavaScript",
-                    "FullyScanned",
-                    "ext:backend"
-                ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html",
-                "publishedIn": "manual"
-            },
-            {
-                "type": "Deprecation",
-                "version": "14.2",
-                "issue": "109027",
-                "title": "Move language:update command and events to EXT:core",
-                "name": "Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore",
-                "removal": "15",
-                "migration": "",
-                "tags": [
-                    "CLI",
+                    "LocalConfiguration",
+                    "NotScanned",
                     "PHP-API",
-                    "FullyScanned",
-                    "ext:install"
+                    "PartiallyScanned",
+                    "RTE",
+                    "Scheduler",
+                    "TCA",
+                    "TSConfig",
+                    "TypoScript",
+                    "YAML",
+                    "ext:backend",
+                    "ext:core",
+                    "ext:dashboard",
+                    "ext:extbase",
+                    "ext:extensionmanager",
+                    "ext:felogin",
+                    "ext:filelist",
+                    "ext:fluid",
+                    "ext:form",
+                    "ext:frontend",
+                    "ext:impexp",
+                    "ext:indexed_search",
+                    "ext:install",
+                    "ext:lowlevel",
+                    "ext:redirects",
+                    "ext:rte_ckeditor",
+                    "ext:scheduler",
+                    "ext:seo",
+                    "ext:t3editor"
                 ],
-                "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html",
-                "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html",
-                "publishedIn": "manual"
+                "entries": [
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110202",
+                        "title": "StringUtility::multibyteStringPad() method",
+                        "name": "Deprecation-110202-StringUtilityMultibyteStringPad",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110202-StringUtilityMultibyteStringPad.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110285",
+                        "title": "DataHandler->setCorrelationId()",
+                        "name": "Deprecation-110285-DataHandlerSetCorrelationId",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110285-DataHandlerSetCorrelationId.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110334",
+                        "title": "AbstractXmlSitemapDataProvider",
+                        "name": "Deprecation-110334-AbstractXmlSitemapDataProvider",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:seo"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110334-AbstractXmlSitemapDataProvider.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110347",
+                        "title": "LazyLoadingProxy and LazyObjectStorage",
+                        "name": "Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:extbase"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110347-LazyLoadingProxyAndLazyObjectStorage.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110477",
+                        "title": "CommandRegistry->getSchedulableCommands()",
+                        "name": "Deprecation-110477-CommandRegistryGetSchedulableCommands",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "CLI",
+                            "FullyScanned",
+                            "PHP-API",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110477-CommandRegistryGetSchedulableCommands.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110762",
+                        "title": "ResourceStorage->getStorageRecord()",
+                        "name": "Deprecation-110762-ResourceStorageGetStorageRecord",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "FAL",
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110762-ResourceStorageGetStorageRecord.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "110966",
+                        "title": "PathUtility basename(), dirname(), pathinfo()",
+                        "name": "Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo",
+                        "removal": "16.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-110966-PathUtilityBasenameDirnameAndPathinfo.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "15.0",
+                        "issue": "111116",
+                        "title": "BackendUtility::getModuleData()",
+                        "name": "Deprecation-111116-BackendUtilityGetModuleData",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "Backend",
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/15.0/Deprecation-111116-BackendUtilityGetModuleData.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "107931",
+                        "title": "Lowlevel DatabaseIntegrityCheck class",
+                        "name": "Deprecation-107931-LowlevelDatabaseIntegrityCheck",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:lowlevel"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-107931-LowlevelDatabaseIntegrityCheck.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109519",
+                        "title": "BackendUtility item list label methods",
+                        "name": "Deprecation-109519-BackendUtilityItemListLabelMethods",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109519-BackendUtilityItemListLabelMethods.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109523",
+                        "title": "GeneralUtility::isOnCurrentHost() without PSR-7 request",
+                        "name": "Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109523-GeneralUtilityIsOnCurrentHostWithoutRequest.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109544",
+                        "title": "GeneralUtility::sanitizeLocalUrl() needs PSR-7 request",
+                        "name": "Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109544-GeneralUtilitySanitizeLocalUrlWithoutRequest.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109548",
+                        "title": "GeneralUtility::locationHeaderUrl() without PSR-7 request",
+                        "name": "Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109548-GeneralUtilityLocationHeaderUrlWithoutRequest.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.3",
+                        "issue": "109551",
+                        "title": "GeneralUtility::getIndpEnv()",
+                        "name": "Deprecation-109551-GeneralUtilityGetIndpEnv",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.3/Deprecation-109551-GeneralUtilityGetIndpEnv.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108568",
+                        "title": "BackendUserAuthentication::recordEditAccessInternals() and $errorMsg",
+                        "name": "Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108568-BackendUserAuthenticationRecordEditAccessInternals.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108761",
+                        "title": "BackendUtility TSconfig-related methods",
+                        "name": "Deprecation-108761-BackendUtilityTSconfigMethods",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108761-BackendUtilityTSconfigMethods.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108810",
+                        "title": "BackendUtility localization-related methods",
+                        "name": "Deprecation-108810-BackendUtilityLocalizationMethods",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108810-BackendUtilityLocalizationMethods.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108843",
+                        "title": "ExtensionManagementUtility::addFieldsToUserSettings",
+                        "name": "Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings",
+                        "removal": "15.0",
+                        "migration": "",
+                        "tags": [
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:core"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108843-ExtensionManagementUtilityAddFieldsToUserSettings.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "108963",
+                        "title": "Deprecate PageRenderer->addInlineLanguageDomain()",
+                        "name": "Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain",
+                        "removal": "",
+                        "migration": "",
+                        "tags": [
+                            "Backend",
+                            "JavaScript",
+                            "FullyScanned",
+                            "ext:backend"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-108963-DeprecatePageRenderer-addInlineLanguageDomain.html",
+                        "publishedIn": "manual"
+                    },
+                    {
+                        "type": "Deprecation",
+                        "version": "14.2",
+                        "issue": "109027",
+                        "title": "Move language:update command and events to EXT:core",
+                        "name": "Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore",
+                        "removal": "15",
+                        "migration": "",
+                        "tags": [
+                            "CLI",
+                            "PHP-API",
+                            "FullyScanned",
+                            "ext:install"
+                        ],
+                        "file": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html",
+                        "url": "https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.2/Deprecation-109027-MoveLanguageUpdateCommandAndEventsToEXTcore.html",
+                        "publishedIn": "manual"
+                    }
+                ],
+                "versions": [
+                    "14.3"
+                ],
+                "answeredBy": "packages",
+                "versionsFromTheManual": [
+                    "15.0",
+                    "14.3",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0"
+                ],
+                "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
+                "owed": [
+                    "Read the file for the description and the migration, or ask again with the name of one entry as the query, such as \"Deprecation-110202-StringUtilityMultibyteStringPad\". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
+                ]
             }
-        ],
-        "versions": [
-            "14.3"
-        ],
-        "answeredBy": "packages",
-        "versionsFromTheManual": [
-            "15.0",
-            "14.3",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0"
-        ],
-        "removalRule": "A deprecated API keeps working until the next major release. An entry that states a removal version overrides that, and some state one more than a major away. An empty removal is what the entry states, not a promise that no removal is planned.",
-        "owed": [
-            "Read the file for the description and the migration, or ask again with the name of one entry as the query, such as \"Deprecation-110202-StringUtilityMultibyteStringPad\". That reaches the one entry and carries its migration section whole. A Deprecation or Breaking entry tagged FullyScanned or PartiallyScanned has an extension scanner matcher behind it, so the Install Tool can find the call sites for you."
-        ]
-    }
 
 changelog: miss
 ~~~~~~~~~~~~~~~
@@ -1682,162 +1693,166 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    No changelog entry in this installation carries all of "quantumflux".
-    A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId "core/contribution/changelog".
-    15.0, 14.3, 14.3.x, 14.2, 14.1, 14.0, 13.4, 13.4.x, 13.3, 13.2, 13.1, 13.0, 12.4, 12.4.x, 12.3, 12.2, 12.1, 12.0 are read from docs.typo3.org — what it renders today, after every merge, which for a major that is not released yet is still being written. This installation ships 14.3, 14.3.x, 14.2, 14.1, 14.0, 13.4, 13.4.x, 13.3 and older.
+        .. code-block:: text
 
-Data:
+            No changelog entry in this installation carries all of "quantumflux".
+            A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId "core/contribution/changelog".
+            15.0, 14.3, 14.3.x, 14.2, 14.1, 14.0, 13.4, 13.4.x, 13.3, 13.2, 13.1, 13.0, 12.4, 12.4.x, 12.3, 12.2, 12.1, 12.0 are read from docs.typo3.org — what it renders today, after every merge, which for a major that is not released yet is still being written. This installation ships 14.3, 14.3.x, 14.2, 14.1, 14.0, 13.4, 13.4.x, 13.3 and older.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "quantumflux",
-        "matchCount": 0,
-        "tags": [],
-        "entries": [],
-        "versions": [
-            "14.3",
-            "14.3.x",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.4.x",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0",
-            "11.5",
-            "11.5.x",
-            "11.4",
-            "11.3",
-            "11.2",
-            "11.1",
-            "11.0",
-            "10.4",
-            "10.4.x",
-            "10.3",
-            "10.2",
-            "10.1",
-            "10.0",
-            "9.5",
-            "9.5.x",
-            "9.4",
-            "9.3",
-            "9.2",
-            "9.1",
-            "9.0",
-            "8.7",
-            "8.7.x",
-            "8.6",
-            "8.5",
-            "8.4",
-            "8.3",
-            "8.2",
-            "8.1",
-            "8.0",
-            "7.6",
-            "7.6.x",
-            "7.5",
-            "7.4",
-            "7.3",
-            "7.2",
-            "7.1",
-            "7.0"
-        ],
-        "answeredBy": "packages",
-        "versionsFromTheManual": [
-            "15.0",
-            "14.3",
-            "14.3.x",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.4.x",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0"
-        ],
-        "termCounts": [
+        .. code-block:: json
+
             {
-                "term": "quantumflux",
-                "matchCount": 0
+                "query": "quantumflux",
+                "matchCount": 0,
+                "tags": [],
+                "entries": [],
+                "versions": [
+                    "14.3",
+                    "14.3.x",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.4.x",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0",
+                    "11.5",
+                    "11.5.x",
+                    "11.4",
+                    "11.3",
+                    "11.2",
+                    "11.1",
+                    "11.0",
+                    "10.4",
+                    "10.4.x",
+                    "10.3",
+                    "10.2",
+                    "10.1",
+                    "10.0",
+                    "9.5",
+                    "9.5.x",
+                    "9.4",
+                    "9.3",
+                    "9.2",
+                    "9.1",
+                    "9.0",
+                    "8.7",
+                    "8.7.x",
+                    "8.6",
+                    "8.5",
+                    "8.4",
+                    "8.3",
+                    "8.2",
+                    "8.1",
+                    "8.0",
+                    "7.6",
+                    "7.6.x",
+                    "7.5",
+                    "7.4",
+                    "7.3",
+                    "7.2",
+                    "7.1",
+                    "7.0"
+                ],
+                "answeredBy": "packages",
+                "versionsFromTheManual": [
+                    "15.0",
+                    "14.3",
+                    "14.3.x",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.4.x",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0"
+                ],
+                "termCounts": [
+                    {
+                        "term": "quantumflux",
+                        "matchCount": 0
+                    }
+                ],
+                "owed": [
+                    "A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId \"core/contribution/changelog\"."
+                ]
             }
-        ],
-        "owed": [
-            "A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId \"core/contribution/changelog\"."
-        ]
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    No changelog entry in this installation carries all of "quantumflux".
-    A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId "core/contribution/changelog".
-    15.0, 14.3, 14.3.x, 14.2, 14.1, 14.0, 13.4, 13.4.x, 13.3, 13.2, 13.1, 13.0, 12.4, 12.4.x, 12.3, 12.2, 12.1, 12.0 are read from docs.typo3.org — what it renders today, after every merge, which for a major that is not released yet is still being written. This installation ships 14.3 and older.
+        .. code-block:: text
 
-Data:
+            No changelog entry in this installation carries all of "quantumflux".
+            A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId "core/contribution/changelog".
+            15.0, 14.3, 14.3.x, 14.2, 14.1, 14.0, 13.4, 13.4.x, 13.3, 13.2, 13.1, 13.0, 12.4, 12.4.x, 12.3, 12.2, 12.1, 12.0 are read from docs.typo3.org — what it renders today, after every merge, which for a major that is not released yet is still being written. This installation ships 14.3 and older.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "quantumflux",
-        "matchCount": 0,
-        "tags": [],
-        "entries": [],
-        "versions": [
-            "14.3"
-        ],
-        "answeredBy": "packages",
-        "versionsFromTheManual": [
-            "15.0",
-            "14.3",
-            "14.3.x",
-            "14.2",
-            "14.1",
-            "14.0",
-            "13.4",
-            "13.4.x",
-            "13.3",
-            "13.2",
-            "13.1",
-            "13.0",
-            "12.4",
-            "12.4.x",
-            "12.3",
-            "12.2",
-            "12.1",
-            "12.0"
-        ],
-        "termCounts": [
+        .. code-block:: json
+
             {
-                "term": "quantumflux",
-                "matchCount": 0
+                "query": "quantumflux",
+                "matchCount": 0,
+                "tags": [],
+                "entries": [],
+                "versions": [
+                    "14.3"
+                ],
+                "answeredBy": "packages",
+                "versionsFromTheManual": [
+                    "15.0",
+                    "14.3",
+                    "14.3.x",
+                    "14.2",
+                    "14.1",
+                    "14.0",
+                    "13.4",
+                    "13.4.x",
+                    "13.3",
+                    "13.2",
+                    "13.1",
+                    "13.0",
+                    "12.4",
+                    "12.4.x",
+                    "12.3",
+                    "12.2",
+                    "12.1",
+                    "12.0"
+                ],
+                "termCounts": [
+                    {
+                        "term": "quantumflux",
+                        "matchCount": 0
+                    }
+                ],
+                "owed": [
+                    "A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId \"core/contribution/changelog\"."
+                ]
             }
-        ],
-        "owed": [
-            "A changelog records change events, so a miss can mean the question belongs to another corpus. Whether a mechanism nobody changed still holds is typo3_documentation_lookup with targetVersion; whether a core patch of your own owes an entry is typo3_rule_lookup with documentId \"core/contribution/changelog\"."
-        ]
-    }

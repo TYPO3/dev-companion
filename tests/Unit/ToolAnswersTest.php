@@ -74,7 +74,7 @@ final class ToolAnswersTest extends TestCase
         foreach (self::recorded() as $name => $section) {
             $outside = self::outsideBlocks($section);
             $calls = preg_match_all('/^~{2,}$/m', $outside);
-            $answers = preg_match_all('/^Data:$/m', $outside);
+            $answers = preg_match_all('/^\s*\.\. tab:: Data$/m', $outside);
 
             self::assertGreaterThanOrEqual($calls, $answers, $name . ': answers per call');
             self::assertSame($calls + $answers * 2, count(self::blocks($section)), $name . ': blocks');
@@ -85,8 +85,8 @@ final class ToolAnswersTest extends TestCase
             );
             self::assertSame(
                 $answers,
-                preg_match_all('/^Text:$/m', $outside),
-                $name . ': ' . $answers . ' answers, and this many "Text:" left outside a block',
+                preg_match_all('/^\s*\.\. tab:: Text$/m', $outside),
+                $name . ': ' . $answers . ' answers, and this many Text tabs left outside a block',
             );
         }
     }
@@ -102,7 +102,7 @@ final class ToolAnswersTest extends TestCase
     {
         foreach (self::recorded() as $name => $section) {
             $outside = self::outsideBlocks($section);
-            $answers = preg_match_all('/^Data:$/m', $outside);
+            $answers = preg_match_all('/^\s*\.\. tab:: Data$/m', $outside);
             if ($answers === preg_match_all('/^~{2,}$/m', $outside)) {
                 continue;
             }
@@ -315,7 +315,7 @@ final class ToolAnswersTest extends TestCase
             if ($line === 'Called with:') {
                 ++$index;
             }
-            if ($line === 'Data:') {
+            if (trim($line) === '.. tab:: Data') {
                 $answers[$state . $from] = $blocks[$index + 1][1] ?? '';
                 $index += 2;
             }

@@ -1,4 +1,4 @@
-.. _typo3_extension_describe:
+:navigation-title: extension_describe
 
 ``typo3_extension_describe``
 ============================
@@ -23,10 +23,13 @@ and never what editors store through it. How many rows one of its tables holds,
 on which page and what they are is typo3_record_lookup. Answers from:
 installation, packages.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`,
-:ref:`packages <answer-sources-packages>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`, :ref:`packages <answer-sources-packages>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -367,864 +370,868 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    backend (system) — <installation>/typo3/sysext/backend
-    TYPO3 CMS Backend
+        .. code-block:: text
 
-    TCA tables it extends: be_users
+            backend (system) — <installation>/typo3/sysext/backend
+            TYPO3 CMS Backend
 
-    Backend modules: web_layout, records, content_status, site_configuration, link_management, about, pagetsconfig, pagetsconfig_pages, pagetsconfig_active, pagetsconfig_includes, content_security_policy, user_setup
+            TCA tables it extends: be_users
 
-    Backend routes: login, main, state-tracker, logout, password_forget, password_forget_initiate_reset, password_reset_validate, password_reset_finish, sudo_mode_module, sudo_mode_apply, sudo_mode_error, login_frameset, login_request_token, auth_mfa, setup_mfa, mfa, wizard_add, wizard_list, wizard_edit, wizard_element_browser, wizard_link, online_media, record_download, record_history, db_new, db_new_pages, pages_sort, pages_new, new_content_element_wizard, move_page, move_element, show_item, dummy, tce_db, tce_file, record_edit, record_edit_contextual, image_processing, clipboard_process, resource_request_thumbnail, language_domain, resource_rename, resource_gather, resource_replace, link_resource, file_process, file_exists, file_reference_details, file_reference_create, file_reference_synchronizelocalize, file_reference_expandcollapse, record_inline_details, record_inline_create, record_inline_synchronizelocalize, record_inline_expandcollapse, site_configuration_inline_create, record_slug_suggest, site_configuration_inline_details, record_flex_container_add, record_suggest, record_tree_data, page_tree_data, page_tree_rootline, page_tree_filter, page_tree_configuration, page_tree_browser_configuration, page_tree_set_temporary_mount_point, filestorage_tree_data, filestorage_tree_rootline, filestorage_tree_filter, bookmark_list, bookmark_create, bookmark_update, bookmark_delete, bookmark_reorder, bookmark_delete_multiple, bookmark_move, bookmark_group_create, bookmark_group_update, bookmark_group_delete, bookmark_group_reorder, clearcache_group_pages, clearcache_group_all, clearcache_page, systeminformation_render, modulemenu, topbar, login, logout, login_preflight, login_refresh, login_timedout, switch_user, switch_user_exit, mfa, contextmenu, contextmenu_clipboard, record_process, usersettings_process, wizard_image_manipulation, livesearch, livesearch_form, online_media_create, icons, link_browser_encodetypolink, wizard_localization_get_record, wizard_localization_get_targets, wizard_localization_get_sources, wizard_localization_get_modes, wizard_localization_get_handlers, wizard_localization_get_content, wizard_localization_localize, show_columns, show_columns_selector, record_download_settings, record_toggle_visibility, password_generate, security_csp_control, sudo_mode_control, codeeditor_tsref, codeeditor_codecompletion_loadtemplates, color_scheme_update, qrcode_generator, qrcode_download, wizard_page_get_doktypes, wizard_page_get_page_detail, wizard_page_get_processed_value, wizard_config, wizard_submit
+            Backend modules: web_layout, records, content_status, site_configuration, link_management, about, pagetsconfig, pagetsconfig_pages, pagetsconfig_active, pagetsconfig_includes, content_security_policy, user_setup
 
-    Middlewares: typo3/cms-core/normalized-params-attribute, typo3/cms-backend/locked-backend, typo3/cms-backend/https-redirector, typo3/cms-backend/csp-report, typo3/cms-backend/backend-routing, typo3/cms-core/request-token-middleware, typo3/cms-backend/authentication, typo3/cms-backend/backend-module-validator, typo3/cms-backend/sudo-mode-interceptor, typo3/cms-backend/site-resolver, typo3/cms-backend/page-context, typo3/cms-backend/csp-headers, typo3/cms-backend/js-label-importmap-resolver, typo3/cms-backend/response-headers, typo3/cms-core/response-propagation
+            Backend routes: login, main, state-tracker, logout, password_forget, password_forget_initiate_reset, password_reset_validate, password_reset_finish, sudo_mode_module, sudo_mode_apply, sudo_mode_error, login_frameset, login_request_token, auth_mfa, setup_mfa, mfa, wizard_add, wizard_list, wizard_edit, wizard_element_browser, wizard_link, online_media, record_download, record_history, db_new, db_new_pages, pages_sort, pages_new, new_content_element_wizard, move_page, move_element, show_item, dummy, tce_db, tce_file, record_edit, record_edit_contextual, image_processing, clipboard_process, resource_request_thumbnail, language_domain, resource_rename, resource_gather, resource_replace, link_resource, file_process, file_exists, file_reference_details, file_reference_create, file_reference_synchronizelocalize, file_reference_expandcollapse, record_inline_details, record_inline_create, record_inline_synchronizelocalize, record_inline_expandcollapse, site_configuration_inline_create, record_slug_suggest, site_configuration_inline_details, record_flex_container_add, record_suggest, record_tree_data, page_tree_data, page_tree_rootline, page_tree_filter, page_tree_configuration, page_tree_browser_configuration, page_tree_set_temporary_mount_point, filestorage_tree_data, filestorage_tree_rootline, filestorage_tree_filter, bookmark_list, bookmark_create, bookmark_update, bookmark_delete, bookmark_reorder, bookmark_delete_multiple, bookmark_move, bookmark_group_create, bookmark_group_update, bookmark_group_delete, bookmark_group_reorder, clearcache_group_pages, clearcache_group_all, clearcache_page, systeminformation_render, modulemenu, topbar, login, logout, login_preflight, login_refresh, login_timedout, switch_user, switch_user_exit, mfa, contextmenu, contextmenu_clipboard, record_process, usersettings_process, wizard_image_manipulation, livesearch, livesearch_form, online_media_create, icons, link_browser_encodetypolink, wizard_localization_get_record, wizard_localization_get_targets, wizard_localization_get_sources, wizard_localization_get_modes, wizard_localization_get_handlers, wizard_localization_get_content, wizard_localization_localize, show_columns, show_columns_selector, record_download_settings, record_toggle_visibility, password_generate, security_csp_control, sudo_mode_control, codeeditor_tsref, codeeditor_codecompletion_loadtemplates, color_scheme_update, qrcode_generator, qrcode_download, wizard_page_get_doktypes, wizard_page_get_page_detail, wizard_page_get_processed_value, wizard_config, wizard_submit
 
-    Registration files: ext_localconf.php, ext_tables.sql, Configuration/page.tsconfig, Configuration/user.tsconfig, Configuration/RequestMiddlewares.php, Configuration/Services.yaml, Configuration/JavaScriptModules.php
-    typo3_schema_lookup with one of those table names answers what columns the core derives for it, with the type, the default and the length of each. That is the resolved schema rather than what the TCA file declares, and two tables generated from one TCA do not have to agree on the order they come back in.
+            Middlewares: typo3/cms-core/normalized-params-attribute, typo3/cms-backend/locked-backend, typo3/cms-backend/https-redirector, typo3/cms-backend/csp-report, typo3/cms-backend/backend-routing, typo3/cms-core/request-token-middleware, typo3/cms-backend/authentication, typo3/cms-backend/backend-module-validator, typo3/cms-backend/sudo-mode-interceptor, typo3/cms-backend/site-resolver, typo3/cms-backend/page-context, typo3/cms-backend/csp-headers, typo3/cms-backend/js-label-importmap-resolver, typo3/cms-backend/response-headers, typo3/cms-core/response-propagation
 
-    Fluid root directories it ships: Resources/Private/Templates/, Resources/Private/Partials/, Resources/Private/Layouts/
-    Each is a directory that is there rather than a root something declared. An Extbase controller of this extension falls back to these three; every other view is pointed at a root by TypoScript or by a call while the request runs, and neither of those is in this list.
+            Registration files: ext_localconf.php, ext_tables.sql, Configuration/page.tsconfig, Configuration/user.tsconfig, Configuration/RequestMiddlewares.php, Configuration/Services.yaml, Configuration/JavaScriptModules.php
+            typo3_schema_lookup with one of those table names answers what columns the core derives for it, with the type, the default and the length of each. That is the resolved schema rather than what the TCA file declares, and two tables generated from one TCA do not have to agree on the order they come back in.
 
-    Classes: Attribute (3), Authentication (4), Backend (22), Breadcrumb (6), Clipboard (2), CodeEditor (6), Command (8), Configuration (5), Context (2), ContextMenu (7), Controller (90), Date (3), DependencyInjection (3), Domain (5), Dto (9), ElementBrowser (6), Event (1), EventListener (4), Exception (8), Form (203), History (4), Hooks (2), Http (4), LinkHandler (9), Localization (11), LoginProvider (4), Middleware (12), Module (17), Preview (5), RecordList (10), Resource (2), Routing (15), Search (22), Security (18), Service (2), Sidebar (7), Template (41), Toolbar (4), Tree (21), Upgrades (3), User (1), UserFunctions (1), Utility (1), View (38), ViewHelpers (15), Wizard (8), 2 directly in Classes/ — 676 PHP files in total.
-    Every directory below Classes/ is named here, and each count is every PHP file below that directory, its own subdirectories included. The total is what `find Classes -name '*.php' | wc -l` gives.
+            Fluid root directories it ships: Resources/Private/Templates/, Resources/Private/Partials/, Resources/Private/Layouts/
+            Each is a directory that is there rather than a root something declared. An Extbase controller of this extension falls back to these three; every other view is pointed at a root by TypoScript or by a call while the request runs, and neither of those is in this list.
 
-    Requires: ext-intl *, ext-libxml *, psr/event-dispatcher ^1.0, typo3/cms-core 14.3.*@dev
+            Classes: Attribute (3), Authentication (4), Backend (22), Breadcrumb (6), Clipboard (2), CodeEditor (6), Command (8), Configuration (5), Context (2), ContextMenu (7), Controller (90), Date (3), DependencyInjection (3), Domain (5), Dto (9), ElementBrowser (6), Event (1), EventListener (4), Exception (8), Form (203), History (4), Hooks (2), Http (4), LinkHandler (9), Localization (11), LoginProvider (4), Middleware (12), Module (17), Preview (5), RecordList (10), Resource (2), Routing (15), Search (22), Security (18), Service (2), Sidebar (7), Template (41), Toolbar (4), Tree (21), Upgrades (3), User (1), UserFunctions (1), Utility (1), View (38), ViewHelpers (15), Wizard (8), 2 directly in Classes/ — 676 PHP files in total.
+            Every directory below Classes/ is named here, and each count is every PHP file below that directory, its own subdirectories included. The total is what `find Classes -name '*.php' | wc -l` gives.
 
-    Ships: manual none, readme README.rst, tests Functional+Unit, language files 49
-    - Resources/Private/Language/Modules/about.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/content-security-policy.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/layout.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/link_management.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/list.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/pagetsconfig.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/pagetsconfig_active.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/pagetsconfig_includes.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/pagetsconfig_pages.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/site_configuration.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/site_settings.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Modules/status.xlf — source-language not declared, no translations beside it
-    - Resources/Private/Language/Modules/user_settings.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/SudoMode.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Wizards/general.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Wizards/localization.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Wizards/move_content_elements.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Wizards/move_page.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/Wizards/page.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/links.xlf — source-language not declared, no translations beside it
-    - Resources/Private/Language/locallang.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_alt_doc.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_browse_links.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_codeeditor.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_column_selector.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_copytoclipboard.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_download.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_layout.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_login.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_mfa.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_mod.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_pages_new.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_pages_sort.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_pagetsconfig.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_reset_password.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_resource.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_settingseditor.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_show_rechis.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_siteconfiguration.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_siteconfiguration_module.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_siteconfiguration_tca.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_sitesettings.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_sitesettings_module.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_toolbar.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/locallang_view_help.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/pages/messages.xlf — source-language not declared, no translations beside it
-    - Resources/Private/Language/qrcode.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/siteconfiguration_fieldinformation.xlf — source-language en, no translations beside it
-    - Resources/Private/Language/user_profile.xlf — source-language en, no translations beside it
-    The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.
-    It ships no manual: `typo3-extension-documentation` is the workflow that writes one.
+            Requires: ext-intl *, ext-libxml *, psr/event-dispatcher ^1.0, typo3/cms-core 14.3.*@dev
 
-    Read from the files, so this is what the extension declares — not what it does at runtime. A table or an icon list built in a loop, and anything a hook or an event listener changes, are not in this list; the files that could hold them are named above. The installation itself was not asked: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
-    ext_localconf.php is named above and read by nothing here. Each registers by running, so a hook, an RTE preset or a global Fluid namespace it sets is in none of the lists above. The booted installation answers the tables, content elements and icons it adds, and none of the rest.
+            Ships: manual none, readme README.rst, tests Functional+Unit, language files 49
+            - Resources/Private/Language/Modules/about.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/content-security-policy.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/layout.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/link_management.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/list.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/pagetsconfig.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/pagetsconfig_active.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/pagetsconfig_includes.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/pagetsconfig_pages.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/site_configuration.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/site_settings.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Modules/status.xlf — source-language not declared, no translations beside it
+            - Resources/Private/Language/Modules/user_settings.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/SudoMode.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Wizards/general.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Wizards/localization.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Wizards/move_content_elements.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Wizards/move_page.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/Wizards/page.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/links.xlf — source-language not declared, no translations beside it
+            - Resources/Private/Language/locallang.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_alt_doc.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_browse_links.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_codeeditor.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_column_selector.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_copytoclipboard.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_download.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_layout.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_login.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_mfa.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_mod.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_pages_new.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_pages_sort.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_pagetsconfig.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_reset_password.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_resource.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_settingseditor.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_show_rechis.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_siteconfiguration.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_siteconfiguration_module.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_siteconfiguration_tca.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_sitesettings.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_sitesettings_module.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_toolbar.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/locallang_view_help.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/pages/messages.xlf — source-language not declared, no translations beside it
+            - Resources/Private/Language/qrcode.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/siteconfiguration_fieldinformation.xlf — source-language en, no translations beside it
+            - Resources/Private/Language/user_profile.xlf — source-language en, no translations beside it
+            The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.
+            It ships no manual: `typo3-extension-documentation` is the workflow that writes one.
 
-Data:
+            Read from the files, so this is what the extension declares — not what it does at runtime. A table or an icon list built in a loop, and anything a hook or an event listener changes, are not in this list; the files that could hold them are named above. The installation itself was not asked: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+            ext_localconf.php is named above and read by nothing here. Each registers by running, so a hook, an RTE preset or a global Fluid namespace it sets is in none of the lists above. The booted installation answers the tables, content elements and icons it adds, and none of the rest.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "key": "backend",
-        "path": "<installation>/typo3/sysext/backend",
-        "origin": "system",
-        "composerName": "typo3/cms-backend",
-        "description": "TYPO3 CMS Backend",
-        "requires": [
+        .. code-block:: json
+
             {
-                "package": "ext-intl",
-                "constraint": "*"
-            },
-            {
-                "package": "ext-libxml",
-                "constraint": "*"
-            },
-            {
-                "package": "psr/event-dispatcher",
-                "constraint": "^1.0"
-            },
-            {
-                "package": "typo3/cms-core",
-                "constraint": "14.3.*@dev"
+                "key": "backend",
+                "path": "<installation>/typo3/sysext/backend",
+                "origin": "system",
+                "composerName": "typo3/cms-backend",
+                "description": "TYPO3 CMS Backend",
+                "requires": [
+                    {
+                        "package": "ext-intl",
+                        "constraint": "*"
+                    },
+                    {
+                        "package": "ext-libxml",
+                        "constraint": "*"
+                    },
+                    {
+                        "package": "psr/event-dispatcher",
+                        "constraint": "^1.0"
+                    },
+                    {
+                        "package": "typo3/cms-core",
+                        "constraint": "14.3.*@dev"
+                    }
+                ],
+                "tcaTables": [],
+                "tcaOverrides": [
+                    "be_users"
+                ],
+                "contentElements": [],
+                "renderedContentTypes": [],
+                "pluginFrame": null,
+                "unlistedFlexForms": [],
+                "backendModules": [
+                    "web_layout",
+                    "records",
+                    "content_status",
+                    "site_configuration",
+                    "link_management",
+                    "about",
+                    "pagetsconfig",
+                    "pagetsconfig_pages",
+                    "pagetsconfig_active",
+                    "pagetsconfig_includes",
+                    "content_security_policy",
+                    "user_setup"
+                ],
+                "backendRoutes": [
+                    "login",
+                    "main",
+                    "state-tracker",
+                    "logout",
+                    "password_forget",
+                    "password_forget_initiate_reset",
+                    "password_reset_validate",
+                    "password_reset_finish",
+                    "sudo_mode_module",
+                    "sudo_mode_apply",
+                    "sudo_mode_error",
+                    "login_frameset",
+                    "login_request_token",
+                    "auth_mfa",
+                    "setup_mfa",
+                    "mfa",
+                    "wizard_add",
+                    "wizard_list",
+                    "wizard_edit",
+                    "wizard_element_browser",
+                    "wizard_link",
+                    "online_media",
+                    "record_download",
+                    "record_history",
+                    "db_new",
+                    "db_new_pages",
+                    "pages_sort",
+                    "pages_new",
+                    "new_content_element_wizard",
+                    "move_page",
+                    "move_element",
+                    "show_item",
+                    "dummy",
+                    "tce_db",
+                    "tce_file",
+                    "record_edit",
+                    "record_edit_contextual",
+                    "image_processing",
+                    "clipboard_process",
+                    "resource_request_thumbnail",
+                    "language_domain",
+                    "resource_rename",
+                    "resource_gather",
+                    "resource_replace",
+                    "link_resource",
+                    "file_process",
+                    "file_exists",
+                    "file_reference_details",
+                    "file_reference_create",
+                    "file_reference_synchronizelocalize",
+                    "file_reference_expandcollapse",
+                    "record_inline_details",
+                    "record_inline_create",
+                    "record_inline_synchronizelocalize",
+                    "record_inline_expandcollapse",
+                    "site_configuration_inline_create",
+                    "record_slug_suggest",
+                    "site_configuration_inline_details",
+                    "record_flex_container_add",
+                    "record_suggest",
+                    "record_tree_data",
+                    "page_tree_data",
+                    "page_tree_rootline",
+                    "page_tree_filter",
+                    "page_tree_configuration",
+                    "page_tree_browser_configuration",
+                    "page_tree_set_temporary_mount_point",
+                    "filestorage_tree_data",
+                    "filestorage_tree_rootline",
+                    "filestorage_tree_filter",
+                    "bookmark_list",
+                    "bookmark_create",
+                    "bookmark_update",
+                    "bookmark_delete",
+                    "bookmark_reorder",
+                    "bookmark_delete_multiple",
+                    "bookmark_move",
+                    "bookmark_group_create",
+                    "bookmark_group_update",
+                    "bookmark_group_delete",
+                    "bookmark_group_reorder",
+                    "clearcache_group_pages",
+                    "clearcache_group_all",
+                    "clearcache_page",
+                    "systeminformation_render",
+                    "modulemenu",
+                    "topbar",
+                    "login",
+                    "logout",
+                    "login_preflight",
+                    "login_refresh",
+                    "login_timedout",
+                    "switch_user",
+                    "switch_user_exit",
+                    "mfa",
+                    "contextmenu",
+                    "contextmenu_clipboard",
+                    "record_process",
+                    "usersettings_process",
+                    "wizard_image_manipulation",
+                    "livesearch",
+                    "livesearch_form",
+                    "online_media_create",
+                    "icons",
+                    "link_browser_encodetypolink",
+                    "wizard_localization_get_record",
+                    "wizard_localization_get_targets",
+                    "wizard_localization_get_sources",
+                    "wizard_localization_get_modes",
+                    "wizard_localization_get_handlers",
+                    "wizard_localization_get_content",
+                    "wizard_localization_localize",
+                    "show_columns",
+                    "show_columns_selector",
+                    "record_download_settings",
+                    "record_toggle_visibility",
+                    "password_generate",
+                    "security_csp_control",
+                    "sudo_mode_control",
+                    "codeeditor_tsref",
+                    "codeeditor_codecompletion_loadtemplates",
+                    "color_scheme_update",
+                    "qrcode_generator",
+                    "qrcode_download",
+                    "wizard_page_get_doktypes",
+                    "wizard_page_get_page_detail",
+                    "wizard_page_get_processed_value",
+                    "wizard_config",
+                    "wizard_submit"
+                ],
+                "icons": [],
+                "siteSets": [],
+                "formConfigurations": [],
+                "middlewares": [
+                    "typo3/cms-core/normalized-params-attribute",
+                    "typo3/cms-backend/locked-backend",
+                    "typo3/cms-backend/https-redirector",
+                    "typo3/cms-backend/csp-report",
+                    "typo3/cms-backend/backend-routing",
+                    "typo3/cms-core/request-token-middleware",
+                    "typo3/cms-backend/authentication",
+                    "typo3/cms-backend/backend-module-validator",
+                    "typo3/cms-backend/sudo-mode-interceptor",
+                    "typo3/cms-backend/site-resolver",
+                    "typo3/cms-backend/page-context",
+                    "typo3/cms-backend/csp-headers",
+                    "typo3/cms-backend/js-label-importmap-resolver",
+                    "typo3/cms-backend/response-headers",
+                    "typo3/cms-core/response-propagation"
+                ],
+                "serviceTags": [],
+                "fluidRoots": [
+                    "Resources/Private/Templates/",
+                    "Resources/Private/Partials/",
+                    "Resources/Private/Layouts/"
+                ],
+                "fluidNamespaces": [],
+                "typoScript": [],
+                "classes": {
+                    "directories": [
+                        {
+                            "name": "Attribute",
+                            "files": 3
+                        },
+                        {
+                            "name": "Authentication",
+                            "files": 4
+                        },
+                        {
+                            "name": "Backend",
+                            "files": 22
+                        },
+                        {
+                            "name": "Breadcrumb",
+                            "files": 6
+                        },
+                        {
+                            "name": "Clipboard",
+                            "files": 2
+                        },
+                        {
+                            "name": "CodeEditor",
+                            "files": 6
+                        },
+                        {
+                            "name": "Command",
+                            "files": 8
+                        },
+                        {
+                            "name": "Configuration",
+                            "files": 5
+                        },
+                        {
+                            "name": "Context",
+                            "files": 2
+                        },
+                        {
+                            "name": "ContextMenu",
+                            "files": 7
+                        },
+                        {
+                            "name": "Controller",
+                            "files": 90
+                        },
+                        {
+                            "name": "Date",
+                            "files": 3
+                        },
+                        {
+                            "name": "DependencyInjection",
+                            "files": 3
+                        },
+                        {
+                            "name": "Domain",
+                            "files": 5
+                        },
+                        {
+                            "name": "Dto",
+                            "files": 9
+                        },
+                        {
+                            "name": "ElementBrowser",
+                            "files": 6
+                        },
+                        {
+                            "name": "Event",
+                            "files": 1
+                        },
+                        {
+                            "name": "EventListener",
+                            "files": 4
+                        },
+                        {
+                            "name": "Exception",
+                            "files": 8
+                        },
+                        {
+                            "name": "Form",
+                            "files": 203
+                        },
+                        {
+                            "name": "History",
+                            "files": 4
+                        },
+                        {
+                            "name": "Hooks",
+                            "files": 2
+                        },
+                        {
+                            "name": "Http",
+                            "files": 4
+                        },
+                        {
+                            "name": "LinkHandler",
+                            "files": 9
+                        },
+                        {
+                            "name": "Localization",
+                            "files": 11
+                        },
+                        {
+                            "name": "LoginProvider",
+                            "files": 4
+                        },
+                        {
+                            "name": "Middleware",
+                            "files": 12
+                        },
+                        {
+                            "name": "Module",
+                            "files": 17
+                        },
+                        {
+                            "name": "Preview",
+                            "files": 5
+                        },
+                        {
+                            "name": "RecordList",
+                            "files": 10
+                        },
+                        {
+                            "name": "Resource",
+                            "files": 2
+                        },
+                        {
+                            "name": "Routing",
+                            "files": 15
+                        },
+                        {
+                            "name": "Search",
+                            "files": 22
+                        },
+                        {
+                            "name": "Security",
+                            "files": 18
+                        },
+                        {
+                            "name": "Service",
+                            "files": 2
+                        },
+                        {
+                            "name": "Sidebar",
+                            "files": 7
+                        },
+                        {
+                            "name": "Template",
+                            "files": 41
+                        },
+                        {
+                            "name": "Toolbar",
+                            "files": 4
+                        },
+                        {
+                            "name": "Tree",
+                            "files": 21
+                        },
+                        {
+                            "name": "Upgrades",
+                            "files": 3
+                        },
+                        {
+                            "name": "User",
+                            "files": 1
+                        },
+                        {
+                            "name": "UserFunctions",
+                            "files": 1
+                        },
+                        {
+                            "name": "Utility",
+                            "files": 1
+                        },
+                        {
+                            "name": "View",
+                            "files": 38
+                        },
+                        {
+                            "name": "ViewHelpers",
+                            "files": 15
+                        },
+                        {
+                            "name": "Wizard",
+                            "files": 8
+                        }
+                    ],
+                    "looseFiles": 2,
+                    "total": 676
+                },
+                "files": [
+                    "ext_localconf.php",
+                    "ext_tables.sql",
+                    "Configuration/page.tsconfig",
+                    "Configuration/user.tsconfig",
+                    "Configuration/RequestMiddlewares.php",
+                    "Configuration/Services.yaml",
+                    "Configuration/JavaScriptModules.php"
+                ],
+                "deprecatedFiles": [],
+                "notReadStatically": [],
+                "artifacts": {
+                    "manual": null,
+                    "readme": "README.rst",
+                    "tests": [
+                        "Functional",
+                        "Unit"
+                    ],
+                    "languageFiles": [
+                        {
+                            "path": "Resources/Private/Language/Modules/about.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/content-security-policy.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/layout.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/link_management.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/list.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/pagetsconfig.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/pagetsconfig_active.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/pagetsconfig_includes.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/pagetsconfig_pages.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/site_configuration.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/site_settings.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/status.xlf",
+                            "sourceLanguage": null,
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Modules/user_settings.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/SudoMode.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Wizards/general.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Wizards/localization.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Wizards/move_content_elements.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Wizards/move_page.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/Wizards/page.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/links.xlf",
+                            "sourceLanguage": null,
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_alt_doc.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_browse_links.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_codeeditor.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_column_selector.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_copytoclipboard.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_download.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_layout.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_login.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_mfa.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_mod.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_pages_new.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_pages_sort.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_pagetsconfig.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_reset_password.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_resource.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_settingseditor.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_show_rechis.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_siteconfiguration.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_siteconfiguration_module.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_siteconfiguration_tca.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_sitesettings.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_sitesettings_module.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_toolbar.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/locallang_view_help.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/pages/messages.xlf",
+                            "sourceLanguage": null,
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/qrcode.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/siteconfiguration_fieldinformation.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        },
+                        {
+                            "path": "Resources/Private/Language/user_profile.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        }
+                    ]
+                },
+                "deprecatedFilesOwed": "",
+                "answeredBy": "packages",
+                "owed": [
+                    "typo3_schema_lookup with one of those table names answers what columns the core derives for it, with the type, the default and the length of each. That is the resolved schema rather than what the TCA file declares, and two tables generated from one TCA do not have to agree on the order they come back in.",
+                    "The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.",
+                    "It ships no manual: `typo3-extension-documentation` is the workflow that writes one."
+                ]
             }
-        ],
-        "tcaTables": [],
-        "tcaOverrides": [
-            "be_users"
-        ],
-        "contentElements": [],
-        "renderedContentTypes": [],
-        "pluginFrame": null,
-        "unlistedFlexForms": [],
-        "backendModules": [
-            "web_layout",
-            "records",
-            "content_status",
-            "site_configuration",
-            "link_management",
-            "about",
-            "pagetsconfig",
-            "pagetsconfig_pages",
-            "pagetsconfig_active",
-            "pagetsconfig_includes",
-            "content_security_policy",
-            "user_setup"
-        ],
-        "backendRoutes": [
-            "login",
-            "main",
-            "state-tracker",
-            "logout",
-            "password_forget",
-            "password_forget_initiate_reset",
-            "password_reset_validate",
-            "password_reset_finish",
-            "sudo_mode_module",
-            "sudo_mode_apply",
-            "sudo_mode_error",
-            "login_frameset",
-            "login_request_token",
-            "auth_mfa",
-            "setup_mfa",
-            "mfa",
-            "wizard_add",
-            "wizard_list",
-            "wizard_edit",
-            "wizard_element_browser",
-            "wizard_link",
-            "online_media",
-            "record_download",
-            "record_history",
-            "db_new",
-            "db_new_pages",
-            "pages_sort",
-            "pages_new",
-            "new_content_element_wizard",
-            "move_page",
-            "move_element",
-            "show_item",
-            "dummy",
-            "tce_db",
-            "tce_file",
-            "record_edit",
-            "record_edit_contextual",
-            "image_processing",
-            "clipboard_process",
-            "resource_request_thumbnail",
-            "language_domain",
-            "resource_rename",
-            "resource_gather",
-            "resource_replace",
-            "link_resource",
-            "file_process",
-            "file_exists",
-            "file_reference_details",
-            "file_reference_create",
-            "file_reference_synchronizelocalize",
-            "file_reference_expandcollapse",
-            "record_inline_details",
-            "record_inline_create",
-            "record_inline_synchronizelocalize",
-            "record_inline_expandcollapse",
-            "site_configuration_inline_create",
-            "record_slug_suggest",
-            "site_configuration_inline_details",
-            "record_flex_container_add",
-            "record_suggest",
-            "record_tree_data",
-            "page_tree_data",
-            "page_tree_rootline",
-            "page_tree_filter",
-            "page_tree_configuration",
-            "page_tree_browser_configuration",
-            "page_tree_set_temporary_mount_point",
-            "filestorage_tree_data",
-            "filestorage_tree_rootline",
-            "filestorage_tree_filter",
-            "bookmark_list",
-            "bookmark_create",
-            "bookmark_update",
-            "bookmark_delete",
-            "bookmark_reorder",
-            "bookmark_delete_multiple",
-            "bookmark_move",
-            "bookmark_group_create",
-            "bookmark_group_update",
-            "bookmark_group_delete",
-            "bookmark_group_reorder",
-            "clearcache_group_pages",
-            "clearcache_group_all",
-            "clearcache_page",
-            "systeminformation_render",
-            "modulemenu",
-            "topbar",
-            "login",
-            "logout",
-            "login_preflight",
-            "login_refresh",
-            "login_timedout",
-            "switch_user",
-            "switch_user_exit",
-            "mfa",
-            "contextmenu",
-            "contextmenu_clipboard",
-            "record_process",
-            "usersettings_process",
-            "wizard_image_manipulation",
-            "livesearch",
-            "livesearch_form",
-            "online_media_create",
-            "icons",
-            "link_browser_encodetypolink",
-            "wizard_localization_get_record",
-            "wizard_localization_get_targets",
-            "wizard_localization_get_sources",
-            "wizard_localization_get_modes",
-            "wizard_localization_get_handlers",
-            "wizard_localization_get_content",
-            "wizard_localization_localize",
-            "show_columns",
-            "show_columns_selector",
-            "record_download_settings",
-            "record_toggle_visibility",
-            "password_generate",
-            "security_csp_control",
-            "sudo_mode_control",
-            "codeeditor_tsref",
-            "codeeditor_codecompletion_loadtemplates",
-            "color_scheme_update",
-            "qrcode_generator",
-            "qrcode_download",
-            "wizard_page_get_doktypes",
-            "wizard_page_get_page_detail",
-            "wizard_page_get_processed_value",
-            "wizard_config",
-            "wizard_submit"
-        ],
-        "icons": [],
-        "siteSets": [],
-        "formConfigurations": [],
-        "middlewares": [
-            "typo3/cms-core/normalized-params-attribute",
-            "typo3/cms-backend/locked-backend",
-            "typo3/cms-backend/https-redirector",
-            "typo3/cms-backend/csp-report",
-            "typo3/cms-backend/backend-routing",
-            "typo3/cms-core/request-token-middleware",
-            "typo3/cms-backend/authentication",
-            "typo3/cms-backend/backend-module-validator",
-            "typo3/cms-backend/sudo-mode-interceptor",
-            "typo3/cms-backend/site-resolver",
-            "typo3/cms-backend/page-context",
-            "typo3/cms-backend/csp-headers",
-            "typo3/cms-backend/js-label-importmap-resolver",
-            "typo3/cms-backend/response-headers",
-            "typo3/cms-core/response-propagation"
-        ],
-        "serviceTags": [],
-        "fluidRoots": [
-            "Resources/Private/Templates/",
-            "Resources/Private/Partials/",
-            "Resources/Private/Layouts/"
-        ],
-        "fluidNamespaces": [],
-        "typoScript": [],
-        "classes": {
-            "directories": [
-                {
-                    "name": "Attribute",
-                    "files": 3
-                },
-                {
-                    "name": "Authentication",
-                    "files": 4
-                },
-                {
-                    "name": "Backend",
-                    "files": 22
-                },
-                {
-                    "name": "Breadcrumb",
-                    "files": 6
-                },
-                {
-                    "name": "Clipboard",
-                    "files": 2
-                },
-                {
-                    "name": "CodeEditor",
-                    "files": 6
-                },
-                {
-                    "name": "Command",
-                    "files": 8
-                },
-                {
-                    "name": "Configuration",
-                    "files": 5
-                },
-                {
-                    "name": "Context",
-                    "files": 2
-                },
-                {
-                    "name": "ContextMenu",
-                    "files": 7
-                },
-                {
-                    "name": "Controller",
-                    "files": 90
-                },
-                {
-                    "name": "Date",
-                    "files": 3
-                },
-                {
-                    "name": "DependencyInjection",
-                    "files": 3
-                },
-                {
-                    "name": "Domain",
-                    "files": 5
-                },
-                {
-                    "name": "Dto",
-                    "files": 9
-                },
-                {
-                    "name": "ElementBrowser",
-                    "files": 6
-                },
-                {
-                    "name": "Event",
-                    "files": 1
-                },
-                {
-                    "name": "EventListener",
-                    "files": 4
-                },
-                {
-                    "name": "Exception",
-                    "files": 8
-                },
-                {
-                    "name": "Form",
-                    "files": 203
-                },
-                {
-                    "name": "History",
-                    "files": 4
-                },
-                {
-                    "name": "Hooks",
-                    "files": 2
-                },
-                {
-                    "name": "Http",
-                    "files": 4
-                },
-                {
-                    "name": "LinkHandler",
-                    "files": 9
-                },
-                {
-                    "name": "Localization",
-                    "files": 11
-                },
-                {
-                    "name": "LoginProvider",
-                    "files": 4
-                },
-                {
-                    "name": "Middleware",
-                    "files": 12
-                },
-                {
-                    "name": "Module",
-                    "files": 17
-                },
-                {
-                    "name": "Preview",
-                    "files": 5
-                },
-                {
-                    "name": "RecordList",
-                    "files": 10
-                },
-                {
-                    "name": "Resource",
-                    "files": 2
-                },
-                {
-                    "name": "Routing",
-                    "files": 15
-                },
-                {
-                    "name": "Search",
-                    "files": 22
-                },
-                {
-                    "name": "Security",
-                    "files": 18
-                },
-                {
-                    "name": "Service",
-                    "files": 2
-                },
-                {
-                    "name": "Sidebar",
-                    "files": 7
-                },
-                {
-                    "name": "Template",
-                    "files": 41
-                },
-                {
-                    "name": "Toolbar",
-                    "files": 4
-                },
-                {
-                    "name": "Tree",
-                    "files": 21
-                },
-                {
-                    "name": "Upgrades",
-                    "files": 3
-                },
-                {
-                    "name": "User",
-                    "files": 1
-                },
-                {
-                    "name": "UserFunctions",
-                    "files": 1
-                },
-                {
-                    "name": "Utility",
-                    "files": 1
-                },
-                {
-                    "name": "View",
-                    "files": 38
-                },
-                {
-                    "name": "ViewHelpers",
-                    "files": 15
-                },
-                {
-                    "name": "Wizard",
-                    "files": 8
-                }
-            ],
-            "looseFiles": 2,
-            "total": 676
-        },
-        "files": [
-            "ext_localconf.php",
-            "ext_tables.sql",
-            "Configuration/page.tsconfig",
-            "Configuration/user.tsconfig",
-            "Configuration/RequestMiddlewares.php",
-            "Configuration/Services.yaml",
-            "Configuration/JavaScriptModules.php"
-        ],
-        "deprecatedFiles": [],
-        "notReadStatically": [],
-        "artifacts": {
-            "manual": null,
-            "readme": "README.rst",
-            "tests": [
-                "Functional",
-                "Unit"
-            ],
-            "languageFiles": [
-                {
-                    "path": "Resources/Private/Language/Modules/about.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/content-security-policy.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/layout.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/link_management.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/list.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/pagetsconfig.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/pagetsconfig_active.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/pagetsconfig_includes.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/pagetsconfig_pages.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/site_configuration.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/site_settings.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/status.xlf",
-                    "sourceLanguage": null,
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Modules/user_settings.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/SudoMode.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Wizards/general.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Wizards/localization.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Wizards/move_content_elements.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Wizards/move_page.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/Wizards/page.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/links.xlf",
-                    "sourceLanguage": null,
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_alt_doc.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_browse_links.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_codeeditor.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_column_selector.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_copytoclipboard.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_download.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_layout.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_login.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_mfa.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_mod.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_pages_new.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_pages_sort.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_pagetsconfig.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_reset_password.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_resource.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_settingseditor.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_show_rechis.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_siteconfiguration.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_siteconfiguration_module.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_siteconfiguration_tca.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_sitesettings.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_sitesettings_module.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_toolbar.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/locallang_view_help.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/pages/messages.xlf",
-                    "sourceLanguage": null,
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/qrcode.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/siteconfiguration_fieldinformation.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                },
-                {
-                    "path": "Resources/Private/Language/user_profile.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                }
-            ]
-        },
-        "deprecatedFilesOwed": "",
-        "answeredBy": "packages",
-        "owed": [
-            "typo3_schema_lookup with one of those table names answers what columns the core derives for it, with the type, the default and the length of each. That is the resolved schema rather than what the TCA file declares, and two tables generated from one TCA do not have to agree on the order they come back in.",
-            "The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.",
-            "It ships no manual: `typo3-extension-documentation` is the workflow that writes one."
-        ]
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    backend (system) — <installation>/vendor/typo3/cms-backend
-    The fixture installation's backend package.
+        .. code-block:: text
 
-    Backend modules: web_list, acme_events
+            backend (system) — <installation>/vendor/typo3/cms-backend
+            The fixture installation's backend package.
 
-    Backend routes: login, main
+            Backend modules: web_list, acme_events
 
-    Icons: actions-close, actions-document-open, actions-open
+            Backend routes: login, main
 
-    Service tags: backend.controller
+            Icons: actions-close, actions-document-open, actions-open
 
-    Registration files: Configuration/Services.yaml
+            Service tags: backend.controller
 
-    Classes: Controller (1) — 1 PHP file in total.
-    Every directory below Classes/ is named here, and each count is every PHP file below that directory, its own subdirectories included. The total is what `find Classes -name '*.php' | wc -l` gives.
+            Registration files: Configuration/Services.yaml
 
-    Ships: manual none, readme none, tests none, language files 1
-    - Resources/Private/Language/locallang.xlf — source-language en, no translations beside it
-    The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.
-    It ships no manual and no README: `typo3-extension-documentation` is the workflow that writes them.
-    It ships no test: `typo3-extension-testing` is the workflow that sets the first one up.
+            Classes: Controller (1) — 1 PHP file in total.
+            Every directory below Classes/ is named here, and each count is every PHP file below that directory, its own subdirectories included. The total is what `find Classes -name '*.php' | wc -l` gives.
 
-    The tables, content elements and icons are what the booted installation has, attributed to this extension by the EXT: reference each entry carries; everything else is read from its files. What a hook or an event listener changes at request time is in neither.
+            Ships: manual none, readme none, tests none, language files 1
+            - Resources/Private/Language/locallang.xlf — source-language en, no translations beside it
+            The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.
+            It ships no manual and no README: `typo3-extension-documentation` is the workflow that writes them.
+            It ships no test: `typo3-extension-testing` is the workflow that sets the first one up.
 
-Data:
+            The tables, content elements and icons are what the booted installation has, attributed to this extension by the EXT: reference each entry carries; everything else is read from its files. What a hook or an event listener changes at request time is in neither.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "key": "backend",
-        "path": "<installation>/vendor/typo3/cms-backend",
-        "origin": "system",
-        "composerName": "typo3/cms-backend",
-        "description": "The fixture installation's backend package.",
-        "requires": [],
-        "tcaTables": [],
-        "tcaOverrides": [],
-        "contentElements": [],
-        "renderedContentTypes": [],
-        "pluginFrame": null,
-        "unlistedFlexForms": [],
-        "backendModules": [
-            "web_list",
-            "acme_events"
-        ],
-        "backendRoutes": [
-            "login",
-            "main"
-        ],
-        "icons": [
-            "actions-close",
-            "actions-document-open",
-            "actions-open"
-        ],
-        "siteSets": [],
-        "formConfigurations": [],
-        "middlewares": [],
-        "serviceTags": [
-            "backend.controller"
-        ],
-        "fluidRoots": [],
-        "fluidNamespaces": [],
-        "typoScript": [],
-        "classes": {
-            "directories": [
-                {
-                    "name": "Controller",
-                    "files": 1
-                }
-            ],
-            "looseFiles": 0,
-            "total": 1
-        },
-        "files": [
-            "Configuration/Services.yaml"
-        ],
-        "deprecatedFiles": [],
-        "notReadStatically": [],
-        "artifacts": {
-            "manual": null,
-            "readme": null,
-            "tests": [],
-            "languageFiles": [
-                {
-                    "path": "Resources/Private/Language/locallang.xlf",
-                    "sourceLanguage": "en",
-                    "translations": []
-                }
-            ]
-        },
-        "deprecatedFilesOwed": "",
-        "answeredBy": "installation",
-        "owed": [
-            "The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.",
-            "It ships no manual and no README: `typo3-extension-documentation` is the workflow that writes them.",
-            "It ships no test: `typo3-extension-testing` is the workflow that sets the first one up."
-        ]
-    }
+        .. code-block:: json
+
+            {
+                "key": "backend",
+                "path": "<installation>/vendor/typo3/cms-backend",
+                "origin": "system",
+                "composerName": "typo3/cms-backend",
+                "description": "The fixture installation's backend package.",
+                "requires": [],
+                "tcaTables": [],
+                "tcaOverrides": [],
+                "contentElements": [],
+                "renderedContentTypes": [],
+                "pluginFrame": null,
+                "unlistedFlexForms": [],
+                "backendModules": [
+                    "web_list",
+                    "acme_events"
+                ],
+                "backendRoutes": [
+                    "login",
+                    "main"
+                ],
+                "icons": [
+                    "actions-close",
+                    "actions-document-open",
+                    "actions-open"
+                ],
+                "siteSets": [],
+                "formConfigurations": [],
+                "middlewares": [],
+                "serviceTags": [
+                    "backend.controller"
+                ],
+                "fluidRoots": [],
+                "fluidNamespaces": [],
+                "typoScript": [],
+                "classes": {
+                    "directories": [
+                        {
+                            "name": "Controller",
+                            "files": 1
+                        }
+                    ],
+                    "looseFiles": 0,
+                    "total": 1
+                },
+                "files": [
+                    "Configuration/Services.yaml"
+                ],
+                "deprecatedFiles": [],
+                "notReadStatically": [],
+                "artifacts": {
+                    "manual": null,
+                    "readme": null,
+                    "tests": [],
+                    "languageFiles": [
+                        {
+                            "path": "Resources/Private/Language/locallang.xlf",
+                            "sourceLanguage": "en",
+                            "translations": []
+                        }
+                    ]
+                },
+                "deprecatedFilesOwed": "",
+                "answeredBy": "installation",
+                "owed": [
+                    "The source language is what each file declares, not what it should declare — typo3_hint_lookup owns that rule.",
+                    "It ships no manual and no README: `typo3-extension-documentation` is the workflow that writes them.",
+                    "It ships no test: `typo3-extension-testing` is the workflow that sets the first one up."
+                ]
+            }

@@ -1,4 +1,4 @@
-.. _typo3_issue_report_guide:
+:navigation-title: issue_report_guide
 
 ``typo3_issue_report_guide``
 ============================
@@ -20,10 +20,13 @@ default, and lists them as possible duplicates. Every draft carries the tag
 dev-companion. typo3_forge_lookup reads issues that already exist, and settles a
 negative this search leaves open. Answers from: knowledge, network.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
+.. facts::
 
-Answers from :ref:`knowledge <answer-sources-knowledge>`,
-:ref:`network <answer-sources-network>`.
+    :Answers from: :ref:`knowledge <answer-sources-knowledge>`, :ref:`network <answer-sources-network>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``true``
 
 Takes
 -----
@@ -173,166 +176,168 @@ Called with:
         "searchFor": "styleguide password"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    Forge issue draft for the TYPO3 Core project. Nothing was filed: open the link, read the form, submit.
+        .. code-block:: text
 
-    - Tracker: Bug
-    - Subject: Styleguide TCA generator hashes every demo password again
-    - TYPO3 Version: 14
-    - PHP Version: 8.4
-    - Is Regression: No
-    - Tags: dev-companion
+            Forge issue draft for the TYPO3 Core project. Nothing was filed: open the link, read the form, submit.
 
-    Description, which the link fills in:
-    ```textile
-    h2. Problem
+            - Tracker: Bug
+            - Subject: Styleguide TCA generator hashes every demo password again
+            - TYPO3 Version: 14
+            - PHP Version: 8.4
+            - Is Regression: No
+            - Tags: dev-companion
 
-    styleguide:generate -c tca hashes the same demo password once per record.
+            Description, which the link fills in:
+            ```textile
+            h2. Problem
 
-    h2. Steps to reproduce
+            styleguide:generate -c tca hashes the same demo password once per record.
 
-    # Install EXT:styleguide
-    # Run @vendor/bin/typo3 styleguide:generate -c tca@
-    ```
+            h2. Steps to reproduce
 
-    The form, filled in: https://forge.typo3.org/projects/typo3cms-core/issues/new?issue%5Btracker_id%5D=1&issue%5Bsubject%5D=Styleguide%20TCA%20generator%20hashes%20every%20demo%20password%20again&issue%5Bcustom_field_values%5D%5B4%5D=14&issue%5Bcustom_field_values%5D%5B5%5D=8.4&issue%5Bcustom_field_values%5D%5B15%5D=0&issue%5Bcustom_field_values%5D%5B3%5D=dev-companion&issue%5Bdescription%5D=h2.%20Problem%0A%0Astyleguide%3Agenerate%20-c%20tca%20hashes%20the%20same%20demo%20password%20once%20per%20record.%0A%0Ah2.%20Steps%20to%20reproduce%0A%0A%23%20Install%20EXT%3Astyleguide%0A%23%20Run%20%40vendor%2Fbin%2Ftypo3%20styleguide%3Agenerate%20-c%20tca%40
+            # Install EXT:styleguide
+            # Run @vendor/bin/typo3 styleguide:generate -c tca@
+            ```
 
-    Checks:
-    - ERROR: The core project has no category "styleguide", so it stays out of the form. typo3_forge_lookup with category in your own words answers the tracker's spelling.
-    - WARNING: 7 issues match "styleguide password". Read them before you file this one.
+            The form, filled in: https://forge.typo3.org/projects/typo3cms-core/issues/new?issue%5Btracker_id%5D=1&issue%5Bsubject%5D=Styleguide%20TCA%20generator%20hashes%20every%20demo%20password%20again&issue%5Bcustom_field_values%5D%5B4%5D=14&issue%5Bcustom_field_values%5D%5B5%5D=8.4&issue%5Bcustom_field_values%5D%5B15%5D=0&issue%5Bcustom_field_values%5D%5B3%5D=dev-companion&issue%5Bdescription%5D=h2.%20Problem%0A%0Astyleguide%3Agenerate%20-c%20tca%20hashes%20the%20same%20demo%20password%20once%20per%20record.%0A%0Ah2.%20Steps%20to%20reproduce%0A%0A%23%20Install%20EXT%3Astyleguide%0A%23%20Run%20%40vendor%2Fbin%2Ftypo3%20styleguide%3Agenerate%20-c%20tca%40
 
-    Possible duplicates:
-    - #109716 · Bug · Resolved · Cannot DI PageRepository in blank projects because constructor calls init which demands DB and other framework context · https://forge.typo3.org/issues/109716
-    - #108399 · Bug · Closed · Lowlevel Advanced Query module throws PHP deprecation warning in fresh install · https://forge.typo3.org/issues/108399
-    - #106283 · Bug · Closed · DataHandler copy for not-nullable passwords fails with SQL error · https://forge.typo3.org/issues/106283
-    - #104994 · Task · Needs Feedback · Set proper branch alias for supported release branches (incl. ELTS) · https://forge.typo3.org/issues/104994
-    - #102685 · Feature · Under Review · Add PreviewRenderer for plugins · https://forge.typo3.org/issues/102685
-    - #99335 · Bug · Closed · Read only password can be overwritten · https://forge.typo3.org/issues/99335
-    - #97250 · Bug · Closed · Adjust password field acceptance test · https://forge.typo3.org/issues/97250
+            Checks:
+            - ERROR: The core project has no category "styleguide", so it stays out of the form. typo3_forge_lookup with category in your own words answers the tracker's spelling.
+            - WARNING: 7 issues match "styleguide password". Read them before you file this one.
 
-    typo3_forge_lookup — with issue and the number of each possible duplicate, and with backlog="newest" and createdSince where the search matched nothing.
-    typo3_commit_message_guide — with workflow="core" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it.
+            Possible duplicates:
+            - #109716 · Bug · Resolved · Cannot DI PageRepository in blank projects because constructor calls init which demands DB and other framework context · https://forge.typo3.org/issues/109716
+            - #108399 · Bug · Closed · Lowlevel Advanced Query module throws PHP deprecation warning in fresh install · https://forge.typo3.org/issues/108399
+            - #106283 · Bug · Closed · DataHandler copy for not-nullable passwords fails with SQL error · https://forge.typo3.org/issues/106283
+            - #104994 · Task · Needs Feedback · Set proper branch alias for supported release branches (incl. ELTS) · https://forge.typo3.org/issues/104994
+            - #102685 · Feature · Under Review · Add PreviewRenderer for plugins · https://forge.typo3.org/issues/102685
+            - #99335 · Bug · Closed · Read only password can be overwritten · https://forge.typo3.org/issues/99335
+            - #97250 · Bug · Closed · Adjust password field acceptance test · https://forge.typo3.org/issues/97250
 
-Data:
+            typo3_forge_lookup — with issue and the number of each possible duplicate, and with backlog="newest" and createdSince where the search matched nothing.
+            typo3_commit_message_guide — with workflow="core" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "subject": "Styleguide TCA generator hashes every demo password again",
-        "tracker": "Bug",
-        "description": "h2. Problem\n\nstyleguide:generate -c tca hashes the same demo password once per record.\n\nh2. Steps to reproduce\n\n# Install EXT:styleguide\n# Run @vendor/bin/typo3 styleguide:generate -c tca@",
-        "form": [
+        .. code-block:: json
+
             {
-                "field": "Tracker",
-                "value": "Bug"
-            },
-            {
-                "field": "Subject",
-                "value": "Styleguide TCA generator hashes every demo password again"
-            },
-            {
-                "field": "TYPO3 Version",
-                "value": "14"
-            },
-            {
-                "field": "PHP Version",
-                "value": "8.4"
-            },
-            {
-                "field": "Is Regression",
-                "value": "No"
-            },
-            {
-                "field": "Tags",
-                "value": "dev-companion"
+                "subject": "Styleguide TCA generator hashes every demo password again",
+                "tracker": "Bug",
+                "description": "h2. Problem\n\nstyleguide:generate -c tca hashes the same demo password once per record.\n\nh2. Steps to reproduce\n\n# Install EXT:styleguide\n# Run @vendor/bin/typo3 styleguide:generate -c tca@",
+                "form": [
+                    {
+                        "field": "Tracker",
+                        "value": "Bug"
+                    },
+                    {
+                        "field": "Subject",
+                        "value": "Styleguide TCA generator hashes every demo password again"
+                    },
+                    {
+                        "field": "TYPO3 Version",
+                        "value": "14"
+                    },
+                    {
+                        "field": "PHP Version",
+                        "value": "8.4"
+                    },
+                    {
+                        "field": "Is Regression",
+                        "value": "No"
+                    },
+                    {
+                        "field": "Tags",
+                        "value": "dev-companion"
+                    }
+                ],
+                "url": "https://forge.typo3.org/projects/typo3cms-core/issues/new?issue%5Btracker_id%5D=1&issue%5Bsubject%5D=Styleguide%20TCA%20generator%20hashes%20every%20demo%20password%20again&issue%5Bcustom_field_values%5D%5B4%5D=14&issue%5Bcustom_field_values%5D%5B5%5D=8.4&issue%5Bcustom_field_values%5D%5B15%5D=0&issue%5Bcustom_field_values%5D%5B3%5D=dev-companion&issue%5Bdescription%5D=h2.%20Problem%0A%0Astyleguide%3Agenerate%20-c%20tca%20hashes%20the%20same%20demo%20password%20once%20per%20record.%0A%0Ah2.%20Steps%20to%20reproduce%0A%0A%23%20Install%20EXT%3Astyleguide%0A%23%20Run%20%40vendor%2Fbin%2Ftypo3%20styleguide%3Agenerate%20-c%20tca%40",
+                "descriptionInLink": true,
+                "duplicateSearch": {
+                    "query": "styleguide password",
+                    "status": "answered",
+                    "total": 7
+                },
+                "possibleDuplicates": [
+                    {
+                        "issue": 109716,
+                        "subject": "Cannot DI PageRepository in blank projects because constructor calls init which demands DB and other framework context",
+                        "tracker": "Bug",
+                        "status": "Resolved",
+                        "url": "https://forge.typo3.org/issues/109716"
+                    },
+                    {
+                        "issue": 108399,
+                        "subject": "Lowlevel Advanced Query module throws PHP deprecation warning in fresh install",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/108399"
+                    },
+                    {
+                        "issue": 106283,
+                        "subject": "DataHandler copy for not-nullable passwords fails with SQL error",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/106283"
+                    },
+                    {
+                        "issue": 104994,
+                        "subject": "Set proper branch alias for supported release branches (incl. ELTS)",
+                        "tracker": "Task",
+                        "status": "Needs Feedback",
+                        "url": "https://forge.typo3.org/issues/104994"
+                    },
+                    {
+                        "issue": 102685,
+                        "subject": "Add PreviewRenderer for plugins",
+                        "tracker": "Feature",
+                        "status": "Under Review",
+                        "url": "https://forge.typo3.org/issues/102685"
+                    },
+                    {
+                        "issue": 99335,
+                        "subject": "Read only password can be overwritten",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/99335"
+                    },
+                    {
+                        "issue": 97250,
+                        "subject": "Adjust password field acceptance test",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/97250"
+                    }
+                ],
+                "checks": [
+                    {
+                        "level": "error",
+                        "code": "unknown-category",
+                        "message": "The core project has no category \"styleguide\", so it stays out of the form. typo3_forge_lookup with category in your own words answers the tracker's spelling."
+                    },
+                    {
+                        "level": "warning",
+                        "code": "possible-duplicates",
+                        "message": "7 issues match \"styleguide password\". Read them before you file this one."
+                    }
+                ],
+                "urlOwed": "Nothing was filed: open the link, read the form, submit.",
+                "nextTools": [
+                    {
+                        "tool": "typo3_forge_lookup",
+                        "when": "with issue and the number of each possible duplicate, and with backlog=\"newest\" and createdSince where the search matched nothing."
+                    },
+                    {
+                        "tool": "typo3_commit_message_guide",
+                        "when": "with workflow=\"core\" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it."
+                    }
+                ],
+                "owed": []
             }
-        ],
-        "url": "https://forge.typo3.org/projects/typo3cms-core/issues/new?issue%5Btracker_id%5D=1&issue%5Bsubject%5D=Styleguide%20TCA%20generator%20hashes%20every%20demo%20password%20again&issue%5Bcustom_field_values%5D%5B4%5D=14&issue%5Bcustom_field_values%5D%5B5%5D=8.4&issue%5Bcustom_field_values%5D%5B15%5D=0&issue%5Bcustom_field_values%5D%5B3%5D=dev-companion&issue%5Bdescription%5D=h2.%20Problem%0A%0Astyleguide%3Agenerate%20-c%20tca%20hashes%20the%20same%20demo%20password%20once%20per%20record.%0A%0Ah2.%20Steps%20to%20reproduce%0A%0A%23%20Install%20EXT%3Astyleguide%0A%23%20Run%20%40vendor%2Fbin%2Ftypo3%20styleguide%3Agenerate%20-c%20tca%40",
-        "descriptionInLink": true,
-        "duplicateSearch": {
-            "query": "styleguide password",
-            "status": "answered",
-            "total": 7
-        },
-        "possibleDuplicates": [
-            {
-                "issue": 109716,
-                "subject": "Cannot DI PageRepository in blank projects because constructor calls init which demands DB and other framework context",
-                "tracker": "Bug",
-                "status": "Resolved",
-                "url": "https://forge.typo3.org/issues/109716"
-            },
-            {
-                "issue": 108399,
-                "subject": "Lowlevel Advanced Query module throws PHP deprecation warning in fresh install",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/108399"
-            },
-            {
-                "issue": 106283,
-                "subject": "DataHandler copy for not-nullable passwords fails with SQL error",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/106283"
-            },
-            {
-                "issue": 104994,
-                "subject": "Set proper branch alias for supported release branches (incl. ELTS)",
-                "tracker": "Task",
-                "status": "Needs Feedback",
-                "url": "https://forge.typo3.org/issues/104994"
-            },
-            {
-                "issue": 102685,
-                "subject": "Add PreviewRenderer for plugins",
-                "tracker": "Feature",
-                "status": "Under Review",
-                "url": "https://forge.typo3.org/issues/102685"
-            },
-            {
-                "issue": 99335,
-                "subject": "Read only password can be overwritten",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/99335"
-            },
-            {
-                "issue": 97250,
-                "subject": "Adjust password field acceptance test",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/97250"
-            }
-        ],
-        "checks": [
-            {
-                "level": "error",
-                "code": "unknown-category",
-                "message": "The core project has no category \"styleguide\", so it stays out of the form. typo3_forge_lookup with category in your own words answers the tracker's spelling."
-            },
-            {
-                "level": "warning",
-                "code": "possible-duplicates",
-                "message": "7 issues match \"styleguide password\". Read them before you file this one."
-            }
-        ],
-        "urlOwed": "Nothing was filed: open the link, read the form, submit.",
-        "nextTools": [
-            {
-                "tool": "typo3_forge_lookup",
-                "when": "with issue and the number of each possible duplicate, and with backlog=\"newest\" and createdSince where the search matched nothing."
-            },
-            {
-                "tool": "typo3_commit_message_guide",
-                "when": "with workflow=\"core\" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it."
-            }
-        ],
-        "owed": []
-    }
 
 issue report: Markdown where the tracker reads Textile
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -346,189 +351,191 @@ Called with:
         "description": "## Problem\n\nThe `Foo::bar()` call fails.\n\n```php\nfoo();\n```"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    Forge issue draft for the TYPO3 Core project. Nothing was filed: open the link, read the form, submit.
+        .. code-block:: text
 
-    - Tracker: Bug
-    - Subject: Something renders wrong
-    - Tags: dev-companion
+            Forge issue draft for the TYPO3 Core project. Nothing was filed: open the link, read the form, submit.
 
-    Description, which the link fills in:
-    ```textile
-    ## Problem
+            - Tracker: Bug
+            - Subject: Something renders wrong
+            - Tags: dev-companion
 
-    The `Foo::bar()` call fails.
+            Description, which the link fills in:
+            ```textile
+            ## Problem
 
-    ```php
-    foo();
-    ```
-    ```
+            The `Foo::bar()` call fails.
 
-    The form, filled in: https://forge.typo3.org/projects/typo3cms-core/issues/new?issue%5Btracker_id%5D=1&issue%5Bsubject%5D=Something%20renders%20wrong&issue%5Bcustom_field_values%5D%5B3%5D=dev-companion&issue%5Bdescription%5D=%23%23%20Problem%0A%0AThe%20%60Foo%3A%3Abar%28%29%60%20call%20fails.%0A%0A%60%60%60php%0Afoo%28%29%3B%0A%60%60%60
+            ```php
+            foo();
+            ```
+            ```
 
-    Checks:
-    - ERROR: Three backticks render as three backticks. A code block is <pre><code class="php"> … </code></pre>.
-    - WARNING: A backtick renders as a backtick. Inline code is @Foo::bar()@.
-    - WARNING: A line that starts with ## is a nested list item in Textile. A heading is h2. or h3.
-    - ERROR: A Bug does not go without its TYPO3 Version: the major you saw it on. Pass typo3Version.
-    - WARNING: 15 issues match "Something renders wrong". Read them before you file this one.
+            The form, filled in: https://forge.typo3.org/projects/typo3cms-core/issues/new?issue%5Btracker_id%5D=1&issue%5Bsubject%5D=Something%20renders%20wrong&issue%5Bcustom_field_values%5D%5B3%5D=dev-companion&issue%5Bdescription%5D=%23%23%20Problem%0A%0AThe%20%60Foo%3A%3Abar%28%29%60%20call%20fails.%0A%0A%60%60%60php%0Afoo%28%29%3B%0A%60%60%60
 
-    Possible duplicates:
-    - #111111 · Bug · Under Review · Text & Images in Camino theme only renders one image · https://forge.typo3.org/issues/111111
-    - #110427 · Task · Under Review · Rework the database analyzer stack onto objects · https://forge.typo3.org/issues/110427
-    - #109681 · Bug · Needs Feedback · SVG image processing only one path · https://forge.typo3.org/issues/109681
-    - #104440 · Bug · Closed · stripPathSitePrefix breaks file path · https://forge.typo3.org/issues/104440
-    - #101928 · Bug · Under Review · f:image(.uri) and other FAL/File ViewHelpers should never raise an Exception for missing files! · https://forge.typo3.org/issues/101928
-    - #99372 · Bug · Closed · TYPO3 11.5.20 - after upgrade, error message "get_class_methods(): Argument #1 ($object_or_class) must be an object or a valid class name, string given" · https://forge.typo3.org/issues/99372
-    - #96830 · Bug · Closed · Forms: Confirmation message Finisher overriding issues · https://forge.typo3.org/issues/96830
-    - #96823 · Bug · Closed · <f:image src="{file-path-to-image}"> with config.absRefPrefix not working in TYPO3 11 · https://forge.typo3.org/issues/96823
-    - #94202 · Bug · Closed · show details for BE user (non-admin) leads to exception: An argument "key" or "id" has to be provided · https://forge.typo3.org/issues/94202
-    - #93079 · Bug · Closed · Site appearing twice in HMENU Navigation in Workspace Preview · https://forge.typo3.org/issues/93079
+            Checks:
+            - ERROR: Three backticks render as three backticks. A code block is <pre><code class="php"> … </code></pre>.
+            - WARNING: A backtick renders as a backtick. Inline code is @Foo::bar()@.
+            - WARNING: A line that starts with ## is a nested list item in Textile. A heading is h2. or h3.
+            - ERROR: A Bug does not go without its TYPO3 Version: the major you saw it on. Pass typo3Version.
+            - WARNING: 15 issues match "Something renders wrong". Read them before you file this one.
 
-    typo3_forge_lookup — with issue and the number of each possible duplicate, and with backlog="newest" and createdSince where the search matched nothing.
-    typo3_commit_message_guide — with workflow="core" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it.
+            Possible duplicates:
+            - #111111 · Bug · Under Review · Text & Images in Camino theme only renders one image · https://forge.typo3.org/issues/111111
+            - #110427 · Task · Under Review · Rework the database analyzer stack onto objects · https://forge.typo3.org/issues/110427
+            - #109681 · Bug · Needs Feedback · SVG image processing only one path · https://forge.typo3.org/issues/109681
+            - #104440 · Bug · Closed · stripPathSitePrefix breaks file path · https://forge.typo3.org/issues/104440
+            - #101928 · Bug · Under Review · f:image(.uri) and other FAL/File ViewHelpers should never raise an Exception for missing files! · https://forge.typo3.org/issues/101928
+            - #99372 · Bug · Closed · TYPO3 11.5.20 - after upgrade, error message "get_class_methods(): Argument #1 ($object_or_class) must be an object or a valid class name, string given" · https://forge.typo3.org/issues/99372
+            - #96830 · Bug · Closed · Forms: Confirmation message Finisher overriding issues · https://forge.typo3.org/issues/96830
+            - #96823 · Bug · Closed · <f:image src="{file-path-to-image}"> with config.absRefPrefix not working in TYPO3 11 · https://forge.typo3.org/issues/96823
+            - #94202 · Bug · Closed · show details for BE user (non-admin) leads to exception: An argument "key" or "id" has to be provided · https://forge.typo3.org/issues/94202
+            - #93079 · Bug · Closed · Site appearing twice in HMENU Navigation in Workspace Preview · https://forge.typo3.org/issues/93079
 
-Data:
+            typo3_forge_lookup — with issue and the number of each possible duplicate, and with backlog="newest" and createdSince where the search matched nothing.
+            typo3_commit_message_guide — with workflow="core" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "subject": "Something renders wrong",
-        "tracker": "Bug",
-        "description": "## Problem\n\nThe `Foo::bar()` call fails.\n\n```php\nfoo();\n```",
-        "form": [
+        .. code-block:: json
+
             {
-                "field": "Tracker",
-                "value": "Bug"
-            },
-            {
-                "field": "Subject",
-                "value": "Something renders wrong"
-            },
-            {
-                "field": "Tags",
-                "value": "dev-companion"
+                "subject": "Something renders wrong",
+                "tracker": "Bug",
+                "description": "## Problem\n\nThe `Foo::bar()` call fails.\n\n```php\nfoo();\n```",
+                "form": [
+                    {
+                        "field": "Tracker",
+                        "value": "Bug"
+                    },
+                    {
+                        "field": "Subject",
+                        "value": "Something renders wrong"
+                    },
+                    {
+                        "field": "Tags",
+                        "value": "dev-companion"
+                    }
+                ],
+                "url": "https://forge.typo3.org/projects/typo3cms-core/issues/new?issue%5Btracker_id%5D=1&issue%5Bsubject%5D=Something%20renders%20wrong&issue%5Bcustom_field_values%5D%5B3%5D=dev-companion&issue%5Bdescription%5D=%23%23%20Problem%0A%0AThe%20%60Foo%3A%3Abar%28%29%60%20call%20fails.%0A%0A%60%60%60php%0Afoo%28%29%3B%0A%60%60%60",
+                "descriptionInLink": true,
+                "duplicateSearch": {
+                    "query": "Something renders wrong",
+                    "status": "answered",
+                    "total": 15
+                },
+                "possibleDuplicates": [
+                    {
+                        "issue": 111111,
+                        "subject": "Text & Images in Camino theme only renders one image",
+                        "tracker": "Bug",
+                        "status": "Under Review",
+                        "url": "https://forge.typo3.org/issues/111111"
+                    },
+                    {
+                        "issue": 110427,
+                        "subject": "Rework the database analyzer stack onto objects",
+                        "tracker": "Task",
+                        "status": "Under Review",
+                        "url": "https://forge.typo3.org/issues/110427"
+                    },
+                    {
+                        "issue": 109681,
+                        "subject": "SVG image processing only one path",
+                        "tracker": "Bug",
+                        "status": "Needs Feedback",
+                        "url": "https://forge.typo3.org/issues/109681"
+                    },
+                    {
+                        "issue": 104440,
+                        "subject": "stripPathSitePrefix breaks file path",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/104440"
+                    },
+                    {
+                        "issue": 101928,
+                        "subject": "f:image(.uri) and other FAL/File ViewHelpers should never raise an Exception for missing files!",
+                        "tracker": "Bug",
+                        "status": "Under Review",
+                        "url": "https://forge.typo3.org/issues/101928"
+                    },
+                    {
+                        "issue": 99372,
+                        "subject": "TYPO3 11.5.20 - after upgrade, error message \"get_class_methods(): Argument #1 ($object_or_class) must be an object or a valid class name, string given\"",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/99372"
+                    },
+                    {
+                        "issue": 96830,
+                        "subject": "Forms: Confirmation message Finisher overriding issues",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/96830"
+                    },
+                    {
+                        "issue": 96823,
+                        "subject": "<f:image src=\"{file-path-to-image}\"> with config.absRefPrefix not working in TYPO3 11",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/96823"
+                    },
+                    {
+                        "issue": 94202,
+                        "subject": "show details for BE user (non-admin) leads to exception: An argument \"key\" or \"id\" has to be provided",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/94202"
+                    },
+                    {
+                        "issue": 93079,
+                        "subject": "Site appearing twice in HMENU Navigation in Workspace Preview",
+                        "tracker": "Bug",
+                        "status": "Closed",
+                        "url": "https://forge.typo3.org/issues/93079"
+                    }
+                ],
+                "checks": [
+                    {
+                        "level": "error",
+                        "code": "markdown-fence",
+                        "message": "Three backticks render as three backticks. A code block is <pre><code class=\"php\"> … </code></pre>."
+                    },
+                    {
+                        "level": "warning",
+                        "code": "markdown-code",
+                        "message": "A backtick renders as a backtick. Inline code is @Foo::bar()@."
+                    },
+                    {
+                        "level": "warning",
+                        "code": "markdown-heading",
+                        "message": "A line that starts with ## is a nested list item in Textile. A heading is h2. or h3."
+                    },
+                    {
+                        "level": "error",
+                        "code": "missing-typo3-version",
+                        "message": "A Bug does not go without its TYPO3 Version: the major you saw it on. Pass typo3Version."
+                    },
+                    {
+                        "level": "warning",
+                        "code": "possible-duplicates",
+                        "message": "15 issues match \"Something renders wrong\". Read them before you file this one."
+                    }
+                ],
+                "urlOwed": "Nothing was filed: open the link, read the form, submit.",
+                "nextTools": [
+                    {
+                        "tool": "typo3_forge_lookup",
+                        "when": "with issue and the number of each possible duplicate, and with backlog=\"newest\" and createdSince where the search matched nothing."
+                    },
+                    {
+                        "tool": "typo3_commit_message_guide",
+                        "when": "with workflow=\"core\" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it."
+                    }
+                ],
+                "owed": []
             }
-        ],
-        "url": "https://forge.typo3.org/projects/typo3cms-core/issues/new?issue%5Btracker_id%5D=1&issue%5Bsubject%5D=Something%20renders%20wrong&issue%5Bcustom_field_values%5D%5B3%5D=dev-companion&issue%5Bdescription%5D=%23%23%20Problem%0A%0AThe%20%60Foo%3A%3Abar%28%29%60%20call%20fails.%0A%0A%60%60%60php%0Afoo%28%29%3B%0A%60%60%60",
-        "descriptionInLink": true,
-        "duplicateSearch": {
-            "query": "Something renders wrong",
-            "status": "answered",
-            "total": 15
-        },
-        "possibleDuplicates": [
-            {
-                "issue": 111111,
-                "subject": "Text & Images in Camino theme only renders one image",
-                "tracker": "Bug",
-                "status": "Under Review",
-                "url": "https://forge.typo3.org/issues/111111"
-            },
-            {
-                "issue": 110427,
-                "subject": "Rework the database analyzer stack onto objects",
-                "tracker": "Task",
-                "status": "Under Review",
-                "url": "https://forge.typo3.org/issues/110427"
-            },
-            {
-                "issue": 109681,
-                "subject": "SVG image processing only one path",
-                "tracker": "Bug",
-                "status": "Needs Feedback",
-                "url": "https://forge.typo3.org/issues/109681"
-            },
-            {
-                "issue": 104440,
-                "subject": "stripPathSitePrefix breaks file path",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/104440"
-            },
-            {
-                "issue": 101928,
-                "subject": "f:image(.uri) and other FAL/File ViewHelpers should never raise an Exception for missing files!",
-                "tracker": "Bug",
-                "status": "Under Review",
-                "url": "https://forge.typo3.org/issues/101928"
-            },
-            {
-                "issue": 99372,
-                "subject": "TYPO3 11.5.20 - after upgrade, error message \"get_class_methods(): Argument #1 ($object_or_class) must be an object or a valid class name, string given\"",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/99372"
-            },
-            {
-                "issue": 96830,
-                "subject": "Forms: Confirmation message Finisher overriding issues",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/96830"
-            },
-            {
-                "issue": 96823,
-                "subject": "<f:image src=\"{file-path-to-image}\"> with config.absRefPrefix not working in TYPO3 11",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/96823"
-            },
-            {
-                "issue": 94202,
-                "subject": "show details for BE user (non-admin) leads to exception: An argument \"key\" or \"id\" has to be provided",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/94202"
-            },
-            {
-                "issue": 93079,
-                "subject": "Site appearing twice in HMENU Navigation in Workspace Preview",
-                "tracker": "Bug",
-                "status": "Closed",
-                "url": "https://forge.typo3.org/issues/93079"
-            }
-        ],
-        "checks": [
-            {
-                "level": "error",
-                "code": "markdown-fence",
-                "message": "Three backticks render as three backticks. A code block is <pre><code class=\"php\"> … </code></pre>."
-            },
-            {
-                "level": "warning",
-                "code": "markdown-code",
-                "message": "A backtick renders as a backtick. Inline code is @Foo::bar()@."
-            },
-            {
-                "level": "warning",
-                "code": "markdown-heading",
-                "message": "A line that starts with ## is a nested list item in Textile. A heading is h2. or h3."
-            },
-            {
-                "level": "error",
-                "code": "missing-typo3-version",
-                "message": "A Bug does not go without its TYPO3 Version: the major you saw it on. Pass typo3Version."
-            },
-            {
-                "level": "warning",
-                "code": "possible-duplicates",
-                "message": "15 issues match \"Something renders wrong\". Read them before you file this one."
-            }
-        ],
-        "urlOwed": "Nothing was filed: open the link, read the form, submit.",
-        "nextTools": [
-            {
-                "tool": "typo3_forge_lookup",
-                "when": "with issue and the number of each possible duplicate, and with backlog=\"newest\" and createdSince where the search matched nothing."
-            },
-            {
-                "tool": "typo3_commit_message_guide",
-                "when": "with workflow=\"core\" and the number the tracker gives the issue, for the Resolves: line of the patch that fixes it."
-            }
-        ],
-        "owed": []
-    }

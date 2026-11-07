@@ -1,4 +1,4 @@
-.. _typo3_service_lookup:
+:navigation-title: service_lookup
 
 ``typo3_service_lookup``
 ========================
@@ -17,9 +17,13 @@ Services.yaml says. So a decoration, an override or an alias shows up as the
 class the container injects. It instantiates nothing to answer. Answers from:
 installation.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -168,68 +172,72 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "PageRenderer",
-        "tag": null,
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "query": "PageRenderer",
+                "tag": null,
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: the installation booted and its container could not be assembled a second time: Error: Class "TYPO3\CMS\Core\Package\PackageManager" not found.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: the installation booted and its container could not be assembled a second time: Error: Class "TYPO3\CMS\Core\Package\PackageManager" not found.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "PageRenderer",
-        "tag": null,
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "the installation booted and its container could not be assembled a second time: Error: Class \"TYPO3\\CMS\\Core\\Package\\PackageManager\" not found",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "query": "PageRenderer",
+                "tag": null,
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "the installation booted and its container could not be assembled a second time: Error: Class \"TYPO3\\CMS\\Core\\Package\\PackageManager\" not found",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 services: by tag
 ~~~~~~~~~~~~~~~~
@@ -246,65 +254,69 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": null,
-        "tag": "event.listener",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "query": null,
+                "tag": "event.listener",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: the installation booted and its container could not be assembled a second time: Error: Class "TYPO3\CMS\Core\Package\PackageManager" not found.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: the installation booted and its container could not be assembled a second time: Error: Class "TYPO3\CMS\Core\Package\PackageManager" not found.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": null,
-        "tag": "event.listener",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "the installation booted and its container could not be assembled a second time: Error: Class \"TYPO3\\CMS\\Core\\Package\\PackageManager\" not found",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "query": null,
+                "tag": "event.listener",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "the installation booted and its container could not be assembled a second time: Error: Class \"TYPO3\\CMS\\Core\\Package\\PackageManager\" not found",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }

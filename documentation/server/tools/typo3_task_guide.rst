@@ -1,4 +1,4 @@
-.. _typo3_task_guide:
+:navigation-title: task_guide
 
 ``typo3_task_guide``
 ====================
@@ -26,9 +26,13 @@ typo3_rule_lookup. Work that reads as a project or third-party extension gets
 what transfers only. The answer leaves out the core checks, checklist items and
 steps that name something only the core repository has. Answers from: knowledge.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`knowledge <answer-sources-knowledge>`.
+    :Answers from: :ref:`knowledge <answer-sources-knowledge>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -357,620 +361,622 @@ Called with:
         "changeType": "cleanup"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    Task: Deprecate a public method
-    Change type: cleanup
-    Domains: php
-    Paths:
-    - typo3/sysext/core/Classes/Utility/GeneralUtility.php
-    Recognized as: Deprecation
-    Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.
-    Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+        .. code-block:: text
 
-    Hints:
-    The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
-    These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.
+            Task: Deprecate a public method
+            Change type: cleanup
+            Domains: php
+            Paths:
+            - typo3/sysext/core/Classes/Utility/GeneralUtility.php
+            Recognized as: Deprecation
+            Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.
+            Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
+            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
-    ### PHP
+            Hints:
+            The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
+            These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.
 
-    ## Where One System Extension Ends and the Next Begins
-    Hints:
-    - A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.
-    - @internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.
-    - A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.
+            ### PHP
 
-    ## Deprecated APIs
-    Hints:
-    - Whether an API is deprecated is a property of the branch you work on, not of TYPO3 as a whole. Where you work in an installation the server reads that branch: typo3_project_describe names the TYPO3 version installed there, and typo3_changelog_lookup answers from the changelog its core package ships.
-    - Read the declaration itself: an @deprecated annotation together with a trigger_error(..., E_USER_DEPRECATED) call is what marks one. The core marks nothing with PHP's #[\Deprecated] attribute, so finding none says nothing about what is deprecated.
-    - The trigger does not have to sit in the declaring body, so a file without one settles nothing. A method, a property or a class can raise from its caller, from the __get() and __call() of PublicPropertyDeprecationTrait and PublicMethodDeprecationTrait where the member was made protected and listed there, or from whatever resolves the class.
-    - A class constant and an enum case are where the docblock stands alone: nothing runs when one is read, so no trigger_error can be attached to it anywhere. Such a deprecation raises nothing — no deprecation log entry, nothing for a test suite running with failOnDeprecation — and the call site turns into a fatal error in the major that removes it. What finds it is the extension scanner, through the ClassConstantMatcher entry the deprecating patch owes it, rather than anything at runtime.
-    - What a branch deprecated is recorded in typo3/sysext/core/Documentation/Changelog/<version>/Deprecation-<issue>-<Title>.rst and in the matchers below typo3/sysext/install/Configuration/ExtensionScanner/Php/. Take the migration path from there instead of assuming a replacement.
-    - An entry's Impact section is prose and can promise a deprecation warning the code does not raise. What is raised is a property of the declaration, so read that for the severity rather than the entry.
-    - A deprecated API keeps working until the next major release, so an existing call site is not automatically a defect. New code uses the replacement the changelog names.
-    - Authoring a deprecation and finding out what a version deprecated are two directions through the same files. From the reading side: the changelog directory and the extension scanner matchers ship with the core and install packages of any installation, the Extension Scanner in the Install Tool runs the matchers over an extension, and `typo3 upgrade:list` and `typo3 upgrade:run` are the console side of the migrations.
-    - @internal on a class or on a member says it is not public API, and both are read: a public class can carry an internal method. It is an input to whether a removal is breaking and never the answer on its own.
-    - What settles it is whether anything outside the core calls it. The core has removed @internal members both as a breaking change and as an Important note, and what separates the two is the call sites rather than the marker: a Breaking entry names them in its Affected installations section, and the extension scanner matchers are where they are looked for. Writing that section is the test of whether there is one. Where there is none, the removal is an ordinary [TASK] with no marker, no changelog entry and no matcher.
-    - An absent annotation is not a statement that something is public API. Read the changelog for the subsystem and the extension scanner matchers before concluding either way.
+            ## Where One System Extension Ends and the Next Begins
+            Hints:
+            - A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.
+            - @internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.
+            - A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.
 
-    ## Changing a Public Method Signature
-    Hints:
-    - A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.
-    - Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — "Declaration of Sub::start() must be compatible with Base::start()" — and nothing in the class being edited names it.
-    - A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.
-    - The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.
-    - Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.
-    - The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.
-    - The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.
-    - So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.
-    - Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.
-    - Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query "breaking change").
-    - A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.
-    - A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.
-    - A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.
+            ## Deprecated APIs
+            Hints:
+            - Whether an API is deprecated is a property of the branch you work on, not of TYPO3 as a whole. Where you work in an installation the server reads that branch: typo3_project_describe names the TYPO3 version installed there, and typo3_changelog_lookup answers from the changelog its core package ships.
+            - Read the declaration itself: an @deprecated annotation together with a trigger_error(..., E_USER_DEPRECATED) call is what marks one. The core marks nothing with PHP's #[\Deprecated] attribute, so finding none says nothing about what is deprecated.
+            - The trigger does not have to sit in the declaring body, so a file without one settles nothing. A method, a property or a class can raise from its caller, from the __get() and __call() of PublicPropertyDeprecationTrait and PublicMethodDeprecationTrait where the member was made protected and listed there, or from whatever resolves the class.
+            - A class constant and an enum case are where the docblock stands alone: nothing runs when one is read, so no trigger_error can be attached to it anywhere. Such a deprecation raises nothing — no deprecation log entry, nothing for a test suite running with failOnDeprecation — and the call site turns into a fatal error in the major that removes it. What finds it is the extension scanner, through the ClassConstantMatcher entry the deprecating patch owes it, rather than anything at runtime.
+            - What a branch deprecated is recorded in typo3/sysext/core/Documentation/Changelog/<version>/Deprecation-<issue>-<Title>.rst and in the matchers below typo3/sysext/install/Configuration/ExtensionScanner/Php/. Take the migration path from there instead of assuming a replacement.
+            - An entry's Impact section is prose and can promise a deprecation warning the code does not raise. What is raised is a property of the declaration, so read that for the severity rather than the entry.
+            - A deprecated API keeps working until the next major release, so an existing call site is not automatically a defect. New code uses the replacement the changelog names.
+            - Authoring a deprecation and finding out what a version deprecated are two directions through the same files. From the reading side: the changelog directory and the extension scanner matchers ship with the core and install packages of any installation, the Extension Scanner in the Install Tool runs the matchers over an extension, and `typo3 upgrade:list` and `typo3 upgrade:run` are the console side of the migrations.
+            - @internal on a class or on a member says it is not public API, and both are read: a public class can carry an internal method. It is an input to whether a removal is breaking and never the answer on its own.
+            - What settles it is whether anything outside the core calls it. The core has removed @internal members both as a breaking change and as an Important note, and what separates the two is the call sites rather than the marker: a Breaking entry names them in its Affected installations section, and the extension scanner matchers are where they are looked for. Writing that section is the test of whether there is one. Where there is none, the removal is an ordinary [TASK] with no marker, no changelog entry and no matcher.
+            - An absent annotation is not a statement that something is public API. Read the changelog for the subsystem and the extension scanner matchers before concluding either way.
 
-    ## Events and Extension Points
-    Hints:
-    - A listener is registered with the #[AsEventListener] attribute from TYPO3\CMS\Core\Attribute, on the class or on a single method. Its arguments are identifier, event, method, before and after; the attribute is repeatable, so one class can listen to several events. Autoconfiguration picks it up — do not add an event.listener tag to Services.yaml, no core listener is registered that way. [TYPO3 v13 and newer]
-    - Event classes live in Classes/Event/ of the extension that dispatches them, are final, and are readonly where the payload is immutable. A listener that may change the outcome gets setters on the event instead of a return value.
-    - Keep event payloads minimal and stable, and prefer a new event over a hook: a hook is only the right answer where the subsystem still has hook-based extension points.
-    - The surviving hooks are a subsystem fact, not a second extension-point registry. Ask the subsystem hint with the intent — for example prefilling a form field — so it can name both the remaining hook and the narrower event; the form-framework hint records EXT:form's two remaining SC_OPTIONS calls.
-    - A PSR-14 event is public API. A new one needs a changelog entry, careful naming, and regression coverage.
+            ## Changing a Public Method Signature
+            Hints:
+            - A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.
+            - Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — "Declaration of Sub::start() must be compatible with Base::start()" — and nothing in the class being edited names it.
+            - A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.
+            - The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.
+            - Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.
+            - The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.
+            - The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.
+            - So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.
+            - Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.
+            - Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query "breaking change").
+            - A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.
+            - A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.
+            - A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.
 
-    Rules that apply to this task:
+            ## Events and Extension Points
+            Hints:
+            - A listener is registered with the #[AsEventListener] attribute from TYPO3\CMS\Core\Attribute, on the class or on a single method. Its arguments are identifier, event, method, before and after; the attribute is repeatable, so one class can listen to several events. Autoconfiguration picks it up — do not add an event.listener tag to Services.yaml, no core listener is registered that way. [TYPO3 v13 and newer]
+            - Event classes live in Classes/Event/ of the extension that dispatches them, are final, and are readonly where the payload is immutable. A listener that may change the outcome gets setters on the event instead of a return value.
+            - Keep event payloads minimal and stable, and prefer a new event over a hook: a hook is only the right answer where the subsystem still has hook-based extension points.
+            - The surviving hooks are a subsystem fact, not a second extension-point registry. Ask the subsystem hint with the intent — for example prefilling a form field — so it can name both the remaining hook and the narrower event; the form-framework hint records EXT:form's two remaining SC_OPTIONS calls.
+            - A PSR-14 event is public API. A new one needs a changelog entry, careful naming, and regression coverage.
 
-    A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.
+            Rules that apply to this task:
 
-    ## Deprecations
-    Source: TYPO3 Core Commit Message Rules (typo3://guides/core/contribution/commit-messages) — matches 100% of the query terms
+            A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.
 
-    - A deprecation must not use `[!!!]`.
-    - A deprecation may only use `[TASK]` or `[FEATURE]`.
-    - A deprecation must have a changelog RST file.
-    - A deprecation needs migration guidance and may need extension scanner
-      considerations.
-    - All of the above is the author's side. The reader's side works the other way
-      round. It asks what a given version deprecated, and what that means for code
-      that uses it. The Extension Scanner in the Install Tool checks an installation
-      against two directories. Those are the changelog files below
-      `Documentation/Changelog/` of the core package, and the matchers below the
-      install package's `Configuration/ExtensionScanner/Php/`. Both ship with a
-      Composer installation.
+            ## Deprecations
+            Source: TYPO3 Core Commit Message Rules (typo3://guides/core/contribution/commit-messages) — matches 100% of the query terms
 
-    ## Breaking Changes
-    Source: TYPO3 Core Commit Message Rules (typo3://guides/core/contribution/commit-messages) — matches 100% of the query terms
+            - A deprecation must not use `[!!!]`.
+            - A deprecation may only use `[TASK]` or `[FEATURE]`.
+            - A deprecation must have a changelog RST file.
+            - A deprecation needs migration guidance and may need extension scanner
+              considerations.
+            - All of the above is the author's side. The reader's side works the other way
+              round. It asks what a given version deprecated, and what that means for code
+              that uses it. The Extension Scanner in the Install Tool checks an installation
+              against two directories. Those are the changelog files below
+              `Documentation/Changelog/` of the core package, and the matchers below the
+              install package's `Configuration/ExtensionScanner/Php/`. Both ship with a
+              Composer installation.
 
-    - A breaking change must use `[!!!]` before the keyword.
-    - A breaking change must have a changelog RST file.
-    - A breaking change should usually target `main`.
-    - A removed or narrowed PHP API gets an extension scanner matcher entry in the
-      same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.
-      How code writes the removed member where it uses it decides the file:
-      - `MethodCallMatcher.php` — an instance method.
-      - `MethodCallStaticMatcher.php` — a static method.
-      - `PropertyPublicMatcher.php` — a removed public property.
-      - `PropertyProtectedMatcher.php` — a public property that became protected.
-      - `ClassNameMatcher.php` — a whole class or interface.
-    - Visibility routes a property and never a method. The method matchers are a
-      weak match on the method name where code uses it. They do not resolve the
-      class, so they cannot see visibility, and a protected method goes with a
-      public one. `RendererRegistry->getRendererInstances` went from public to
-      protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The
-      list above has no row for a protected method because it needs none. That
-      absence says nothing about whether the change owes an entry.
-    - The fully qualified name with `->` or `::` keys an entry. The entry carries
-      `restFiles`, which names the changelog file that removed the member. The
-      method matchers add `numberOfMandatoryArguments` and
-      `maximumNumberOfArguments`. A member deprecated before its removal lists both
-      changelog files.
-    - Every Breaking and Deprecation entry carries exactly one of `NotScanned`,
-      `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is
-      the claim those entries have to back. `FullyScanned` says the scanner finds
-      every item the changelog entry names. The scanner reads PHP. So what an entry
-      changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.
-    - `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the
-      changelog files the matchers name exist. Nothing checks the other direction. A
-      missing entry surfaces when somebody audits the matcher files against the
-      changelog.
+            ## Breaking Changes
+            Source: TYPO3 Core Commit Message Rules (typo3://guides/core/contribution/commit-messages) — matches 100% of the query terms
 
-    Each excerpt above is one section of a longer document, and each page below carries the `##` headings that are not above. Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:
-    - core/contribution/commit-messages — TYPO3 Core Commit Message Rules: 11 of its 13 headings are not above — Who Reads It, Summary Line, Work in Progress, Body, The Longest Line The Hook Accepts, Relationships, Release Targets, The Trailers A Core Commit Carries, What The Commit Hook Writes, Changed Signatures, The Changelog Entry a Message Announces.
+            - A breaking change must use `[!!!]` before the keyword.
+            - A breaking change must have a changelog RST file.
+            - A breaking change should usually target `main`.
+            - A removed or narrowed PHP API gets an extension scanner matcher entry in the
+              same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.
+              How code writes the removed member where it uses it decides the file:
+              - `MethodCallMatcher.php` — an instance method.
+              - `MethodCallStaticMatcher.php` — a static method.
+              - `PropertyPublicMatcher.php` — a removed public property.
+              - `PropertyProtectedMatcher.php` — a public property that became protected.
+              - `ClassNameMatcher.php` — a whole class or interface.
+            - Visibility routes a property and never a method. The method matchers are a
+              weak match on the method name where code uses it. They do not resolve the
+              class, so they cannot see visibility, and a protected method goes with a
+              public one. `RendererRegistry->getRendererInstances` went from public to
+              protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The
+              list above has no row for a protected method because it needs none. That
+              absence says nothing about whether the change owes an entry.
+            - The fully qualified name with `->` or `::` keys an entry. The entry carries
+              `restFiles`, which names the changelog file that removed the member. The
+              method matchers add `numberOfMandatoryArguments` and
+              `maximumNumberOfArguments`. A member deprecated before its removal lists both
+              changelog files.
+            - Every Breaking and Deprecation entry carries exactly one of `NotScanned`,
+              `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is
+              the claim those entries have to back. `FullyScanned` says the scanner finds
+              every item the changelog entry names. The scanner reads PHP. So what an entry
+              changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.
+            - `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the
+              changelog files the matchers name exist. Nothing checks the other direction. A
+              missing entry surfaces when somebody audits the matcher files against the
+              changelog.
 
-    Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:
-    - `CI=true ./Build/Scripts/runTests.sh -s unit`
-    - `CI=true ./Build/Scripts/runTests.sh -s functional`
-    - `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
-    - `CI=true ./Build/Scripts/runTests.sh -s checkRst`
-    - `CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst`
+            Each excerpt above is one section of a longer document, and each page below carries the `##` headings that are not above. Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:
+            - core/contribution/commit-messages — TYPO3 Core Commit Message Rules: 11 of its 13 headings are not above — Who Reads It, Summary Line, Work in Progress, Body, The Longest Line The Hook Accepts, Relationships, Release Targets, The Trailers A Core Commit Carries, What The Commit Hook Writes, Changed Signatures, The Changelog Entry a Message Announces.
 
-    Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
-    Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
-    ## checkIntegrityPhp
-    `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
-    Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
+            Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:
+            - `CI=true ./Build/Scripts/runTests.sh -s unit`
+            - `CI=true ./Build/Scripts/runTests.sh -s functional`
+            - `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
+            - `CI=true ./Build/Scripts/runTests.sh -s checkRst`
+            - `CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst`
 
-    Suggested checklist:
-    - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
-    - Confirm the target TYPO3 core branch and issue context.
-    - Inspect nearby code, tests, and established subsystem conventions.
-    - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
-    - Keep the patch focused on the stated task.
-    - Add or update the narrowest useful test coverage.
-    - Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.
-    - Keep the cleanup mechanical; avoid mixing behavioural changes into the same patch.
-    - Annotate the member @deprecated since TYPO3 v<the version this lands in>, will be removed in TYPO3 v<the next major>. and close that line with the migration sentence. Read both versions off the branch you are on rather than off an example.
-    - Keep the member working and open its body with trigger_error('<Class>-><member>() is deprecated since TYPO3 v<the version this lands in> and will be removed in TYPO3 v<the next major>. <migration>', E_USER_DEPRECATED). The docblock and the message say the same three things, and the removal is a patch of its own in that major.
-    - Migrate every caller of the deprecated API in the same patch, and confirm none is left behind.
-    - Add a changelog file below typo3/sysext/core/Documentation/Changelog/<the minor this is released in>/ named Deprecation-<issue>-<UpperCamelCaseDescription>.rst. That directory's Index.rst pulls in every Deprecation-* file by glob, so naming the file correctly is the whole of including it and no index needs editing. Which directory a backport's file goes into is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item.
-    - Open the changelog file with .. include:: /Includes.rst.txt and a unique .. _deprecation-<issue>-<unix timestamp>: anchor directly above the 'Deprecation: #<issue> - <title>' headline, with See :issue:`<issue>` under it. Then Description, Impact, Affected installations and Migration — the last two are what this type owes over a feature entry.
-    - End the changelog file with .. index:: carrying at least one subject tag and exactly one of FullyScanned, PartiallyScanned or NotScanned. Build/Scripts/validateRstFiles.php rejects a Deprecation file without the scanner tag, so add the tag rather than weighing whether to.
-    - Back a FullyScanned or PartiallyScanned tag with an extension scanner matcher: an entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/, keyed by the deprecated symbol and naming the changelog file in its restFiles. NotScanned is for what no matcher can find, not for what nobody wrote.
-    - Use [TASK] or [FEATURE] as the commit keyword. A deprecation must never use the [!!!] breaking prefix.
-    - Write the commit message with typo3_commit_message_guide and workflow="core": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping.
+            Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
+            Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
+            ## checkIntegrityPhp
+            `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
+            Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
 
-    Establish in your checkout — this server cannot see it:
-    - Which files the task actually touches
-      git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them.
-    - Which tests already cover them
-      Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation.
-    - The branch you are on and the branches the change is meant for
-      git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main.
-    - Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch
-      Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision.
-    - Whether an icon identifier is registered, and which one spells the shape you want
-      Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family.
-    - Whether a label for this wording already exists
-      Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask.
+            Suggested checklist:
+            - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
+            - Confirm the target TYPO3 core branch and issue context.
+            - Inspect nearby code, tests, and established subsystem conventions.
+            - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
+            - Keep the patch focused on the stated task.
+            - Add or update the narrowest useful test coverage.
+            - Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.
+            - Keep the cleanup mechanical; avoid mixing behavioural changes into the same patch.
+            - Annotate the member @deprecated since TYPO3 v<the version this lands in>, will be removed in TYPO3 v<the next major>. and close that line with the migration sentence. Read both versions off the branch you are on rather than off an example.
+            - Keep the member working and open its body with trigger_error('<Class>-><member>() is deprecated since TYPO3 v<the version this lands in> and will be removed in TYPO3 v<the next major>. <migration>', E_USER_DEPRECATED). The docblock and the message say the same three things, and the removal is a patch of its own in that major.
+            - Migrate every caller of the deprecated API in the same patch, and confirm none is left behind.
+            - Add a changelog file below typo3/sysext/core/Documentation/Changelog/<the minor this is released in>/ named Deprecation-<issue>-<UpperCamelCaseDescription>.rst. That directory's Index.rst pulls in every Deprecation-* file by glob, so naming the file correctly is the whole of including it and no index needs editing. Which directory a backport's file goes into is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item.
+            - Open the changelog file with .. include:: /Includes.rst.txt and a unique .. _deprecation-<issue>-<unix timestamp>: anchor directly above the 'Deprecation: #<issue> - <title>' headline, with See :issue:`<issue>` under it. Then Description, Impact, Affected installations and Migration — the last two are what this type owes over a feature entry.
+            - End the changelog file with .. index:: carrying at least one subject tag and exactly one of FullyScanned, PartiallyScanned or NotScanned. Build/Scripts/validateRstFiles.php rejects a Deprecation file without the scanner tag, so add the tag rather than weighing whether to.
+            - Back a FullyScanned or PartiallyScanned tag with an extension scanner matcher: an entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/, keyed by the deprecated symbol and naming the changelog file in its restFiles. NotScanned is for what no matcher can find, not for what nobody wrote.
+            - Use [TASK] or [FEATURE] as the commit keyword. A deprecation must never use the [!!!] breaking prefix.
+            - Write the commit message with typo3_commit_message_guide and workflow="core": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping.
 
-    Next lookups for this task:
-    - typo3_commit_message_guide — with workflow="core" and isDeprecation=true, for the keyword and prefix rules a message pushed to Gerrit is held to
-    - typo3_changelog_lookup — for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact
-    - typo3_hint_lookup — with the concrete file paths, once they are known
-    - typo3_test_run_guide — for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few
-    - typo3_task_guide — again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships
-    - typo3_feedback_record — when one of these answers was wrong or incomplete
+            Establish in your checkout — this server cannot see it:
+            - Which files the task actually touches
+              git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them.
+            - Which tests already cover them
+              Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation.
+            - The branch you are on and the branches the change is meant for
+              git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main.
+            - Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch
+              Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision.
+            - Whether an icon identifier is registered, and which one spells the shape you want
+              Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family.
+            - Whether a label for this wording already exists
+              Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask.
 
-Data:
+            Next lookups for this task:
+            - typo3_commit_message_guide — with workflow="core" and isDeprecation=true, for the keyword and prefix rules a message pushed to Gerrit is held to
+            - typo3_changelog_lookup — for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact
+            - typo3_hint_lookup — with the concrete file paths, once they are known
+            - typo3_test_run_guide — for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few
+            - typo3_task_guide — again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships
+            - typo3_feedback_record — when one of these answers was wrong or incomplete
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "task": "Deprecate a public method",
-        "paths": [
-            "typo3/sysext/core/Classes/Utility/GeneralUtility.php"
-        ],
-        "scopes": [
+        .. code-block:: json
+
             {
-                "path": "typo3/sysext/core/Classes/Utility/GeneralUtility.php",
-                "scope": "core"
-            }
-        ],
-        "changeType": "cleanup",
-        "targetVersion": 14,
-        "targetVersions": [
-            14
-        ],
-        "domains": [
-            "php"
-        ],
-        "scope": "core",
-        "intents": [
-            {
-                "id": "deprecation",
-                "title": "Deprecation",
-                "confidence": "strong",
-                "condition": ""
-            }
-        ],
-        "skills": [
-            "typo3-core-patch-development"
-        ],
-        "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.",
-        "staleSkills": [],
-        "staleSkillsOwed": "",
-        "guides": [
-            {
-                "id": "any/writing/the-prose-a-patch-carries",
-                "title": "The Prose a Patch Carries",
-                "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            }
-        ],
-        "surfaces": [],
-        "surfacesOwed": "",
-        "hints": [
-            {
-                "id": "system-extension-boundaries",
-                "title": "Where One System Extension Ends and the Next Begins",
-                "category": "PHP",
-                "scope": null,
-                "hints": [
+                "task": "Deprecate a public method",
+                "paths": [
+                    "typo3/sysext/core/Classes/Utility/GeneralUtility.php"
+                ],
+                "scopes": [
                     {
-                        "text": "A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "@internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
+                        "path": "typo3/sysext/core/Classes/Utility/GeneralUtility.php",
+                        "scope": "core"
                     }
-                ]
-            },
-            {
-                "id": "deprecated-apis",
-                "title": "Deprecated APIs",
-                "category": "PHP",
-                "scope": null,
-                "hints": [
-                    {
-                        "text": "Whether an API is deprecated is a property of the branch you work on, not of TYPO3 as a whole. Where you work in an installation the server reads that branch: typo3_project_describe names the TYPO3 version installed there, and typo3_changelog_lookup answers from the changelog its core package ships.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Read the declaration itself: an @deprecated annotation together with a trigger_error(..., E_USER_DEPRECATED) call is what marks one. The core marks nothing with PHP's #[\\Deprecated] attribute, so finding none says nothing about what is deprecated.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "The trigger does not have to sit in the declaring body, so a file without one settles nothing. A method, a property or a class can raise from its caller, from the __get() and __call() of PublicPropertyDeprecationTrait and PublicMethodDeprecationTrait where the member was made protected and listed there, or from whatever resolves the class.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A class constant and an enum case are where the docblock stands alone: nothing runs when one is read, so no trigger_error can be attached to it anywhere. Such a deprecation raises nothing — no deprecation log entry, nothing for a test suite running with failOnDeprecation — and the call site turns into a fatal error in the major that removes it. What finds it is the extension scanner, through the ClassConstantMatcher entry the deprecating patch owes it, rather than anything at runtime.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "What a branch deprecated is recorded in typo3/sysext/core/Documentation/Changelog/<version>/Deprecation-<issue>-<Title>.rst and in the matchers below typo3/sysext/install/Configuration/ExtensionScanner/Php/. Take the migration path from there instead of assuming a replacement.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "An entry's Impact section is prose and can promise a deprecation warning the code does not raise. What is raised is a property of the declaration, so read that for the severity rather than the entry.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A deprecated API keeps working until the next major release, so an existing call site is not automatically a defect. New code uses the replacement the changelog names.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Authoring a deprecation and finding out what a version deprecated are two directions through the same files. From the reading side: the changelog directory and the extension scanner matchers ship with the core and install packages of any installation, the Extension Scanner in the Install Tool runs the matchers over an extension, and `typo3 upgrade:list` and `typo3 upgrade:run` are the console side of the migrations.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "@internal on a class or on a member says it is not public API, and both are read: a public class can carry an internal method. It is an input to whether a removal is breaking and never the answer on its own.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "What settles it is whether anything outside the core calls it. The core has removed @internal members both as a breaking change and as an Important note, and what separates the two is the call sites rather than the marker: a Breaking entry names them in its Affected installations section, and the extension scanner matchers are where they are looked for. Writing that section is the test of whether there is one. Where there is none, the removal is an ordinary [TASK] with no marker, no changelog entry and no matcher.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "An absent annotation is not a statement that something is public API. Read the changelog for the subsystem and the extension scanner matchers before concluding either way.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    }
-                ]
-            },
-            {
-                "id": "public-api-surface",
-                "title": "Changing a Public Method Signature",
-                "category": "PHP",
-                "scope": null,
-                "hints": [
-                    {
-                        "text": "A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — \"Declaration of Sub::start() must be compatible with Base::start()\" — and nothing in the class being edited names it.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query \"breaking change\").",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    }
-                ]
-            },
-            {
-                "id": "events-extension-points",
-                "title": "Events and Extension Points",
-                "category": "PHP",
-                "scope": null,
-                "hints": [
-                    {
-                        "text": "A listener is registered with the #[AsEventListener] attribute from TYPO3\\CMS\\Core\\Attribute, on the class or on a single method. Its arguments are identifier, event, method, before and after; the attribute is repeatable, so one class can listen to several events. Autoconfiguration picks it up — do not add an event.listener tag to Services.yaml, no core listener is registered that way.",
-                        "since": 13,
-                        "until": null,
-                        "versions": "TYPO3 v13 and newer",
-                        "scope": null
-                    },
-                    {
-                        "text": "Event classes live in Classes/Event/ of the extension that dispatches them, are final, and are readonly where the payload is immutable. A listener that may change the outcome gets setters on the event instead of a return value.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Keep event payloads minimal and stable, and prefer a new event over a hook: a hook is only the right answer where the subsystem still has hook-based extension points.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "The surviving hooks are a subsystem fact, not a second extension-point registry. Ask the subsystem hint with the intent — for example prefilling a form field — so it can name both the remaining hook and the narrower event; the form-framework hint records EXT:form's two remaining SC_OPTIONS calls.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A PSR-14 event is public API. A new one needs a changelog entry, careful naming, and regression coverage.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    }
-                ]
-            }
-        ],
-        "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.",
-        "omittedHints": [],
-        "omittedHintsOwed": "",
-        "rules": [
-            {
-                "documentId": "core/contribution/commit-messages",
-                "title": "TYPO3 Core Commit Message Rules",
-                "uri": "typo3://guides/core/contribution/commit-messages",
-                "heading": "Deprecations",
-                "body": "- A deprecation must not use `[!!!]`.\n- A deprecation may only use `[TASK]` or `[FEATURE]`.\n- A deprecation must have a changelog RST file.\n- A deprecation needs migration guidance and may need extension scanner\n  considerations.\n- All of the above is the author's side. The reader's side works the other way\n  round. It asks what a given version deprecated, and what that means for code\n  that uses it. The Extension Scanner in the Install Tool checks an installation\n  against two directories. Those are the changelog files below\n  `Documentation/Changelog/` of the core package, and the matchers below the\n  install package's `Configuration/ExtensionScanner/Php/`. Both ship with a\n  Composer installation.",
-                "versions": "",
-                "coverage": 1,
-                "score": 69,
-                "truncated": false
-            },
-            {
-                "documentId": "core/contribution/commit-messages",
-                "title": "TYPO3 Core Commit Message Rules",
-                "uri": "typo3://guides/core/contribution/commit-messages",
-                "heading": "Breaking Changes",
-                "body": "- A breaking change must use `[!!!]` before the keyword.\n- A breaking change must have a changelog RST file.\n- A breaking change should usually target `main`.\n- A removed or narrowed PHP API gets an extension scanner matcher entry in the\n  same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.\n  How code writes the removed member where it uses it decides the file:\n  - `MethodCallMatcher.php` — an instance method.\n  - `MethodCallStaticMatcher.php` — a static method.\n  - `PropertyPublicMatcher.php` — a removed public property.\n  - `PropertyProtectedMatcher.php` — a public property that became protected.\n  - `ClassNameMatcher.php` — a whole class or interface.\n- Visibility routes a property and never a method. The method matchers are a\n  weak match on the method name where code uses it. They do not resolve the\n  class, so they cannot see visibility, and a protected method goes with a\n  public one. `RendererRegistry->getRendererInstances` went from public to\n  protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The\n  list above has no row for a protected method because it needs none. That\n  absence says nothing about whether the change owes an entry.\n- The fully qualified name with `->` or `::` keys an entry. The entry carries\n  `restFiles`, which names the changelog file that removed the member. The\n  method matchers add `numberOfMandatoryArguments` and\n  `maximumNumberOfArguments`. A member deprecated before its removal lists both\n  changelog files.\n- Every Breaking and Deprecation entry carries exactly one of `NotScanned`,\n  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is\n  the claim those entries have to back. `FullyScanned` says the scanner finds\n  every item the changelog entry names. The scanner reads PHP. So what an entry\n  changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.\n- `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the\n  changelog files the matchers name exist. Nothing checks the other direction. A\n  missing entry surfaces when somebody audits the matcher files against the\n  changelog.",
-                "versions": "",
-                "coverage": 1,
-                "score": 21,
-                "truncated": false
-            }
-        ],
-        "checks": [
-            "CI=true ./Build/Scripts/runTests.sh -s unit",
-            "CI=true ./Build/Scripts/runTests.sh -s functional",
-            "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
-            "CI=true ./Build/Scripts/runTests.sh -s checkRst",
-            "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst"
-        ],
-        "checksOwed": "",
-        "conditionalChecks": [],
-        "testSuites": [
-            {
-                "suite": "checkIntegrityPhp",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
-                "runs": "check",
-                "targeted": null,
-                "description": "Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.",
-                "whenToUse": "Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.",
+                ],
+                "changeType": "cleanup",
+                "targetVersion": 14,
+                "targetVersions": [
+                    14
+                ],
                 "domains": [
                     "php"
                 ],
-                "base": true,
-                "verifies": true,
-                "versions": "TYPO3 v13 and newer"
+                "scope": "core",
+                "intents": [
+                    {
+                        "id": "deprecation",
+                        "title": "Deprecation",
+                        "confidence": "strong",
+                        "condition": ""
+                    }
+                ],
+                "skills": [
+                    "typo3-core-patch-development"
+                ],
+                "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.",
+                "staleSkills": [],
+                "staleSkillsOwed": "",
+                "guides": [
+                    {
+                        "id": "any/writing/the-prose-a-patch-carries",
+                        "title": "The Prose a Patch Carries",
+                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    }
+                ],
+                "surfaces": [],
+                "surfacesOwed": "",
+                "hints": [
+                    {
+                        "id": "system-extension-boundaries",
+                        "title": "Where One System Extension Ends and the Next Begins",
+                        "category": "PHP",
+                        "scope": null,
+                        "hints": [
+                            {
+                                "text": "A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "@internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": "deprecated-apis",
+                        "title": "Deprecated APIs",
+                        "category": "PHP",
+                        "scope": null,
+                        "hints": [
+                            {
+                                "text": "Whether an API is deprecated is a property of the branch you work on, not of TYPO3 as a whole. Where you work in an installation the server reads that branch: typo3_project_describe names the TYPO3 version installed there, and typo3_changelog_lookup answers from the changelog its core package ships.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Read the declaration itself: an @deprecated annotation together with a trigger_error(..., E_USER_DEPRECATED) call is what marks one. The core marks nothing with PHP's #[\\Deprecated] attribute, so finding none says nothing about what is deprecated.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "The trigger does not have to sit in the declaring body, so a file without one settles nothing. A method, a property or a class can raise from its caller, from the __get() and __call() of PublicPropertyDeprecationTrait and PublicMethodDeprecationTrait where the member was made protected and listed there, or from whatever resolves the class.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A class constant and an enum case are where the docblock stands alone: nothing runs when one is read, so no trigger_error can be attached to it anywhere. Such a deprecation raises nothing — no deprecation log entry, nothing for a test suite running with failOnDeprecation — and the call site turns into a fatal error in the major that removes it. What finds it is the extension scanner, through the ClassConstantMatcher entry the deprecating patch owes it, rather than anything at runtime.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "What a branch deprecated is recorded in typo3/sysext/core/Documentation/Changelog/<version>/Deprecation-<issue>-<Title>.rst and in the matchers below typo3/sysext/install/Configuration/ExtensionScanner/Php/. Take the migration path from there instead of assuming a replacement.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "An entry's Impact section is prose and can promise a deprecation warning the code does not raise. What is raised is a property of the declaration, so read that for the severity rather than the entry.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A deprecated API keeps working until the next major release, so an existing call site is not automatically a defect. New code uses the replacement the changelog names.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Authoring a deprecation and finding out what a version deprecated are two directions through the same files. From the reading side: the changelog directory and the extension scanner matchers ship with the core and install packages of any installation, the Extension Scanner in the Install Tool runs the matchers over an extension, and `typo3 upgrade:list` and `typo3 upgrade:run` are the console side of the migrations.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "@internal on a class or on a member says it is not public API, and both are read: a public class can carry an internal method. It is an input to whether a removal is breaking and never the answer on its own.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "What settles it is whether anything outside the core calls it. The core has removed @internal members both as a breaking change and as an Important note, and what separates the two is the call sites rather than the marker: a Breaking entry names them in its Affected installations section, and the extension scanner matchers are where they are looked for. Writing that section is the test of whether there is one. Where there is none, the removal is an ordinary [TASK] with no marker, no changelog entry and no matcher.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "An absent annotation is not a statement that something is public API. Read the changelog for the subsystem and the extension scanner matchers before concluding either way.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": "public-api-surface",
+                        "title": "Changing a Public Method Signature",
+                        "category": "PHP",
+                        "scope": null,
+                        "hints": [
+                            {
+                                "text": "A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — \"Declaration of Sub::start() must be compatible with Base::start()\" — and nothing in the class being edited names it.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query \"breaking change\").",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": "events-extension-points",
+                        "title": "Events and Extension Points",
+                        "category": "PHP",
+                        "scope": null,
+                        "hints": [
+                            {
+                                "text": "A listener is registered with the #[AsEventListener] attribute from TYPO3\\CMS\\Core\\Attribute, on the class or on a single method. Its arguments are identifier, event, method, before and after; the attribute is repeatable, so one class can listen to several events. Autoconfiguration picks it up — do not add an event.listener tag to Services.yaml, no core listener is registered that way.",
+                                "since": 13,
+                                "until": null,
+                                "versions": "TYPO3 v13 and newer",
+                                "scope": null
+                            },
+                            {
+                                "text": "Event classes live in Classes/Event/ of the extension that dispatches them, are final, and are readonly where the payload is immutable. A listener that may change the outcome gets setters on the event instead of a return value.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Keep event payloads minimal and stable, and prefer a new event over a hook: a hook is only the right answer where the subsystem still has hook-based extension points.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "The surviving hooks are a subsystem fact, not a second extension-point registry. Ask the subsystem hint with the intent — for example prefilling a form field — so it can name both the remaining hook and the narrower event; the form-framework hint records EXT:form's two remaining SC_OPTIONS calls.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A PSR-14 event is public API. A new one needs a changelog entry, careful naming, and regression coverage.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            }
+                        ]
+                    }
+                ],
+                "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.",
+                "omittedHints": [],
+                "omittedHintsOwed": "",
+                "rules": [
+                    {
+                        "documentId": "core/contribution/commit-messages",
+                        "title": "TYPO3 Core Commit Message Rules",
+                        "uri": "typo3://guides/core/contribution/commit-messages",
+                        "heading": "Deprecations",
+                        "body": "- A deprecation must not use `[!!!]`.\n- A deprecation may only use `[TASK]` or `[FEATURE]`.\n- A deprecation must have a changelog RST file.\n- A deprecation needs migration guidance and may need extension scanner\n  considerations.\n- All of the above is the author's side. The reader's side works the other way\n  round. It asks what a given version deprecated, and what that means for code\n  that uses it. The Extension Scanner in the Install Tool checks an installation\n  against two directories. Those are the changelog files below\n  `Documentation/Changelog/` of the core package, and the matchers below the\n  install package's `Configuration/ExtensionScanner/Php/`. Both ship with a\n  Composer installation.",
+                        "versions": "",
+                        "coverage": 1,
+                        "score": 69,
+                        "truncated": false
+                    },
+                    {
+                        "documentId": "core/contribution/commit-messages",
+                        "title": "TYPO3 Core Commit Message Rules",
+                        "uri": "typo3://guides/core/contribution/commit-messages",
+                        "heading": "Breaking Changes",
+                        "body": "- A breaking change must use `[!!!]` before the keyword.\n- A breaking change must have a changelog RST file.\n- A breaking change should usually target `main`.\n- A removed or narrowed PHP API gets an extension scanner matcher entry in the\n  same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.\n  How code writes the removed member where it uses it decides the file:\n  - `MethodCallMatcher.php` — an instance method.\n  - `MethodCallStaticMatcher.php` — a static method.\n  - `PropertyPublicMatcher.php` — a removed public property.\n  - `PropertyProtectedMatcher.php` — a public property that became protected.\n  - `ClassNameMatcher.php` — a whole class or interface.\n- Visibility routes a property and never a method. The method matchers are a\n  weak match on the method name where code uses it. They do not resolve the\n  class, so they cannot see visibility, and a protected method goes with a\n  public one. `RendererRegistry->getRendererInstances` went from public to\n  protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The\n  list above has no row for a protected method because it needs none. That\n  absence says nothing about whether the change owes an entry.\n- The fully qualified name with `->` or `::` keys an entry. The entry carries\n  `restFiles`, which names the changelog file that removed the member. The\n  method matchers add `numberOfMandatoryArguments` and\n  `maximumNumberOfArguments`. A member deprecated before its removal lists both\n  changelog files.\n- Every Breaking and Deprecation entry carries exactly one of `NotScanned`,\n  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is\n  the claim those entries have to back. `FullyScanned` says the scanner finds\n  every item the changelog entry names. The scanner reads PHP. So what an entry\n  changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.\n- `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the\n  changelog files the matchers name exist. Nothing checks the other direction. A\n  missing entry surfaces when somebody audits the matcher files against the\n  changelog.",
+                        "versions": "",
+                        "coverage": 1,
+                        "score": 21,
+                        "truncated": false
+                    }
+                ],
+                "checks": [
+                    "CI=true ./Build/Scripts/runTests.sh -s unit",
+                    "CI=true ./Build/Scripts/runTests.sh -s functional",
+                    "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
+                    "CI=true ./Build/Scripts/runTests.sh -s checkRst",
+                    "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst"
+                ],
+                "checksOwed": "",
+                "conditionalChecks": [],
+                "testSuites": [
+                    {
+                        "suite": "checkIntegrityPhp",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.",
+                        "whenToUse": "Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": "TYPO3 v13 and newer"
+                    }
+                ],
+                "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
+                "checklist": [
+                    "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
+                    "Confirm the target TYPO3 core branch and issue context.",
+                    "Inspect nearby code, tests, and established subsystem conventions.",
+                    "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",
+                    "Keep the patch focused on the stated task.",
+                    "Add or update the narrowest useful test coverage.",
+                    "Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.",
+                    "Keep the cleanup mechanical; avoid mixing behavioural changes into the same patch.",
+                    "Annotate the member @deprecated since TYPO3 v<the version this lands in>, will be removed in TYPO3 v<the next major>. and close that line with the migration sentence. Read both versions off the branch you are on rather than off an example.",
+                    "Keep the member working and open its body with trigger_error('<Class>-><member>() is deprecated since TYPO3 v<the version this lands in> and will be removed in TYPO3 v<the next major>. <migration>', E_USER_DEPRECATED). The docblock and the message say the same three things, and the removal is a patch of its own in that major.",
+                    "Migrate every caller of the deprecated API in the same patch, and confirm none is left behind.",
+                    "Add a changelog file below typo3/sysext/core/Documentation/Changelog/<the minor this is released in>/ named Deprecation-<issue>-<UpperCamelCaseDescription>.rst. That directory's Index.rst pulls in every Deprecation-* file by glob, so naming the file correctly is the whole of including it and no index needs editing. Which directory a backport's file goes into is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item.",
+                    "Open the changelog file with .. include:: /Includes.rst.txt and a unique .. _deprecation-<issue>-<unix timestamp>: anchor directly above the 'Deprecation: #<issue> - <title>' headline, with See :issue:`<issue>` under it. Then Description, Impact, Affected installations and Migration — the last two are what this type owes over a feature entry.",
+                    "End the changelog file with .. index:: carrying at least one subject tag and exactly one of FullyScanned, PartiallyScanned or NotScanned. Build/Scripts/validateRstFiles.php rejects a Deprecation file without the scanner tag, so add the tag rather than weighing whether to.",
+                    "Back a FullyScanned or PartiallyScanned tag with an extension scanner matcher: an entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/, keyed by the deprecated symbol and naming the changelog file in its restFiles. NotScanned is for what no matcher can find, not for what nobody wrote.",
+                    "Use [TASK] or [FEATURE] as the commit keyword. A deprecation must never use the [!!!] breaking prefix.",
+                    "Write the commit message with typo3_commit_message_guide and workflow=\"core\": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping."
+                ],
+                "checkoutDiscovery": [
+                    {
+                        "establish": "Which files the task actually touches",
+                        "how": "git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them."
+                    },
+                    {
+                        "establish": "Which tests already cover them",
+                        "how": "Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation."
+                    },
+                    {
+                        "establish": "The branch you are on and the branches the change is meant for",
+                        "how": "git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main."
+                    },
+                    {
+                        "establish": "Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch",
+                        "how": "Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision."
+                    },
+                    {
+                        "establish": "Whether an icon identifier is registered, and which one spells the shape you want",
+                        "how": "Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family."
+                    },
+                    {
+                        "establish": "Whether a label for this wording already exists",
+                        "how": "Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask."
+                    }
+                ],
+                "nextTools": [
+                    {
+                        "tool": "typo3_commit_message_guide",
+                        "when": "with workflow=\"core\" and isDeprecation=true, for the keyword and prefix rules a message pushed to Gerrit is held to"
+                    },
+                    {
+                        "tool": "typo3_changelog_lookup",
+                        "when": "for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact"
+                    },
+                    {
+                        "tool": "typo3_hint_lookup",
+                        "when": "with the concrete file paths, once they are known"
+                    },
+                    {
+                        "tool": "typo3_test_run_guide",
+                        "when": "for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few"
+                    },
+                    {
+                        "tool": "typo3_task_guide",
+                        "when": "again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships"
+                    },
+                    {
+                        "tool": "typo3_feedback_record",
+                        "when": "when one of these answers was wrong or incomplete"
+                    }
+                ],
+                "owed": [
+                    "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
+                    "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
+                    "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
+                ]
             }
-        ],
-        "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
-        "checklist": [
-            "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
-            "Confirm the target TYPO3 core branch and issue context.",
-            "Inspect nearby code, tests, and established subsystem conventions.",
-            "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",
-            "Keep the patch focused on the stated task.",
-            "Add or update the narrowest useful test coverage.",
-            "Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.",
-            "Keep the cleanup mechanical; avoid mixing behavioural changes into the same patch.",
-            "Annotate the member @deprecated since TYPO3 v<the version this lands in>, will be removed in TYPO3 v<the next major>. and close that line with the migration sentence. Read both versions off the branch you are on rather than off an example.",
-            "Keep the member working and open its body with trigger_error('<Class>-><member>() is deprecated since TYPO3 v<the version this lands in> and will be removed in TYPO3 v<the next major>. <migration>', E_USER_DEPRECATED). The docblock and the message say the same three things, and the removal is a patch of its own in that major.",
-            "Migrate every caller of the deprecated API in the same patch, and confirm none is left behind.",
-            "Add a changelog file below typo3/sysext/core/Documentation/Changelog/<the minor this is released in>/ named Deprecation-<issue>-<UpperCamelCaseDescription>.rst. That directory's Index.rst pulls in every Deprecation-* file by glob, so naming the file correctly is the whole of including it and no index needs editing. Which directory a backport's file goes into is settled by typo3_rule_lookup with documentId=core/contribution/changelog rather than by this item.",
-            "Open the changelog file with .. include:: /Includes.rst.txt and a unique .. _deprecation-<issue>-<unix timestamp>: anchor directly above the 'Deprecation: #<issue> - <title>' headline, with See :issue:`<issue>` under it. Then Description, Impact, Affected installations and Migration — the last two are what this type owes over a feature entry.",
-            "End the changelog file with .. index:: carrying at least one subject tag and exactly one of FullyScanned, PartiallyScanned or NotScanned. Build/Scripts/validateRstFiles.php rejects a Deprecation file without the scanner tag, so add the tag rather than weighing whether to.",
-            "Back a FullyScanned or PartiallyScanned tag with an extension scanner matcher: an entry below typo3/sysext/install/Configuration/ExtensionScanner/Php/, keyed by the deprecated symbol and naming the changelog file in its restFiles. NotScanned is for what no matcher can find, not for what nobody wrote.",
-            "Use [TASK] or [FEATURE] as the commit keyword. A deprecation must never use the [!!!] breaking prefix.",
-            "Write the commit message with typo3_commit_message_guide and workflow=\"core\": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping."
-        ],
-        "checkoutDiscovery": [
-            {
-                "establish": "Which files the task actually touches",
-                "how": "git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them."
-            },
-            {
-                "establish": "Which tests already cover them",
-                "how": "Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation."
-            },
-            {
-                "establish": "The branch you are on and the branches the change is meant for",
-                "how": "git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main."
-            },
-            {
-                "establish": "Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch",
-                "how": "Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision."
-            },
-            {
-                "establish": "Whether an icon identifier is registered, and which one spells the shape you want",
-                "how": "Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family."
-            },
-            {
-                "establish": "Whether a label for this wording already exists",
-                "how": "Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask."
-            }
-        ],
-        "nextTools": [
-            {
-                "tool": "typo3_commit_message_guide",
-                "when": "with workflow=\"core\" and isDeprecation=true, for the keyword and prefix rules a message pushed to Gerrit is held to"
-            },
-            {
-                "tool": "typo3_changelog_lookup",
-                "when": "for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact"
-            },
-            {
-                "tool": "typo3_hint_lookup",
-                "when": "with the concrete file paths, once they are known"
-            },
-            {
-                "tool": "typo3_test_run_guide",
-                "when": "for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few"
-            },
-            {
-                "tool": "typo3_task_guide",
-                "when": "again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships"
-            },
-            {
-                "tool": "typo3_feedback_record",
-                "when": "when one of these answers was wrong or incomplete"
-            }
-        ],
-        "owed": [
-            "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
-            "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
-            "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
-        ]
-    }
 
 brief: task only
 ~~~~~~~~~~~~~~~~
@@ -983,406 +989,408 @@ Called with:
         "task": "Add a badge to the list module"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    Task: Add a badge to the list module
-    Change type: unknown
-    Domains: php
-    Recognized as: Backend UI markup
-    Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-    - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.
-    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+        .. code-block:: text
 
-    Hints:
-    The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
-    These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.
+            Task: Add a badge to the list module
+            Change type: unknown
+            Domains: php
+            Recognized as: Backend UI markup
+            Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
+            - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.
+            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
-    ### PHP
+            Hints:
+            The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
+            These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.
 
-    ## Changing a Public Method Signature
-    Hints:
-    - A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.
-    - Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — "Declaration of Sub::start() must be compatible with Base::start()" — and nothing in the class being edited names it.
-    - A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.
-    - The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.
-    - Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.
-    - The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.
-    - The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.
-    - So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.
-    - Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.
-    - Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query "breaking change").
-    - A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.
-    - A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.
-    - A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.
+            ### PHP
 
-    Rules that apply to this task:
+            ## Changing a Public Method Signature
+            Hints:
+            - A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.
+            - Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — "Declaration of Sub::start() must be compatible with Base::start()" — and nothing in the class being edited names it.
+            - A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.
+            - The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.
+            - Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.
+            - The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.
+            - The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.
+            - So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.
+            - Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.
+            - Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query "breaking change").
+            - A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.
+            - A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.
+            - A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.
 
-    A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.
+            Rules that apply to this task:
 
-    ## Testing
-    Source: TYPO3 Core Contribution Rules (typo3://guides/core/contribution/rules) — matches 50% of the query terms
+            A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.
 
-    - A reviewer expects a unit test for isolated behavior.
-    - A reviewer expects a functional test for persistence, configuration, routing,
-      backend behavior, or integration with TYPO3 services.
-    - An end-to-end test in the `e2e` suite is useful for a change to an editor or
-      administrator workflow. Such a change breaks only in the assembled backend.
-      That suite replaced the former acceptance suites.
-    - Document the tests you could not execute and why.
+            ## Testing
+            Source: TYPO3 Core Contribution Rules (typo3://guides/core/contribution/rules) — matches 50% of the query terms
 
-    Each excerpt above is one section of a longer document, and each page below carries the `##` headings that are not above. Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:
-    - core/contribution/rules — TYPO3 Core Contribution Rules: 4 of its 5 headings are not above — Contribution Flow, Code Style, Documentation, Review Readiness.
+            - A reviewer expects a unit test for isolated behavior.
+            - A reviewer expects a functional test for persistence, configuration, routing,
+              backend behavior, or integration with TYPO3 services.
+            - An end-to-end test in the `e2e` suite is useful for a change to an editor or
+              administrator workflow. Such a change breaks only in the assembled backend.
+              That suite replaced the former acceptance suites.
+            - Document the tests you could not execute and why.
 
-    Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:
-    - `CI=true ./Build/Scripts/runTests.sh -s unit`
-    - `CI=true ./Build/Scripts/runTests.sh -s functional`
-    - `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
-    - `CI=true ./Build/Scripts/runTests.sh -s lintScss`
-    - `CI=true ./Build/Scripts/runTests.sh -s build`
+            Each excerpt above is one section of a longer document, and each page below carries the `##` headings that are not above. Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:
+            - core/contribution/rules — TYPO3 Core Contribution Rules: 4 of its 5 headings are not above — Contribution Flow, Code Style, Documentation, Review Readiness.
 
-    Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
-    Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
-    ## listExceptionCodes
-    `CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes`
-    Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.
-    ## cglGit
-    `CI=true ./Build/Scripts/runTests.sh -s cglGit`
-    Targeted: `CI=true ./Build/Scripts/runTests.sh -s cgl -n`
-    Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.
-    ## cglHeaderGit
-    `CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit`
-    Targeted: `CI=true ./Build/Scripts/runTests.sh -s cglHeader -n`
-    Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.
+            Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:
+            - `CI=true ./Build/Scripts/runTests.sh -s unit`
+            - `CI=true ./Build/Scripts/runTests.sh -s functional`
+            - `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
+            - `CI=true ./Build/Scripts/runTests.sh -s lintScss`
+            - `CI=true ./Build/Scripts/runTests.sh -s build`
 
-    Suggested checklist:
-    - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
-    - Confirm the target TYPO3 core branch and issue context.
-    - Inspect nearby code, tests, and established subsystem conventions.
-    - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
-    - Keep the patch focused on the stated task.
-    - Add or update the narrowest useful test coverage.
-    - Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.
-    - Use the existing backend component classes and their documented markup instead of new ad-hoc classes.
-    - Check the styleguide demo of the component for the canonical structure.
-    - Write the commit message with typo3_commit_message_guide and workflow="core": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping.
+            Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
+            Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
+            ## listExceptionCodes
+            `CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes`
+            Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.
+            ## cglGit
+            `CI=true ./Build/Scripts/runTests.sh -s cglGit`
+            Targeted: `CI=true ./Build/Scripts/runTests.sh -s cgl -n`
+            Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.
+            ## cglHeaderGit
+            `CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit`
+            Targeted: `CI=true ./Build/Scripts/runTests.sh -s cglHeader -n`
+            Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.
 
-    Establish in your checkout — this server cannot see it:
-    - Which files the task actually touches
-      git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them.
-    - Which tests already cover them
-      Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation.
-    - The branch you are on and the branches the change is meant for
-      git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main.
-    - Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch
-      Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision.
-    - Whether an icon identifier is registered, and which one spells the shape you want
-      Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family.
-    - Whether a label for this wording already exists
-      Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask.
+            Suggested checklist:
+            - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
+            - Confirm the target TYPO3 core branch and issue context.
+            - Inspect nearby code, tests, and established subsystem conventions.
+            - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
+            - Keep the patch focused on the stated task.
+            - Add or update the narrowest useful test coverage.
+            - Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.
+            - Use the existing backend component classes and their documented markup instead of new ad-hoc classes.
+            - Check the styleguide demo of the component for the canonical structure.
+            - Write the commit message with typo3_commit_message_guide and workflow="core": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping.
 
-    Next lookups for this task:
-    - typo3_component_lookup — before writing backend markup or CSS classes
-    - typo3_changelog_lookup — for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact
-    - typo3_hint_lookup — with the concrete file paths, once they are known
-    - typo3_test_run_guide — for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few
-    - typo3_commit_message_guide — with workflow="core", before committing — the default is a repository of your own and demands no Forge issue or release trailer
-    - typo3_task_guide — again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships
-    - typo3_feedback_record — when one of these answers was wrong or incomplete
+            Establish in your checkout — this server cannot see it:
+            - Which files the task actually touches
+              git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them.
+            - Which tests already cover them
+              Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation.
+            - The branch you are on and the branches the change is meant for
+              git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main.
+            - Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch
+              Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision.
+            - Whether an icon identifier is registered, and which one spells the shape you want
+              Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family.
+            - Whether a label for this wording already exists
+              Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask.
 
-Data:
+            Next lookups for this task:
+            - typo3_component_lookup — before writing backend markup or CSS classes
+            - typo3_changelog_lookup — for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact
+            - typo3_hint_lookup — with the concrete file paths, once they are known
+            - typo3_test_run_guide — for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few
+            - typo3_commit_message_guide — with workflow="core", before committing — the default is a repository of your own and demands no Forge issue or release trailer
+            - typo3_task_guide — again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships
+            - typo3_feedback_record — when one of these answers was wrong or incomplete
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "task": "Add a badge to the list module",
-        "paths": [],
-        "scopes": [],
-        "changeType": "unknown",
-        "targetVersion": 14,
-        "targetVersions": [
-            14
-        ],
-        "domains": [
-            "php"
-        ],
-        "scope": "core",
-        "intents": [
+        .. code-block:: json
+
             {
-                "id": "backend-ui",
-                "title": "Backend UI markup",
-                "confidence": "strong",
-                "condition": "only if the change adds or alters backend component markup or CSS classes"
-            }
-        ],
-        "skills": [],
-        "skillsOwed": "",
-        "staleSkills": [],
-        "staleSkillsOwed": "",
-        "guides": [
-            {
-                "id": "any/testing/browser-check",
-                "title": "Looking at a Change in a Real Browser",
-                "when": "When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            },
-            {
-                "id": "any/writing/the-prose-a-patch-carries",
-                "title": "The Prose a Patch Carries",
-                "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            }
-        ],
-        "surfaces": [],
-        "surfacesOwed": "",
-        "hints": [
-            {
-                "id": "public-api-surface",
-                "title": "Changing a Public Method Signature",
-                "category": "PHP",
-                "scope": null,
+                "task": "Add a badge to the list module",
+                "paths": [],
+                "scopes": [],
+                "changeType": "unknown",
+                "targetVersion": 14,
+                "targetVersions": [
+                    14
+                ],
+                "domains": [
+                    "php"
+                ],
+                "scope": "core",
+                "intents": [
+                    {
+                        "id": "backend-ui",
+                        "title": "Backend UI markup",
+                        "confidence": "strong",
+                        "condition": "only if the change adds or alters backend component markup or CSS classes"
+                    }
+                ],
+                "skills": [],
+                "skillsOwed": "",
+                "staleSkills": [],
+                "staleSkillsOwed": "",
+                "guides": [
+                    {
+                        "id": "any/testing/browser-check",
+                        "title": "Looking at a Change in a Real Browser",
+                        "when": "When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    },
+                    {
+                        "id": "any/writing/the-prose-a-patch-carries",
+                        "title": "The Prose a Patch Carries",
+                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    }
+                ],
+                "surfaces": [],
+                "surfacesOwed": "",
                 "hints": [
                     {
-                        "text": "A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — \"Declaration of Sub::start() must be compatible with Base::start()\" — and nothing in the class being edited names it.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query \"breaking change\").",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": "core"
-                    },
-                    {
-                        "text": "A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
+                        "id": "public-api-surface",
+                        "title": "Changing a Public Method Signature",
+                        "category": "PHP",
+                        "scope": null,
+                        "hints": [
+                            {
+                                "text": "A public or protected method on a class that is not final is an override point: something outside the package may already override it, and PHP compares the two declarations when that subclass is loaded.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Adding a parameter to such a method is a signature change, an optional one included. The subclass that declares the old signature fatals as it is autoloaded — \"Declaration of Sub::start() must be compatible with Base::start()\" — and nothing in the class being edited names it.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A constructor is the exception. PHP compares no constructor between a class and its subclass unless an interface or an abstract constructor declares it. So a changed constructor reaches a subclass only through its parent::__construct() call: an argument the parent no longer takes at the end is dropped without a word, one removed in between moves the rest, and an added required one fails. Code that calls new with the old arguments meets the same.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "The core settles a changed constructor on who calls it. A service that only the container builds changes its dependencies in a [TASK] with no changelog entry. A class that code constructs by hand, or a base built to extend, gets a Breaking entry.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "Nothing in a core checkout reports it. No core class has to override the method, so the unit, functional, coding-guidelines and static-analysis runs are all green on the change.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "The core files such a change as breaking on the possibility of an override rather than on a demonstrated one. Its changelog entries name the affected installations as the extensions extending the method, and one that calls that set very unlikely files it as breaking anyway.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "The exception is a member the core has taken out of its public API with @internal, which takes an Important entry instead of a Breaking one. An entry is still owed; only its type changes, and that is what lets such a change reach a release line.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "So the target branch is decided here rather than at commit-message time. A maintained release line carries no breaking change, no deprecation and no feature, which leaves Important the only one of the four it takes — a fix owed to one cannot carry the signature change at all.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "Add rather than widen where the change has to reach a release line: a method of its own, or the state handed over on something the callee already receives — the core puts the calling ContentObjectRenderer on the request as the currentContentObject attribute instead of into a signature. Declaring the class or the method final first is no cheaper, because that is itself a breaking change with an entry of its own.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Which entries decide each of those, and what the extension scanner can and cannot find, is typo3_rule_lookup(query \"breaking change\").",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "A change that moves no member at all is settled the other way round, on what it renders: typo3_hint_lookup with the id breaking-without-a-moved-member.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": "core"
+                            },
+                            {
+                                "text": "A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            }
+                        ]
                     }
+                ],
+                "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.",
+                "omittedHints": [],
+                "omittedHintsOwed": "",
+                "rules": [
+                    {
+                        "documentId": "core/contribution/rules",
+                        "title": "TYPO3 Core Contribution Rules",
+                        "uri": "typo3://guides/core/contribution/rules",
+                        "heading": "Testing",
+                        "body": "- A reviewer expects a unit test for isolated behavior.\n- A reviewer expects a functional test for persistence, configuration, routing,\n  backend behavior, or integration with TYPO3 services.\n- An end-to-end test in the `e2e` suite is useful for a change to an editor or\n  administrator workflow. Such a change breaks only in the assembled backend.\n  That suite replaced the former acceptance suites.\n- Document the tests you could not execute and why.",
+                        "versions": "",
+                        "coverage": 0.5,
+                        "score": 35,
+                        "truncated": false
+                    }
+                ],
+                "checks": [
+                    "CI=true ./Build/Scripts/runTests.sh -s unit",
+                    "CI=true ./Build/Scripts/runTests.sh -s functional",
+                    "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
+                    "CI=true ./Build/Scripts/runTests.sh -s lintScss",
+                    "CI=true ./Build/Scripts/runTests.sh -s build"
+                ],
+                "checksOwed": "",
+                "conditionalChecks": [],
+                "testSuites": [
+                    {
+                        "suite": "listExceptionCodes",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.",
+                        "whenToUse": "Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "cglGit",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
+                        "runs": "change",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
+                        "description": "Checks and fixes coding guideline issues in the latest committed patch.",
+                        "whenToUse": "Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "cglHeaderGit",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit",
+                        "runs": "change",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
+                        "description": "Checks and fixes the licence header in the latest committed patch.",
+                        "whenToUse": "Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    }
+                ],
+                "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
+                "checklist": [
+                    "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
+                    "Confirm the target TYPO3 core branch and issue context.",
+                    "Inspect nearby code, tests, and established subsystem conventions.",
+                    "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",
+                    "Keep the patch focused on the stated task.",
+                    "Add or update the narrowest useful test coverage.",
+                    "Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.",
+                    "Use the existing backend component classes and their documented markup instead of new ad-hoc classes.",
+                    "Check the styleguide demo of the component for the canonical structure.",
+                    "Write the commit message with typo3_commit_message_guide and workflow=\"core\": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping."
+                ],
+                "checkoutDiscovery": [
+                    {
+                        "establish": "Which files the task actually touches",
+                        "how": "git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them."
+                    },
+                    {
+                        "establish": "Which tests already cover them",
+                        "how": "Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation."
+                    },
+                    {
+                        "establish": "The branch you are on and the branches the change is meant for",
+                        "how": "git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main."
+                    },
+                    {
+                        "establish": "Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch",
+                        "how": "Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision."
+                    },
+                    {
+                        "establish": "Whether an icon identifier is registered, and which one spells the shape you want",
+                        "how": "Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family."
+                    },
+                    {
+                        "establish": "Whether a label for this wording already exists",
+                        "how": "Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask."
+                    }
+                ],
+                "nextTools": [
+                    {
+                        "tool": "typo3_component_lookup",
+                        "when": "before writing backend markup or CSS classes"
+                    },
+                    {
+                        "tool": "typo3_changelog_lookup",
+                        "when": "for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact"
+                    },
+                    {
+                        "tool": "typo3_hint_lookup",
+                        "when": "with the concrete file paths, once they are known"
+                    },
+                    {
+                        "tool": "typo3_test_run_guide",
+                        "when": "for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few"
+                    },
+                    {
+                        "tool": "typo3_commit_message_guide",
+                        "when": "with workflow=\"core\", before committing — the default is a repository of your own and demands no Forge issue or release trailer"
+                    },
+                    {
+                        "tool": "typo3_task_guide",
+                        "when": "again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships"
+                    },
+                    {
+                        "tool": "typo3_feedback_record",
+                        "when": "when one of these answers was wrong or incomplete"
+                    }
+                ],
+                "owed": [
+                    "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
+                    "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
+                    "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
                 ]
             }
-        ],
-        "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.",
-        "omittedHints": [],
-        "omittedHintsOwed": "",
-        "rules": [
-            {
-                "documentId": "core/contribution/rules",
-                "title": "TYPO3 Core Contribution Rules",
-                "uri": "typo3://guides/core/contribution/rules",
-                "heading": "Testing",
-                "body": "- A reviewer expects a unit test for isolated behavior.\n- A reviewer expects a functional test for persistence, configuration, routing,\n  backend behavior, or integration with TYPO3 services.\n- An end-to-end test in the `e2e` suite is useful for a change to an editor or\n  administrator workflow. Such a change breaks only in the assembled backend.\n  That suite replaced the former acceptance suites.\n- Document the tests you could not execute and why.",
-                "versions": "",
-                "coverage": 0.5,
-                "score": 35,
-                "truncated": false
-            }
-        ],
-        "checks": [
-            "CI=true ./Build/Scripts/runTests.sh -s unit",
-            "CI=true ./Build/Scripts/runTests.sh -s functional",
-            "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
-            "CI=true ./Build/Scripts/runTests.sh -s lintScss",
-            "CI=true ./Build/Scripts/runTests.sh -s build"
-        ],
-        "checksOwed": "",
-        "conditionalChecks": [],
-        "testSuites": [
-            {
-                "suite": "listExceptionCodes",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes",
-                "runs": "check",
-                "targeted": null,
-                "description": "Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.",
-                "whenToUse": "Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": ""
-            },
-            {
-                "suite": "cglGit",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
-                "description": "Checks and fixes coding guideline issues in the latest committed patch.",
-                "whenToUse": "Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "cglHeaderGit",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
-                "description": "Checks and fixes the licence header in the latest committed patch.",
-                "whenToUse": "Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            }
-        ],
-        "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
-        "checklist": [
-            "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
-            "Confirm the target TYPO3 core branch and issue context.",
-            "Inspect nearby code, tests, and established subsystem conventions.",
-            "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",
-            "Keep the patch focused on the stated task.",
-            "Add or update the narrowest useful test coverage.",
-            "Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.",
-            "Use the existing backend component classes and their documented markup instead of new ad-hoc classes.",
-            "Check the styleguide demo of the component for the canonical structure.",
-            "Write the commit message with typo3_commit_message_guide and workflow=\"core\": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping."
-        ],
-        "checkoutDiscovery": [
-            {
-                "establish": "Which files the task actually touches",
-                "how": "git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them."
-            },
-            {
-                "establish": "Which tests already cover them",
-                "how": "Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation."
-            },
-            {
-                "establish": "The branch you are on and the branches the change is meant for",
-                "how": "git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main."
-            },
-            {
-                "establish": "Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch",
-                "how": "Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision."
-            },
-            {
-                "establish": "Whether an icon identifier is registered, and which one spells the shape you want",
-                "how": "Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family."
-            },
-            {
-                "establish": "Whether a label for this wording already exists",
-                "how": "Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask."
-            }
-        ],
-        "nextTools": [
-            {
-                "tool": "typo3_component_lookup",
-                "when": "before writing backend markup or CSS classes"
-            },
-            {
-                "tool": "typo3_changelog_lookup",
-                "when": "for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact"
-            },
-            {
-                "tool": "typo3_hint_lookup",
-                "when": "with the concrete file paths, once they are known"
-            },
-            {
-                "tool": "typo3_test_run_guide",
-                "when": "for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few"
-            },
-            {
-                "tool": "typo3_commit_message_guide",
-                "when": "with workflow=\"core\", before committing — the default is a repository of your own and demands no Forge issue or release trailer"
-            },
-            {
-                "tool": "typo3_task_guide",
-                "when": "again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships"
-            },
-            {
-                "tool": "typo3_feedback_record",
-                "when": "when one of these answers was wrong or incomplete"
-            }
-        ],
-        "owed": [
-            "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
-            "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
-            "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
-        ]
-    }
 
 brief: paths of two kinds
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1400,446 +1408,448 @@ Called with:
         "changeType": "bugfix"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    Of the paths given, packages/acme_events/Classes/Domain/Repository/EventRepository.php is outside the TYPO3 core — a project or third-party extension. What follows is split accordingly: what only the core repository has is left out of the half that is about it. The checks below, the changelog and the submission route belong to the core repository, so they are steps for the paths that are in it and for none of the others.
+        .. code-block:: text
 
-    Owed after this brief, and not carried below: events-extension-points. Each is the one typo3_hint_lookup call by id its entry names as lookup, and an id left out of a batch is still owed. A subject named here and not below is one this brief did not reach.
-    - typo3_hint_lookup with id "events-extension-points" — Events and Extension Points
+            Of the paths given, packages/acme_events/Classes/Domain/Repository/EventRepository.php is outside the TYPO3 core — a project or third-party extension. What follows is split accordingly: what only the core repository has is left out of the half that is about it. The checks below, the changelog and the submission route belong to the core repository, so they are steps for the paths that are in it and for none of the others.
 
-    Task: Fix the query that reads the events
-    Change type: bugfix
-    Domains: php
-    Paths:
-    - packages/acme_events/Classes/Domain/Repository/EventRepository.php (extension)
-    - typo3/sysext/core/Classes/Database/Query/QueryBuilder.php
-    Recognized as: Writing the change
-    Possibly also: Registering an event listener, only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this. Its checklist items are marked as conditional below and its checks are listed separately.
-    Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.
-    Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-    - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+            Owed after this brief, and not carried below: events-extension-points. Each is the one typo3_hint_lookup call by id its entry names as lookup, and an id left out of a batch is still owed. A subject named here and not below is one this brief did not reach.
+            - typo3_hint_lookup with id "events-extension-points" — Events and Extension Points
 
-    Hints:
-    The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
-    A brief carries the 4 strongest per group of paths, which is not everything the lookup holds on them — call it for the rest, by path, with a larger limit, or by id.
+            Task: Fix the query that reads the events
+            Change type: bugfix
+            Domains: php
+            Paths:
+            - packages/acme_events/Classes/Domain/Repository/EventRepository.php (extension)
+            - typo3/sysext/core/Classes/Database/Query/QueryBuilder.php
+            Recognized as: Writing the change
+            Possibly also: Registering an event listener, only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this. Its checklist items are marked as conditional below and its checks are listed separately.
+            Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.
+            Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
+            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
-    # For typo3/sysext/core/Classes/Database/Query/QueryBuilder.php
+            Hints:
+            The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
+            A brief carries the 4 strongest per group of paths, which is not everything the lookup holds on them — call it for the rest, by path, with a larger limit, or by id.
 
-    ### PHP
+            # For typo3/sysext/core/Classes/Database/Query/QueryBuilder.php
 
-    ## Reading Records, and What Is Hidden From the Query
-    Hints:
-    - A QueryBuilder from ConnectionPool::getQueryBuilderForTable() already carries a DefaultRestrictionContainer: DeletedRestriction, HiddenRestriction, StartTimeRestriction and EndTimeRestriction. A plain select therefore hides disabled and time-restricted rows without saying so, which is what a record that is in the database and not in the result usually is.
-    - Taking them off is deliberate and partial: getRestrictions()->removeAll() drops all four, and the ordinary form adds DeletedRestriction back, because a deleted row is not a row. BackendUtility::getRecord() is the worked example — removeAll(), then DeletedRestriction unless the caller asked for it too.
-    - The frontend uses FrontendRestrictionContainer instead, which PageRepository sets with the current Context: the same four plus WorkspaceRestriction and FrontendGroupRestriction. Access groups and workspaces are conditions there and nowhere else.
-    - Outside the frontend a query returns the live record, and the workspace version is put on top of it afterwards: PageRepository::versionOL($table, $row) overlays it in place. It is a step after the query, not a condition in it.
-    - The translation works the same way: PageRepository::getLanguageOverlay($table, $row, ?LanguageAspect) replaces the row's fields with the translated ones and honours the fallback chain the LanguageAspect describes. Selecting rows by sys_language_uid is not the same thing and misses the fallback. PageRepository::getPage() shows the order both are applied in: versionOL() first, then the language overlay.
-    - PageRepository::getDefaultConstraints($table, $enableFieldsToIgnore) returns the enable-field conditions as QueryBuilder expressions, for a query that builds its own restrictions. [TYPO3 v13 and newer]
-    - All of this is about which rows come back. What the object built from one of them is shaped like — and why $row['hidden'] is absent on it rather than false — is record-system-properties. [TYPO3 v13 and newer]
+            ### PHP
 
-    ## Where One System Extension Ends and the Next Begins
-    Hints:
-    - A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.
-    - @internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.
-    - A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.
+            ## Reading Records, and What Is Hidden From the Query
+            Hints:
+            - A QueryBuilder from ConnectionPool::getQueryBuilderForTable() already carries a DefaultRestrictionContainer: DeletedRestriction, HiddenRestriction, StartTimeRestriction and EndTimeRestriction. A plain select therefore hides disabled and time-restricted rows without saying so, which is what a record that is in the database and not in the result usually is.
+            - Taking them off is deliberate and partial: getRestrictions()->removeAll() drops all four, and the ordinary form adds DeletedRestriction back, because a deleted row is not a row. BackendUtility::getRecord() is the worked example — removeAll(), then DeletedRestriction unless the caller asked for it too.
+            - The frontend uses FrontendRestrictionContainer instead, which PageRepository sets with the current Context: the same four plus WorkspaceRestriction and FrontendGroupRestriction. Access groups and workspaces are conditions there and nowhere else.
+            - Outside the frontend a query returns the live record, and the workspace version is put on top of it afterwards: PageRepository::versionOL($table, $row) overlays it in place. It is a step after the query, not a condition in it.
+            - The translation works the same way: PageRepository::getLanguageOverlay($table, $row, ?LanguageAspect) replaces the row's fields with the translated ones and honours the fallback chain the LanguageAspect describes. Selecting rows by sys_language_uid is not the same thing and misses the fallback. PageRepository::getPage() shows the order both are applied in: versionOL() first, then the language overlay.
+            - PageRepository::getDefaultConstraints($table, $enableFieldsToIgnore) returns the enable-field conditions as QueryBuilder expressions, for a query that builds its own restrictions. [TYPO3 v13 and newer]
+            - All of this is about which rows come back. What the object built from one of them is shaped like — and why $row['hidden'] is absent on it rather than false — is record-system-properties. [TYPO3 v13 and newer]
 
-    # For packages/acme_events/Classes/Domain/Repository/EventRepository.php — extension
+            ## Where One System Extension Ends and the Next Begins
+            Hints:
+            - A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.
+            - @internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.
+            - A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.
 
-    ### PHP
+            # For packages/acme_events/Classes/Domain/Repository/EventRepository.php — extension
 
-    ## Models, Repositories and the Table Behind Them
-    Hints:
-    - A model maps onto the table its class name implies. Configuration/Extbase/Persistence/Classes.php is where a table named differently is mapped, together with the per-property column names and the record type of a single-table inheritance.
-    - Orderings are property names, not column names. Ordering by the order records have in the backend therefore needs a property for that field on the model, although it is not a domain concept.
+            ### PHP
 
-    Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:
-    - `CI=true ./Build/Scripts/runTests.sh -s unit`
-    - `CI=true ./Build/Scripts/runTests.sh -s functional`
-    - `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
+            ## Models, Repositories and the Table Behind Them
+            Hints:
+            - A model maps onto the table its class name implies. Configuration/Extbase/Persistence/Classes.php is where a table named differently is mapped, together with the per-property column names and the record type of a single-table inheritance.
+            - Orderings are property names, not column names. Ordering by the order records have in the backend therefore needs a property for that field on the model, although it is not a domain concept.
 
-    Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
-    Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
-    ## checkIntegrityPhp
-    `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
-    Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
-    ## e2e-browser
-    `CI=true ./Build/Scripts/runTests.sh -s e2e-browser`
-    Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.
-    ## cglGit
-    `CI=true ./Build/Scripts/runTests.sh -s cglGit`
-    Targeted: `CI=true ./Build/Scripts/runTests.sh -s cgl -n`
-    Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.
-    ## checkExtensionScannerRst
-    `CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst`
-    Use when a deprecation or breaking change adds extension scanner matchers.
+            Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:
+            - `CI=true ./Build/Scripts/runTests.sh -s unit`
+            - `CI=true ./Build/Scripts/runTests.sh -s functional`
+            - `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
 
-    Suggested checklist:
-    - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
-    - Confirm the target TYPO3 core branch and issue context.
-    - Inspect nearby code, tests, and established subsystem conventions.
-    - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
-    - Keep the patch focused on the stated task.
-    - Add or update the narrowest useful test coverage.
-    - Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.
-    - Reproduce the bug first, ideally with a failing test that the fix turns green.
-    - Settle which release branches the fix goes to with typo3_commit_message_guide, which names the lines a change of this type takes and says what claiming an older one costs. Whether the defect is on them is your reading, and a checkout holding one branch cannot make it.
-    - A bugfix owes a changelog entry only where it changes what an installation renders, is configured by, or has documented, and then it is an Important below typo3/sysext/core/Documentation/Changelog/. Write it into the <lts>.x directory of the oldest branch the Releases: trailer names, and into both .x directories where two maintained lines take the change. The whole rule is one typo3_rule_lookup call with documentId "core/contribution/changelog".
-    - Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: find the event that is really dispatched before writing a listener for it. An event class that reads plausibly and is dispatched nowhere is a listener that never runs and throws nothing, which is the failure this task shape has instead of an error.
-    - Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: how a listener is registered is bound to the TYPO3 line and is not stated here: typo3_hint_lookup with id=events-extension-points carries both mechanisms with the versions each holds on, and a package serving two majors gets both from it.
-    - Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: say what happens when another listener has already run. Ordering is declared or it is not there, and a listener that quietly assumes it goes first is correct until somebody installs a second extension.
-    - Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: a hook is not the fallback. Where a subsystem still has hook-based extension points that is a fact about that subsystem — ask its own hint with the intent, and take the narrower event where there is one.
-    - Write the commit message with typo3_commit_message_guide and workflow="core": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping.
+            Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths.
+            Before running one: Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
+            ## checkIntegrityPhp
+            `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
+            Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
+            ## e2e-browser
+            `CI=true ./Build/Scripts/runTests.sh -s e2e-browser`
+            Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.
+            ## cglGit
+            `CI=true ./Build/Scripts/runTests.sh -s cglGit`
+            Targeted: `CI=true ./Build/Scripts/runTests.sh -s cgl -n`
+            Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.
+            ## checkExtensionScannerRst
+            `CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst`
+            Use when a deprecation or breaking change adds extension scanner matchers.
 
-    Establish in your checkout — this server cannot see it:
-    - Which files the task actually touches
-      git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them.
-    - Which tests already cover them
-      Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation.
-    - The branch you are on and the branches the change is meant for
-      git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main.
-    - Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch
-      Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision.
-    - Whether an icon identifier is registered, and which one spells the shape you want
-      Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family.
-    - Whether a label for this wording already exists
-      Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask.
+            Suggested checklist:
+            - A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.
+            - Confirm the target TYPO3 core branch and issue context.
+            - Inspect nearby code, tests, and established subsystem conventions.
+            - Sweep the deprecations before writing: typo3_changelog_lookup with type "deprecation" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.
+            - Keep the patch focused on the stated task.
+            - Add or update the narrowest useful test coverage.
+            - Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.
+            - Reproduce the bug first, ideally with a failing test that the fix turns green.
+            - Settle which release branches the fix goes to with typo3_commit_message_guide, which names the lines a change of this type takes and says what claiming an older one costs. Whether the defect is on them is your reading, and a checkout holding one branch cannot make it.
+            - A bugfix owes a changelog entry only where it changes what an installation renders, is configured by, or has documented, and then it is an Important below typo3/sysext/core/Documentation/Changelog/. Write it into the <lts>.x directory of the oldest branch the Releases: trailer names, and into both .x directories where two maintained lines take the change. The whole rule is one typo3_rule_lookup call with documentId "core/contribution/changelog".
+            - Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: find the event that is really dispatched before writing a listener for it. An event class that reads plausibly and is dispatched nowhere is a listener that never runs and throws nothing, which is the failure this task shape has instead of an error.
+            - Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: how a listener is registered is bound to the TYPO3 line and is not stated here: typo3_hint_lookup with id=events-extension-points carries both mechanisms with the versions each holds on, and a package serving two majors gets both from it.
+            - Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: say what happens when another listener has already run. Ordering is declared or it is not there, and a listener that quietly assumes it goes first is correct until somebody installs a second extension.
+            - Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: a hook is not the fallback. Where a subsystem still has hook-based extension points that is a fact about that subsystem — ask its own hint with the intent, and take the narrower event where there is one.
+            - Write the commit message with typo3_commit_message_guide and workflow="core": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping.
 
-    Next lookups for this task:
-    - typo3_hint_lookup — with id=events-extension-points, for the registration each covered line has and what an event class owes its listeners
-    - typo3_extension_describe — for what the extension dispatching the event already registers
-    - typo3_changelog_lookup — for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact
-    - typo3_test_run_guide — for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few
-    - typo3_commit_message_guide — with workflow="core", before committing — the default is a repository of your own and demands no Forge issue or release trailer
-    - typo3_task_guide — again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships
-    - typo3_feedback_record — when one of these answers was wrong or incomplete
+            Establish in your checkout — this server cannot see it:
+            - Which files the task actually touches
+              git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them.
+            - Which tests already cover them
+              Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation.
+            - The branch you are on and the branches the change is meant for
+              git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main.
+            - Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch
+              Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision.
+            - Whether an icon identifier is registered, and which one spells the shape you want
+              Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family.
+            - Whether a label for this wording already exists
+              Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask.
 
-Data:
+            Next lookups for this task:
+            - typo3_hint_lookup — with id=events-extension-points, for the registration each covered line has and what an event class owes its listeners
+            - typo3_extension_describe — for what the extension dispatching the event already registers
+            - typo3_changelog_lookup — for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact
+            - typo3_test_run_guide — for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few
+            - typo3_commit_message_guide — with workflow="core", before committing — the default is a repository of your own and demands no Forge issue or release trailer
+            - typo3_task_guide — again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships
+            - typo3_feedback_record — when one of these answers was wrong or incomplete
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "task": "Fix the query that reads the events",
-        "paths": [
-            "packages/acme_events/Classes/Domain/Repository/EventRepository.php",
-            "typo3/sysext/core/Classes/Database/Query/QueryBuilder.php"
-        ],
-        "scopes": [
+        .. code-block:: json
+
             {
-                "path": "packages/acme_events/Classes/Domain/Repository/EventRepository.php",
-                "scope": "extension"
-            },
-            {
-                "path": "typo3/sysext/core/Classes/Database/Query/QueryBuilder.php",
-                "scope": "core"
-            }
-        ],
-        "changeType": "bugfix",
-        "targetVersion": 14,
-        "targetVersions": [
-            14
-        ],
-        "domains": [
-            "php"
-        ],
-        "scope": "core",
-        "intents": [
-            {
-                "id": "patch",
-                "title": "Writing the change",
-                "confidence": "strong",
-                "condition": ""
-            },
-            {
-                "id": "event-listener",
-                "title": "Registering an event listener",
-                "confidence": "weak",
-                "condition": "only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this"
-            }
-        ],
-        "skills": [
-            "typo3-core-patch-development"
-        ],
-        "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.",
-        "staleSkills": [],
-        "staleSkillsOwed": "",
-        "guides": [
-            {
-                "id": "any/writing/the-prose-a-patch-carries",
-                "title": "The Prose a Patch Carries",
-                "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
-                "scope": "any",
-                "tool": "typo3_rule_lookup"
-            }
-        ],
-        "surfaces": [],
-        "surfacesOwed": "",
-        "hints": [
-            {
-                "id": "persistence-reading",
-                "title": "Reading Records, and What Is Hidden From the Query",
-                "category": "PHP",
-                "scope": null,
-                "hints": [
+                "task": "Fix the query that reads the events",
+                "paths": [
+                    "packages/acme_events/Classes/Domain/Repository/EventRepository.php",
+                    "typo3/sysext/core/Classes/Database/Query/QueryBuilder.php"
+                ],
+                "scopes": [
                     {
-                        "text": "A QueryBuilder from ConnectionPool::getQueryBuilderForTable() already carries a DefaultRestrictionContainer: DeletedRestriction, HiddenRestriction, StartTimeRestriction and EndTimeRestriction. A plain select therefore hides disabled and time-restricted rows without saying so, which is what a record that is in the database and not in the result usually is.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
+                        "path": "packages/acme_events/Classes/Domain/Repository/EventRepository.php",
+                        "scope": "extension"
                     },
                     {
-                        "text": "Taking them off is deliberate and partial: getRestrictions()->removeAll() drops all four, and the ordinary form adds DeletedRestriction back, because a deleted row is not a row. BackendUtility::getRecord() is the worked example — removeAll(), then DeletedRestriction unless the caller asked for it too.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "The frontend uses FrontendRestrictionContainer instead, which PageRepository sets with the current Context: the same four plus WorkspaceRestriction and FrontendGroupRestriction. Access groups and workspaces are conditions there and nowhere else.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Outside the frontend a query returns the live record, and the workspace version is put on top of it afterwards: PageRepository::versionOL($table, $row) overlays it in place. It is a step after the query, not a condition in it.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "The translation works the same way: PageRepository::getLanguageOverlay($table, $row, ?LanguageAspect) replaces the row's fields with the translated ones and honours the fallback chain the LanguageAspect describes. Selecting rows by sys_language_uid is not the same thing and misses the fallback. PageRepository::getPage() shows the order both are applied in: versionOL() first, then the language overlay.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "PageRepository::getDefaultConstraints($table, $enableFieldsToIgnore) returns the enable-field conditions as QueryBuilder expressions, for a query that builds its own restrictions.",
-                        "since": 13,
-                        "until": null,
-                        "versions": "TYPO3 v13 and newer",
-                        "scope": null
-                    },
-                    {
-                        "text": "All of this is about which rows come back. What the object built from one of them is shaped like — and why $row['hidden'] is absent on it rather than false — is record-system-properties.",
-                        "since": 13,
-                        "until": null,
-                        "versions": "TYPO3 v13 and newer",
-                        "scope": null
+                        "path": "typo3/sysext/core/Classes/Database/Query/QueryBuilder.php",
+                        "scope": "core"
                     }
-                ]
-            },
-            {
-                "id": "system-extension-boundaries",
-                "title": "Where One System Extension Ends and the Next Begins",
-                "category": "PHP",
-                "scope": null,
-                "hints": [
-                    {
-                        "text": "A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "@internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    }
-                ]
-            },
-            {
-                "id": "extbase-domain-mapping",
-                "title": "Models, Repositories and the Table Behind Them",
-                "category": "PHP",
-                "scope": null,
-                "hints": [
-                    {
-                        "text": "A model maps onto the table its class name implies. Configuration/Extbase/Persistence/Classes.php is where a table named differently is mapped, together with the per-property column names and the record type of a single-table inheritance.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    },
-                    {
-                        "text": "Orderings are property names, not column names. Ordering by the order records have in the backend therefore needs a property for that field on the model, although it is not a domain concept.",
-                        "since": null,
-                        "until": null,
-                        "versions": "",
-                        "scope": null
-                    }
-                ]
-            }
-        ],
-        "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. A brief carries the 4 strongest per group of paths, which is not everything the lookup holds on them — call it for the rest, by path, with a larger limit, or by id.",
-        "omittedHints": [
-            {
-                "id": "events-extension-points",
-                "title": "Events and Extension Points",
-                "category": "PHP",
-                "lookup": "typo3_hint_lookup with id \"events-extension-points\""
-            }
-        ],
-        "omittedHintsOwed": "Owed after this brief, and not carried below: events-extension-points. Each is the one typo3_hint_lookup call by id its entry names as lookup, and an id left out of a batch is still owed. A subject named here and not below is one this brief did not reach.",
-        "rules": [],
-        "checks": [
-            "CI=true ./Build/Scripts/runTests.sh -s unit",
-            "CI=true ./Build/Scripts/runTests.sh -s functional",
-            "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp"
-        ],
-        "checksOwed": "",
-        "conditionalChecks": [],
-        "testSuites": [
-            {
-                "suite": "checkIntegrityPhp",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
-                "runs": "check",
-                "targeted": null,
-                "description": "Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.",
-                "whenToUse": "Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.",
+                ],
+                "changeType": "bugfix",
+                "targetVersion": 14,
+                "targetVersions": [
+                    14
+                ],
                 "domains": [
                     "php"
                 ],
-                "base": true,
-                "verifies": true,
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "e2e-browser",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-browser",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "The e2e suite in Playwright's own UI, served from the container.",
-                "whenToUse": "Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.",
-                "domains": [
-                    "php",
-                    "typescript",
-                    "fluid",
-                    "css"
+                "scope": "core",
+                "intents": [
+                    {
+                        "id": "patch",
+                        "title": "Writing the change",
+                        "confidence": "strong",
+                        "condition": ""
+                    },
+                    {
+                        "id": "event-listener",
+                        "title": "Registering an event listener",
+                        "confidence": "weak",
+                        "condition": "only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this"
+                    }
                 ],
-                "base": false,
-                "verifies": false,
-                "versions": "TYPO3 v14 and newer"
-            },
-            {
-                "suite": "cglGit",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
-                "description": "Checks and fixes coding guideline issues in the latest committed patch.",
-                "whenToUse": "Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.",
-                "domains": [
-                    "php"
+                "skills": [
+                    "typo3-core-patch-development"
                 ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "checkExtensionScannerRst",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst",
-                "runs": "check",
-                "targeted": null,
-                "description": "Verifies that all .rst files referenced by the extension scanner exist.",
-                "whenToUse": "Use when a deprecation or breaking change adds extension scanner matchers.",
-                "domains": [
-                    "docs",
-                    "php"
+                "skillsOwed": "Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.",
+                "staleSkills": [],
+                "staleSkillsOwed": "",
+                "guides": [
+                    {
+                        "id": "any/writing/the-prose-a-patch-carries",
+                        "title": "The Prose a Patch Carries",
+                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                        "scope": "any",
+                        "tool": "typo3_rule_lookup"
+                    }
                 ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
+                "surfaces": [],
+                "surfacesOwed": "",
+                "hints": [
+                    {
+                        "id": "persistence-reading",
+                        "title": "Reading Records, and What Is Hidden From the Query",
+                        "category": "PHP",
+                        "scope": null,
+                        "hints": [
+                            {
+                                "text": "A QueryBuilder from ConnectionPool::getQueryBuilderForTable() already carries a DefaultRestrictionContainer: DeletedRestriction, HiddenRestriction, StartTimeRestriction and EndTimeRestriction. A plain select therefore hides disabled and time-restricted rows without saying so, which is what a record that is in the database and not in the result usually is.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Taking them off is deliberate and partial: getRestrictions()->removeAll() drops all four, and the ordinary form adds DeletedRestriction back, because a deleted row is not a row. BackendUtility::getRecord() is the worked example — removeAll(), then DeletedRestriction unless the caller asked for it too.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "The frontend uses FrontendRestrictionContainer instead, which PageRepository sets with the current Context: the same four plus WorkspaceRestriction and FrontendGroupRestriction. Access groups and workspaces are conditions there and nowhere else.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Outside the frontend a query returns the live record, and the workspace version is put on top of it afterwards: PageRepository::versionOL($table, $row) overlays it in place. It is a step after the query, not a condition in it.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "The translation works the same way: PageRepository::getLanguageOverlay($table, $row, ?LanguageAspect) replaces the row's fields with the translated ones and honours the fallback chain the LanguageAspect describes. Selecting rows by sys_language_uid is not the same thing and misses the fallback. PageRepository::getPage() shows the order both are applied in: versionOL() first, then the language overlay.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "PageRepository::getDefaultConstraints($table, $enableFieldsToIgnore) returns the enable-field conditions as QueryBuilder expressions, for a query that builds its own restrictions.",
+                                "since": 13,
+                                "until": null,
+                                "versions": "TYPO3 v13 and newer",
+                                "scope": null
+                            },
+                            {
+                                "text": "All of this is about which rows come back. What the object built from one of them is shaped like — and why $row['hidden'] is absent on it rather than false — is record-system-properties.",
+                                "since": 13,
+                                "until": null,
+                                "versions": "TYPO3 v13 and newer",
+                                "scope": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": "system-extension-boundaries",
+                        "title": "Where One System Extension Ends and the Next Begins",
+                        "category": "PHP",
+                        "scope": null,
+                        "hints": [
+                            {
+                                "text": "A system extension names the packages it uses in its own composer.json require. impexp requires typo3/cms-core and nothing else; fluid_styled_content requires core, fluid and frontend. A class from a package not named there works in every core checkout, because the root autoloader loads all of them. It fails in a project that installs the extension without that package. So a patch that reaches into another extension adds the requirement, or stays inside its own.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "@internal on a class or a method marks what another extension may not use, whatever the visibility says. A change to it takes no deprecation, and an Important changelog entry rather than a Breaking one where installations used it. So a caller in another extension is a finding in that caller. Nothing checks either boundary: checkComposer compares each extension's constraints against the root composer.json, and no integrity check reads a cross-extension call.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "A patch that begins in one extension and adds a class or a method in another has crossed. The addition is the second extension's: its tests cover it, and the hints for its subsystem judge it, whatever the patch is named after. A boundary that really moves is a contract change and says so in its commit message.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            }
+                        ]
+                    },
+                    {
+                        "id": "extbase-domain-mapping",
+                        "title": "Models, Repositories and the Table Behind Them",
+                        "category": "PHP",
+                        "scope": null,
+                        "hints": [
+                            {
+                                "text": "A model maps onto the table its class name implies. Configuration/Extbase/Persistence/Classes.php is where a table named differently is mapped, together with the per-property column names and the record type of a single-table inheritance.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            },
+                            {
+                                "text": "Orderings are property names, not column names. Ordering by the order records have in the backend therefore needs a property for that field on the model, although it is not a domain concept.",
+                                "since": null,
+                                "until": null,
+                                "versions": "",
+                                "scope": null
+                            }
+                        ]
+                    }
+                ],
+                "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. A brief carries the 4 strongest per group of paths, which is not everything the lookup holds on them — call it for the rest, by path, with a larger limit, or by id.",
+                "omittedHints": [
+                    {
+                        "id": "events-extension-points",
+                        "title": "Events and Extension Points",
+                        "category": "PHP",
+                        "lookup": "typo3_hint_lookup with id \"events-extension-points\""
+                    }
+                ],
+                "omittedHintsOwed": "Owed after this brief, and not carried below: events-extension-points. Each is the one typo3_hint_lookup call by id its entry names as lookup, and an id left out of a batch is still owed. A subject named here and not below is one this brief did not reach.",
+                "rules": [],
+                "checks": [
+                    "CI=true ./Build/Scripts/runTests.sh -s unit",
+                    "CI=true ./Build/Scripts/runTests.sh -s functional",
+                    "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp"
+                ],
+                "checksOwed": "",
+                "conditionalChecks": [],
+                "testSuites": [
+                    {
+                        "suite": "checkIntegrityPhp",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.",
+                        "whenToUse": "Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": "TYPO3 v13 and newer"
+                    },
+                    {
+                        "suite": "e2e-browser",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-browser",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "The e2e suite in Playwright's own UI, served from the container.",
+                        "whenToUse": "Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.",
+                        "domains": [
+                            "php",
+                            "typescript",
+                            "fluid",
+                            "css"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": "TYPO3 v14 and newer"
+                    },
+                    {
+                        "suite": "cglGit",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
+                        "runs": "change",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
+                        "description": "Checks and fixes coding guideline issues in the latest committed patch.",
+                        "whenToUse": "Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "checkExtensionScannerRst",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Verifies that all .rst files referenced by the extension scanner exist.",
+                        "whenToUse": "Use when a deprecation or breaking change adds extension scanner matchers.",
+                        "domains": [
+                            "docs",
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    }
+                ],
+                "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
+                "checklist": [
+                    "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
+                    "Confirm the target TYPO3 core branch and issue context.",
+                    "Inspect nearby code, tests, and established subsystem conventions.",
+                    "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",
+                    "Keep the patch focused on the stated task.",
+                    "Add or update the narrowest useful test coverage.",
+                    "Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.",
+                    "Reproduce the bug first, ideally with a failing test that the fix turns green.",
+                    "Settle which release branches the fix goes to with typo3_commit_message_guide, which names the lines a change of this type takes and says what claiming an older one costs. Whether the defect is on them is your reading, and a checkout holding one branch cannot make it.",
+                    "A bugfix owes a changelog entry only where it changes what an installation renders, is configured by, or has documented, and then it is an Important below typo3/sysext/core/Documentation/Changelog/. Write it into the <lts>.x directory of the oldest branch the Releases: trailer names, and into both .x directories where two maintained lines take the change. The whole rule is one typo3_rule_lookup call with documentId \"core/contribution/changelog\".",
+                    "Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: find the event that is really dispatched before writing a listener for it. An event class that reads plausibly and is dispatched nowhere is a listener that never runs and throws nothing, which is the failure this task shape has instead of an error.",
+                    "Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: how a listener is registered is bound to the TYPO3 line and is not stated here: typo3_hint_lookup with id=events-extension-points carries both mechanisms with the versions each holds on, and a package serving two majors gets both from it.",
+                    "Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: say what happens when another listener has already run. Ordering is declared or it is not there, and a listener that quietly assumes it goes first is correct until somebody installs a second extension.",
+                    "Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: a hook is not the fallback. Where a subsystem still has hook-based extension points that is a fact about that subsystem — ask its own hint with the intent, and take the narrower event where there is one.",
+                    "Write the commit message with typo3_commit_message_guide and workflow=\"core\": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping."
+                ],
+                "checkoutDiscovery": [
+                    {
+                        "establish": "Which files the task actually touches",
+                        "how": "git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them."
+                    },
+                    {
+                        "establish": "Which tests already cover them",
+                        "how": "Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation."
+                    },
+                    {
+                        "establish": "The branch you are on and the branches the change is meant for",
+                        "how": "git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main."
+                    },
+                    {
+                        "establish": "Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch",
+                        "how": "Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision."
+                    },
+                    {
+                        "establish": "Whether an icon identifier is registered, and which one spells the shape you want",
+                        "how": "Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family."
+                    },
+                    {
+                        "establish": "Whether a label for this wording already exists",
+                        "how": "Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask."
+                    }
+                ],
+                "nextTools": [
+                    {
+                        "tool": "typo3_hint_lookup",
+                        "when": "with id=events-extension-points, for the registration each covered line has and what an event class owes its listeners"
+                    },
+                    {
+                        "tool": "typo3_extension_describe",
+                        "when": "for what the extension dispatching the event already registers"
+                    },
+                    {
+                        "tool": "typo3_changelog_lookup",
+                        "when": "for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact"
+                    },
+                    {
+                        "tool": "typo3_test_run_guide",
+                        "when": "for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few"
+                    },
+                    {
+                        "tool": "typo3_commit_message_guide",
+                        "when": "with workflow=\"core\", before committing — the default is a repository of your own and demands no Forge issue or release trailer"
+                    },
+                    {
+                        "tool": "typo3_task_guide",
+                        "when": "again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships"
+                    },
+                    {
+                        "tool": "typo3_feedback_record",
+                        "when": "when one of these answers was wrong or incomplete"
+                    }
+                ],
+                "owed": [
+                    "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
+                ]
             }
-        ],
-        "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
-        "checklist": [
-            "A change is judged by what the editor and the visitor get once it is in place — that is what they are owed. Where that outcome is wrong, the outcome is the defect, and the error it throws is the symptom.",
-            "Confirm the target TYPO3 core branch and issue context.",
-            "Inspect nearby code, tests, and established subsystem conventions.",
-            "Sweep the deprecations before writing: typo3_changelog_lookup with type \"deprecation\" and the query omitted, at TYPO3 v14. Only a change touching no TYPO3 API skips it, a CI file being the shape of one, and how small the diff is decides nothing. One call per tag: the ext: tag of each system extension this package calls into, and TCA, Fluid, Backend or Frontend for the kinds of file it ships. Every call also returns the tags that major carries, so the second onwards is read off the first.",
-            "Keep the patch focused on the stated task.",
-            "Add or update the narrowest useful test coverage.",
-            "Run targeted tests first; broaden to CGL, functional, or npm checks when relevant.",
-            "Reproduce the bug first, ideally with a failing test that the fix turns green.",
-            "Settle which release branches the fix goes to with typo3_commit_message_guide, which names the lines a change of this type takes and says what claiming an older one costs. Whether the defect is on them is your reading, and a checkout holding one branch cannot make it.",
-            "A bugfix owes a changelog entry only where it changes what an installation renders, is configured by, or has documented, and then it is an Important below typo3/sysext/core/Documentation/Changelog/. Write it into the <lts>.x directory of the oldest branch the Releases: trailer names, and into both .x directories where two maintained lines take the change. The whole rule is one typo3_rule_lookup call with documentId \"core/contribution/changelog\".",
-            "Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: find the event that is really dispatched before writing a listener for it. An event class that reads plausibly and is dispatched nowhere is a listener that never runs and throws nothing, which is the failure this task shape has instead of an error.",
-            "Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: how a listener is registered is bound to the TYPO3 line and is not stated here: typo3_hint_lookup with id=events-extension-points carries both mechanisms with the versions each holds on, and a package serving two majors gets both from it.",
-            "Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: say what happens when another listener has already run. Ordering is declared or it is not there, and a listener that quietly assumes it goes first is correct until somebody installs a second extension.",
-            "Only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this: a hook is not the fallback. Where a subsystem still has hook-based extension points that is a fact about that subsystem — ask its own hint with the intent, and take the narrower event where there is one.",
-            "Write the commit message with typo3_commit_message_guide and workflow=\"core\": summarize the changed behavior, the affected area and the commands you ran, and it hands back a draft that carries the keyword, the trailers and the wrapping."
-        ],
-        "checkoutDiscovery": [
-            {
-                "establish": "Which files the task actually touches",
-                "how": "git status --short and git diff --name-only in the core checkout, then call typo3_hint_lookup with those paths for the conventions that apply to them."
-            },
-            {
-                "establish": "Which tests already cover them",
-                "how": "Core tests mirror the class path below typo3/sysext/<ext>/Tests/Unit/ and Tests/Functional/. Find the file there, then ask typo3_test_run_guide for the targeted runTests.sh invocation."
-            },
-            {
-                "establish": "The branch you are on and the branches the change is meant for",
-                "how": "git branch --show-current. In the normal case the patch targets main and the merging core team member handles the backport; push to a release branch only when the bug does not exist on main."
-            },
-            {
-                "establish": "Whether the paths, classes, labels, and identifiers named in an answer still exist on that branch",
-                "how": "Call typo3_component_lookup for curated backend components: it reads the active installation when the target matches. For uncatalogued code or another target branch, grep the checkout; typo3_snapshot_scope names the fallback revision."
-            },
-            {
-                "establish": "Whether an icon identifier is registered, and which one spells the shape you want",
-                "how": "Ask typo3_icon_lookup: it reads the registry of the installation this server was started in, the T3Icons set and every installed package included. Where there is no reachable installation, the same three places can be read by hand — typo3/sysext/core/Resources/Public/Icons/T3Icons/icons.json, the Configuration/Icons.php of each package, and typo3/sysext/core/Resources/Public/Icons/Flags/ for the flags-* family."
-            },
-            {
-                "establish": "Whether a label for this wording already exists",
-                "how": "Identify the XLF resource already used at the consuming code, then ask typo3_label_lookup with that resource. It applies the installation's resource overrides, but a match from another module or package is not reusable in this context. Where the console cannot be reached it reads the installed package's XLF file instead and says so; only where there is no installation at all is there nothing to ask."
-            }
-        ],
-        "nextTools": [
-            {
-                "tool": "typo3_hint_lookup",
-                "when": "with id=events-extension-points, for the registration each covered line has and what an event class owes its listeners"
-            },
-            {
-                "tool": "typo3_extension_describe",
-                "when": "for what the extension dispatching the event already registers"
-            },
-            {
-                "tool": "typo3_changelog_lookup",
-                "when": "for what 14 changed about this area — the first stop when you have not built on it recently, not only a lookup after the fact"
-            },
-            {
-                "tool": "typo3_test_run_guide",
-                "when": "for the targeted runTests.sh invocation — it lists every suite these domains hold, of which the testSuites above are the strongest few"
-            },
-            {
-                "tool": "typo3_commit_message_guide",
-                "when": "with workflow=\"core\", before committing — the default is a repository of your own and demands no Forge issue or release trailer"
-            },
-            {
-                "tool": "typo3_task_guide",
-                "when": "again, where the work enters a subject this task did not name — the first file under a test directory, the first run of a check the repository declares, the first branch or commit, the first edit to code or documentation the package ships"
-            },
-            {
-                "tool": "typo3_feedback_record",
-                "when": "when one of these answers was wrong or incomplete"
-            }
-        ],
-        "owed": [
-            "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
-        ]
-    }

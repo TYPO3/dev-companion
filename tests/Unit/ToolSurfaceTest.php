@@ -120,7 +120,7 @@ final class ToolSurfaceTest extends TestCase
      * shape changes takes the counter with it rather than reports zero.
      *
      * The zero is the failure this holds against. The first parser read the
-     * `Data:` label before it closed the text block above it. Every tool came
+     * `Data` label before it closed the text block above it. Every tool came
      * back with no text at all and a total that still looked plausible.
      *
      * The data half counts as the compact JSON a client hands the model, so
@@ -153,8 +153,8 @@ final class ToolSurfaceTest extends TestCase
         // has to come in under that, or it counted the indentation.
         $recorded = 0;
         foreach (ToolSurface::written() as $file) {
-            preg_match_all('/^\.\. code-block:: json\n\n((?:    .*\n|\n)+)/m', (string) file_get_contents($file->getPathname()), $blocks);
-            $recorded += array_sum(array_map('strlen', $blocks[1]));
+            preg_match_all('/^( *)\.\. code-block:: json\n\n((?:\1    .*\n|\n)+)/m', (string) file_get_contents($file->getPathname()), $blocks);
+            $recorded += array_sum(array_map('strlen', $blocks[2]));
         }
         self::assertGreaterThan(0, $recorded, 'no page carries a JSON block to count against');
         self::assertLessThan($recorded, array_sum(array_column($measured, 'data')), 'the data half counts the indentation of the record, which reaches no model');

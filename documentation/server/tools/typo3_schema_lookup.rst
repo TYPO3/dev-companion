@@ -1,4 +1,4 @@
-.. _typo3_schema_lookup:
+:navigation-title: schema_lookup
 
 ``typo3_schema_lookup``
 =======================
@@ -24,9 +24,13 @@ column is one column here and a data structure elsewhere: what this installation
 resolves it to, sheet by sheet, is typo3_flexform_lookup. Answers from:
 installation.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -183,93 +187,97 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tt_content",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": "tt_content",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    TYPO3 derives 4 columns for tt_content from its TCA. An ext_tables.sql that declares one of them again is declaring what the core already creates.
-    The database was not readable from here, so what follows is the derived side alone.
+        .. code-block:: text
 
-    - uid integer NOT NULL
-    - pid integer NOT NULL DEFAULT 0
-    - tstamp integer NOT NULL DEFAULT 0
-    - deleted smallint NOT NULL DEFAULT 0
+            TYPO3 derives 4 columns for tt_content from its TCA. An ext_tables.sql that declares one of them again is declaring what the core already creates.
+            The database was not readable from here, so what follows is the derived side alone.
 
-Data:
+            - uid integer NOT NULL
+            - pid integer NOT NULL DEFAULT 0
+            - tstamp integer NOT NULL DEFAULT 0
+            - deleted smallint NOT NULL DEFAULT 0
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": "tt_content",
-        "matchCount": 4,
-        "answeredBy": "installation",
-        "columns": [
+        .. code-block:: json
+
             {
-                "name": "uid",
-                "type": "integer",
-                "notnull": true,
-                "default": null,
-                "length": null
-            },
-            {
-                "name": "pid",
-                "type": "integer",
-                "notnull": true,
-                "default": 0,
-                "length": null
-            },
-            {
-                "name": "tstamp",
-                "type": "integer",
-                "notnull": true,
-                "default": 0,
-                "length": null
-            },
-            {
-                "name": "deleted",
-                "type": "smallint",
-                "notnull": true,
-                "default": 0,
-                "length": null
+                "table": "tt_content",
+                "matchCount": 4,
+                "answeredBy": "installation",
+                "columns": [
+                    {
+                        "name": "uid",
+                        "type": "integer",
+                        "notnull": true,
+                        "default": null,
+                        "length": null
+                    },
+                    {
+                        "name": "pid",
+                        "type": "integer",
+                        "notnull": true,
+                        "default": 0,
+                        "length": null
+                    },
+                    {
+                        "name": "tstamp",
+                        "type": "integer",
+                        "notnull": true,
+                        "default": 0,
+                        "length": null
+                    },
+                    {
+                        "name": "deleted",
+                        "type": "smallint",
+                        "notnull": true,
+                        "default": 0,
+                        "length": null
+                    }
+                ],
+                "tables": [],
+                "actual": null,
+                "updates": null,
+                "owed": []
             }
-        ],
-        "tables": [],
-        "actual": null,
-        "updates": null,
-        "owed": []
-    }
 
 schema: every table
 ~~~~~~~~~~~~~~~~~~~
@@ -283,82 +291,86 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": null,
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "table": null,
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    TYPO3 derives columns for 4 tables in this installation.
-    Name one to see its columns. What is listed for it is what an ext_tables.sql may leave out.
+        .. code-block:: text
 
-    - tt_content: 4 columns
-    - pages: 4 columns
-    - tx_acme_events_event: 4 columns
-    - tx_acme_events_event_category_mm: 3 columns (created for an MM relation; declare nothing for it)
+            TYPO3 derives columns for 4 tables in this installation.
+            Name one to see its columns. What is listed for it is what an ext_tables.sql may leave out.
 
-Data:
+            - tt_content: 4 columns
+            - pages: 4 columns
+            - tx_acme_events_event: 4 columns
+            - tx_acme_events_event_category_mm: 3 columns (created for an MM relation; declare nothing for it)
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "table": null,
-        "matchCount": 4,
-        "answeredBy": "installation",
-        "columns": [],
-        "tables": [
+        .. code-block:: json
+
             {
-                "table": "tt_content",
-                "columnCount": 4,
-                "relationTable": false
-            },
-            {
-                "table": "pages",
-                "columnCount": 4,
-                "relationTable": false
-            },
-            {
-                "table": "tx_acme_events_event",
-                "columnCount": 4,
-                "relationTable": false
-            },
-            {
-                "table": "tx_acme_events_event_category_mm",
-                "columnCount": 3,
-                "relationTable": true
+                "table": null,
+                "matchCount": 4,
+                "answeredBy": "installation",
+                "columns": [],
+                "tables": [
+                    {
+                        "table": "tt_content",
+                        "columnCount": 4,
+                        "relationTable": false
+                    },
+                    {
+                        "table": "pages",
+                        "columnCount": 4,
+                        "relationTable": false
+                    },
+                    {
+                        "table": "tx_acme_events_event",
+                        "columnCount": 4,
+                        "relationTable": false
+                    },
+                    {
+                        "table": "tx_acme_events_event_category_mm",
+                        "columnCount": 3,
+                        "relationTable": true
+                    }
+                ],
+                "actual": null,
+                "updates": null,
+                "owed": []
             }
-        ],
-        "actual": null,
-        "updates": null,
-        "owed": []
-    }

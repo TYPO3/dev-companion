@@ -1,4 +1,4 @@
-.. _typo3_feedback_record:
+:navigation-title: feedback_record
 
 ``typo3_feedback_record``
 =========================
@@ -16,9 +16,13 @@ point per sentence, at most 20 words in a sentence. That is the form this
 server's own records keep, and a feedback in it goes into the queue as it is.
 Answers from: checkout.
 
-``readOnlyHint: false`` · ``destructiveHint: false`` · ``idempotentHint: false`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`checkout <answer-sources-checkout>`.
+    :Answers from: :ref:`checkout <answer-sources-checkout>`
+    :readOnlyHint: ``false``
+    :destructiveHint: ``false``
+    :idempotentHint: ``false``
+    :openWorldHint: ``false``
 
 Takes
 -----

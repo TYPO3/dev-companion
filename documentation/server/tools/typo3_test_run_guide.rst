@@ -1,4 +1,4 @@
-.. _typo3_test_run_guide:
+:navigation-title: test_run_guide
 
 ``typo3_test_run_guide``
 ========================
@@ -22,9 +22,13 @@ suite at all rather than commands that cannot run there. The script's own notes
 are typo3_script_lookup: the commands it offers per subject, and what the
 pre-commit hook does to a commit. Answers from: knowledge.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`knowledge <answer-sources-knowledge>`.
+    :Answers from: :ref:`knowledge <answer-sources-knowledge>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -183,988 +187,990 @@ Called with:
 
     {}
 
-Text:
-
-.. code-block:: text
-
-    ## Before a suite can run
-    - Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.
-    - A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.
-    - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
-    - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
-    - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
-
-    The suites that verify: unit, functional, checkIntegrityPhp, checkRst, build, lintScss, lintTypescript, unitJavascript, cgl, cglGit, cglHeader, cglHeaderGit, lintPhp, phpstan, lintServicesYaml, lintYaml, checkComposer, checkIntegritySetLabels, lintHtml, checkIntegrityXliff, normalizeXliff, checkExtensionScannerRst, checkRstRenderingSingle, build-css, checkGruntClean and e2e. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
-
-    ## unit
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s unit`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Base: every change in its domains runs it.
-    Targeted run while iterating:
-    `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter <methodName> <path/to/Test.php>`
-
-    PHP unit tests.
-    Use for isolated PHP behavior, utility classes, value objects, and narrow bug fixes.
-
-    ## functional
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s functional`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Base: every change in its domains runs it.
-    Targeted run while iterating:
-    `CI=true ./Build/Scripts/runTests.sh -s functional -d sqlite -- <path/to/Test.php>`
-
-    PHP functional tests, sqlite by default.
-    Use for TYPO3 services, persistence, configuration, authentication, routing, and integration behavior.
-
-    ## checkIntegrityPhp
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
-    Running it: check — it reports and hands the checkout back as it was.
-    Base: every change in its domains runs it.
-
-    Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.
-    Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
-
-    ## checkRst
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkRst`
-    Running it: check — it reports and hands the checkout back as it was.
-    Base: every change in its domains runs it.
-
-    Checks .rst files for integrity.
-    Use for every changelog entry and other ReST documentation change.
-
-    ## build
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s build`
-    Running it: change — it rewrites files in the checkout.
-    Base: every change in its domains runs it.
-
-    Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.
-    Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId="core/contribution/committed-build-output" is the procedure and what it was measured on.
-
-    ## lintScss
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintScss`
-    Running it: check — it reports and hands the checkout back as it was.
-    Base: every change in its domains runs it.
-
-    SCSS linting with TYPO3's stylelint setup.
-    Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.
-
-    ## lintTypescript
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintTypescript`
-    Running it: check — it reports and hands the checkout back as it was.
-    Base: every change in its domains runs it.
-
-    TypeScript linting.
-    Use when TypeScript or JavaScript code changes.
-
-    ## unitJavascript
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s unitJavascript`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Base: every change in its domains runs it.
-
-    JavaScript unit tests for the built backend modules.
-    Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. No targeted form goes through runTests.sh: this target passes nothing through, and -s npm runs in the Node image without a browser, so a run test -- --group there stops at ChromePathNotSetError. A targeted run is npm run test -- --group <package> in Build/ on a machine with Chrome, and --files narrows nothing because the config declares groups. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.
-
-    ## cgl
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s cgl`
-    Running it: change — it rewrites files in the checkout.
-    Targeted run while iterating:
-    `CI=true ./Build/Scripts/runTests.sh -s cgl -n`
-
-    Checks and fixes coding guideline issues for all core PHP files.
-    Use before review when PHP formatting or file headers may be affected. Add `-n` to only report.
-
-    ## cglGit
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s cglGit`
-    Running it: change — it rewrites files in the checkout.
-    Targeted run while iterating:
-    `CI=true ./Build/Scripts/runTests.sh -s cgl -n`
-
-    Checks and fixes coding guideline issues in the latest committed patch.
-    Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.
-
-    ## cglHeader
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s cglHeader`
-    Running it: change — it rewrites files in the checkout.
-    Targeted run while iterating:
-    `CI=true ./Build/Scripts/runTests.sh -s cglHeader -n`
-
-    Checks and fixes the licence header of all core PHP files.
-    Use where a PHP file was added or its header touched, and to settle the file-header error the pre-commit hook reports. It runs php-cs-fixer over `Build/php-cs-fixer/header-comment.php`, which `cgl` does not: a green `cgl` says nothing about a header. Add `-n` to only report.
-
-    ## cglHeaderGit
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit`
-    Running it: change — it rewrites files in the checkout.
-    Targeted run while iterating:
-    `CI=true ./Build/Scripts/runTests.sh -s cglHeader -n`
-
-    Checks and fixes the licence header in the latest committed patch.
-    Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.
-
-    ## lintPhp
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintPhp`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    PHP syntax linting.
-    Use for broad PHP syntax confidence after touching many PHP files.
-
-    ## phpstan
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s phpstan`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Static analysis with phpstan.
-    Use for type-sensitive PHP changes and API contract changes.
-
-    ## lintServicesYaml
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintServicesYaml`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Lints Services.yaml files with tag parsing enabled.
-    Use after changing dependency injection wiring in a Configuration/Services.yaml.
-
-    ## lintYaml
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintYaml`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    YAML linting for every YAML file below typo3/ except Services.yaml.
-    Use after changing any Configuration YAML: site set config.yaml and settings definitions, route enhancers, form setups, RTE presets. Services.yaml has its own suite, lintServicesYaml, because it needs tag parsing.
-
-    ## listExceptionCodes
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes`
-    Running it: check — it reports and hands the checkout back as it was.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
-
-    Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.
-    Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.
-
-    ## checkComposer
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkComposer`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Checks the composer.json files of the system extensions for version integrity.
-    Use after editing any composer.json, for example when adding a dependency between system extensions.
-
-    ## checkIntegritySetLabels
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkIntegritySetLabels`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Checks the labels.xlf integrity of the site sets.
-    Use after adding or changing a Configuration/Sets/<Set>/labels.xlf. It is the purpose-built check for site set labels; checkIntegrityXliff does not replace it.
-
-    ## lintHtml
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintHtml`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Whitespace and EditorConfig linting of the templates below typo3/sysext/*/Resources/Private.
-    Use after changing a Fluid template, partial, or layout.
-
-    ## checkIntegrityXliff
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityXliff`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Checks all .xlf files for validity and deprecated usages.
-    Use after adding, changing, or retiring XLF labels.
-
-    ## normalizeXliff
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s normalizeXliff`
-    Running it: change — it rewrites files in the checkout.
-
-    Normalizes .xlf files (formatting, attribute order).
-    Use after editing XLF files, so the diff carries no formatting noise. Add `-n` to only report.
-
-    ## checkExtensionScannerRst
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Verifies that all .rst files referenced by the extension scanner exist.
-    Use when a deprecation or breaking change adds extension scanner matchers.
-
-    ## checkRstRenderingSingle
-    Command from the TYPO3 core root:
-    `./Build/Scripts/runTests.sh -s checkRstRenderingSingle core`
-    Running it: check — it reports and hands the checkout back as it was.
-
-    Renders one system extension's Documentation/ with the documentation team's container into Documentation-GENERATED-temp/ and reports what the renderer rejects.
-    Use where a ReST change has to be looked at rather than validated: checkRst reads the structure of a file and says nothing about how the page comes out.
-
-    ## watchRst
-    Command from the TYPO3 core root:
-    `./Build/Scripts/runTests.sh -s watchRst core interactive`
-    Running it: change — it rewrites files in the checkout.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
-
-    Creates a changelog file from the core's own template and serves the rendered page locally, reloading it as the file is saved.
-    Use when writing a changelog entry: interactive asks for the type, the issue number and the title and writes the file from Build/rstTemplates/, and a path in place of it opens that file instead. It writes into the directory of the release the branch develops, so a backport's file is moved afterwards.
-
-    ## build-css
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
-    Running it: change — it rewrites files in the checkout.
-
-    Focused CSS build from Build/package.json.
-    Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.
-
-    ## checkGruntClean
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s checkGruntClean`
-    Running it: git — it runs git over the working tree, so the index and uncommitted edits are at stake.
-
-    Rebuilds the committed JavaScript and reports whether it still matches its TypeScript sources.
-    Use for a change below Build/Sources/TypeScript, where the committed JavaScript has to stay in sync with its source. Its body deletes every generated .js below typo3/sysext and runs the frontend build. Then it runs `git add *` over the whole working tree and asks git status whether anything is left, so it stages every file the checkout holds, untracked ones included. Run it in a checkout whose index you can throw away, and not in one holding work of your own. A git worktree is not the way out: its gitdir sits outside the mounted directory, so the build succeeds, every git call fails with `fatal: not a git repository: <the worktree's gitdir>` and the suite reports FAILURE over a tree that is clean. The same question is answered without staging anything by rebuilding in a throwaway worktree and reading git status yourself: typo3_rule_lookup with documentId="core/contribution/committed-build-output" has that procedure, how a minified file is diffed at all, and what a backport does to one.
-
-    ## e2e
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s e2e`
-    Running it: unknown — the body does not say what it does to the checkout.
-
-    End-to-end tests driving a real backend with Playwright.
-    Use for editor or administrator workflows that only break in the assembled backend. Where the e2e branch of Build/Scripts/runTests.sh sets PLAYWRIGHT_TEST_ARGS, a spec path or a --grep pattern after the options reaches Playwright, and that spec runs after the login setup alone. Where it does not, nothing passes through, the run is every spec of the project, and a change to one spec file costs the whole suite.
-
-    ## e2e-prepare
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s e2e-prepare`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
-
-    Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.
-    Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.
-
-    ## e2e-browser
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s e2e-browser`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
-
-    The e2e suite in Playwright's own UI, served from the container.
-    Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.
-
-    ## composerInstall
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s composerInstall`
-    Running it: change — it rewrites files in the checkout.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
-
-    Installs the PHP dependencies of the checkout it is run in, into its own vendor/ and bin/, inside the container.
-    Use once in a checkout that has no vendor/ or bin/ in it, before any other suite. Look in the directory the suite will mount rather than reasoning from its kind: a fresh clone has neither, and so does a git worktree, which starts without both because /vendor/* and /bin/* are gitignored — unless whatever made the worktree copied them across. Without it every PHP suite stops at `exec: line 9: bin/phpunit: not found`. It is a precondition and not a step — a checkout that already has vendor/ needs it again only after composer.json or composer.lock changed. Whether the lock changed since the install is what `typo3_project_describe` says, package by package; a vendor/ behind it fails the suite in classes the patch never touched. It needs no PHP on the host, unlike `composer install` run there.
-
-    ## npm
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s npm -- <npm command>`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
-
-    Dispatcher for npm commands inside the TYPO3 core build environment.
-    Use for npm install, audit, build, watch, and package-script tasks.
-
-    ## composer
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s composer -- <composer command>`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
-
-    Dispatcher for composer commands inside the TYPO3 core build environment.
-    Use for composer dumpautoload, require, info, and dependency tasks.
-
-    ## Looking at it rather than asserting it
-    The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId "any/testing/browser-check", which needs no resource list.
-    - The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.
-    - Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.
-
-    ## Seeing what it rendered rather than whether it passed
-    A functional suite answers pass or fail, and a finding that turns on what a rendering contains needs the output itself. The procedure is one call away — typo3_rule_lookup with documentId "core/testing/proving-a-rendering", which needs no resource list.
-    - How the output is got out of a run that would otherwise print nothing, and why what a content object echoes may never arrive.
-    - One marker per region of the response, so a rendering says which part of it changed rather than that it changed, and how what a service holds mid-request is printed.
-
-    ## Invoking runTests.sh
-    - Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
-    - Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.
-    - Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.
-    - The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file "--filter" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.
-    - Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file "<path>" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.
-    - While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.
-    - The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.
-    - `./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.
-    - A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.
-    - `PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.
-    - A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.
-    - What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.
-    - A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished.
-
-    Options:
-    - `-- <phpunit arguments>` — Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method.
-    - `-d sqlite|mariadb|mysql|postgres` — Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour.
-    - `-a mysqli|pdo_mysql` — Database driver, only with `-s functional` on mysql or mariadb.
-    - `-i <version>` — Specific database version, for example `-d mariadb -i 11.4`.
-    - `-p <php minor>` — PHP minor version for the container. Only the versions the branch supports are available; check `-h`.
-    - `-n` — Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are.
-    - `-c <chunk>/<total>` — Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them.
-    - `-x [-y <port>]` — Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one.
-    - `-b docker|podman` — Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right.
-
-    Examples:
-    - One unit test file:
-      `CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
-    - One unit test method:
-      `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
-    - One functional test file on the default sqlite database:
-      `CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php`
-    - Functional tests on mariadb, to reproduce a DBMS-specific bug:
-      `CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/`
-    - Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS:
-      `CI=true ./Build/Scripts/runTests.sh -s cglGit`
-    - A single npm package script:
-      `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
-    - A composer command inside the core test environment:
-      `CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload`
-
-    ## The whole procedure
-    This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId "core/testing/scripts", which needs no resource list.
-    - Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.
-    - Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either.
-
-Data:
-
-.. code-block:: json
-
-    {
-        "query": null,
-        "paths": [],
-        "scopes": [],
-        "domains": [],
-        "uncoveredPaths": [],
-        "missingPaths": [],
-        "withheld": {
-            "domains": [],
-            "suites": 0
-        },
-        "suites": [
+.. tabs::
+
+    .. tab:: Text
+
+        .. code-block:: text
+
+            ## Before a suite can run
+            - Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.
+            - A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.
+            - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
+            - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
+            - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
+
+            The suites that verify: unit, functional, checkIntegrityPhp, checkRst, build, lintScss, lintTypescript, unitJavascript, cgl, cglGit, cglHeader, cglHeaderGit, lintPhp, phpstan, lintServicesYaml, lintYaml, checkComposer, checkIntegritySetLabels, lintHtml, checkIntegrityXliff, normalizeXliff, checkExtensionScannerRst, checkRstRenderingSingle, build-css, checkGruntClean and e2e. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
+
+            ## unit
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s unit`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Base: every change in its domains runs it.
+            Targeted run while iterating:
+            `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter <methodName> <path/to/Test.php>`
+
+            PHP unit tests.
+            Use for isolated PHP behavior, utility classes, value objects, and narrow bug fixes.
+
+            ## functional
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s functional`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Base: every change in its domains runs it.
+            Targeted run while iterating:
+            `CI=true ./Build/Scripts/runTests.sh -s functional -d sqlite -- <path/to/Test.php>`
+
+            PHP functional tests, sqlite by default.
+            Use for TYPO3 services, persistence, configuration, authentication, routing, and integration behavior.
+
+            ## checkIntegrityPhp
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp`
+            Running it: check — it reports and hands the checkout back as it was.
+            Base: every change in its domains runs it.
+
+            Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.
+            Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.
+
+            ## checkRst
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s checkRst`
+            Running it: check — it reports and hands the checkout back as it was.
+            Base: every change in its domains runs it.
+
+            Checks .rst files for integrity.
+            Use for every changelog entry and other ReST documentation change.
+
+            ## build
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s build`
+            Running it: change — it rewrites files in the checkout.
+            Base: every change in its domains runs it.
+
+            Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.
+            Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId="core/contribution/committed-build-output" is the procedure and what it was measured on.
+
+            ## lintScss
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s lintScss`
+            Running it: check — it reports and hands the checkout back as it was.
+            Base: every change in its domains runs it.
+
+            SCSS linting with TYPO3's stylelint setup.
+            Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.
+
+            ## lintTypescript
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s lintTypescript`
+            Running it: check — it reports and hands the checkout back as it was.
+            Base: every change in its domains runs it.
+
+            TypeScript linting.
+            Use when TypeScript or JavaScript code changes.
+
+            ## unitJavascript
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s unitJavascript`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Base: every change in its domains runs it.
+
+            JavaScript unit tests for the built backend modules.
+            Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. No targeted form goes through runTests.sh: this target passes nothing through, and -s npm runs in the Node image without a browser, so a run test -- --group there stops at ChromePathNotSetError. A targeted run is npm run test -- --group <package> in Build/ on a machine with Chrome, and --files narrows nothing because the config declares groups. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.
+
+            ## cgl
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s cgl`
+            Running it: change — it rewrites files in the checkout.
+            Targeted run while iterating:
+            `CI=true ./Build/Scripts/runTests.sh -s cgl -n`
+
+            Checks and fixes coding guideline issues for all core PHP files.
+            Use before review when PHP formatting or file headers may be affected. Add `-n` to only report.
+
+            ## cglGit
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s cglGit`
+            Running it: change — it rewrites files in the checkout.
+            Targeted run while iterating:
+            `CI=true ./Build/Scripts/runTests.sh -s cgl -n`
+
+            Checks and fixes coding guideline issues in the latest committed patch.
+            Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.
+
+            ## cglHeader
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s cglHeader`
+            Running it: change — it rewrites files in the checkout.
+            Targeted run while iterating:
+            `CI=true ./Build/Scripts/runTests.sh -s cglHeader -n`
+
+            Checks and fixes the licence header of all core PHP files.
+            Use where a PHP file was added or its header touched, and to settle the file-header error the pre-commit hook reports. It runs php-cs-fixer over `Build/php-cs-fixer/header-comment.php`, which `cgl` does not: a green `cgl` says nothing about a header. Add `-n` to only report.
+
+            ## cglHeaderGit
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit`
+            Running it: change — it rewrites files in the checkout.
+            Targeted run while iterating:
+            `CI=true ./Build/Scripts/runTests.sh -s cglHeader -n`
+
+            Checks and fixes the licence header in the latest committed patch.
+            Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.
+
+            ## lintPhp
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s lintPhp`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            PHP syntax linting.
+            Use for broad PHP syntax confidence after touching many PHP files.
+
+            ## phpstan
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s phpstan`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            Static analysis with phpstan.
+            Use for type-sensitive PHP changes and API contract changes.
+
+            ## lintServicesYaml
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s lintServicesYaml`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            Lints Services.yaml files with tag parsing enabled.
+            Use after changing dependency injection wiring in a Configuration/Services.yaml.
+
+            ## lintYaml
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s lintYaml`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            YAML linting for every YAML file below typo3/ except Services.yaml.
+            Use after changing any Configuration YAML: site set config.yaml and settings definitions, route enhancers, form setups, RTE presets. Services.yaml has its own suite, lintServicesYaml, because it needs tag parsing.
+
+            ## listExceptionCodes
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes`
+            Running it: check — it reports and hands the checkout back as it was.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+
+            Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.
+            Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.
+
+            ## checkComposer
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s checkComposer`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            Checks the composer.json files of the system extensions for version integrity.
+            Use after editing any composer.json, for example when adding a dependency between system extensions.
+
+            ## checkIntegritySetLabels
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s checkIntegritySetLabels`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            Checks the labels.xlf integrity of the site sets.
+            Use after adding or changing a Configuration/Sets/<Set>/labels.xlf. It is the purpose-built check for site set labels; checkIntegrityXliff does not replace it.
+
+            ## lintHtml
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s lintHtml`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            Whitespace and EditorConfig linting of the templates below typo3/sysext/*/Resources/Private.
+            Use after changing a Fluid template, partial, or layout.
+
+            ## checkIntegrityXliff
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s checkIntegrityXliff`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            Checks all .xlf files for validity and deprecated usages.
+            Use after adding, changing, or retiring XLF labels.
+
+            ## normalizeXliff
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s normalizeXliff`
+            Running it: change — it rewrites files in the checkout.
+
+            Normalizes .xlf files (formatting, attribute order).
+            Use after editing XLF files, so the diff carries no formatting noise. Add `-n` to only report.
+
+            ## checkExtensionScannerRst
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            Verifies that all .rst files referenced by the extension scanner exist.
+            Use when a deprecation or breaking change adds extension scanner matchers.
+
+            ## checkRstRenderingSingle
+            Command from the TYPO3 core root:
+            `./Build/Scripts/runTests.sh -s checkRstRenderingSingle core`
+            Running it: check — it reports and hands the checkout back as it was.
+
+            Renders one system extension's Documentation/ with the documentation team's container into Documentation-GENERATED-temp/ and reports what the renderer rejects.
+            Use where a ReST change has to be looked at rather than validated: checkRst reads the structure of a file and says nothing about how the page comes out.
+
+            ## watchRst
+            Command from the TYPO3 core root:
+            `./Build/Scripts/runTests.sh -s watchRst core interactive`
+            Running it: change — it rewrites files in the checkout.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+
+            Creates a changelog file from the core's own template and serves the rendered page locally, reloading it as the file is saved.
+            Use when writing a changelog entry: interactive asks for the type, the issue number and the title and writes the file from Build/rstTemplates/, and a path in place of it opens that file instead. It writes into the directory of the release the branch develops, so a backport's file is moved afterwards.
+
+            ## build-css
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
+            Running it: change — it rewrites files in the checkout.
+
+            Focused CSS build from Build/package.json.
+            Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.
+
+            ## checkGruntClean
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s checkGruntClean`
+            Running it: git — it runs git over the working tree, so the index and uncommitted edits are at stake.
+
+            Rebuilds the committed JavaScript and reports whether it still matches its TypeScript sources.
+            Use for a change below Build/Sources/TypeScript, where the committed JavaScript has to stay in sync with its source. Its body deletes every generated .js below typo3/sysext and runs the frontend build. Then it runs `git add *` over the whole working tree and asks git status whether anything is left, so it stages every file the checkout holds, untracked ones included. Run it in a checkout whose index you can throw away, and not in one holding work of your own. A git worktree is not the way out: its gitdir sits outside the mounted directory, so the build succeeds, every git call fails with `fatal: not a git repository: <the worktree's gitdir>` and the suite reports FAILURE over a tree that is clean. The same question is answered without staging anything by rebuilding in a throwaway worktree and reading git status yourself: typo3_rule_lookup with documentId="core/contribution/committed-build-output" has that procedure, how a minified file is diffed at all, and what a backport does to one.
+
+            ## e2e
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s e2e`
+            Running it: unknown — the body does not say what it does to the checkout.
+
+            End-to-end tests driving a real backend with Playwright.
+            Use for editor or administrator workflows that only break in the assembled backend. Where the e2e branch of Build/Scripts/runTests.sh sets PLAYWRIGHT_TEST_ARGS, a spec path or a --grep pattern after the options reaches Playwright, and that spec runs after the login setup alone. Where it does not, nothing passes through, the run is every spec of the project, and a change to one spec file costs the whole suite.
+
+            ## e2e-prepare
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s e2e-prepare`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+
+            Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.
+            Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.
+
+            ## e2e-browser
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s e2e-browser`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+
+            The e2e suite in Playwright's own UI, served from the container.
+            Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.
+
+            ## composerInstall
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s composerInstall`
+            Running it: change — it rewrites files in the checkout.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+
+            Installs the PHP dependencies of the checkout it is run in, into its own vendor/ and bin/, inside the container.
+            Use once in a checkout that has no vendor/ or bin/ in it, before any other suite. Look in the directory the suite will mount rather than reasoning from its kind: a fresh clone has neither, and so does a git worktree, which starts without both because /vendor/* and /bin/* are gitignored — unless whatever made the worktree copied them across. Without it every PHP suite stops at `exec: line 9: bin/phpunit: not found`. It is a precondition and not a step — a checkout that already has vendor/ needs it again only after composer.json or composer.lock changed. Whether the lock changed since the install is what `typo3_project_describe` says, package by package; a vendor/ behind it fails the suite in classes the patch never touched. It needs no PHP on the host, unlike `composer install` run there.
+
+            ## npm
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s npm -- <npm command>`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+
+            Dispatcher for npm commands inside the TYPO3 core build environment.
+            Use for npm install, audit, build, watch, and package-script tasks.
+
+            ## composer
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s composer -- <composer command>`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+
+            Dispatcher for composer commands inside the TYPO3 core build environment.
+            Use for composer dumpautoload, require, info, and dependency tasks.
+
+            ## Looking at it rather than asserting it
+            The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId "any/testing/browser-check", which needs no resource list.
+            - The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.
+            - Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.
+
+            ## Seeing what it rendered rather than whether it passed
+            A functional suite answers pass or fail, and a finding that turns on what a rendering contains needs the output itself. The procedure is one call away — typo3_rule_lookup with documentId "core/testing/proving-a-rendering", which needs no resource list.
+            - How the output is got out of a run that would otherwise print nothing, and why what a content object echoes may never arrive.
+            - One marker per region of the response, so a rendering says which part of it changed rather than that it changed, and how what a service holds mid-request is printed.
+
+            ## Invoking runTests.sh
+            - Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
+            - Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.
+            - Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.
+            - The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file "--filter" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.
+            - Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file "<path>" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.
+            - While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.
+            - The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.
+            - `./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.
+            - A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.
+            - `PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.
+            - A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.
+            - What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.
+            - A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished.
+
+            Options:
+            - `-- <phpunit arguments>` — Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method.
+            - `-d sqlite|mariadb|mysql|postgres` — Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour.
+            - `-a mysqli|pdo_mysql` — Database driver, only with `-s functional` on mysql or mariadb.
+            - `-i <version>` — Specific database version, for example `-d mariadb -i 11.4`.
+            - `-p <php minor>` — PHP minor version for the container. Only the versions the branch supports are available; check `-h`.
+            - `-n` — Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are.
+            - `-c <chunk>/<total>` — Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them.
+            - `-x [-y <port>]` — Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one.
+            - `-b docker|podman` — Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right.
+
+            Examples:
+            - One unit test file:
+              `CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
+            - One unit test method:
+              `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
+            - One functional test file on the default sqlite database:
+              `CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php`
+            - Functional tests on mariadb, to reproduce a DBMS-specific bug:
+              `CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/`
+            - Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS:
+              `CI=true ./Build/Scripts/runTests.sh -s cglGit`
+            - A single npm package script:
+              `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
+            - A composer command inside the core test environment:
+              `CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload`
+
+            ## The whole procedure
+            This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId "core/testing/scripts", which needs no resource list.
+            - Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.
+            - Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either.
+
+    .. tab:: Data
+
+        .. code-block:: json
+
             {
-                "suite": "unit",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s unit",
-                "runs": "unknown",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter <methodName> <path/to/Test.php>",
-                "description": "PHP unit tests.",
-                "whenToUse": "Use for isolated PHP behavior, utility classes, value objects, and narrow bug fixes.",
-                "domains": [
-                    "php"
+                "query": null,
+                "paths": [],
+                "scopes": [],
+                "domains": [],
+                "uncoveredPaths": [],
+                "missingPaths": [],
+                "withheld": {
+                    "domains": [],
+                    "suites": 0
+                },
+                "suites": [
+                    {
+                        "suite": "unit",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s unit",
+                        "runs": "unknown",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter <methodName> <path/to/Test.php>",
+                        "description": "PHP unit tests.",
+                        "whenToUse": "Use for isolated PHP behavior, utility classes, value objects, and narrow bug fixes.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "functional",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s functional",
+                        "runs": "unknown",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s functional -d sqlite -- <path/to/Test.php>",
+                        "description": "PHP functional tests, sqlite by default.",
+                        "whenToUse": "Use for TYPO3 services, persistence, configuration, authentication, routing, and integration behavior.",
+                        "domains": [
+                            "php",
+                            "fluid",
+                            "typoscript"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "checkIntegrityPhp",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.",
+                        "whenToUse": "Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": "TYPO3 v13 and newer"
+                    },
+                    {
+                        "suite": "checkRst",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkRst",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Checks .rst files for integrity.",
+                        "whenToUse": "Use for every changelog entry and other ReST documentation change.",
+                        "domains": [
+                            "docs"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "build",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s build",
+                        "runs": "change",
+                        "targeted": null,
+                        "description": "Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.",
+                        "whenToUse": "Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId=\"core/contribution/committed-build-output\" is the procedure and what it was measured on.",
+                        "domains": [
+                            "typescript",
+                            "css"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": "TYPO3 v13 and newer"
+                    },
+                    {
+                        "suite": "lintScss",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s lintScss",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "SCSS linting with TYPO3's stylelint setup.",
+                        "whenToUse": "Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.",
+                        "domains": [
+                            "css"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "lintTypescript",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s lintTypescript",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "TypeScript linting.",
+                        "whenToUse": "Use when TypeScript or JavaScript code changes.",
+                        "domains": [
+                            "typescript"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "unitJavascript",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s unitJavascript",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "JavaScript unit tests for the built backend modules.",
+                        "whenToUse": "Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. No targeted form goes through runTests.sh: this target passes nothing through, and -s npm runs in the Node image without a browser, so a run test -- --group there stops at ChromePathNotSetError. A targeted run is npm run test -- --group <package> in Build/ on a machine with Chrome, and --files narrows nothing because the config declares groups. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.",
+                        "domains": [
+                            "typescript"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "cgl",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s cgl",
+                        "runs": "change",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
+                        "description": "Checks and fixes coding guideline issues for all core PHP files.",
+                        "whenToUse": "Use before review when PHP formatting or file headers may be affected. Add `-n` to only report.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "cglGit",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
+                        "runs": "change",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
+                        "description": "Checks and fixes coding guideline issues in the latest committed patch.",
+                        "whenToUse": "Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "cglHeader",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeader",
+                        "runs": "change",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
+                        "description": "Checks and fixes the licence header of all core PHP files.",
+                        "whenToUse": "Use where a PHP file was added or its header touched, and to settle the file-header error the pre-commit hook reports. It runs php-cs-fixer over `Build/php-cs-fixer/header-comment.php`, which `cgl` does not: a green `cgl` says nothing about a header. Add `-n` to only report.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "cglHeaderGit",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit",
+                        "runs": "change",
+                        "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
+                        "description": "Checks and fixes the licence header in the latest committed patch.",
+                        "whenToUse": "Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "lintPhp",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s lintPhp",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "PHP syntax linting.",
+                        "whenToUse": "Use for broad PHP syntax confidence after touching many PHP files.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "phpstan",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s phpstan",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Static analysis with phpstan.",
+                        "whenToUse": "Use for type-sensitive PHP changes and API contract changes.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "lintServicesYaml",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s lintServicesYaml",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Lints Services.yaml files with tag parsing enabled.",
+                        "whenToUse": "Use after changing dependency injection wiring in a Configuration/Services.yaml.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "lintYaml",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s lintYaml",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "YAML linting for every YAML file below typo3/ except Services.yaml.",
+                        "whenToUse": "Use after changing any Configuration YAML: site set config.yaml and settings definitions, route enhancers, form setups, RTE presets. Services.yaml has its own suite, lintServicesYaml, because it needs tag parsing.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "listExceptionCodes",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.",
+                        "whenToUse": "Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "checkComposer",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkComposer",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Checks the composer.json files of the system extensions for version integrity.",
+                        "whenToUse": "Use after editing any composer.json, for example when adding a dependency between system extensions.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "checkIntegritySetLabels",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegritySetLabels",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Checks the labels.xlf integrity of the site sets.",
+                        "whenToUse": "Use after adding or changing a Configuration/Sets/<Set>/labels.xlf. It is the purpose-built check for site set labels; checkIntegrityXliff does not replace it.",
+                        "domains": [
+                            "typoscript"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": "TYPO3 v13 and newer"
+                    },
+                    {
+                        "suite": "lintHtml",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s lintHtml",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Whitespace and EditorConfig linting of the templates below typo3/sysext/*/Resources/Private.",
+                        "whenToUse": "Use after changing a Fluid template, partial, or layout.",
+                        "domains": [
+                            "fluid"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "checkIntegrityXliff",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityXliff",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Checks all .xlf files for validity and deprecated usages.",
+                        "whenToUse": "Use after adding, changing, or retiring XLF labels.",
+                        "domains": [
+                            "xliff"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": "TYPO3 v14 and newer"
+                    },
+                    {
+                        "suite": "normalizeXliff",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s normalizeXliff",
+                        "runs": "change",
+                        "targeted": null,
+                        "description": "Normalizes .xlf files (formatting, attribute order).",
+                        "whenToUse": "Use after editing XLF files, so the diff carries no formatting noise. Add `-n` to only report.",
+                        "domains": [
+                            "xliff"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": "TYPO3 v14 and newer"
+                    },
+                    {
+                        "suite": "checkExtensionScannerRst",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Verifies that all .rst files referenced by the extension scanner exist.",
+                        "whenToUse": "Use when a deprecation or breaking change adds extension scanner matchers.",
+                        "domains": [
+                            "docs",
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "checkRstRenderingSingle",
+                        "command": "./Build/Scripts/runTests.sh -s checkRstRenderingSingle core",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Renders one system extension's Documentation/ with the documentation team's container into Documentation-GENERATED-temp/ and reports what the renderer rejects.",
+                        "whenToUse": "Use where a ReST change has to be looked at rather than validated: checkRst reads the structure of a file and says nothing about how the page comes out.",
+                        "domains": [
+                            "docs"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "watchRst",
+                        "command": "./Build/Scripts/runTests.sh -s watchRst core interactive",
+                        "runs": "change",
+                        "targeted": null,
+                        "description": "Creates a changelog file from the core's own template and serves the rendered page locally, reloading it as the file is saved.",
+                        "whenToUse": "Use when writing a changelog entry: interactive asks for the type, the issue number and the title and writes the file from Build/rstTemplates/, and a path in place of it opens that file instead. It writes into the directory of the release the branch develops, so a backport's file is moved afterwards.",
+                        "domains": [
+                            "docs"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "build-css",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css",
+                        "runs": "change",
+                        "targeted": null,
+                        "description": "Focused CSS build from Build/package.json.",
+                        "whenToUse": "Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.",
+                        "domains": [
+                            "css"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "checkGruntClean",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s checkGruntClean",
+                        "runs": "git",
+                        "targeted": null,
+                        "description": "Rebuilds the committed JavaScript and reports whether it still matches its TypeScript sources.",
+                        "whenToUse": "Use for a change below Build/Sources/TypeScript, where the committed JavaScript has to stay in sync with its source. Its body deletes every generated .js below typo3/sysext and runs the frontend build. Then it runs `git add *` over the whole working tree and asks git status whether anything is left, so it stages every file the checkout holds, untracked ones included. Run it in a checkout whose index you can throw away, and not in one holding work of your own. A git worktree is not the way out: its gitdir sits outside the mounted directory, so the build succeeds, every git call fails with `fatal: not a git repository: <the worktree's gitdir>` and the suite reports FAILURE over a tree that is clean. The same question is answered without staging anything by rebuilding in a throwaway worktree and reading git status yourself: typo3_rule_lookup with documentId=\"core/contribution/committed-build-output\" has that procedure, how a minified file is diffed at all, and what a backport does to one.",
+                        "domains": [
+                            "typescript"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "e2e",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s e2e",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "End-to-end tests driving a real backend with Playwright.",
+                        "whenToUse": "Use for editor or administrator workflows that only break in the assembled backend. Where the e2e branch of Build/Scripts/runTests.sh sets PLAYWRIGHT_TEST_ARGS, a spec path or a --grep pattern after the options reaches Playwright, and that spec runs after the login setup alone. Where it does not, nothing passes through, the run is every spec of the project, and a change to one spec file costs the whole suite.",
+                        "domains": [
+                            "php",
+                            "typescript",
+                            "fluid"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": "TYPO3 v13 and newer"
+                    },
+                    {
+                        "suite": "e2e-prepare",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-prepare",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.",
+                        "whenToUse": "Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.",
+                        "domains": [
+                            "php",
+                            "typescript",
+                            "fluid",
+                            "css"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": "TYPO3 v13 and newer"
+                    },
+                    {
+                        "suite": "e2e-browser",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-browser",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "The e2e suite in Playwright's own UI, served from the container.",
+                        "whenToUse": "Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.",
+                        "domains": [
+                            "php",
+                            "typescript",
+                            "fluid",
+                            "css"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": "TYPO3 v14 and newer"
+                    },
+                    {
+                        "suite": "composerInstall",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s composerInstall",
+                        "runs": "change",
+                        "targeted": null,
+                        "description": "Installs the PHP dependencies of the checkout it is run in, into its own vendor/ and bin/, inside the container.",
+                        "whenToUse": "Use once in a checkout that has no vendor/ or bin/ in it, before any other suite. Look in the directory the suite will mount rather than reasoning from its kind: a fresh clone has neither, and so does a git worktree, which starts without both because /vendor/* and /bin/* are gitignored — unless whatever made the worktree copied them across. Without it every PHP suite stops at `exec: line 9: bin/phpunit: not found`. It is a precondition and not a step — a checkout that already has vendor/ needs it again only after composer.json or composer.lock changed. Whether the lock changed since the install is what `typo3_project_describe` says, package by package; a vendor/ behind it fails the suite in classes the patch never touched. It needs no PHP on the host, unlike `composer install` run there.",
+                        "domains": [
+                            "php",
+                            "fluid",
+                            "typoscript"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "npm",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- <npm command>",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "Dispatcher for npm commands inside the TYPO3 core build environment.",
+                        "whenToUse": "Use for npm install, audit, build, watch, and package-script tasks.",
+                        "domains": [
+                            "typescript",
+                            "css"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "composer",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- <composer command>",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "Dispatcher for composer commands inside the TYPO3 core build environment.",
+                        "whenToUse": "Use for composer dumpautoload, require, info, and dependency tasks.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": ""
+                    }
                 ],
-                "base": true,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "functional",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s functional",
-                "runs": "unknown",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s functional -d sqlite -- <path/to/Test.php>",
-                "description": "PHP functional tests, sqlite by default.",
-                "whenToUse": "Use for TYPO3 services, persistence, configuration, authentication, routing, and integration behavior.",
-                "domains": [
-                    "php",
-                    "fluid",
-                    "typoscript"
+                "verifying": [
+                    "unit",
+                    "functional",
+                    "checkIntegrityPhp",
+                    "checkRst",
+                    "build",
+                    "lintScss",
+                    "lintTypescript",
+                    "unitJavascript",
+                    "cgl",
+                    "cglGit",
+                    "cglHeader",
+                    "cglHeaderGit",
+                    "lintPhp",
+                    "phpstan",
+                    "lintServicesYaml",
+                    "lintYaml",
+                    "checkComposer",
+                    "checkIntegritySetLabels",
+                    "lintHtml",
+                    "checkIntegrityXliff",
+                    "normalizeXliff",
+                    "checkExtensionScannerRst",
+                    "checkRstRenderingSingle",
+                    "build-css",
+                    "checkGruntClean",
+                    "e2e"
                 ],
-                "base": true,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "checkIntegrityPhp",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityPhp",
-                "runs": "check",
-                "targeted": null,
-                "description": "Reads typo3/sysext/*/Classes, Tests/Unit and Tests/Functional for the conventions neither lintPhp nor cgl covers: the exception code on every throw, the annotations, the namespace against the path, the test method prefix and the final test class.",
-                "whenToUse": "Run it on any patch that writes PHP, test fixtures included — the core's own pre-merge pipeline runs it, so what it reports fails review before a person reads the patch. The one it reports most is the exception code: every throw needs a unique ten-digit integer, and undefined, duplicate and malformed ones each come back with the file and the line.",
-                "domains": [
-                    "php"
-                ],
-                "base": true,
-                "verifies": true,
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "checkRst",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkRst",
-                "runs": "check",
-                "targeted": null,
-                "description": "Checks .rst files for integrity.",
-                "whenToUse": "Use for every changelog entry and other ReST documentation change.",
-                "domains": [
-                    "docs"
-                ],
-                "base": true,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "build",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s build",
-                "runs": "change",
-                "targeted": null,
-                "description": "Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.",
-                "whenToUse": "Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId=\"core/contribution/committed-build-output\" is the procedure and what it was measured on.",
-                "domains": [
-                    "typescript",
-                    "css"
-                ],
-                "base": true,
-                "verifies": true,
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "lintScss",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintScss",
-                "runs": "check",
-                "targeted": null,
-                "description": "SCSS linting with TYPO3's stylelint setup.",
-                "whenToUse": "Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.",
-                "domains": [
-                    "css"
-                ],
-                "base": true,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "lintTypescript",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintTypescript",
-                "runs": "check",
-                "targeted": null,
-                "description": "TypeScript linting.",
-                "whenToUse": "Use when TypeScript or JavaScript code changes.",
-                "domains": [
-                    "typescript"
-                ],
-                "base": true,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "unitJavascript",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s unitJavascript",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "JavaScript unit tests for the built backend modules.",
-                "whenToUse": "Use for TypeScript modules with real logic or state transitions. Run the branch's frontend build first so the tests see the current output. No targeted form goes through runTests.sh: this target passes nothing through, and -s npm runs in the Node image without a browser, so a run test -- --group there stops at ChromePathNotSetError. A targeted run is npm run test -- --group <package> in Build/ on a machine with Chrome, and --files narrows nothing because the config declares groups. `typo3_hint_lookup` for `javascript-unit-tests` says where the file goes, what discovers it and what it imports.",
-                "domains": [
-                    "typescript"
-                ],
-                "base": true,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "cgl",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cgl",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
-                "description": "Checks and fixes coding guideline issues for all core PHP files.",
-                "whenToUse": "Use before review when PHP formatting or file headers may be affected. Add `-n` to only report.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "cglGit",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cgl -n",
-                "description": "Checks and fixes coding guideline issues in the latest committed patch.",
-                "whenToUse": "Use for a focused pre-review check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommit.sh` in the container, so running that script directly buys nothing and puts it on the host's PHP rather than on the one the branch pins. Its file list comes from git inside the container, and a git worktree keeps its gitdir outside the mounted directory: git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cgl -n` where the checkout may be a worktree — it asks git nothing.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "cglHeader",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeader",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
-                "description": "Checks and fixes the licence header of all core PHP files.",
-                "whenToUse": "Use where a PHP file was added or its header touched, and to settle the file-header error the pre-commit hook reports. It runs php-cs-fixer over `Build/php-cs-fixer/header-comment.php`, which `cgl` does not: a green `cgl` says nothing about a header. Add `-n` to only report.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "cglHeaderGit",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s cglHeaderGit",
-                "runs": "change",
-                "targeted": "CI=true ./Build/Scripts/runTests.sh -s cglHeader -n",
-                "description": "Checks and fixes the licence header in the latest committed patch.",
-                "whenToUse": "Use for a focused header check after creating a commit, from a normal checkout only. It is `Build/Scripts/cglFixMyCommitFileHeader.sh` in the container, and its file list comes from git inside the container: a git worktree keeps its gitdir outside the mounted directory, git fails, the list is empty, and the suite reports SUCCESS having read nothing. Use `cglHeader -n` where the checkout may be a worktree — it asks git nothing.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "lintPhp",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintPhp",
-                "runs": "check",
-                "targeted": null,
-                "description": "PHP syntax linting.",
-                "whenToUse": "Use for broad PHP syntax confidence after touching many PHP files.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "phpstan",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s phpstan",
-                "runs": "check",
-                "targeted": null,
-                "description": "Static analysis with phpstan.",
-                "whenToUse": "Use for type-sensitive PHP changes and API contract changes.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "lintServicesYaml",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintServicesYaml",
-                "runs": "check",
-                "targeted": null,
-                "description": "Lints Services.yaml files with tag parsing enabled.",
-                "whenToUse": "Use after changing dependency injection wiring in a Configuration/Services.yaml.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "lintYaml",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintYaml",
-                "runs": "check",
-                "targeted": null,
-                "description": "YAML linting for every YAML file below typo3/ except Services.yaml.",
-                "whenToUse": "Use after changing any Configuration YAML: site set config.yaml and settings definitions, route enhancers, form setups, RTE presets. Services.yaml has its own suite, lintServicesYaml, because it needs tag parsing.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "listExceptionCodes",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s listExceptionCodes",
-                "runs": "check",
-                "targeted": null,
-                "description": "Prints every exception code found below typo3/ as JSON. It runs the duplicate check with the flag that only prints, which skips both failure paths, so it exits successfully whatever it finds.",
-                "whenToUse": "Use it to see which codes are taken. It confirms nothing: a missing or duplicated code leaves this suite green, and checkIntegrityPhp is what reports one.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": ""
-            },
-            {
-                "suite": "checkComposer",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkComposer",
-                "runs": "check",
-                "targeted": null,
-                "description": "Checks the composer.json files of the system extensions for version integrity.",
-                "whenToUse": "Use after editing any composer.json, for example when adding a dependency between system extensions.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "checkIntegritySetLabels",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegritySetLabels",
-                "runs": "check",
-                "targeted": null,
-                "description": "Checks the labels.xlf integrity of the site sets.",
-                "whenToUse": "Use after adding or changing a Configuration/Sets/<Set>/labels.xlf. It is the purpose-built check for site set labels; checkIntegrityXliff does not replace it.",
-                "domains": [
-                    "typoscript"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "lintHtml",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintHtml",
-                "runs": "check",
-                "targeted": null,
-                "description": "Whitespace and EditorConfig linting of the templates below typo3/sysext/*/Resources/Private.",
-                "whenToUse": "Use after changing a Fluid template, partial, or layout.",
-                "domains": [
-                    "fluid"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "checkIntegrityXliff",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkIntegrityXliff",
-                "runs": "check",
-                "targeted": null,
-                "description": "Checks all .xlf files for validity and deprecated usages.",
-                "whenToUse": "Use after adding, changing, or retiring XLF labels.",
-                "domains": [
-                    "xliff"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": "TYPO3 v14 and newer"
-            },
-            {
-                "suite": "normalizeXliff",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s normalizeXliff",
-                "runs": "change",
-                "targeted": null,
-                "description": "Normalizes .xlf files (formatting, attribute order).",
-                "whenToUse": "Use after editing XLF files, so the diff carries no formatting noise. Add `-n` to only report.",
-                "domains": [
-                    "xliff"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": "TYPO3 v14 and newer"
-            },
-            {
-                "suite": "checkExtensionScannerRst",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkExtensionScannerRst",
-                "runs": "check",
-                "targeted": null,
-                "description": "Verifies that all .rst files referenced by the extension scanner exist.",
-                "whenToUse": "Use when a deprecation or breaking change adds extension scanner matchers.",
-                "domains": [
-                    "docs",
-                    "php"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "checkRstRenderingSingle",
-                "command": "./Build/Scripts/runTests.sh -s checkRstRenderingSingle core",
-                "runs": "check",
-                "targeted": null,
-                "description": "Renders one system extension's Documentation/ with the documentation team's container into Documentation-GENERATED-temp/ and reports what the renderer rejects.",
-                "whenToUse": "Use where a ReST change has to be looked at rather than validated: checkRst reads the structure of a file and says nothing about how the page comes out.",
-                "domains": [
-                    "docs"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "watchRst",
-                "command": "./Build/Scripts/runTests.sh -s watchRst core interactive",
-                "runs": "change",
-                "targeted": null,
-                "description": "Creates a changelog file from the core's own template and serves the rendered page locally, reloading it as the file is saved.",
-                "whenToUse": "Use when writing a changelog entry: interactive asks for the type, the issue number and the title and writes the file from Build/rstTemplates/, and a path in place of it opens that file instead. It writes into the directory of the release the branch develops, so a backport's file is moved afterwards.",
-                "domains": [
-                    "docs"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": ""
-            },
-            {
-                "suite": "build-css",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css",
-                "runs": "change",
-                "targeted": null,
-                "description": "Focused CSS build from Build/package.json.",
-                "whenToUse": "Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.",
-                "domains": [
-                    "css"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "checkGruntClean",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s checkGruntClean",
-                "runs": "git",
-                "targeted": null,
-                "description": "Rebuilds the committed JavaScript and reports whether it still matches its TypeScript sources.",
-                "whenToUse": "Use for a change below Build/Sources/TypeScript, where the committed JavaScript has to stay in sync with its source. Its body deletes every generated .js below typo3/sysext and runs the frontend build. Then it runs `git add *` over the whole working tree and asks git status whether anything is left, so it stages every file the checkout holds, untracked ones included. Run it in a checkout whose index you can throw away, and not in one holding work of your own. A git worktree is not the way out: its gitdir sits outside the mounted directory, so the build succeeds, every git call fails with `fatal: not a git repository: <the worktree's gitdir>` and the suite reports FAILURE over a tree that is clean. The same question is answered without staging anything by rebuilding in a throwaway worktree and reading git status yourself: typo3_rule_lookup with documentId=\"core/contribution/committed-build-output\" has that procedure, how a minified file is diffed at all, and what a backport does to one.",
-                "domains": [
-                    "typescript"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "e2e",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s e2e",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "End-to-end tests driving a real backend with Playwright.",
-                "whenToUse": "Use for editor or administrator workflows that only break in the assembled backend. Where the e2e branch of Build/Scripts/runTests.sh sets PLAYWRIGHT_TEST_ARGS, a spec path or a --grep pattern after the options reaches Playwright, and that spec runs after the login setup alone. Where it does not, nothing passes through, the run is every spec of the project, and a change to one spec file costs the whole suite.",
-                "domains": [
-                    "php",
-                    "typescript",
-                    "fluid"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "e2e-prepare",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-prepare",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.",
-                "whenToUse": "Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.",
-                "domains": [
-                    "php",
-                    "typescript",
-                    "fluid",
-                    "css"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "e2e-browser",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-browser",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "The e2e suite in Playwright's own UI, served from the container.",
-                "whenToUse": "Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.",
-                "domains": [
-                    "php",
-                    "typescript",
-                    "fluid",
-                    "css"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": "TYPO3 v14 and newer"
-            },
-            {
-                "suite": "composerInstall",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s composerInstall",
-                "runs": "change",
-                "targeted": null,
-                "description": "Installs the PHP dependencies of the checkout it is run in, into its own vendor/ and bin/, inside the container.",
-                "whenToUse": "Use once in a checkout that has no vendor/ or bin/ in it, before any other suite. Look in the directory the suite will mount rather than reasoning from its kind: a fresh clone has neither, and so does a git worktree, which starts without both because /vendor/* and /bin/* are gitignored — unless whatever made the worktree copied them across. Without it every PHP suite stops at `exec: line 9: bin/phpunit: not found`. It is a precondition and not a step — a checkout that already has vendor/ needs it again only after composer.json or composer.lock changed. Whether the lock changed since the install is what `typo3_project_describe` says, package by package; a vendor/ behind it fails the suite in classes the patch never touched. It needs no PHP on the host, unlike `composer install` run there.",
-                "domains": [
-                    "php",
-                    "fluid",
-                    "typoscript"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": ""
-            },
-            {
-                "suite": "npm",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- <npm command>",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "Dispatcher for npm commands inside the TYPO3 core build environment.",
-                "whenToUse": "Use for npm install, audit, build, watch, and package-script tasks.",
-                "domains": [
-                    "typescript",
-                    "css"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": ""
-            },
-            {
-                "suite": "composer",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- <composer command>",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "Dispatcher for composer commands inside the TYPO3 core build environment.",
-                "whenToUse": "Use for composer dumpautoload, require, info, and dependency tasks.",
-                "domains": [
-                    "php"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": ""
+                "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
+                "invocation": {
+                    "preconditions": [
+                        "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
+                        "A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.",
+                        "A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.",
+                        "The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.",
+                        "A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway."
+                    ],
+                    "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
+                    "notes": [
+                        "Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.",
+                        "Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.",
+                        "The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file \"--filter\" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.",
+                        "Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file \"<path>\" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.",
+                        "While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.",
+                        "The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.",
+                        "`./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.",
+                        "A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.",
+                        "`PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.",
+                        "A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.",
+                        "What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.",
+                        "A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished."
+                    ],
+                    "options": [
+                        {
+                            "option": "-- <phpunit arguments>",
+                            "description": "Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method."
+                        },
+                        {
+                            "option": "-d sqlite|mariadb|mysql|postgres",
+                            "description": "Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour."
+                        },
+                        {
+                            "option": "-a mysqli|pdo_mysql",
+                            "description": "Database driver, only with `-s functional` on mysql or mariadb."
+                        },
+                        {
+                            "option": "-i <version>",
+                            "description": "Specific database version, for example `-d mariadb -i 11.4`."
+                        },
+                        {
+                            "option": "-p <php minor>",
+                            "description": "PHP minor version for the container. Only the versions the branch supports are available; check `-h`."
+                        },
+                        {
+                            "option": "-n",
+                            "description": "Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are."
+                        },
+                        {
+                            "option": "-c <chunk>/<total>",
+                            "description": "Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them."
+                        },
+                        {
+                            "option": "-x [-y <port>]",
+                            "description": "Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one."
+                        },
+                        {
+                            "option": "-b docker|podman",
+                            "description": "Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right."
+                        }
+                    ],
+                    "examples": [
+                        {
+                            "purpose": "One unit test file",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
+                        },
+                        {
+                            "purpose": "One unit test method",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
+                        },
+                        {
+                            "purpose": "One functional test file on the default sqlite database",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php"
+                        },
+                        {
+                            "purpose": "Functional tests on mariadb, to reproduce a DBMS-specific bug",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/"
+                        },
+                        {
+                            "purpose": "Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit"
+                        },
+                        {
+                            "purpose": "A single npm package script",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css"
+                        },
+                        {
+                            "purpose": "A composer command inside the core test environment",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
+                        }
+                    ]
+                },
+                "owed": [
+                    "The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId \"any/testing/browser-check\", which needs no resource list.\n- The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.\n- Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.",
+                    "A functional suite answers pass or fail, and a finding that turns on what a rendering contains needs the output itself. The procedure is one call away — typo3_rule_lookup with documentId \"core/testing/proving-a-rendering\", which needs no resource list.\n- How the output is got out of a run that would otherwise print nothing, and why what a content object echoes may never arrive.\n- One marker per region of the response, so a rendering says which part of it changed rather than that it changed, and how what a service holds mid-request is printed.",
+                    "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
+                ]
             }
-        ],
-        "verifying": [
-            "unit",
-            "functional",
-            "checkIntegrityPhp",
-            "checkRst",
-            "build",
-            "lintScss",
-            "lintTypescript",
-            "unitJavascript",
-            "cgl",
-            "cglGit",
-            "cglHeader",
-            "cglHeaderGit",
-            "lintPhp",
-            "phpstan",
-            "lintServicesYaml",
-            "lintYaml",
-            "checkComposer",
-            "checkIntegritySetLabels",
-            "lintHtml",
-            "checkIntegrityXliff",
-            "normalizeXliff",
-            "checkExtensionScannerRst",
-            "checkRstRenderingSingle",
-            "build-css",
-            "checkGruntClean",
-            "e2e"
-        ],
-        "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
-        "invocation": {
-            "preconditions": [
-                "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
-                "A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.",
-                "A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.",
-                "The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.",
-                "A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway."
-            ],
-            "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
-            "notes": [
-                "Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.",
-                "Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.",
-                "The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file \"--filter\" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.",
-                "Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file \"<path>\" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.",
-                "While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.",
-                "The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.",
-                "`./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.",
-                "A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.",
-                "`PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.",
-                "A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.",
-                "What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.",
-                "A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished."
-            ],
-            "options": [
-                {
-                    "option": "-- <phpunit arguments>",
-                    "description": "Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method."
-                },
-                {
-                    "option": "-d sqlite|mariadb|mysql|postgres",
-                    "description": "Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour."
-                },
-                {
-                    "option": "-a mysqli|pdo_mysql",
-                    "description": "Database driver, only with `-s functional` on mysql or mariadb."
-                },
-                {
-                    "option": "-i <version>",
-                    "description": "Specific database version, for example `-d mariadb -i 11.4`."
-                },
-                {
-                    "option": "-p <php minor>",
-                    "description": "PHP minor version for the container. Only the versions the branch supports are available; check `-h`."
-                },
-                {
-                    "option": "-n",
-                    "description": "Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are."
-                },
-                {
-                    "option": "-c <chunk>/<total>",
-                    "description": "Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them."
-                },
-                {
-                    "option": "-x [-y <port>]",
-                    "description": "Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one."
-                },
-                {
-                    "option": "-b docker|podman",
-                    "description": "Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right."
-                }
-            ],
-            "examples": [
-                {
-                    "purpose": "One unit test file",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
-                },
-                {
-                    "purpose": "One unit test method",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
-                },
-                {
-                    "purpose": "One functional test file on the default sqlite database",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php"
-                },
-                {
-                    "purpose": "Functional tests on mariadb, to reproduce a DBMS-specific bug",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/"
-                },
-                {
-                    "purpose": "Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit"
-                },
-                {
-                    "purpose": "A single npm package script",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css"
-                },
-                {
-                    "purpose": "A composer command inside the core test environment",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
-                }
-            ]
-        },
-        "owed": [
-            "The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId \"any/testing/browser-check\", which needs no resource list.\n- The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.\n- Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.",
-            "A functional suite answers pass or fail, and a finding that turns on what a rendering contains needs the output itself. The procedure is one call away — typo3_rule_lookup with documentId \"core/testing/proving-a-rendering\", which needs no resource list.\n- How the output is got out of a run that would otherwise print nothing, and why what a content object echoes may never arrive.\n- One marker per region of the response, so a rendering says which part of it changed rather than that it changed, and how what a service holds mid-request is printed.",
-            "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
-        ]
-    }
 
 runTests: hit
 ~~~~~~~~~~~~~
@@ -1177,205 +1183,207 @@ Called with:
         "query": "phpstan"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    ## Before a suite can run
-    - Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.
-    - A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.
-    - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
-    - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
-    - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
+        .. code-block:: text
 
-    The suites that verify: phpstan. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
+            ## Before a suite can run
+            - Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.
+            - A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.
+            - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
+            - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
+            - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
 
-    ## phpstan
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s phpstan`
-    Running it: check — it reports and hands the checkout back as it was.
+            The suites that verify: phpstan. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
 
-    Static analysis with phpstan.
-    Use for type-sensitive PHP changes and API contract changes.
+            ## phpstan
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s phpstan`
+            Running it: check — it reports and hands the checkout back as it was.
 
-    ## Invoking runTests.sh
-    - Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
-    - Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.
-    - Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.
-    - The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file "--filter" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.
-    - Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file "<path>" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.
-    - While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.
-    - The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.
-    - `./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.
-    - A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.
-    - `PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.
-    - A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.
-    - What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.
-    - A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished.
+            Static analysis with phpstan.
+            Use for type-sensitive PHP changes and API contract changes.
 
-    Options:
-    - `-- <phpunit arguments>` — Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method.
-    - `-d sqlite|mariadb|mysql|postgres` — Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour.
-    - `-a mysqli|pdo_mysql` — Database driver, only with `-s functional` on mysql or mariadb.
-    - `-i <version>` — Specific database version, for example `-d mariadb -i 11.4`.
-    - `-p <php minor>` — PHP minor version for the container. Only the versions the branch supports are available; check `-h`.
-    - `-n` — Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are.
-    - `-c <chunk>/<total>` — Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them.
-    - `-x [-y <port>]` — Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one.
-    - `-b docker|podman` — Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right.
+            ## Invoking runTests.sh
+            - Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
+            - Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.
+            - Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.
+            - The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file "--filter" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.
+            - Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file "<path>" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.
+            - While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.
+            - The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.
+            - `./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.
+            - A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.
+            - `PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.
+            - A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.
+            - What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.
+            - A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished.
 
-    Examples:
-    - One unit test file:
-      `CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
-    - One unit test method:
-      `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
-    - One functional test file on the default sqlite database:
-      `CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php`
-    - Functional tests on mariadb, to reproduce a DBMS-specific bug:
-      `CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/`
-    - Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS:
-      `CI=true ./Build/Scripts/runTests.sh -s cglGit`
-    - A single npm package script:
-      `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
-    - A composer command inside the core test environment:
-      `CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload`
+            Options:
+            - `-- <phpunit arguments>` — Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method.
+            - `-d sqlite|mariadb|mysql|postgres` — Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour.
+            - `-a mysqli|pdo_mysql` — Database driver, only with `-s functional` on mysql or mariadb.
+            - `-i <version>` — Specific database version, for example `-d mariadb -i 11.4`.
+            - `-p <php minor>` — PHP minor version for the container. Only the versions the branch supports are available; check `-h`.
+            - `-n` — Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are.
+            - `-c <chunk>/<total>` — Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them.
+            - `-x [-y <port>]` — Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one.
+            - `-b docker|podman` — Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right.
 
-    ## The whole procedure
-    This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId "core/testing/scripts", which needs no resource list.
-    - Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.
-    - Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either.
+            Examples:
+            - One unit test file:
+              `CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
+            - One unit test method:
+              `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
+            - One functional test file on the default sqlite database:
+              `CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php`
+            - Functional tests on mariadb, to reproduce a DBMS-specific bug:
+              `CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/`
+            - Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS:
+              `CI=true ./Build/Scripts/runTests.sh -s cglGit`
+            - A single npm package script:
+              `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
+            - A composer command inside the core test environment:
+              `CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload`
 
-Data:
+            ## The whole procedure
+            This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId "core/testing/scripts", which needs no resource list.
+            - Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.
+            - Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "phpstan",
-        "paths": [],
-        "scopes": [],
-        "domains": [],
-        "uncoveredPaths": [],
-        "missingPaths": [],
-        "withheld": {
-            "domains": [],
-            "suites": 0
-        },
-        "suites": [
+        .. code-block:: json
+
             {
-                "suite": "phpstan",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s phpstan",
-                "runs": "check",
-                "targeted": null,
-                "description": "Static analysis with phpstan.",
-                "whenToUse": "Use for type-sensitive PHP changes and API contract changes.",
-                "domains": [
-                    "php"
+                "query": "phpstan",
+                "paths": [],
+                "scopes": [],
+                "domains": [],
+                "uncoveredPaths": [],
+                "missingPaths": [],
+                "withheld": {
+                    "domains": [],
+                    "suites": 0
+                },
+                "suites": [
+                    {
+                        "suite": "phpstan",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s phpstan",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "Static analysis with phpstan.",
+                        "whenToUse": "Use for type-sensitive PHP changes and API contract changes.",
+                        "domains": [
+                            "php"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    }
                 ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
+                "verifying": [
+                    "phpstan"
+                ],
+                "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
+                "invocation": {
+                    "preconditions": [
+                        "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
+                        "A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.",
+                        "A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.",
+                        "The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.",
+                        "A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway."
+                    ],
+                    "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
+                    "notes": [
+                        "Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.",
+                        "Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.",
+                        "The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file \"--filter\" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.",
+                        "Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file \"<path>\" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.",
+                        "While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.",
+                        "The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.",
+                        "`./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.",
+                        "A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.",
+                        "`PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.",
+                        "A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.",
+                        "What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.",
+                        "A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished."
+                    ],
+                    "options": [
+                        {
+                            "option": "-- <phpunit arguments>",
+                            "description": "Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method."
+                        },
+                        {
+                            "option": "-d sqlite|mariadb|mysql|postgres",
+                            "description": "Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour."
+                        },
+                        {
+                            "option": "-a mysqli|pdo_mysql",
+                            "description": "Database driver, only with `-s functional` on mysql or mariadb."
+                        },
+                        {
+                            "option": "-i <version>",
+                            "description": "Specific database version, for example `-d mariadb -i 11.4`."
+                        },
+                        {
+                            "option": "-p <php minor>",
+                            "description": "PHP minor version for the container. Only the versions the branch supports are available; check `-h`."
+                        },
+                        {
+                            "option": "-n",
+                            "description": "Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are."
+                        },
+                        {
+                            "option": "-c <chunk>/<total>",
+                            "description": "Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them."
+                        },
+                        {
+                            "option": "-x [-y <port>]",
+                            "description": "Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one."
+                        },
+                        {
+                            "option": "-b docker|podman",
+                            "description": "Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right."
+                        }
+                    ],
+                    "examples": [
+                        {
+                            "purpose": "One unit test file",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
+                        },
+                        {
+                            "purpose": "One unit test method",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
+                        },
+                        {
+                            "purpose": "One functional test file on the default sqlite database",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php"
+                        },
+                        {
+                            "purpose": "Functional tests on mariadb, to reproduce a DBMS-specific bug",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/"
+                        },
+                        {
+                            "purpose": "Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit"
+                        },
+                        {
+                            "purpose": "A single npm package script",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css"
+                        },
+                        {
+                            "purpose": "A composer command inside the core test environment",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
+                        }
+                    ]
+                },
+                "owed": [
+                    "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
+                ]
             }
-        ],
-        "verifying": [
-            "phpstan"
-        ],
-        "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
-        "invocation": {
-            "preconditions": [
-                "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
-                "A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.",
-                "A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.",
-                "The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.",
-                "A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway."
-            ],
-            "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
-            "notes": [
-                "Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.",
-                "Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.",
-                "The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file \"--filter\" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.",
-                "Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file \"<path>\" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.",
-                "While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.",
-                "The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.",
-                "`./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.",
-                "A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.",
-                "`PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.",
-                "A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.",
-                "What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.",
-                "A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished."
-            ],
-            "options": [
-                {
-                    "option": "-- <phpunit arguments>",
-                    "description": "Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method."
-                },
-                {
-                    "option": "-d sqlite|mariadb|mysql|postgres",
-                    "description": "Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour."
-                },
-                {
-                    "option": "-a mysqli|pdo_mysql",
-                    "description": "Database driver, only with `-s functional` on mysql or mariadb."
-                },
-                {
-                    "option": "-i <version>",
-                    "description": "Specific database version, for example `-d mariadb -i 11.4`."
-                },
-                {
-                    "option": "-p <php minor>",
-                    "description": "PHP minor version for the container. Only the versions the branch supports are available; check `-h`."
-                },
-                {
-                    "option": "-n",
-                    "description": "Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are."
-                },
-                {
-                    "option": "-c <chunk>/<total>",
-                    "description": "Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them."
-                },
-                {
-                    "option": "-x [-y <port>]",
-                    "description": "Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one."
-                },
-                {
-                    "option": "-b docker|podman",
-                    "description": "Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right."
-                }
-            ],
-            "examples": [
-                {
-                    "purpose": "One unit test file",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
-                },
-                {
-                    "purpose": "One unit test method",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
-                },
-                {
-                    "purpose": "One functional test file on the default sqlite database",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php"
-                },
-                {
-                    "purpose": "Functional tests on mariadb, to reproduce a DBMS-specific bug",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/"
-                },
-                {
-                    "purpose": "Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit"
-                },
-                {
-                    "purpose": "A single npm package script",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css"
-                },
-                {
-                    "purpose": "A composer command inside the core test environment",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
-                }
-            ]
-        },
-        "owed": [
-            "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
-        ]
-    }
 
 runTests: miss
 ~~~~~~~~~~~~~~
@@ -1388,180 +1396,182 @@ Called with:
         "query": "quantumflux"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    ## Before a suite can run
-    - Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.
-    - A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.
-    - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
-    - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
-    - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
+        .. code-block:: text
 
-    No runTests.sh suite matched "quantumflux". Try "unit", "functional", "phpstan", "checkRst", "build", "composer", or "npm".
+            ## Before a suite can run
+            - Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.
+            - A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.
+            - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
+            - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
+            - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
 
-    ## Invoking runTests.sh
-    - Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
-    - Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.
-    - Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.
-    - The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file "--filter" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.
-    - Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file "<path>" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.
-    - While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.
-    - The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.
-    - `./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.
-    - A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.
-    - `PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.
-    - A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.
-    - What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.
-    - A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished.
+            No runTests.sh suite matched "quantumflux". Try "unit", "functional", "phpstan", "checkRst", "build", "composer", or "npm".
 
-    Options:
-    - `-- <phpunit arguments>` — Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method.
-    - `-d sqlite|mariadb|mysql|postgres` — Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour.
-    - `-a mysqli|pdo_mysql` — Database driver, only with `-s functional` on mysql or mariadb.
-    - `-i <version>` — Specific database version, for example `-d mariadb -i 11.4`.
-    - `-p <php minor>` — PHP minor version for the container. Only the versions the branch supports are available; check `-h`.
-    - `-n` — Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are.
-    - `-c <chunk>/<total>` — Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them.
-    - `-x [-y <port>]` — Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one.
-    - `-b docker|podman` — Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right.
+            ## Invoking runTests.sh
+            - Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
+            - Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.
+            - Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.
+            - The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file "--filter" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.
+            - Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file "<path>" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.
+            - While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.
+            - The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.
+            - `./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.
+            - A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.
+            - `PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.
+            - A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.
+            - What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.
+            - A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished.
 
-    Examples:
-    - One unit test file:
-      `CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
-    - One unit test method:
-      `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
-    - One functional test file on the default sqlite database:
-      `CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php`
-    - Functional tests on mariadb, to reproduce a DBMS-specific bug:
-      `CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/`
-    - Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS:
-      `CI=true ./Build/Scripts/runTests.sh -s cglGit`
-    - A single npm package script:
-      `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
-    - A composer command inside the core test environment:
-      `CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload`
+            Options:
+            - `-- <phpunit arguments>` — Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method.
+            - `-d sqlite|mariadb|mysql|postgres` — Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour.
+            - `-a mysqli|pdo_mysql` — Database driver, only with `-s functional` on mysql or mariadb.
+            - `-i <version>` — Specific database version, for example `-d mariadb -i 11.4`.
+            - `-p <php minor>` — PHP minor version for the container. Only the versions the branch supports are available; check `-h`.
+            - `-n` — Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are.
+            - `-c <chunk>/<total>` — Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them.
+            - `-x [-y <port>]` — Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one.
+            - `-b docker|podman` — Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right.
 
-    ## The whole procedure
-    This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId "core/testing/scripts", which needs no resource list.
-    - Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.
-    - Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either.
+            Examples:
+            - One unit test file:
+              `CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
+            - One unit test method:
+              `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
+            - One functional test file on the default sqlite database:
+              `CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php`
+            - Functional tests on mariadb, to reproduce a DBMS-specific bug:
+              `CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/`
+            - Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS:
+              `CI=true ./Build/Scripts/runTests.sh -s cglGit`
+            - A single npm package script:
+              `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
+            - A composer command inside the core test environment:
+              `CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload`
 
-Data:
+            ## The whole procedure
+            This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId "core/testing/scripts", which needs no resource list.
+            - Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.
+            - Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "quantumflux",
-        "paths": [],
-        "scopes": [],
-        "domains": [],
-        "uncoveredPaths": [],
-        "missingPaths": [],
-        "withheld": {
-            "domains": [],
-            "suites": 0
-        },
-        "suites": [],
-        "verifying": [],
-        "verifyingOwed": "",
-        "invocation": {
-            "preconditions": [
-                "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
-                "A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.",
-                "A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.",
-                "The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.",
-                "A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway."
-            ],
-            "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
-            "notes": [
-                "Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.",
-                "Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.",
-                "The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file \"--filter\" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.",
-                "Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file \"<path>\" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.",
-                "While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.",
-                "The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.",
-                "`./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.",
-                "A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.",
-                "`PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.",
-                "A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.",
-                "What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.",
-                "A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished."
-            ],
-            "options": [
-                {
-                    "option": "-- <phpunit arguments>",
-                    "description": "Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method."
+        .. code-block:: json
+
+            {
+                "query": "quantumflux",
+                "paths": [],
+                "scopes": [],
+                "domains": [],
+                "uncoveredPaths": [],
+                "missingPaths": [],
+                "withheld": {
+                    "domains": [],
+                    "suites": 0
                 },
-                {
-                    "option": "-d sqlite|mariadb|mysql|postgres",
-                    "description": "Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour."
+                "suites": [],
+                "verifying": [],
+                "verifyingOwed": "",
+                "invocation": {
+                    "preconditions": [
+                        "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
+                        "A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.",
+                        "A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.",
+                        "The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.",
+                        "A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway."
+                    ],
+                    "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
+                    "notes": [
+                        "Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.",
+                        "Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.",
+                        "The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file \"--filter\" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.",
+                        "Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file \"<path>\" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.",
+                        "While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.",
+                        "The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.",
+                        "`./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.",
+                        "A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.",
+                        "`PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.",
+                        "A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.",
+                        "What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.",
+                        "A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished."
+                    ],
+                    "options": [
+                        {
+                            "option": "-- <phpunit arguments>",
+                            "description": "Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method."
+                        },
+                        {
+                            "option": "-d sqlite|mariadb|mysql|postgres",
+                            "description": "Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour."
+                        },
+                        {
+                            "option": "-a mysqli|pdo_mysql",
+                            "description": "Database driver, only with `-s functional` on mysql or mariadb."
+                        },
+                        {
+                            "option": "-i <version>",
+                            "description": "Specific database version, for example `-d mariadb -i 11.4`."
+                        },
+                        {
+                            "option": "-p <php minor>",
+                            "description": "PHP minor version for the container. Only the versions the branch supports are available; check `-h`."
+                        },
+                        {
+                            "option": "-n",
+                            "description": "Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are."
+                        },
+                        {
+                            "option": "-c <chunk>/<total>",
+                            "description": "Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them."
+                        },
+                        {
+                            "option": "-x [-y <port>]",
+                            "description": "Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one."
+                        },
+                        {
+                            "option": "-b docker|podman",
+                            "description": "Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right."
+                        }
+                    ],
+                    "examples": [
+                        {
+                            "purpose": "One unit test file",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
+                        },
+                        {
+                            "purpose": "One unit test method",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
+                        },
+                        {
+                            "purpose": "One functional test file on the default sqlite database",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php"
+                        },
+                        {
+                            "purpose": "Functional tests on mariadb, to reproduce a DBMS-specific bug",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/"
+                        },
+                        {
+                            "purpose": "Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit"
+                        },
+                        {
+                            "purpose": "A single npm package script",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css"
+                        },
+                        {
+                            "purpose": "A composer command inside the core test environment",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
+                        }
+                    ]
                 },
-                {
-                    "option": "-a mysqli|pdo_mysql",
-                    "description": "Database driver, only with `-s functional` on mysql or mariadb."
-                },
-                {
-                    "option": "-i <version>",
-                    "description": "Specific database version, for example `-d mariadb -i 11.4`."
-                },
-                {
-                    "option": "-p <php minor>",
-                    "description": "PHP minor version for the container. Only the versions the branch supports are available; check `-h`."
-                },
-                {
-                    "option": "-n",
-                    "description": "Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are."
-                },
-                {
-                    "option": "-c <chunk>/<total>",
-                    "description": "Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them."
-                },
-                {
-                    "option": "-x [-y <port>]",
-                    "description": "Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one."
-                },
-                {
-                    "option": "-b docker|podman",
-                    "description": "Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right."
-                }
-            ],
-            "examples": [
-                {
-                    "purpose": "One unit test file",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
-                },
-                {
-                    "purpose": "One unit test method",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
-                },
-                {
-                    "purpose": "One functional test file on the default sqlite database",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php"
-                },
-                {
-                    "purpose": "Functional tests on mariadb, to reproduce a DBMS-specific bug",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/"
-                },
-                {
-                    "purpose": "Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit"
-                },
-                {
-                    "purpose": "A single npm package script",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css"
-                },
-                {
-                    "purpose": "A composer command inside the core test environment",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
-                }
-            ]
-        },
-        "owed": [
-            "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
-        ]
-    }
+                "owed": [
+                    "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
+                ]
+            }
 
 runTests: narrowed by paths
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1577,330 +1587,332 @@ Called with:
         ]
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    ## Before a suite can run
-    - Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.
-    - A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.
-    - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
-    - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
-    - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
+        .. code-block:: text
 
-    Narrowed to the css domain(s) the given paths touch. Suites outside them cannot fail on this change; call again without paths to see all of them. No given path reached php, fluid, typoscript, xliff, docs and typescript, which leaves 27 suites out. A path landing in one of those domains means calling again.
+            ## Before a suite can run
+            - Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.
+            - A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.
+            - A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.
+            - The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.
+            - A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway.
 
-    Every change in these domains runs build and lintScss, and typo3_task_guide makes them its checks. Each carries base below. The rest can fail on these paths and needs a reason of its own.
+            Narrowed to the css domain(s) the given paths touch. Suites outside them cannot fail on this change; call again without paths to see all of them. No given path reached php, fluid, typoscript, xliff, docs and typescript, which leaves 27 suites out. A path landing in one of those domains means calling again.
 
-    The suites that verify: build, build-css and lintScss. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
+            Every change in these domains runs build and lintScss, and typo3_task_guide makes them its checks. Each carries base below. The rest can fail on these paths and needs a reason of its own.
 
-    ## build
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s build`
-    Running it: change — it rewrites files in the checkout.
-    Base: every change in its domains runs it.
+            The suites that verify: build, build-css and lintScss. A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.
 
-    Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.
-    Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId="core/contribution/committed-build-output" is the procedure and what it was measured on.
+            ## build
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s build`
+            Running it: change — it rewrites files in the checkout.
+            Base: every change in its domains runs it.
 
-    ## e2e-prepare
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s e2e-prepare`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+            Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.
+            Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId="core/contribution/committed-build-output" is the procedure and what it was measured on.
 
-    Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.
-    Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.
+            ## e2e-prepare
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s e2e-prepare`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
-    ## build-css
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
-    Running it: change — it rewrites files in the checkout.
+            Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.
+            Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.
 
-    Focused CSS build from Build/package.json.
-    Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.
+            ## build-css
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
+            Running it: change — it rewrites files in the checkout.
 
-    ## e2e-browser
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s e2e-browser`
-    Running it: unknown — the body does not say what it does to the checkout.
-    Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
+            Focused CSS build from Build/package.json.
+            Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.
 
-    The e2e suite in Playwright's own UI, served from the container.
-    Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.
+            ## e2e-browser
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s e2e-browser`
+            Running it: unknown — the body does not say what it does to the checkout.
+            Verifies nothing: a run says nothing about the change, so a report owes it no Not run line.
 
-    ## lintScss
-    Command from the TYPO3 core root:
-    `CI=true ./Build/Scripts/runTests.sh -s lintScss`
-    Running it: check — it reports and hands the checkout back as it was.
-    Base: every change in its domains runs it.
+            The e2e suite in Playwright's own UI, served from the container.
+            Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.
 
-    SCSS linting with TYPO3's stylelint setup.
-    Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.
+            ## lintScss
+            Command from the TYPO3 core root:
+            `CI=true ./Build/Scripts/runTests.sh -s lintScss`
+            Running it: check — it reports and hands the checkout back as it was.
+            Base: every change in its domains runs it.
 
-    ## Looking at it rather than asserting it
-    The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId "any/testing/browser-check", which needs no resource list.
-    - The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.
-    - Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.
+            SCSS linting with TYPO3's stylelint setup.
+            Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.
 
-    ## Invoking runTests.sh
-    - Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
-    - Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.
-    - Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.
-    - The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file "--filter" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.
-    - Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file "<path>" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.
-    - While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.
-    - The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.
-    - `./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.
-    - A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.
-    - `PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.
-    - A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.
-    - What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.
-    - A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished.
+            ## Looking at it rather than asserting it
+            The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId "any/testing/browser-check", which needs no resource list.
+            - The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.
+            - Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.
 
-    Options:
-    - `-- <phpunit arguments>` — Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method.
-    - `-d sqlite|mariadb|mysql|postgres` — Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour.
-    - `-a mysqli|pdo_mysql` — Database driver, only with `-s functional` on mysql or mariadb.
-    - `-i <version>` — Specific database version, for example `-d mariadb -i 11.4`.
-    - `-p <php minor>` — PHP minor version for the container. Only the versions the branch supports are available; check `-h`.
-    - `-n` — Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are.
-    - `-c <chunk>/<total>` — Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them.
-    - `-x [-y <port>]` — Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one.
-    - `-b docker|podman` — Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right.
+            ## Invoking runTests.sh
+            - Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.
+            - Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.
+            - Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.
+            - The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file "--filter" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.
+            - Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file "<path>" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.
+            - While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.
+            - The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.
+            - `./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.
+            - A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.
+            - `PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.
+            - A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.
+            - What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.
+            - A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished.
 
-    Examples:
-    - One unit test file:
-      `CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
-    - One unit test method:
-      `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
-    - One functional test file on the default sqlite database:
-      `CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php`
-    - Functional tests on mariadb, to reproduce a DBMS-specific bug:
-      `CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/`
-    - Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS:
-      `CI=true ./Build/Scripts/runTests.sh -s cglGit`
-    - A single npm package script:
-      `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
-    - A composer command inside the core test environment:
-      `CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload`
+            Options:
+            - `-- <phpunit arguments>` — Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method.
+            - `-d sqlite|mariadb|mysql|postgres` — Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour.
+            - `-a mysqli|pdo_mysql` — Database driver, only with `-s functional` on mysql or mariadb.
+            - `-i <version>` — Specific database version, for example `-d mariadb -i 11.4`.
+            - `-p <php minor>` — PHP minor version for the container. Only the versions the branch supports are available; check `-h`.
+            - `-n` — Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are.
+            - `-c <chunk>/<total>` — Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them.
+            - `-x [-y <port>]` — Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one.
+            - `-b docker|podman` — Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right.
 
-    ## The whole procedure
-    This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId "core/testing/scripts", which needs no resource list.
-    - Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.
-    - Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either.
+            Examples:
+            - One unit test file:
+              `CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
+            - One unit test method:
+              `CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php`
+            - One functional test file on the default sqlite database:
+              `CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php`
+            - Functional tests on mariadb, to reproduce a DBMS-specific bug:
+              `CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/`
+            - Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS:
+              `CI=true ./Build/Scripts/runTests.sh -s cglGit`
+            - A single npm package script:
+              `CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css`
+            - A composer command inside the core test environment:
+              `CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload`
 
-Data:
+            ## The whole procedure
+            This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId "core/testing/scripts", which needs no resource list.
+            - Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.
+            - Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "what do I have to run",
-        "paths": [
-            "Build/Sources/Sass/component/_card.scss"
-        ],
-        "scopes": [
+        .. code-block:: json
+
             {
-                "path": "Build/Sources/Sass/component/_card.scss",
-                "scope": "core"
+                "query": "what do I have to run",
+                "paths": [
+                    "Build/Sources/Sass/component/_card.scss"
+                ],
+                "scopes": [
+                    {
+                        "path": "Build/Sources/Sass/component/_card.scss",
+                        "scope": "core"
+                    }
+                ],
+                "domains": [
+                    "css"
+                ],
+                "uncoveredPaths": [],
+                "missingPaths": [],
+                "withheld": {
+                    "domains": [
+                        "php",
+                        "fluid",
+                        "typoscript",
+                        "xliff",
+                        "docs",
+                        "typescript"
+                    ],
+                    "suites": 27
+                },
+                "suites": [
+                    {
+                        "suite": "build",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s build",
+                        "runs": "change",
+                        "targeted": null,
+                        "description": "Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.",
+                        "whenToUse": "Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId=\"core/contribution/committed-build-output\" is the procedure and what it was measured on.",
+                        "domains": [
+                            "typescript",
+                            "css"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": "TYPO3 v13 and newer"
+                    },
+                    {
+                        "suite": "e2e-prepare",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-prepare",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.",
+                        "whenToUse": "Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.",
+                        "domains": [
+                            "php",
+                            "typescript",
+                            "fluid",
+                            "css"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": "TYPO3 v13 and newer"
+                    },
+                    {
+                        "suite": "build-css",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css",
+                        "runs": "change",
+                        "targeted": null,
+                        "description": "Focused CSS build from Build/package.json.",
+                        "whenToUse": "Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.",
+                        "domains": [
+                            "css"
+                        ],
+                        "base": false,
+                        "verifies": true,
+                        "versions": ""
+                    },
+                    {
+                        "suite": "e2e-browser",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-browser",
+                        "runs": "unknown",
+                        "targeted": null,
+                        "description": "The e2e suite in Playwright's own UI, served from the container.",
+                        "whenToUse": "Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.",
+                        "domains": [
+                            "php",
+                            "typescript",
+                            "fluid",
+                            "css"
+                        ],
+                        "base": false,
+                        "verifies": false,
+                        "versions": "TYPO3 v14 and newer"
+                    },
+                    {
+                        "suite": "lintScss",
+                        "command": "CI=true ./Build/Scripts/runTests.sh -s lintScss",
+                        "runs": "check",
+                        "targeted": null,
+                        "description": "SCSS linting with TYPO3's stylelint setup.",
+                        "whenToUse": "Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.",
+                        "domains": [
+                            "css"
+                        ],
+                        "base": true,
+                        "verifies": true,
+                        "versions": ""
+                    }
+                ],
+                "verifying": [
+                    "build",
+                    "build-css",
+                    "lintScss"
+                ],
+                "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
+                "invocation": {
+                    "preconditions": [
+                        "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
+                        "A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.",
+                        "A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.",
+                        "The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.",
+                        "A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway."
+                    ],
+                    "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
+                    "notes": [
+                        "Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.",
+                        "Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.",
+                        "The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file \"--filter\" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.",
+                        "Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file \"<path>\" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.",
+                        "While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.",
+                        "The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.",
+                        "`./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.",
+                        "A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.",
+                        "`PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.",
+                        "A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.",
+                        "What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.",
+                        "A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished."
+                    ],
+                    "options": [
+                        {
+                            "option": "-- <phpunit arguments>",
+                            "description": "Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method."
+                        },
+                        {
+                            "option": "-d sqlite|mariadb|mysql|postgres",
+                            "description": "Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour."
+                        },
+                        {
+                            "option": "-a mysqli|pdo_mysql",
+                            "description": "Database driver, only with `-s functional` on mysql or mariadb."
+                        },
+                        {
+                            "option": "-i <version>",
+                            "description": "Specific database version, for example `-d mariadb -i 11.4`."
+                        },
+                        {
+                            "option": "-p <php minor>",
+                            "description": "PHP minor version for the container. Only the versions the branch supports are available; check `-h`."
+                        },
+                        {
+                            "option": "-n",
+                            "description": "Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are."
+                        },
+                        {
+                            "option": "-c <chunk>/<total>",
+                            "description": "Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them."
+                        },
+                        {
+                            "option": "-x [-y <port>]",
+                            "description": "Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one."
+                        },
+                        {
+                            "option": "-b docker|podman",
+                            "description": "Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right."
+                        }
+                    ],
+                    "examples": [
+                        {
+                            "purpose": "One unit test file",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
+                        },
+                        {
+                            "purpose": "One unit test method",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
+                        },
+                        {
+                            "purpose": "One functional test file on the default sqlite database",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php"
+                        },
+                        {
+                            "purpose": "Functional tests on mariadb, to reproduce a DBMS-specific bug",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/"
+                        },
+                        {
+                            "purpose": "Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit"
+                        },
+                        {
+                            "purpose": "A single npm package script",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css"
+                        },
+                        {
+                            "purpose": "A composer command inside the core test environment",
+                            "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
+                        }
+                    ]
+                },
+                "owed": [
+                    "Every change in these domains runs build and lintScss, and typo3_task_guide makes them its checks. The rest can fail on these paths and needs a reason of its own.",
+                    "The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId \"any/testing/browser-check\", which needs no resource list.\n- The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.\n- Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.",
+                    "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
+                ]
             }
-        ],
-        "domains": [
-            "css"
-        ],
-        "uncoveredPaths": [],
-        "missingPaths": [],
-        "withheld": {
-            "domains": [
-                "php",
-                "fluid",
-                "typoscript",
-                "xliff",
-                "docs",
-                "typescript"
-            ],
-            "suites": 27
-        },
-        "suites": [
-            {
-                "suite": "build",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s build",
-                "runs": "change",
-                "targeted": null,
-                "description": "Frontend build for TypeScript, Sass, Contrib, and assets. It rewrites the committed JavaScript and CSS below typo3/sysext/*/Resources/Public/, and its npm install can rewrite Build/package-lock.json.",
-                "whenToUse": "Use when backend UI assets, TypeScript, Sass, or generated assets change. It is also the suite that produces the committed JavaScript of a patch and the one that resolves a backport conflicting in one, run in a git worktree branched off the target branch so the checkout you work in stays as it is: typo3_rule_lookup with documentId=\"core/contribution/committed-build-output\" is the procedure and what it was measured on.",
-                "domains": [
-                    "typescript",
-                    "css"
-                ],
-                "base": true,
-                "verifies": true,
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "e2e-prepare",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-prepare",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "Installs the same instance the e2e suite runs against, publishes it on a local port and leaves it up.",
-                "whenToUse": "Use to look at a backend change in a real browser. It prints the instance URL and then waits: Enter re-runs the specs in the container, Control-C ends it. That wait is a read from /dev/tty, so the suite needs a controlling terminal, and CI=true does not stand in for one. A run that has none fails on the redirect and falls straight through to the cleanup every run ends in, which takes the instance down while the summary still reports SUCCESS. That cleanup is what removes it, so a run killed before reaching it leaves the containers up with the instance still served, and the invocation notes say how to find and stop them. The two local Playwright commands it prints, headless and in the UI with PLAYWRIGHT_BASE_URL already set, are for iterating by eye rather than for reporting: they run on the host, where the browsers are an `npm --prefix=Build run playwright:install` of their own that the containerised suites never need. What a review reports is the `-s e2e` run.",
-                "domains": [
-                    "php",
-                    "typescript",
-                    "fluid",
-                    "css"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": "TYPO3 v13 and newer"
-            },
-            {
-                "suite": "build-css",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css",
-                "runs": "change",
-                "targeted": null,
-                "description": "Focused CSS build from Build/package.json.",
-                "whenToUse": "Use while iterating on Sass/CSS changes when a full frontend build is not needed. This maps to grunt css.",
-                "domains": [
-                    "css"
-                ],
-                "base": false,
-                "verifies": true,
-                "versions": ""
-            },
-            {
-                "suite": "e2e-browser",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s e2e-browser",
-                "runs": "unknown",
-                "targeted": null,
-                "description": "The e2e suite in Playwright's own UI, served from the container.",
-                "whenToUse": "Use to watch a spec run and step through it. It prints the UI URL and the instance URL beside it, then waits on a keypress it reads from /dev/tty. Like e2e-prepare it needs a controlling terminal: a run that has none falls through to the cleanup that removes the containers, and still reports SUCCESS. A run killed before that cleanup leaves them up instead, which the invocation notes say how to read and end.",
-                "domains": [
-                    "php",
-                    "typescript",
-                    "fluid",
-                    "css"
-                ],
-                "base": false,
-                "verifies": false,
-                "versions": "TYPO3 v14 and newer"
-            },
-            {
-                "suite": "lintScss",
-                "command": "CI=true ./Build/Scripts/runTests.sh -s lintScss",
-                "runs": "check",
-                "targeted": null,
-                "description": "SCSS linting with TYPO3's stylelint setup.",
-                "whenToUse": "Use when Sass or CSS sources change. Internally this runs grunt stylelint in the Build directory.",
-                "domains": [
-                    "css"
-                ],
-                "base": true,
-                "verifies": true,
-                "versions": ""
-            }
-        ],
-        "verifying": [
-            "build",
-            "build-css",
-            "lintScss"
-        ],
-        "verifyingOwed": "A report on the change names each of them on a Ran line or on a Not run line, so its Not run line is this list minus what ran.",
-        "invocation": {
-            "preconditions": [
-                "Run runTests.sh from the TYPO3 core checkout root. It starts a container and runs the suite inside it. Which runtime that is comes from a probe rather than from a default: podman where `type podman` succeeds, docker otherwise. So a machine with only docker runs docker with no option passed, and the summary line `Container runtime: <bin>` is what the run actually used.",
-                "A suite runs against the `vendor/` and `bin/` of the directory it is started from, because the script mounts that directory and nothing else. Whether they are in that directory is what decides it, so look rather than reason from what kind of checkout it is: a fresh clone has neither, a git worktree of a checkout that has them starts without them because `/vendor/*` and `/bin/*` are gitignored, and tooling that provisions worktrees may put them there anyway. The run then stops at `/usr/local/bin/docker-php-entrypoint: exec: line 9: bin/phpunit: not found`, which names phpunit rather than the directory. Run `CI=true ./Build/Scripts/runTests.sh -s composerInstall` once in that directory first. Symlinking `vendor/` and `bin/` from another checkout does not stand in for it: the target sits outside the one mount and does not resolve inside the container.",
-                "A `vendor/` tooling put into a worktree is a copy of another checkout's, and it can be behind this branch's `composer.lock`, which is tracked. Nothing reports that: the suites run on the copy, and a static analyser or a fixer a release apart reports differently. `CI=true ./Build/Scripts/runTests.sh -s composer -- install --dry-run` says whether the two agree, and `-s composerInstall` brings them together whether they did or not.",
-                "The node suites need none of that. `-s build`, `-s lintTypescript`, `-s lintScss`, `-s lintHtml`, `-s unitJavascript` and `-s npm` run npm inside `Build/`, whose `package.json` and `package-lock.json` are tracked, and install the `node_modules` they need themselves. So a fresh clone and a bare git worktree run them without a composerInstall first, which is how a build is run for a checkout that has to stay as it is. Measured for `-s build` on 2026-08-26, in a worktree at the tip of 14.3 and one at the tip of main: both ran without a composerInstall and left `git status` empty. The other five are read off the suite bodies.",
-                "A checkout of an older revision runs that revision's own script against the `vendor/` on disk, and the two disagree about PHP. `Build/Scripts/runTests.sh` carries a default PHP version per branch, so a revision from before a raise starts its container with the older one. The run stops in Composer's platform check with `Your Composer dependencies require a PHP version >= 8.5.0. You are running 8.2.31.`, which names the two PHP versions rather than the revision they came from. Read in `.checkouts/` on 2026-08-26: main defaults to 8.5 and requires `^8.5` since the raise of 2026-07-16, and a revision from before it defaults to 8.2. `-p <the version vendor/ requires>` gets past it where the checked-out script accepts that version, and `-h` says which ones it accepts. Rebasing the revision onto what `vendor/` was installed for is the other fix, and the one a stale patch set needs anyway."
-            ],
-            "beforeYouRun": "Copy untracked work aside before starting a suite, and a new test file with its fixtures under a `Tests/` directory is exactly that. `runs: unknown` is what most suites carry, and it means nothing here reads what the core's own test code writes into the checkout the container mounts. One session lost four such files during a run and got them back only from a copy it had made on a hunch. Committing is the other way out and is not available to a session working the core's own rules, which is why the copy leads. The script itself removes files only in `-s clean`, `-s cleanBuild`, `-s cleanCache`, `-s cleanRenderedDocumentation` and `-s cleanTests`, so a file missing after any other suite did not go by `runTests.sh`.",
-            "notes": [
-                "Prefix scripted and non-interactive runs with `CI=true`. It drops the interactive container flags, skips the SIGINT trap, and selects the CI phpstan config. Without a TTY the script also removes the interactive flags on its own, but `CI=true` is the explicit form and the one to use from an agent. What it does not do is stand in for a terminal: a suite that waits for a keypress reads /dev/tty itself, and its entry says what a run without one costs.",
-                "Everything after `--` is handed to the underlying tool unchanged: phpunit for the test suites, npm for `-s npm`, composer for `-s composer`.",
-                "The script stops reading its own options at the first word that is not one. `getopts` ends there and `shift $((OPTIND - 1))` hands that word and everything after it to phpunit, the `--` included. So `-s functional -d sqlite <path> -- --filter someTest` leaves `<path> -- --filter someTest` for phpunit, and the failure reads `Test file \"--filter\" not found`. An option written after a path is handed on the same way: `-d sqlite` behind the path never reaches the script. Every option the script owns stands before the `--`, and the path stands after it beside the filter.",
-                "Nothing checks a path before the containers are up: the script hands the list to phpunit unchanged, and phpunit resolves every entry before it builds a suite. One path that does not exist ends the run with `Test file \"<path>\" not found`, and the paths beside it never run. A misspelling, or a system extension carrying no `Tests/Functional` at all, costs a whole container start rather than a failing test. Confirm the paths exist in the checkout before starting the run.",
-                "While iterating, run a single test file or a single test method instead of a whole suite; a full functional run costs minutes per round.",
-                "The exception is a change that alters rendered output — a URI, a tag, an attribute other tests assert verbatim. Narrowing then reports the blast radius one failing suite at a time, and each round costs a run. Find the expectations by searching the checkout first and fix them in one pass; `typo3_hint_lookup` for `core-tests` says where they hide, which is largely not in files named `*Test.php`. Run the full functional suite once to confirm, rather than widening the path set round after round.",
-                "`./Build/Scripts/runTests.sh -h` is how a suite is confirmed to exist on the branch: it lists the suites and option values that branch supports. Grepping the case label in the script misses a glob — the label is `build*)` on 13.4 and up, and `buildCss)` and `buildJavascript)` on 12.4, so a search for `build)` finds nothing on any covered branch.",
-                "A suite this answer does not list can still run git over the working tree: `checkIsoDatabase` and `checkCharsets` regenerate a table, discard uncommitted edits to composer.json and composer.lock, and stage everything with `git add *`.",
-                "`PLAYWRIGHT_USE_EXISTING_INSTANCE=1` in the environment keeps the instance a previous `-s e2e-prepare` installed: the run skips the composer install of the test instance and starts in seconds instead of minutes. Only the branches that carry the e2e suites read it.",
-                "A session with no terminal reaches the suites that wait by allocating one: `script -qec '<the runTests.sh command>' /dev/null` (util-linux), with stdin from something that stays open and never writes, such as a fifo. `/dev/null` as stdin ends the wait immediately and `/dev/zero` floods the terminal with NUL bytes.",
-                "What a run left behind is read from the container runtime rather than from its exit code. The cleanup every run ends in kills the containers on that run's network. A run that never reaches it — a failing wait, a terminated wrapper — leaves `ac-web-<suffix>` and `ac-phpfpm-<suffix>` up with the test instance still served. `docker ps` names them, and `docker port ac-web-<suffix> 80/tcp` prints where the instance listens: a random high port on 127.0.0.1 that only `-s e2e-prepare` and `-s e2e-browser` publish. `docker rm -f ac-web-<suffix> ac-phpfpm-<suffix>` ends it, and `podman` stands in for `docker` in all three where that is the runtime the summary named. The suffix is random per run and the summary prints it, so a run that printed no summary is found by name in that listing.",
-                "A session waits for a run in the background on the client's own notice that the task is complete. Where it has to poll instead, it polls the output for the end of the summary. The script prints `SUCCESS` or `FAILURE` to stderr in that summary, so the session sends `2>&1` into the file it reads. A process search for the script name never ends: `pgrep -f runTests.sh` in a shell loop matches the loop's own command line. One session waited on that for 26 minutes after its suites had finished."
-            ],
-            "options": [
-                {
-                    "option": "-- <phpunit arguments>",
-                    "description": "Passthrough to phpunit. A path limits the run to one test file, `--filter <methodName>` to one test method."
-                },
-                {
-                    "option": "-d sqlite|mariadb|mysql|postgres",
-                    "description": "Database for `-s functional` and for whichever installer suite the branch carries. sqlite is the default and the fastest; use mariadb or postgres to reproduce DBMS-specific behaviour."
-                },
-                {
-                    "option": "-a mysqli|pdo_mysql",
-                    "description": "Database driver, only with `-s functional` on mysql or mariadb."
-                },
-                {
-                    "option": "-i <version>",
-                    "description": "Specific database version, for example `-d mariadb -i 11.4`."
-                },
-                {
-                    "option": "-p <php minor>",
-                    "description": "PHP minor version for the container. Only the versions the branch supports are available; check `-h`."
-                },
-                {
-                    "option": "-n",
-                    "description": "Dry run for the `cgl` suites, and for any other suite the branch lists under it: report issues without modifying files. `-h` says which ones those are."
-                },
-                {
-                    "option": "-c <chunk>/<total>",
-                    "description": "Split `-s functional`, and the browser suite where the branch has one, into chunks and run one of them."
-                },
-                {
-                    "option": "-x [-y <port>]",
-                    "description": "Enable xdebug towards a listening IDE (default port 9003) for `-s unit`, `-s functional`, and the installer suite where the branch has one."
-                },
-                {
-                    "option": "-b docker|podman",
-                    "description": "Container runtime. Left off, the script probes for podman and takes docker where there is none. `-h` calls podman the default, so on a machine without it the help and the run disagree and the run is right."
-                }
-            ],
-            "examples": [
-                {
-                    "purpose": "One unit test file",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
-                },
-                {
-                    "purpose": "One unit test method",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s unit -- --filter fixPermissionsSetsGroup typo3/sysext/core/Tests/Unit/Utility/GeneralUtilityTest.php"
-                },
-                {
-                    "purpose": "One functional test file on the default sqlite database",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s functional -- typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php"
-                },
-                {
-                    "purpose": "Functional tests on mariadb, to reproduce a DBMS-specific bug",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s functional -d mariadb -- typo3/sysext/impexp/Tests/Functional/"
-                },
-                {
-                    "purpose": "Coding guidelines of the latest commit only, from a normal checkout — from a git worktree it reads no file and still reports SUCCESS",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s cglGit"
-                },
-                {
-                    "purpose": "A single npm package script",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s npm -- run build-css"
-                },
-                {
-                    "purpose": "A composer command inside the core test environment",
-                    "command": "CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload"
-                }
-            ]
-        },
-        "owed": [
-            "Every change in these domains runs build and lintScss, and typo3_task_guide makes them its checks. The rest can fail on these paths and needs a reason of its own.",
-            "The suites above start a browser and stop there. The rest is one call away — typo3_rule_lookup with documentId \"any/testing/browser-check\", which needs no resource list.\n- The instance `-s e2e-prepare` installs is a styleguide and carries no content beyond the components it demonstrates. Where the defect needs content, the installation that has it is the one to look at, and a browser in a container reaches a running DDEV site over `ddev_default` rather than over `host.docker.internal`.\n- Where the harness and its screenshots go: `Build/typo3temp/` is not ignored, so one written there lands in the next commit.",
-            "This is the suites and how to invoke them. The rest is one call away — typo3_rule_lookup with documentId \"core/testing/scripts\", which needs no resource list.\n- Why a suite runs against the `vendor/` and `bin/` of the directory it was started from, and what `exec: line 9: bin/phpunit: not found` means — it names phpunit rather than the directory.\n- Why `-s cglGit` reports SUCCESS having read no file from a git worktree, and that `-s cgl` is the one that works from either."
-        ]
-    }

@@ -1,4 +1,4 @@
-.. _typo3_ter_lookup:
+:navigation-title: ter_lookup
 
 ``typo3_ter_lookup``
 ====================
@@ -30,9 +30,13 @@ id="extension-ter-release". This tool reads only, with no credential. You
 register a key, upload a version and transfer an extension yourself, through
 Tailor and the token it carries. Answers from: network.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: true``
+.. facts::
 
-Answers from :ref:`network <answer-sources-network>`.
+    :Answers from: :ref:`network <answer-sources-network>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``true``
 
 Takes
 -----
@@ -203,69 +207,71 @@ Called with:
         "limit": 3
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    TYPO3 Extension Repository: blog — 32 published versions, highest 14.0.1 (stable, uploaded 2026-08-20)
-    https://extensions.typo3.org/extension/blog
+        .. code-block:: text
 
-    ## The newest 3 of 32, by version number
-    Version order and not upload order: a release on an older line sits further down and may have been uploaded after the ones above it, which the days say.
-    - 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99
-    - 14.0.0 · stable · uploaded 2025-08-25 · TYPO3 13 · >=13.4.15 <=13.4.99
-    - 13.0.1 · stable · uploaded 2025-08-25 · TYPO3 12, 13 · >=12.4.22 <=13.4.99
+            TYPO3 Extension Repository: blog — 32 published versions, highest 14.0.1 (stable, uploaded 2026-08-20)
+            https://extensions.typo3.org/extension/blog
 
-Data:
+            ## The newest 3 of 32, by version number
+            Version order and not upload order: a release on an older line sits further down and may have been uploaded after the ones above it, which the days say.
+            - 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99
+            - 14.0.0 · stable · uploaded 2025-08-25 · TYPO3 13 · >=13.4.15 <=13.4.99
+            - 13.0.1 · stable · uploaded 2025-08-25 · TYPO3 12, 13 · >=12.4.22 <=13.4.99
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "answered",
-        "source": "https://extensions.typo3.org",
-        "url": "https://extensions.typo3.org/api/v1/extension/blog/versions",
-        "page": "https://extensions.typo3.org/extension/blog",
-        "extension": "blog",
-        "query": "",
-        "extensionVersion": "",
-        "held": null,
-        "total": 32,
-        "versions": [
+        .. code-block:: json
+
             {
-                "number": "14.0.1",
-                "state": "stable",
-                "uploaded": "2026-08-20",
-                "majors": [
-                    13,
-                    14
+                "status": "answered",
+                "source": "https://extensions.typo3.org",
+                "url": "https://extensions.typo3.org/api/v1/extension/blog/versions",
+                "page": "https://extensions.typo3.org/extension/blog",
+                "extension": "blog",
+                "query": "",
+                "extensionVersion": "",
+                "held": null,
+                "total": 32,
+                "versions": [
+                    {
+                        "number": "14.0.1",
+                        "state": "stable",
+                        "uploaded": "2026-08-20",
+                        "majors": [
+                            13,
+                            14
+                        ],
+                        "constraint": ">=13.4.15 <=14.3.99"
+                    },
+                    {
+                        "number": "14.0.0",
+                        "state": "stable",
+                        "uploaded": "2025-08-25",
+                        "majors": [
+                            13
+                        ],
+                        "constraint": ">=13.4.15 <=13.4.99"
+                    },
+                    {
+                        "number": "13.0.1",
+                        "state": "stable",
+                        "uploaded": "2025-08-25",
+                        "majors": [
+                            12,
+                            13
+                        ],
+                        "constraint": ">=12.4.22 <=13.4.99"
+                    }
                 ],
-                "constraint": ">=13.4.15 <=14.3.99"
-            },
-            {
-                "number": "14.0.0",
-                "state": "stable",
-                "uploaded": "2025-08-25",
-                "majors": [
-                    13
-                ],
-                "constraint": ">=13.4.15 <=13.4.99"
-            },
-            {
-                "number": "13.0.1",
-                "state": "stable",
-                "uploaded": "2025-08-25",
-                "majors": [
-                    12,
-                    13
-                ],
-                "constraint": ">=12.4.22 <=13.4.99"
+                "matches": [],
+                "searches": [],
+                "unavailable": null,
+                "owed": []
             }
-        ],
-        "matches": [],
-        "searches": [],
-        "unavailable": null,
-        "owed": []
-    }
 
 ter: is this version already out
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -280,71 +286,73 @@ Called with:
         "limit": 3
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    TYPO3 Extension Repository: blog — 32 published versions, highest 14.0.1 (stable, uploaded 2026-08-20)
-    https://extensions.typo3.org/extension/blog
+        .. code-block:: text
 
-    The registry holds 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99.
+            TYPO3 Extension Repository: blog — 32 published versions, highest 14.0.1 (stable, uploaded 2026-08-20)
+            https://extensions.typo3.org/extension/blog
 
-    ## The newest 3 of 32, by version number
-    Version order and not upload order: a release on an older line sits further down and may have been uploaded after the ones above it, which the days say.
-    - 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99
-    - 14.0.0 · stable · uploaded 2025-08-25 · TYPO3 13 · >=13.4.15 <=13.4.99
-    - 13.0.1 · stable · uploaded 2025-08-25 · TYPO3 12, 13 · >=12.4.22 <=13.4.99
+            The registry holds 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99.
 
-Data:
+            ## The newest 3 of 32, by version number
+            Version order and not upload order: a release on an older line sits further down and may have been uploaded after the ones above it, which the days say.
+            - 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99
+            - 14.0.0 · stable · uploaded 2025-08-25 · TYPO3 13 · >=13.4.15 <=13.4.99
+            - 13.0.1 · stable · uploaded 2025-08-25 · TYPO3 12, 13 · >=12.4.22 <=13.4.99
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "answered",
-        "source": "https://extensions.typo3.org",
-        "url": "https://extensions.typo3.org/api/v1/extension/blog/versions",
-        "page": "https://extensions.typo3.org/extension/blog",
-        "extension": "blog",
-        "query": "",
-        "extensionVersion": "14.0.1",
-        "held": true,
-        "total": 32,
-        "versions": [
+        .. code-block:: json
+
             {
-                "number": "14.0.1",
-                "state": "stable",
-                "uploaded": "2026-08-20",
-                "majors": [
-                    13,
-                    14
+                "status": "answered",
+                "source": "https://extensions.typo3.org",
+                "url": "https://extensions.typo3.org/api/v1/extension/blog/versions",
+                "page": "https://extensions.typo3.org/extension/blog",
+                "extension": "blog",
+                "query": "",
+                "extensionVersion": "14.0.1",
+                "held": true,
+                "total": 32,
+                "versions": [
+                    {
+                        "number": "14.0.1",
+                        "state": "stable",
+                        "uploaded": "2026-08-20",
+                        "majors": [
+                            13,
+                            14
+                        ],
+                        "constraint": ">=13.4.15 <=14.3.99"
+                    },
+                    {
+                        "number": "14.0.0",
+                        "state": "stable",
+                        "uploaded": "2025-08-25",
+                        "majors": [
+                            13
+                        ],
+                        "constraint": ">=13.4.15 <=13.4.99"
+                    },
+                    {
+                        "number": "13.0.1",
+                        "state": "stable",
+                        "uploaded": "2025-08-25",
+                        "majors": [
+                            12,
+                            13
+                        ],
+                        "constraint": ">=12.4.22 <=13.4.99"
+                    }
                 ],
-                "constraint": ">=13.4.15 <=14.3.99"
-            },
-            {
-                "number": "14.0.0",
-                "state": "stable",
-                "uploaded": "2025-08-25",
-                "majors": [
-                    13
-                ],
-                "constraint": ">=13.4.15 <=13.4.99"
-            },
-            {
-                "number": "13.0.1",
-                "state": "stable",
-                "uploaded": "2025-08-25",
-                "majors": [
-                    12,
-                    13
-                ],
-                "constraint": ">=12.4.22 <=13.4.99"
+                "matches": [],
+                "searches": [],
+                "unavailable": null,
+                "owed": []
             }
-        ],
-        "matches": [],
-        "searches": [],
-        "unavailable": null,
-        "owed": []
-    }
 
 ter: nothing is published under this key
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -357,33 +365,35 @@ Called with:
         "extension": "quantumflux_transponder"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    TYPO3 Extension Repository: nothing is published under the key "quantumflux_transponder" at https://extensions.typo3.org.
-    The registry holds no extension by that key. That is not a statement that no such package exists: one distributed through Composer alone is never registered here, and a key can be registered without a version having been uploaded to it yet.
+        .. code-block:: text
 
-Data:
+            TYPO3 Extension Repository: nothing is published under the key "quantumflux_transponder" at https://extensions.typo3.org.
+            The registry holds no extension by that key. That is not a statement that no such package exists: one distributed through Composer alone is never registered here, and a key can be registered without a version having been uploaded to it yet.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "empty",
-        "source": "https://extensions.typo3.org",
-        "url": "https://extensions.typo3.org/api/v1/extension/quantumflux_transponder/versions",
-        "page": "https://extensions.typo3.org/extension/quantumflux_transponder",
-        "extension": "quantumflux_transponder",
-        "query": "",
-        "extensionVersion": "",
-        "held": null,
-        "total": 0,
-        "versions": [],
-        "matches": [],
-        "searches": [],
-        "unavailable": null,
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "status": "empty",
+                "source": "https://extensions.typo3.org",
+                "url": "https://extensions.typo3.org/api/v1/extension/quantumflux_transponder/versions",
+                "page": "https://extensions.typo3.org/extension/quantumflux_transponder",
+                "extension": "quantumflux_transponder",
+                "query": "",
+                "extensionVersion": "",
+                "held": null,
+                "total": 0,
+                "versions": [],
+                "matches": [],
+                "searches": [],
+                "unavailable": null,
+                "owed": []
+            }
 
 ter: a composer package name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -396,33 +406,35 @@ Called with:
         "extension": "georgringer/news"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    TYPO3 Extension Repository: "georgringer/news" is not an extension key, so nothing was read. That is about the name and not about what is published.
-    A key is lowercase letters, digits and underscores, three to thirty characters, starting with a letter. A slash or a dash means a Composer package name — the key is what extra.typo3/cms.extension-key declares in that package's own composer.json. To find an extension by its package name or by its subject, pass query instead.
+        .. code-block:: text
 
-Data:
+            TYPO3 Extension Repository: "georgringer/news" is not an extension key, so nothing was read. That is about the name and not about what is published.
+            A key is lowercase letters, digits and underscores, three to thirty characters, starting with a letter. A slash or a dash means a Composer package name — the key is what extra.typo3/cms.extension-key declares in that package's own composer.json. To find an extension by its package name or by its subject, pass query instead.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "empty",
-        "source": "https://extensions.typo3.org",
-        "url": "",
-        "page": "",
-        "extension": "georgringer/news",
-        "query": "",
-        "extensionVersion": "",
-        "held": null,
-        "total": 0,
-        "versions": [],
-        "matches": [],
-        "searches": [],
-        "unavailable": null,
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "status": "empty",
+                "source": "https://extensions.typo3.org",
+                "url": "",
+                "page": "",
+                "extension": "georgringer/news",
+                "query": "",
+                "extensionVersion": "",
+                "held": null,
+                "total": 0,
+                "versions": [],
+                "matches": [],
+                "searches": [],
+                "unavailable": null,
+                "owed": []
+            }
 
 ter: the extensions for a subject
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -436,105 +448,107 @@ Called with:
         "limit": 3
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    Published extensions for "news": 522 on https://extensions.typo3.org, 283 extension packages on https://packagist.org
+        .. code-block:: text
 
-    - georgringer/news · key news · 14.1.2, uploaded 2026-10-12 · TYPO3 13, 14 · 5781129 installs
-      News system - Versatile news system based on Extbase & Fluid and using the latest technologies provided by TYPO3 CMS.
-    - georgringer/eventnews · 678167 installs
-      Extend EXT:news with event and calendar functionality
-    - georgringer/news-seo · 119707 installs
-      Indivdual indexing/robot information for each news article record
+            Published extensions for "news": 522 on https://extensions.typo3.org, 283 extension packages on https://packagist.org
 
-    A version range here is what the author declared, not evidence that the release was tested on it. Read every version of one with typo3_ter_lookup and extension set to its key. Whether to take one or build your own is typo3_hint_lookup with id="extension-reuse".
+            - georgringer/news · key news · 14.1.2, uploaded 2026-10-12 · TYPO3 13, 14 · 5781129 installs
+              News system - Versatile news system based on Extbase & Fluid and using the latest technologies provided by TYPO3 CMS.
+            - georgringer/eventnews · 678167 installs
+              Extend EXT:news with event and calendar functionality
+            - georgringer/news-seo · 119707 installs
+              Indivdual indexing/robot information for each news article record
 
-Data:
+            A version range here is what the author declared, not evidence that the release was tested on it. Read every version of one with typo3_ter_lookup and extension set to its key. Whether to take one or build your own is typo3_hint_lookup with id="extension-reuse".
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "answered",
-        "source": "https://extensions.typo3.org and https://packagist.org",
-        "url": "",
-        "page": "",
-        "extension": "",
-        "query": "news",
-        "extensionVersion": "",
-        "held": null,
-        "total": 0,
-        "versions": [],
-        "matches": [
+        .. code-block:: json
+
             {
-                "package": "georgringer/news",
-                "key": "news",
-                "description": "News system - Versatile news system based on Extbase & Fluid and using the latest technologies provided by TYPO3 CMS.",
-                "version": "14.1.2",
-                "uploaded": "2026-10-12",
-                "majors": [
-                    13,
-                    14
+                "status": "answered",
+                "source": "https://extensions.typo3.org and https://packagist.org",
+                "url": "",
+                "page": "",
+                "extension": "",
+                "query": "news",
+                "extensionVersion": "",
+                "held": null,
+                "total": 0,
+                "versions": [],
+                "matches": [
+                    {
+                        "package": "georgringer/news",
+                        "key": "news",
+                        "description": "News system - Versatile news system based on Extbase & Fluid and using the latest technologies provided by TYPO3 CMS.",
+                        "version": "14.1.2",
+                        "uploaded": "2026-10-12",
+                        "majors": [
+                            13,
+                            14
+                        ],
+                        "constraint": ">=13.4.29 <=14.99.99",
+                        "terDownloads": 4354780,
+                        "packagistDownloads": 5781129,
+                        "foundIn": [
+                            "https://packagist.org",
+                            "https://extensions.typo3.org"
+                        ]
+                    },
+                    {
+                        "package": "georgringer/eventnews",
+                        "key": "",
+                        "description": "Extend EXT:news with event and calendar functionality",
+                        "version": "",
+                        "uploaded": "",
+                        "majors": [],
+                        "constraint": "",
+                        "terDownloads": 0,
+                        "packagistDownloads": 678167,
+                        "foundIn": [
+                            "https://packagist.org"
+                        ]
+                    },
+                    {
+                        "package": "georgringer/news-seo",
+                        "key": "",
+                        "description": "Indivdual indexing/robot information for each news article record",
+                        "version": "",
+                        "uploaded": "",
+                        "majors": [],
+                        "constraint": "",
+                        "terDownloads": 0,
+                        "packagistDownloads": 119707,
+                        "foundIn": [
+                            "https://packagist.org"
+                        ]
+                    }
                 ],
-                "constraint": ">=13.4.29 <=14.99.99",
-                "terDownloads": 4354780,
-                "packagistDownloads": 5781129,
-                "foundIn": [
-                    "https://packagist.org",
-                    "https://extensions.typo3.org"
-                ]
-            },
-            {
-                "package": "georgringer/eventnews",
-                "key": "",
-                "description": "Extend EXT:news with event and calendar functionality",
-                "version": "",
-                "uploaded": "",
-                "majors": [],
-                "constraint": "",
-                "terDownloads": 0,
-                "packagistDownloads": 678167,
-                "foundIn": [
-                    "https://packagist.org"
-                ]
-            },
-            {
-                "package": "georgringer/news-seo",
-                "key": "",
-                "description": "Indivdual indexing/robot information for each news article record",
-                "version": "",
-                "uploaded": "",
-                "majors": [],
-                "constraint": "",
-                "terDownloads": 0,
-                "packagistDownloads": 119707,
-                "foundIn": [
-                    "https://packagist.org"
+                "searches": [
+                    {
+                        "source": "https://extensions.typo3.org",
+                        "url": "https://extensions.typo3.org/api/v1/extension?filter%5Bsearch%5D=news&per_page=3",
+                        "status": "answered",
+                        "total": 522
+                    },
+                    {
+                        "source": "https://packagist.org",
+                        "url": "https://packagist.org/search.json?q=news&type=typo3-cms-extension&per_page=3",
+                        "status": "answered",
+                        "total": 283
+                    }
+                ],
+                "unavailable": null,
+                "owed": [
+                    "A version range here is what the author declared, not evidence that the release was tested on it.",
+                    "Read every version of one with typo3_ter_lookup and extension set to its key.",
+                    "Whether to take one or build your own is typo3_hint_lookup with id=\"extension-reuse\"."
                 ]
             }
-        ],
-        "searches": [
-            {
-                "source": "https://extensions.typo3.org",
-                "url": "https://extensions.typo3.org/api/v1/extension?filter%5Bsearch%5D=news&per_page=3",
-                "status": "answered",
-                "total": 522
-            },
-            {
-                "source": "https://packagist.org",
-                "url": "https://packagist.org/search.json?q=news&type=typo3-cms-extension&per_page=3",
-                "status": "answered",
-                "total": 283
-            }
-        ],
-        "unavailable": null,
-        "owed": [
-            "A version range here is what the author declared, not evidence that the release was tested on it.",
-            "Read every version of one with typo3_ter_lookup and extension set to its key.",
-            "Whether to take one or build your own is typo3_hint_lookup with id=\"extension-reuse\"."
-        ]
-    }
 
 ter: no extension for a subject
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -547,42 +561,44 @@ Called with:
         "query": "quantumflux transponder"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    No published extension matches "quantumflux transponder". Another word for the subject may still find one.
+        .. code-block:: text
 
-Data:
+            No published extension matches "quantumflux transponder". Another word for the subject may still find one.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "status": "empty",
-        "source": "https://extensions.typo3.org and https://packagist.org",
-        "url": "",
-        "page": "",
-        "extension": "",
-        "query": "quantumflux transponder",
-        "extensionVersion": "",
-        "held": null,
-        "total": 0,
-        "versions": [],
-        "matches": [],
-        "searches": [
+        .. code-block:: json
+
             {
-                "source": "https://extensions.typo3.org",
-                "url": "https://extensions.typo3.org/api/v1/extension?filter%5Bsearch%5D=quantumflux%20transponder&per_page=10",
                 "status": "empty",
-                "total": 0
-            },
-            {
-                "source": "https://packagist.org",
-                "url": "https://packagist.org/search.json?q=quantumflux%20transponder&type=typo3-cms-extension&per_page=10",
-                "status": "empty",
-                "total": 0
+                "source": "https://extensions.typo3.org and https://packagist.org",
+                "url": "",
+                "page": "",
+                "extension": "",
+                "query": "quantumflux transponder",
+                "extensionVersion": "",
+                "held": null,
+                "total": 0,
+                "versions": [],
+                "matches": [],
+                "searches": [
+                    {
+                        "source": "https://extensions.typo3.org",
+                        "url": "https://extensions.typo3.org/api/v1/extension?filter%5Bsearch%5D=quantumflux%20transponder&per_page=10",
+                        "status": "empty",
+                        "total": 0
+                    },
+                    {
+                        "source": "https://packagist.org",
+                        "url": "https://packagist.org/search.json?q=quantumflux%20transponder&type=typo3-cms-extension&per_page=10",
+                        "status": "empty",
+                        "total": 0
+                    }
+                ],
+                "unavailable": null,
+                "owed": []
             }
-        ],
-        "unavailable": null,
-        "owed": []
-    }

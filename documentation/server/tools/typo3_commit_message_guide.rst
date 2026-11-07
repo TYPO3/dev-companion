@@ -1,4 +1,4 @@
-.. _typo3_commit_message_guide:
+:navigation-title: commit_message_guide
 
 ``typo3_commit_message_guide``
 ==============================
@@ -28,9 +28,13 @@ body that counts what the change touched, so many files or so many spellings,
 gets a check that says so. The core's own bodies do not count. Answers from:
 knowledge.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`knowledge <answer-sources-knowledge>`.
+    :Answers from: :ref:`knowledge <answer-sources-knowledge>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -149,48 +153,50 @@ Called with:
         "issue": "106123"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    Commit message draft:
-    ```text
-    [BUGFIX] Show hidden records in the import preview
+        .. code-block:: text
 
-    The preview reads the records the import writes, hidden ones included.
+            Commit message draft:
+            ```text
+            [BUGFIX] Show hidden records in the import preview
 
-    Resolves: #106123
-    ```
+            The preview reads the records the import writes, hidden ones included.
 
-    Checks:
-    - INFO: No commit message readiness issues found by the local checks.
+            Resolves: #106123
+            ```
 
-    Checked without the core workflow: keyword, 52/72 limits and wrapping apply, no Forge issue and no Releases: trailer are demanded, and the Resolves: and Related: lines carry the issues this call passed. workflow="core" for a patch against the TYPO3 core.
+            Checks:
+            - INFO: No commit message readiness issues found by the local checks.
 
-    typo3_task_guide — with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths.
+            Checked without the core workflow: keyword, 52/72 limits and wrapping apply, no Forge issue and no Releases: trailer are demanded, and the Resolves: and Related: lines carry the issues this call passed. workflow="core" for a patch against the TYPO3 core.
 
-Data:
+            typo3_task_guide — with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "message": "[BUGFIX] Show hidden records in the import preview\n\nThe preview reads the records the import writes, hidden ones included.\n\nResolves: #106123",
-        "checks": [
+        .. code-block:: json
+
             {
-                "level": "info",
-                "code": "no-issues-found",
-                "message": "No commit message readiness issues found by the local checks."
+                "message": "[BUGFIX] Show hidden records in the import preview\n\nThe preview reads the records the import writes, hidden ones included.\n\nResolves: #106123",
+                "checks": [
+                    {
+                        "level": "info",
+                        "code": "no-issues-found",
+                        "message": "No commit message readiness issues found by the local checks."
+                    }
+                ],
+                "workflow": "project",
+                "nextTools": [
+                    {
+                        "tool": "typo3_task_guide",
+                        "when": "with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths."
+                    }
+                ],
+                "owed": []
             }
-        ],
-        "workflow": "project",
-        "nextTools": [
-            {
-                "tool": "typo3_task_guide",
-                "when": "with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths."
-            }
-        ],
-        "owed": []
-    }
 
 commit: from a message
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -203,46 +209,48 @@ Called with:
         "message": "[TASK] Do a thing\n\nBody.\n\nResolves: #1\nReleases: main"
     }
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    Commit message, corrected:
-    ```text
-    [TASK] Do a thing
+        .. code-block:: text
 
-    Body.
+            Commit message, corrected:
+            ```text
+            [TASK] Do a thing
 
-    Resolves: #1
-    Releases: main
-    ```
+            Body.
 
-    Checks:
-    - INFO: No commit message readiness issues found by the local checks.
+            Resolves: #1
+            Releases: main
+            ```
 
-    Checked without the core workflow: keyword, 52/72 limits and wrapping apply, no Forge issue and no Releases: trailer are demanded, and the Resolves: and Related: lines carry the issues this call passed. workflow="core" for a patch against the TYPO3 core.
+            Checks:
+            - INFO: No commit message readiness issues found by the local checks.
 
-    typo3_task_guide — with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths.
+            Checked without the core workflow: keyword, 52/72 limits and wrapping apply, no Forge issue and no Releases: trailer are demanded, and the Resolves: and Related: lines carry the issues this call passed. workflow="core" for a patch against the TYPO3 core.
 
-Data:
+            typo3_task_guide — with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "message": "[TASK] Do a thing\n\nBody.\n\nResolves: #1\nReleases: main",
-        "checks": [
+        .. code-block:: json
+
             {
-                "level": "info",
-                "code": "no-issues-found",
-                "message": "No commit message readiness issues found by the local checks."
+                "message": "[TASK] Do a thing\n\nBody.\n\nResolves: #1\nReleases: main",
+                "checks": [
+                    {
+                        "level": "info",
+                        "code": "no-issues-found",
+                        "message": "No commit message readiness issues found by the local checks."
+                    }
+                ],
+                "workflow": "project",
+                "nextTools": [
+                    {
+                        "tool": "typo3_task_guide",
+                        "when": "with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths."
+                    }
+                ],
+                "owed": []
             }
-        ],
-        "workflow": "project",
-        "nextTools": [
-            {
-                "tool": "typo3_task_guide",
-                "when": "with the paths this commit touches. This commit is one step of work in your own repository, and the brief names the core conventions that transfer to it and the hints for those paths."
-            }
-        ],
-        "owed": []
-    }

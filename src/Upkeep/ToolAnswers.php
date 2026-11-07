@@ -163,8 +163,8 @@ final class ToolAnswers
     }
 
     /**
-     * The `Text:` and `Data:` blocks of a recorded section, each as it stands
-     * once the four spaces the directive indents it by are off.
+     * The `Text` and `Data` tabs of a recorded section, each block as it stands
+     * once the indent the directives nest it by is off.
      *
      * `Called with:` stays out: the arguments are the caller's own and cost
      * this server nothing to answer with.
@@ -175,35 +175,35 @@ final class ToolAnswers
     {
         $blocks = [];
         $label = '';
-        $block = '';
-        $inside = false;
+        $block = null;
+        $at = 0;
 
         foreach (preg_split('/\\R/', $section) ?: [] as $line) {
-            // Closing comes first: `Data:` ends the text block above it, and a
-            // read of the label before the close threw those bytes away.
-            if ($inside && $line !== '' && !str_starts_with($line, '    ')) {
+            $indent = strlen($line) - strlen(ltrim($line));
+            // A directive owns every line indented past it, so a line at its
+            // column or left of it is where the block ends.
+            if ($block !== null && trim($line) !== '' && $indent <= $at) {
                 $blocks[] = [$label, $block];
-                $inside = false;
-                $label = '';
+                $block = null;
             }
-            if ($line === 'Text:' || $line === 'Data:') {
-                $label = rtrim($line, ':');
+            if (preg_match('/^\s*\.\. tab:: (Text|Data)$/', $line, $matched) === 1) {
+                $label = $matched[1];
                 continue;
             }
-            if (str_starts_with($line, '.. code-block::')) {
-                $inside = $label !== '';
-                $block = '';
+            if (str_starts_with(ltrim($line), '.. code-block::')) {
+                $block = $label !== '' ? '' : null;
+                $at = $indent;
                 continue;
             }
-            if ($inside) {
-                $block .= substr($line, 4) . "\n";
+            if ($block !== null) {
+                $block .= (trim($line) === '' ? '' : substr($line, $at + 4)) . "\n";
             }
         }
-        if ($inside) {
+        if ($block !== null) {
             $blocks[] = [$label, $block];
         }
 
-        return $blocks;
+        return array_map(static fn(array $one): array => [$one[0], rtrim($one[1], "\n") . "\n"], $blocks);
     }
 
     /**
@@ -412,12 +412,10 @@ final class ToolAnswers
                     array_push($lines, ...Rst::heading('From ' . $recording['shortly'], 3));
                 }
                 [$text, $data] = $recording['answers'][$name][$label];
-                $lines[] = 'Text:';
-                $lines[] = '';
-                array_push($lines, ...self::fenced('', $text));
-                $lines[] = 'Data:';
-                $lines[] = '';
-                array_push($lines, ...self::fenced('json', $data));
+                array_push($lines, ...Rst::tabs([
+                    ['Text', self::fenced('', $text)],
+                    ['Data', self::fenced('json', $data)],
+                ]));
             }
         }
 

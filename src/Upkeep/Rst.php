@@ -125,6 +125,42 @@ final class Rst
     }
 
     /**
+     * The same thing in several forms, one tab each, the first one open.
+     *
+     * @param list<array{0: string, 1: list<string>}> $tabs a label and the lines of its body
+     * @return list<string>
+     */
+    public static function tabs(array $tabs): array
+    {
+        $lines = ['.. tabs::', ''];
+        foreach ($tabs as [$label, $body]) {
+            $lines[] = self::INDENT . '.. tab:: ' . $label;
+            $lines[] = '';
+            foreach ($body as $line) {
+                $lines[] = $line === '' ? '' : self::INDENT . self::INDENT . $line;
+            }
+        }
+
+        return $lines;
+    }
+
+    /**
+     * Terms and their values, set so a reader scans down the terms.
+     *
+     * @param array<string, string> $facts
+     * @return list<string>
+     */
+    public static function facts(array $facts): array
+    {
+        $lines = ['.. facts::', ''];
+        foreach ($facts as $term => $value) {
+            $lines[] = self::INDENT . ':' . $term . ': ' . $value;
+        }
+
+        return [...$lines, ''];
+    }
+
+    /**
      * The anchor a `:ref:` reaches, written above the heading it names.
      *
      * @return list<string>

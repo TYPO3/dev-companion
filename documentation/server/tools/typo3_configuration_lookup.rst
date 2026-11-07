@@ -1,4 +1,4 @@
-.. _typo3_configuration_lookup:
+:navigation-title: configuration_lookup
 
 ``typo3_configuration_lookup``
 ==============================
@@ -18,9 +18,13 @@ another environment is the project's own console, one run per environment. That
 is a variable set, or a development-environment marker absent. Answers from:
 installation.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -138,52 +142,56 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "configurationPath": "SYS/fluid",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "configurationPath": "SYS/fluid",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    The installation has no configuration at "SYS/fluid".
+        .. code-block:: text
 
-Data:
+            The installation has no configuration at "SYS/fluid".
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "configurationPath": "SYS/fluid",
-        "found": false,
-        "value": null,
-        "answeredBy": "installation",
-        "owed": []
-    }
+        .. code-block:: json
+
+            {
+                "configurationPath": "SYS/fluid",
+                "found": false,
+                "value": null,
+                "answeredBy": "installation",
+                "owed": []
+            }

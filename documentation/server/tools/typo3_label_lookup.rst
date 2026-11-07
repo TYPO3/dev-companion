@@ -1,4 +1,4 @@
-.. _typo3_label_lookup:
+:navigation-title: label_lookup
 
 ``typo3_label_lookup``
 ======================
@@ -16,10 +16,13 @@ comes back as a translation domain reference. That reference for a file this
 installation does not have, one a patch is about to add, is
 typo3_translation_domain_lookup. Answers from: installation, packages.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`,
-:ref:`packages <answer-sources-packages>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`, :ref:`packages <answer-sources-packages>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -187,437 +190,441 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    109 label(s) in <installation> match "save" — showing the first 25:
-    - backend.alt_doc:buttons.confirm.duplicate_record_changed.yes
-      "Yes, save and duplicate this record"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:buttons.confirm.close_without_save.yes
-      "Discard changes"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:buttons.confirm.close_without_save.no
-      "Keep editing"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:buttons.confirm.save_and_close
-      "Save and close"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.duplicate_record_changed.title
-      "Do you want to save before duplicating this record?"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.duplicate_record_changed.content
-      "You currently have unsaved changes. Do you want to save your changes before duplicating this record?"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.new_record_changed.title
-      "Do you want to save before adding?"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.new_record_changed.content
-      "You need to save your changes before creating a new record. Do you want to save and create now?"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:buttons.confirm.new_record_changed.yes
-      "Yes, save and create now"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.view_record_changed.title
-      "Do you want to save before viewing?"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.view_record_changed.content
-      "You currently have unsaved changes. You can either discard these changes or save and view them."
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.view_record_changed.invalid_form
-      "The form appears to be invalid, therefore "Save changes and view" is not available."
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.view_record_changed.content.is-new-page
-      "You need to save your changes before viewing the page. Do you want to save and view them now?"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:buttons.confirm.view_record_changed.no-save
-      "View without changes"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:buttons.confirm.view_record_changed.save
-      "Save changes and view"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.close_without_save.title
-      "Unsaved changes"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.close_without_save.content
-      "You currently have unsaved changes which will be discarded if you close without saving."
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.add_record_unsaved_parent.title
-      "Save before creating a new record?"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.confirm.add_record_unsaved_parent.content
-      "This record has not been saved yet, so a new related record could not be linked back to it. Save it first to create and link a new record, or discard your changes to cancel."
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:buttons.confirm.add_record_unsaved_parent.save
-      "Save and continue"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.alert.save_with_error.title
-      "You have errors in your form!"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:label.alert.save_with_error.content
-      "Please check the form, there is at least one error in your form."
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:buttons.alert.save_with_error.ok
-      "OK"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:notification.record_saved.title.singular
-      "Record saved"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
-    - backend.alt_doc:notification.record_saved.title.plural
-      "Records saved"
-      EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+        .. code-block:: text
 
-    Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.
+            109 label(s) in <installation> match "save" — showing the first 25:
+            - backend.alt_doc:buttons.confirm.duplicate_record_changed.yes
+              "Yes, save and duplicate this record"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:buttons.confirm.close_without_save.yes
+              "Discard changes"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:buttons.confirm.close_without_save.no
+              "Keep editing"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:buttons.confirm.save_and_close
+              "Save and close"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.duplicate_record_changed.title
+              "Do you want to save before duplicating this record?"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.duplicate_record_changed.content
+              "You currently have unsaved changes. Do you want to save your changes before duplicating this record?"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.new_record_changed.title
+              "Do you want to save before adding?"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.new_record_changed.content
+              "You need to save your changes before creating a new record. Do you want to save and create now?"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:buttons.confirm.new_record_changed.yes
+              "Yes, save and create now"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.view_record_changed.title
+              "Do you want to save before viewing?"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.view_record_changed.content
+              "You currently have unsaved changes. You can either discard these changes or save and view them."
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.view_record_changed.invalid_form
+              "The form appears to be invalid, therefore "Save changes and view" is not available."
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.view_record_changed.content.is-new-page
+              "You need to save your changes before viewing the page. Do you want to save and view them now?"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:buttons.confirm.view_record_changed.no-save
+              "View without changes"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:buttons.confirm.view_record_changed.save
+              "Save changes and view"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.close_without_save.title
+              "Unsaved changes"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.close_without_save.content
+              "You currently have unsaved changes which will be discarded if you close without saving."
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.add_record_unsaved_parent.title
+              "Save before creating a new record?"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.confirm.add_record_unsaved_parent.content
+              "This record has not been saved yet, so a new related record could not be linked back to it. Save it first to create and link a new record, or discard your changes to cancel."
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:buttons.confirm.add_record_unsaved_parent.save
+              "Save and continue"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.alert.save_with_error.title
+              "You have errors in your form!"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:label.alert.save_with_error.content
+              "Please check the form, there is at least one error in your form."
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:buttons.alert.save_with_error.ok
+              "OK"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:notification.record_saved.title.singular
+              "Record saved"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
+            - backend.alt_doc:notification.record_saved.title.plural
+              "Records saved"
+              EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf
 
-    A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
+            Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.
 
-    Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
+            A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
 
-    Read from the XLF files of the installed packages and project site configuration: the console could not be asked (<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both). What that leaves out is the assembled runtime state — a label an installation replaces through LANG/resourceOverrides is shown here as its package ships it.
+            Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
 
-Data:
+            Read from the XLF files of the installed packages and project site configuration: the console could not be asked (<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both). What that leaves out is the assembled runtime state — a label an installation replaces through LANG/resourceOverrides is shown here as its package ships it.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "save",
-        "resource": null,
-        "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
-        "matchCount": 109,
-        "labels": [
+        .. code-block:: json
+
             {
-                "ref": "backend.alt_doc:buttons.confirm.duplicate_record_changed.yes",
-                "domain": "backend.alt_doc",
-                "key": "buttons.confirm.duplicate_record_changed.yes",
-                "source": "Yes, save and duplicate this record",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:buttons.confirm.close_without_save.yes",
-                "domain": "backend.alt_doc",
-                "key": "buttons.confirm.close_without_save.yes",
-                "source": "Discard changes",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:buttons.confirm.close_without_save.no",
-                "domain": "backend.alt_doc",
-                "key": "buttons.confirm.close_without_save.no",
-                "source": "Keep editing",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:buttons.confirm.save_and_close",
-                "domain": "backend.alt_doc",
-                "key": "buttons.confirm.save_and_close",
-                "source": "Save and close",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.duplicate_record_changed.title",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.duplicate_record_changed.title",
-                "source": "Do you want to save before duplicating this record?",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.duplicate_record_changed.content",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.duplicate_record_changed.content",
-                "source": "You currently have unsaved changes. Do you want to save your changes before duplicating this record?",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.new_record_changed.title",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.new_record_changed.title",
-                "source": "Do you want to save before adding?",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.new_record_changed.content",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.new_record_changed.content",
-                "source": "You need to save your changes before creating a new record. Do you want to save and create now?",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:buttons.confirm.new_record_changed.yes",
-                "domain": "backend.alt_doc",
-                "key": "buttons.confirm.new_record_changed.yes",
-                "source": "Yes, save and create now",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.view_record_changed.title",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.view_record_changed.title",
-                "source": "Do you want to save before viewing?",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.view_record_changed.content",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.view_record_changed.content",
-                "source": "You currently have unsaved changes. You can either discard these changes or save and view them.",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.view_record_changed.invalid_form",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.view_record_changed.invalid_form",
-                "source": "The form appears to be invalid, therefore \"Save changes and view\" is not available.",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.view_record_changed.content.is-new-page",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.view_record_changed.content.is-new-page",
-                "source": "You need to save your changes before viewing the page. Do you want to save and view them now?",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:buttons.confirm.view_record_changed.no-save",
-                "domain": "backend.alt_doc",
-                "key": "buttons.confirm.view_record_changed.no-save",
-                "source": "View without changes",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:buttons.confirm.view_record_changed.save",
-                "domain": "backend.alt_doc",
-                "key": "buttons.confirm.view_record_changed.save",
-                "source": "Save changes and view",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.close_without_save.title",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.close_without_save.title",
-                "source": "Unsaved changes",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.close_without_save.content",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.close_without_save.content",
-                "source": "You currently have unsaved changes which will be discarded if you close without saving.",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.add_record_unsaved_parent.title",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.add_record_unsaved_parent.title",
-                "source": "Save before creating a new record?",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.confirm.add_record_unsaved_parent.content",
-                "domain": "backend.alt_doc",
-                "key": "label.confirm.add_record_unsaved_parent.content",
-                "source": "This record has not been saved yet, so a new related record could not be linked back to it. Save it first to create and link a new record, or discard your changes to cancel.",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:buttons.confirm.add_record_unsaved_parent.save",
-                "domain": "backend.alt_doc",
-                "key": "buttons.confirm.add_record_unsaved_parent.save",
-                "source": "Save and continue",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.alert.save_with_error.title",
-                "domain": "backend.alt_doc",
-                "key": "label.alert.save_with_error.title",
-                "source": "You have errors in your form!",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:label.alert.save_with_error.content",
-                "domain": "backend.alt_doc",
-                "key": "label.alert.save_with_error.content",
-                "source": "Please check the form, there is at least one error in your form.",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:buttons.alert.save_with_error.ok",
-                "domain": "backend.alt_doc",
-                "key": "buttons.alert.save_with_error.ok",
-                "source": "OK",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:notification.record_saved.title.singular",
-                "domain": "backend.alt_doc",
-                "key": "notification.record_saved.title.singular",
-                "source": "Record saved",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            },
-            {
-                "ref": "backend.alt_doc:notification.record_saved.title.plural",
-                "domain": "backend.alt_doc",
-                "key": "notification.record_saved.title.plural",
-                "source": "Records saved",
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
-            }
-        ],
-        "terms": [
-            {
-                "term": "save",
-                "matchCount": 109
-            }
-        ],
-        "resourceDiagnostics": [
-            {
-                "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
-                "location": "package",
-                "conventionalName": true,
-                "referenced": true,
-                "references": [
-                    "Build/Sources/TypeScript/backend/contextual-record-edit.ts",
-                    "Build/Sources/TypeScript/backend/element/contextual-record-edit-trigger.ts",
-                    "Build/Sources/TypeScript/backend/form-engine-review.ts",
-                    "Build/Sources/TypeScript/backend/form-engine.ts",
-                    "Build/Sources/TypeScript/backend/form-engine/container/flex-form-container-container.ts",
-                    "Build/Sources/TypeScript/backend/form-engine/container/inline-control-container.ts",
-                    "Build/Sources/TypeScript/backend/form-engine/element/select-tree-toolbar.ts",
-                    "Build/Sources/TypeScript/backend/form-engine/element/suggest/result-container.ts",
-                    "Build/Sources/TypeScript/backend/grid-editor.ts",
-                    "Build/Sources/TypeScript/filelist/file-delete.ts",
-                    "EXT:backend/Classes/Controller/ContextualRecordEditController.php",
-                    "EXT:backend/Classes/Controller/EditDocumentController.php",
-                    "EXT:backend/Classes/Form/Element/BackendLayoutWizardElement.php",
-                    "EXT:backend/Classes/Form/Element/GroupElement.php",
-                    "EXT:backend/Classes/Form/FormResultCompiler.php",
-                    "EXT:backend/Classes/RecordList/DatabaseRecordList.php",
-                    "EXT:backend/Resources/Private/Partials/PageLayout/RecordDefault/Header.fluid.html",
-                    "EXT:backend/Resources/Private/Templates/Form/ContextualRecordEdit.fluid.html",
-                    "EXT:backend/Resources/Public/JavaScript/contextual-record-edit.js",
-                    "EXT:backend/Resources/Public/JavaScript/element/contextual-record-edit-trigger.js",
-                    "EXT:backend/Resources/Public/JavaScript/form-engine-review.js",
-                    "EXT:backend/Resources/Public/JavaScript/form-engine.js",
-                    "EXT:backend/Resources/Public/JavaScript/form-engine/container/flex-form-container-container.js",
-                    "EXT:backend/Resources/Public/JavaScript/form-engine/container/inline-control-container.js",
-                    "EXT:backend/Resources/Public/JavaScript/form-engine/element/select-tree-toolbar.js",
-                    "EXT:backend/Resources/Public/JavaScript/form-engine/element/suggest/result-container.js",
-                    "EXT:backend/Resources/Public/JavaScript/grid-editor.js",
-                    "EXT:beuser/Resources/Private/Partials/BackendUser/PaginatedList.fluid.html",
-                    "EXT:beuser/Resources/Private/Partials/BackendUserGroup/PaginatedList.fluid.html",
-                    "EXT:beuser/Resources/Private/Partials/Filemount/PaginatedList.fluid.html",
-                    "EXT:filelist/Classes/ContextMenu/ItemProviders/FileProvider.php",
-                    "EXT:filelist/Classes/Controller/FileListController.php",
-                    "EXT:filelist/Resources/Public/JavaScript/file-delete.js",
-                    "EXT:reactions/Resources/Private/Templates/Management/Overview.fluid.html",
-                    "EXT:redirects/Resources/Private/Templates/Management/Overview.fluid.html",
-                    "EXT:redirects/Resources/Private/Templates/QrCode/Overview.fluid.html",
-                    "EXT:redirects/Resources/Private/Templates/ShortUrl/Overview.fluid.html",
-                    "EXT:webhooks/Resources/Private/Templates/Management/Overview.fluid.html"
+                "query": "save",
+                "resource": null,
+                "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
+                "matchCount": 109,
+                "labels": [
+                    {
+                        "ref": "backend.alt_doc:buttons.confirm.duplicate_record_changed.yes",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.confirm.duplicate_record_changed.yes",
+                        "source": "Yes, save and duplicate this record",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:buttons.confirm.close_without_save.yes",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.confirm.close_without_save.yes",
+                        "source": "Discard changes",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:buttons.confirm.close_without_save.no",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.confirm.close_without_save.no",
+                        "source": "Keep editing",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:buttons.confirm.save_and_close",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.confirm.save_and_close",
+                        "source": "Save and close",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.duplicate_record_changed.title",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.duplicate_record_changed.title",
+                        "source": "Do you want to save before duplicating this record?",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.duplicate_record_changed.content",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.duplicate_record_changed.content",
+                        "source": "You currently have unsaved changes. Do you want to save your changes before duplicating this record?",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.new_record_changed.title",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.new_record_changed.title",
+                        "source": "Do you want to save before adding?",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.new_record_changed.content",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.new_record_changed.content",
+                        "source": "You need to save your changes before creating a new record. Do you want to save and create now?",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:buttons.confirm.new_record_changed.yes",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.confirm.new_record_changed.yes",
+                        "source": "Yes, save and create now",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.view_record_changed.title",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.view_record_changed.title",
+                        "source": "Do you want to save before viewing?",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.view_record_changed.content",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.view_record_changed.content",
+                        "source": "You currently have unsaved changes. You can either discard these changes or save and view them.",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.view_record_changed.invalid_form",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.view_record_changed.invalid_form",
+                        "source": "The form appears to be invalid, therefore \"Save changes and view\" is not available.",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.view_record_changed.content.is-new-page",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.view_record_changed.content.is-new-page",
+                        "source": "You need to save your changes before viewing the page. Do you want to save and view them now?",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:buttons.confirm.view_record_changed.no-save",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.confirm.view_record_changed.no-save",
+                        "source": "View without changes",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:buttons.confirm.view_record_changed.save",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.confirm.view_record_changed.save",
+                        "source": "Save changes and view",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.close_without_save.title",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.close_without_save.title",
+                        "source": "Unsaved changes",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.close_without_save.content",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.close_without_save.content",
+                        "source": "You currently have unsaved changes which will be discarded if you close without saving.",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.add_record_unsaved_parent.title",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.add_record_unsaved_parent.title",
+                        "source": "Save before creating a new record?",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.confirm.add_record_unsaved_parent.content",
+                        "domain": "backend.alt_doc",
+                        "key": "label.confirm.add_record_unsaved_parent.content",
+                        "source": "This record has not been saved yet, so a new related record could not be linked back to it. Save it first to create and link a new record, or discard your changes to cancel.",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:buttons.confirm.add_record_unsaved_parent.save",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.confirm.add_record_unsaved_parent.save",
+                        "source": "Save and continue",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.alert.save_with_error.title",
+                        "domain": "backend.alt_doc",
+                        "key": "label.alert.save_with_error.title",
+                        "source": "You have errors in your form!",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:label.alert.save_with_error.content",
+                        "domain": "backend.alt_doc",
+                        "key": "label.alert.save_with_error.content",
+                        "source": "Please check the form, there is at least one error in your form.",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:buttons.alert.save_with_error.ok",
+                        "domain": "backend.alt_doc",
+                        "key": "buttons.alert.save_with_error.ok",
+                        "source": "OK",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:notification.record_saved.title.singular",
+                        "domain": "backend.alt_doc",
+                        "key": "notification.record_saved.title.singular",
+                        "source": "Record saved",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    },
+                    {
+                        "ref": "backend.alt_doc:notification.record_saved.title.plural",
+                        "domain": "backend.alt_doc",
+                        "key": "notification.record_saved.title.plural",
+                        "source": "Records saved",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf"
+                    }
                 ],
-                "warnings": []
+                "terms": [
+                    {
+                        "term": "save",
+                        "matchCount": 109
+                    }
+                ],
+                "resourceDiagnostics": [
+                    {
+                        "resource": "EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf",
+                        "location": "package",
+                        "conventionalName": true,
+                        "referenced": true,
+                        "references": [
+                            "Build/Sources/TypeScript/backend/contextual-record-edit.ts",
+                            "Build/Sources/TypeScript/backend/element/contextual-record-edit-trigger.ts",
+                            "Build/Sources/TypeScript/backend/form-engine-review.ts",
+                            "Build/Sources/TypeScript/backend/form-engine.ts",
+                            "Build/Sources/TypeScript/backend/form-engine/container/flex-form-container-container.ts",
+                            "Build/Sources/TypeScript/backend/form-engine/container/inline-control-container.ts",
+                            "Build/Sources/TypeScript/backend/form-engine/element/select-tree-toolbar.ts",
+                            "Build/Sources/TypeScript/backend/form-engine/element/suggest/result-container.ts",
+                            "Build/Sources/TypeScript/backend/grid-editor.ts",
+                            "Build/Sources/TypeScript/filelist/file-delete.ts",
+                            "EXT:backend/Classes/Controller/ContextualRecordEditController.php",
+                            "EXT:backend/Classes/Controller/EditDocumentController.php",
+                            "EXT:backend/Classes/Form/Element/BackendLayoutWizardElement.php",
+                            "EXT:backend/Classes/Form/Element/GroupElement.php",
+                            "EXT:backend/Classes/Form/FormResultCompiler.php",
+                            "EXT:backend/Classes/RecordList/DatabaseRecordList.php",
+                            "EXT:backend/Resources/Private/Partials/PageLayout/RecordDefault/Header.fluid.html",
+                            "EXT:backend/Resources/Private/Templates/Form/ContextualRecordEdit.fluid.html",
+                            "EXT:backend/Resources/Public/JavaScript/contextual-record-edit.js",
+                            "EXT:backend/Resources/Public/JavaScript/element/contextual-record-edit-trigger.js",
+                            "EXT:backend/Resources/Public/JavaScript/form-engine-review.js",
+                            "EXT:backend/Resources/Public/JavaScript/form-engine.js",
+                            "EXT:backend/Resources/Public/JavaScript/form-engine/container/flex-form-container-container.js",
+                            "EXT:backend/Resources/Public/JavaScript/form-engine/container/inline-control-container.js",
+                            "EXT:backend/Resources/Public/JavaScript/form-engine/element/select-tree-toolbar.js",
+                            "EXT:backend/Resources/Public/JavaScript/form-engine/element/suggest/result-container.js",
+                            "EXT:backend/Resources/Public/JavaScript/grid-editor.js",
+                            "EXT:beuser/Resources/Private/Partials/BackendUser/PaginatedList.fluid.html",
+                            "EXT:beuser/Resources/Private/Partials/BackendUserGroup/PaginatedList.fluid.html",
+                            "EXT:beuser/Resources/Private/Partials/Filemount/PaginatedList.fluid.html",
+                            "EXT:filelist/Classes/ContextMenu/ItemProviders/FileProvider.php",
+                            "EXT:filelist/Classes/Controller/FileListController.php",
+                            "EXT:filelist/Resources/Public/JavaScript/file-delete.js",
+                            "EXT:reactions/Resources/Private/Templates/Management/Overview.fluid.html",
+                            "EXT:redirects/Resources/Private/Templates/Management/Overview.fluid.html",
+                            "EXT:redirects/Resources/Private/Templates/QrCode/Overview.fluid.html",
+                            "EXT:redirects/Resources/Private/Templates/ShortUrl/Overview.fluid.html",
+                            "EXT:webhooks/Resources/Private/Templates/Management/Overview.fluid.html"
+                        ],
+                        "warnings": []
+                    }
+                ],
+                "answeredBy": "packages",
+                "owed": [
+                    "Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.",
+                    "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
+                ]
             }
-        ],
-        "answeredBy": "packages",
-        "owed": [
-            "Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.",
-            "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
-        ]
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    3 label(s) in <installation> match "save":
-    - backend.locallang:labels.save
-      "Save"
-      EXT:backend/Resources/Private/Language/locallang.xlf
-    - backend.locallang:labels.saveAndClose
-      "Save and close"
-      EXT:backend/Resources/Private/Language/locallang.xlf
-    - core.locallang_core:labels.savedok
-      "Save document"
-      EXT:core/Resources/Private/Language/locallang_core.xlf
+        .. code-block:: text
 
-    Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.
+            3 label(s) in <installation> match "save":
+            - backend.locallang:labels.save
+              "Save"
+              EXT:backend/Resources/Private/Language/locallang.xlf
+            - backend.locallang:labels.saveAndClose
+              "Save and close"
+              EXT:backend/Resources/Private/Language/locallang.xlf
+            - core.locallang_core:labels.savedok
+              "Save document"
+              EXT:core/Resources/Private/Language/locallang_core.xlf
 
-    A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
+            Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.
 
-    Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
+            A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
 
-    Resource warnings:
-    - EXT:backend/Resources/Private/Language/locallang.xlf: No static reference to this resource was found; references assembled at runtime are outside this scan.
-    - EXT:core/Resources/Private/Language/locallang_core.xlf: No static reference to this resource was found; references assembled at runtime are outside this scan.
+            Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
 
-Data:
+            Resource warnings:
+            - EXT:backend/Resources/Private/Language/locallang.xlf: No static reference to this resource was found; references assembled at runtime are outside this scan.
+            - EXT:core/Resources/Private/Language/locallang_core.xlf: No static reference to this resource was found; references assembled at runtime are outside this scan.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "save",
-        "resource": null,
-        "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
-        "matchCount": 3,
-        "labels": [
+        .. code-block:: json
+
             {
-                "ref": "backend.locallang:labels.save",
-                "domain": "backend.locallang",
-                "key": "labels.save",
-                "source": "Save",
-                "resource": "EXT:backend/Resources/Private/Language/locallang.xlf"
-            },
-            {
-                "ref": "backend.locallang:labels.saveAndClose",
-                "domain": "backend.locallang",
-                "key": "labels.saveAndClose",
-                "source": "Save and close",
-                "resource": "EXT:backend/Resources/Private/Language/locallang.xlf"
-            },
-            {
-                "ref": "core.locallang_core:labels.savedok",
-                "domain": "core.locallang_core",
-                "key": "labels.savedok",
-                "source": "Save document",
-                "resource": "EXT:core/Resources/Private/Language/locallang_core.xlf"
-            }
-        ],
-        "terms": [
-            {
-                "term": "save",
-                "matchCount": 3
-            }
-        ],
-        "resourceDiagnostics": [
-            {
-                "resource": "EXT:backend/Resources/Private/Language/locallang.xlf",
-                "location": "package",
-                "conventionalName": true,
-                "referenced": false,
-                "references": [],
-                "warnings": [
-                    "No static reference to this resource was found; references assembled at runtime are outside this scan."
+                "query": "save",
+                "resource": null,
+                "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
+                "matchCount": 3,
+                "labels": [
+                    {
+                        "ref": "backend.locallang:labels.save",
+                        "domain": "backend.locallang",
+                        "key": "labels.save",
+                        "source": "Save",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang.xlf"
+                    },
+                    {
+                        "ref": "backend.locallang:labels.saveAndClose",
+                        "domain": "backend.locallang",
+                        "key": "labels.saveAndClose",
+                        "source": "Save and close",
+                        "resource": "EXT:backend/Resources/Private/Language/locallang.xlf"
+                    },
+                    {
+                        "ref": "core.locallang_core:labels.savedok",
+                        "domain": "core.locallang_core",
+                        "key": "labels.savedok",
+                        "source": "Save document",
+                        "resource": "EXT:core/Resources/Private/Language/locallang_core.xlf"
+                    }
+                ],
+                "terms": [
+                    {
+                        "term": "save",
+                        "matchCount": 3
+                    }
+                ],
+                "resourceDiagnostics": [
+                    {
+                        "resource": "EXT:backend/Resources/Private/Language/locallang.xlf",
+                        "location": "package",
+                        "conventionalName": true,
+                        "referenced": false,
+                        "references": [],
+                        "warnings": [
+                            "No static reference to this resource was found; references assembled at runtime are outside this scan."
+                        ]
+                    },
+                    {
+                        "resource": "EXT:core/Resources/Private/Language/locallang_core.xlf",
+                        "location": "package",
+                        "conventionalName": true,
+                        "referenced": false,
+                        "references": [],
+                        "warnings": [
+                            "No static reference to this resource was found; references assembled at runtime are outside this scan."
+                        ]
+                    }
+                ],
+                "answeredBy": "installation",
+                "owed": [
+                    "Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.",
+                    "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
                 ]
-            },
-            {
-                "resource": "EXT:core/Resources/Private/Language/locallang_core.xlf",
-                "location": "package",
-                "conventionalName": true,
-                "referenced": false,
-                "references": [],
-                "warnings": [
-                    "No static reference to this resource was found; references assembled at runtime are outside this scan."
-                ]
             }
-        ],
-        "answeredBy": "installation",
-        "owed": [
-            "Reference a label by the ref shown first. Package resources use a translation domain; project-site resources use the full LLL file reference.",
-            "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
-        ]
-    }
 
 labels: miss
 ~~~~~~~~~~~~
@@ -633,73 +640,77 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    No label in <installation> matches "quantumflux". This is an answer about your installation rather than about TYPO3 in general.
+        .. code-block:: text
 
-    A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
+            No label in <installation> matches "quantumflux". This is an answer about your installation rather than about TYPO3 in general.
 
-    Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
+            A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
 
-    Read from the XLF files of the installed packages and project site configuration: the console could not be asked (<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both). What that leaves out is the assembled runtime state — a label an installation replaces through LANG/resourceOverrides is shown here as its package ships it.
+            Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
 
-Data:
+            Read from the XLF files of the installed packages and project site configuration: the console could not be asked (<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both). What that leaves out is the assembled runtime state — a label an installation replaces through LANG/resourceOverrides is shown here as its package ships it.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "quantumflux",
-        "resource": null,
-        "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
-        "matchCount": 0,
-        "labels": [],
-        "terms": [
+        .. code-block:: json
+
             {
-                "term": "quantumflux",
-                "matchCount": 0
+                "query": "quantumflux",
+                "resource": null,
+                "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
+                "matchCount": 0,
+                "labels": [],
+                "terms": [
+                    {
+                        "term": "quantumflux",
+                        "matchCount": 0
+                    }
+                ],
+                "resourceDiagnostics": [],
+                "answeredBy": "packages",
+                "owed": [
+                    "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
+                ]
             }
-        ],
-        "resourceDiagnostics": [],
-        "answeredBy": "packages",
-        "owed": [
-            "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
-        ]
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    No label in <installation> matches "quantumflux". This is an answer about your installation rather than about TYPO3 in general.
+        .. code-block:: text
 
-    A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
+            No label in <installation> matches "quantumflux". This is an answer about your installation rather than about TYPO3 in general.
 
-    Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
+            A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.
 
-Data:
+            Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "quantumflux",
-        "resource": null,
-        "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
-        "matchCount": 0,
-        "labels": [],
-        "terms": [
+        .. code-block:: json
+
             {
-                "term": "quantumflux",
-                "matchCount": 0
+                "query": "quantumflux",
+                "resource": null,
+                "resourceOwed": "A match is reusable only when its resource is the one already used at the consuming code. A label from another module or package is not a shared vocabulary merely because its text matches; call again with resource once that usage context is known.",
+                "matchCount": 0,
+                "labels": [],
+                "terms": [
+                    {
+                        "term": "quantumflux",
+                        "matchCount": 0
+                    }
+                ],
+                "resourceDiagnostics": [],
+                "answeredBy": "installation",
+                "owed": [
+                    "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
+                ]
             }
-        ],
-        "resourceDiagnostics": [],
-        "answeredBy": "installation",
-        "owed": [
-            "Write a new trans-unit in English in the unprefixed source file, and put any other wording in the locale-prefixed file beside it — de.locallang.xlf for locallang.xlf — under the same unit id. A source file that is not English is a defect to correct in place rather than a convention to continue, and adding an en.-prefixed file is not that correction: typo3_hint_lookup with id=language-files has what it is."
-        ]
-    }

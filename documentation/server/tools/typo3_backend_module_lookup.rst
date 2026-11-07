@@ -1,4 +1,4 @@
-.. _typo3_backend_module_lookup:
+:navigation-title: backend_module_lookup
 
 ``typo3_backend_module_lookup``
 ===============================
@@ -17,9 +17,13 @@ registration files says a module has no page tree when it has one. A project
 extension's modules are in it, because the tool boots and asks the installation
 rather than reads a snapshot. Answers from: installation.
 
-``readOnlyHint: true`` · ``destructiveHint: false`` · ``idempotentHint: true`` · ``openWorldHint: false``
+.. facts::
 
-Answers from :ref:`installation <answer-sources-installation>`.
+    :Answers from: :ref:`installation <answer-sources-installation>`
+    :readOnlyHint: ``true``
+    :destructiveHint: ``false``
+    :idempotentHint: ``true``
+    :openWorldHint: ``false``
 
 Takes
 -----
@@ -185,140 +189,144 @@ Called with:
 From the 14.3 core checkout
 """""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
+        .. code-block:: text
 
-Data:
+            This is not answerable here, which is not the same as an empty answer: <installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "",
-        "unsupported": {
-            "cause": "installation-not-answering",
-            "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
-            "repositoryState": "installed",
-            "diagnosis": "",
-            "searched": [
-                "<installation>"
-            ],
-            "misconfiguration": null,
-            "settings": {
-                "root": "TYPO3_DEV_COMPANION_ROOT",
-                "console": "TYPO3_DEV_COMPANION_CONSOLE"
+        .. code-block:: json
+
+            {
+                "query": "",
+                "unsupported": {
+                    "cause": "installation-not-answering",
+                    "reason": "<installation> has no TYPO3 console — none of bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed — vendor/autoload.php is not there either, and composer install writes both",
+                    "repositoryState": "installed",
+                    "diagnosis": "",
+                    "searched": [
+                        "<installation>"
+                    ],
+                    "misconfiguration": null,
+                    "settings": {
+                        "root": "TYPO3_DEV_COMPANION_ROOT",
+                        "console": "TYPO3_DEV_COMPANION_CONSOLE"
+                    }
+                },
+                "owed": []
             }
-        },
-        "owed": []
-    }
 
 From the fixture installation
 """""""""""""""""""""""""""""
 
-Text:
+.. tabs::
 
-.. code-block:: text
+    .. tab:: Text
 
-    4 backend module(s):
-    - web
-      /module/web  (backend)
-      Web [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]
-      navigation: @typo3/backend/tree/page-tree-element
-    - web > web_list
-      /module/web/list  (backend)
-      Records [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]
-      navigation: @typo3/backend/tree/page-tree-element
-    - web > acme_events
-      /module/web/acme-events  (acme_events)
-      Events [LLL:EXT:acme_events/Resources/Private/Language/locallang.xlf]
-      navigation: @typo3/backend/tree/page-tree-element
-      route acme_events.detail  /module/web/acme-events/detail
-    - site
-      /module/site  (backend)
-      Site Management [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]
+        .. code-block:: text
 
-    A module is declared in its extension's Configuration/Backend/Modules.php; the label in brackets is a translation domain reference. The navigation component is the resolved one: a module inherits its parent's, so the registration file of a page-tree navigated module often names none.
+            4 backend module(s):
+            - web
+              /module/web  (backend)
+              Web [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]
+              navigation: @typo3/backend/tree/page-tree-element
+            - web > web_list
+              /module/web/list  (backend)
+              Records [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]
+              navigation: @typo3/backend/tree/page-tree-element
+            - web > acme_events
+              /module/web/acme-events  (acme_events)
+              Events [LLL:EXT:acme_events/Resources/Private/Language/locallang.xlf]
+              navigation: @typo3/backend/tree/page-tree-element
+              route acme_events.detail  /module/web/acme-events/detail
+            - site
+              /module/site  (backend)
+              Site Management [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]
 
-Data:
+            A module is declared in its extension's Configuration/Backend/Modules.php; the label in brackets is a translation domain reference. The navigation component is the resolved one: a module inherits its parent's, so the registration file of a page-tree navigated module often names none.
 
-.. code-block:: json
+    .. tab:: Data
 
-    {
-        "query": "",
-        "matchCount": 4,
-        "modules": [
+        .. code-block:: json
+
             {
-                "identifier": "web",
-                "parents": [],
-                "extension": "backend",
-                "labels": "Web [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]",
-                "path": "/module/web",
-                "position": "",
-                "navigationComponent": "@typo3/backend/tree/page-tree-element",
-                "access": "",
-                "routes": []
-            },
-            {
-                "identifier": "web_list",
-                "parents": [
-                    "web"
-                ],
-                "extension": "backend",
-                "labels": "Records [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]",
-                "path": "/module/web/list",
-                "position": "{\"after\":\"web_layout\"}",
-                "navigationComponent": "@typo3/backend/tree/page-tree-element",
-                "access": "user",
-                "routes": [
+                "query": "",
+                "matchCount": 4,
+                "modules": [
                     {
-                        "name": "_default",
-                        "identifier": "web_list",
-                        "path": "/module/web/list",
-                        "target": "TYPO3\\CMS\\Backend\\Controller\\RecordListController::mainAction"
-                    }
-                ]
-            },
-            {
-                "identifier": "acme_events",
-                "parents": [
-                    "web"
-                ],
-                "extension": "acme_events",
-                "labels": "Events [LLL:EXT:acme_events/Resources/Private/Language/locallang.xlf]",
-                "path": "/module/web/acme-events",
-                "position": "{\"after\":\"web_list\"}",
-                "navigationComponent": "@typo3/backend/tree/page-tree-element",
-                "access": "user",
-                "routes": [
-                    {
-                        "name": "_default",
-                        "identifier": "acme_events",
-                        "path": "/module/web/acme-events",
-                        "target": "TYPO3\\CMS\\Backend\\Controller\\FixtureModuleController::listAction"
+                        "identifier": "web",
+                        "parents": [],
+                        "extension": "backend",
+                        "labels": "Web [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]",
+                        "path": "/module/web",
+                        "position": "",
+                        "navigationComponent": "@typo3/backend/tree/page-tree-element",
+                        "access": "",
+                        "routes": []
                     },
                     {
-                        "name": "detail",
-                        "identifier": "acme_events.detail",
-                        "path": "/module/web/acme-events/detail",
-                        "target": "TYPO3\\CMS\\Backend\\Controller\\FixtureModuleController::detailAction"
+                        "identifier": "web_list",
+                        "parents": [
+                            "web"
+                        ],
+                        "extension": "backend",
+                        "labels": "Records [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]",
+                        "path": "/module/web/list",
+                        "position": "{\"after\":\"web_layout\"}",
+                        "navigationComponent": "@typo3/backend/tree/page-tree-element",
+                        "access": "user",
+                        "routes": [
+                            {
+                                "name": "_default",
+                                "identifier": "web_list",
+                                "path": "/module/web/list",
+                                "target": "TYPO3\\CMS\\Backend\\Controller\\RecordListController::mainAction"
+                            }
+                        ]
+                    },
+                    {
+                        "identifier": "acme_events",
+                        "parents": [
+                            "web"
+                        ],
+                        "extension": "acme_events",
+                        "labels": "Events [LLL:EXT:acme_events/Resources/Private/Language/locallang.xlf]",
+                        "path": "/module/web/acme-events",
+                        "position": "{\"after\":\"web_list\"}",
+                        "navigationComponent": "@typo3/backend/tree/page-tree-element",
+                        "access": "user",
+                        "routes": [
+                            {
+                                "name": "_default",
+                                "identifier": "acme_events",
+                                "path": "/module/web/acme-events",
+                                "target": "TYPO3\\CMS\\Backend\\Controller\\FixtureModuleController::listAction"
+                            },
+                            {
+                                "name": "detail",
+                                "identifier": "acme_events.detail",
+                                "path": "/module/web/acme-events/detail",
+                                "target": "TYPO3\\CMS\\Backend\\Controller\\FixtureModuleController::detailAction"
+                            }
+                        ]
+                    },
+                    {
+                        "identifier": "site",
+                        "parents": [],
+                        "extension": "backend",
+                        "labels": "Site Management [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]",
+                        "path": "/module/site",
+                        "position": "",
+                        "navigationComponent": "",
+                        "access": "",
+                        "routes": []
                     }
-                ]
-            },
-            {
-                "identifier": "site",
-                "parents": [],
-                "extension": "backend",
-                "labels": "Site Management [LLL:EXT:backend/Resources/Private/Language/locallang.xlf]",
-                "path": "/module/site",
-                "position": "",
-                "navigationComponent": "",
-                "access": "",
-                "routes": []
+                ],
+                "checked": [],
+                "answeredBy": "installation",
+                "owed": []
             }
-        ],
-        "checked": [],
-        "answeredBy": "installation",
-        "owed": []
-    }

@@ -290,18 +290,16 @@ final class ToolSurface
     private static function head(array $definition): string
     {
         $lines = [
-            // The label is what every other page reaches this tool by, and it
-            // is the tool's own name: a reference nobody has to look up.
-            ...Rst::label($definition['name']),
+            // The rail is narrower than most tool names, and every entry in it
+            // stands under Tools, so the prefix they all share says nothing
+            // there.
+            ...Rst::navigationTitle(substr($definition['name'], strlen('typo3_'))),
             ...Rst::heading(Rst::literal($definition['name'])),
             '*' . $definition['title'] . '*',
             '',
             self::wrap($definition['description']),
             '',
-            self::annotations($definition['annotations']),
-            '',
-            self::wrap(self::answerSources($definition['answersFrom'])),
-            '',
+            ...Rst::facts(['Answers from' => self::answerSources($definition['answersFrom'])] + self::annotations($definition['annotations'])),
             ...Rst::heading('Takes', 1),
             ...self::schema($definition['inputSchema'], 'The call carries exactly one of these sets of arguments'),
             ...Rst::heading('Answers with', 1),
@@ -360,10 +358,10 @@ final class ToolSurface
      */
     private static function answerSources(array $sources): string
     {
-        return 'Answers from ' . implode(', ', array_map(
+        return implode(', ', array_map(
             static fn(string $source): string => Rst::ref($source, self::sourceLabel($source)),
             $sources,
-        )) . '.';
+        ));
     }
 
     /**
@@ -384,7 +382,6 @@ final class ToolSurface
     {
         $lines = [
             ...Rst::navigationTitle('Answer sources'),
-            ...Rst::label('answer-sources'),
             ...Rst::heading('Where an answer comes from'),
             self::wrap(
                 'Every tool declares which sources can answer it, and says so at the foot of its own description '
@@ -427,15 +424,16 @@ final class ToolSurface
      * translation.
      *
      * @param array<string, bool> $annotations
+     * @return array<string, string>
      */
-    private static function annotations(array $annotations): string
+    private static function annotations(array $annotations): array
     {
         $stated = [];
         foreach ($annotations as $hint => $value) {
-            $stated[] = Rst::literal($hint . ': ' . ($value ? 'true' : 'false'));
+            $stated[$hint] = Rst::literal($value ? 'true' : 'false');
         }
 
-        return implode(' · ', $stated);
+        return $stated;
     }
 
     /**

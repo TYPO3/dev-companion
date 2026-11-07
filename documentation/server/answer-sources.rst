@@ -12,12 +12,36 @@ tools under knowledge and packages are the ones still worth a call. Which source
 answered one call is ``answeredBy`` in that answer, where the tool has two.
 ``bin/cli tools:index`` writes this page from the Source enum.
 
-.. image:: ../images/answer-sources.svg
+.. diagram::
     :zoomable:
-    :alt: The five sources against how much of the machine has to run. Bundled knowledge
-          and this server's own checkout answer with nothing up. Packages need
-          files on disk, the installation source needs a booted installation,
-          and network sources need outbound reach.
+    :caption: A tool declares its sources, so the answer is known to be reachable before the question is asked.
+
+    bars
+      bands "nothing running,files on disk,a booted installation,network reach"
+      axis "Required machine state"
+    title "Every source has a precondition"
+    description "The five sources against how much of the machine has to run. Bundled knowledge and this server's own checkout answer with nothing up. Packages need files on disk, the installation source needs a booted installation, and network sources need outbound reach."
+
+    row `knowledge`
+      sub "Bundled and version-bound."
+      segments 4
+      emphasis
+    row `checkout`
+      sub "This server's own repository."
+      segments 4
+    row `packages`
+      sub "Files read, never executed."
+      segments absent=1 3
+    row `installation`
+      sub "Assembled runtime state."
+      segments absent=2 2
+    row `network`
+      sub "Official live services."
+      segments absent=3 1
+
+    legend
+      ink "available"
+      absent "the state this source still needs"
 
 .. _answer-sources-installation:
 

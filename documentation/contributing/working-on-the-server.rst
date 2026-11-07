@@ -6,11 +6,76 @@ Working on the server itself
 For someone who changes this repository rather than uses it. The conventions are
 in `AGENTS.md <../../AGENTS.md>`_; these are the commands they rest on.
 
-.. image:: ../images/repository-map.svg
+.. diagram::
     :zoomable:
-        :alt: The stdio runtime routes client calls through Server, Tool and Result
-          classes to four answer sources. The separate repository CLI runs
-          upkeep commands over knowledge, evidence and work records.
+    :caption: The server surface and the repository workflow share paths and bootstrap, not responsibilities.
+
+    flow
+      columns 1.5,1.1,1.4,1.1,1.1
+      gap 36,40
+    title "Runtime answers; upkeep maintains"
+    description "The stdio runtime routes client calls through the Server, Tool and Result classes, which answer from five sources. The separate repository CLI runs upkeep commands over knowledge, evidence and work records. Both stand on one bootstrap and one Paths class."
+
+    group runtime "Runtime: what clients ask"
+      stdio "stdio entrypoint"
+        at 0,0
+        body "bin/typo3-dev-companion"
+        ink
+      server `Server/`
+        at 1,0
+        body "entrypoint · factory · transport"
+      tool `Tool/`
+        at 2,0
+        body "with Sdk/: registry · schemas · dispatch"
+      result `Result/`
+        at 3,0
+        span 2
+        body "readable text + structured content"
+      group sources "The five answer sources"
+        knowledge `Knowledge/`
+          at 0,1
+          body "bundled corpus"
+        installation `Installation/`
+          at 1,1
+          body "project and runtime"
+        manual `Manual/`
+          at 2,1
+          body "official manuals"
+        contribution `Contribution/`
+          at 3,1
+          body "Forge and Gerrit"
+        publication `Publication/`
+          at 4,1
+          body "extension registries"
+    group upkeep "Upkeep: what maintains this checkout"
+      cli "repository CLI"
+        at 0,2
+        body "bin/cli"
+        ink
+      console `Upkeep/Cli`
+        at 1,2
+        body "registers every command"
+      command `Upkeep/Command/`
+        at 2,2
+        body "one subject:verb each"
+      records "Repository records"
+        at 3,2
+        span 2
+        body "knowledge · evidence · todo · decisions"
+        store
+    foundation "Shared foundation"
+      at 0,3
+      span 5
+      body "src/bootstrap.php locates the autoloader; src/Paths.php resolves this checkout."
+      emphasis
+
+    stdio -> server
+    server -> tool
+    tool -> result
+    tool -> sources
+    cli -> console
+    console -> command
+    command -> records
 
 The upkeep CLI
 --------------

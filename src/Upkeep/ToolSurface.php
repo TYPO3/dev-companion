@@ -27,6 +27,36 @@ use TYPO3\DevCompanion\Tool\Source;
  */
 final class ToolSurface
 {
+    /** The drawing of the five sources against the machine state each one needs, in the theme's diagram text. */
+    private const SOURCES_DIAGRAM = <<<'DIAGRAM'
+        bars
+          bands "nothing running,files on disk,a booted installation,network reach"
+          axis "Required machine state"
+        title "Every source has a precondition"
+        description "The five sources against how much of the machine has to run. Bundled knowledge and this server's own checkout answer with nothing up. Packages need files on disk, the installation source needs a booted installation, and network sources need outbound reach."
+
+        row `knowledge`
+          sub "Bundled and version-bound."
+          segments 4
+          emphasis
+        row `checkout`
+          sub "This server's own repository."
+          segments 4
+        row `packages`
+          sub "Files read, never executed."
+          segments absent=1 3
+        row `installation`
+          sub "Assembled runtime state."
+          segments absent=2 2
+        row `network`
+          sub "Official live services."
+          segments absent=3 1
+
+        legend
+          ink "available"
+          absent "the state this source still needs"
+        DIAGRAM;
+
     /**
      * The page every tool page links its sources into, named without the
      * extension. That is how a reference addresses a document, and the file is
@@ -365,11 +395,9 @@ final class ToolSurface
                 . ' writes this page from the Source enum.',
             ),
             '',
-            ...Rst::image(
-                '../images/answer-sources.svg',
-                'The five sources against how much of the machine has to run. Bundled knowledge and this '
-                . 'server\'s own checkout answer with nothing up. Packages need files on disk, the installation '
-                . 'source needs a booted installation, and network sources need outbound reach.',
+            ...Rst::diagram(
+                'A tool declares its sources, so the answer is known to be reachable before the question is asked.',
+                self::SOURCES_DIAGRAM,
             ),
         ];
 

@@ -11,12 +11,29 @@ The rules stay in `AGENTS.md <../../AGENTS.md>`_; what a change assumed is in
 `decisions/discovery/ <../../decisions/discovery/readme.md>`_. This is the
 procedure.
 
-.. image:: ../images/installation-fallback.svg
+.. diagram::
     :zoomable:
-        :alt: One square per entry the registry could return. The console path and
-          the booted runtime return all of them. The package-file fallback
-          returns every declared entry and none of the ones registered at
-          runtime, and the answer states that.
+    :caption: Every path runs outside this process; the shortfall travels with the result instead of being hidden.
+
+    units lines=4
+      head "what the machine allows"
+      key "one square = one entry the registry could return"
+    title "A fallback answers less, and says so"
+    description "One square per entry the registry could return. The console path and the booted runtime return all of them. The package-file fallback returns every declared entry and none of the ones registered at runtime, and the answer states that."
+
+    row "A console command exists"
+      sub "Typo3Cli::run()"
+      note "answeredBy: installation"
+      parts 88
+    row "No command — boot the runtime"
+      sub "Typo3Runtime::ask()"
+      note "answeredBy: installation"
+      parts 88
+    row "Failsafe mode, or unreachable"
+      sub "package files, read not executed"
+      note "answeredBy: packages"
+      missing "dynamic registrations, never read"
+      parts 68 degraded=20
 
 The order
 ---------

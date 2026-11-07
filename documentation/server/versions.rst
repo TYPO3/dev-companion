@@ -14,11 +14,30 @@ The covered lines are the LTS line of each major and ``main``. A minor release
 before an LTS is outside them, so a bound at a major is exact for every covered
 line.
 
-.. image:: ../images/version-binding.svg
+.. diagram::
     :zoomable:
-        :alt: TYPO3 12 through 15 form the covered timeline. Unbound statements
-          apply to all of it. Since and until bind one statement and demand a
-          check on both sides of the boundary.
+    :caption: Bind only what changed; keep the surrounding knowledge shared.
+
+    bars
+      bands "12.4 · LTS,13.4 · LTS,14.3 · stable,main · development"
+      axis "Covered line"
+    title "Version differences are data"
+    description "TYPO3 12 through 15 form the covered timeline. A statement without since or until holds on all of it. Since and until bind one statement to the lines it holds on, and a check runs on both sides of that boundary."
+
+    row `no since / until`
+      sub "Holds on every covered line."
+      segments 4
+    row `since: 14`
+      sub "Absent on 13; present on 14."
+      segments absent=2 2
+      emphasis
+    row `until: 13`
+      sub "Present on 13; absent on 14."
+      segments 2 absent=2
+
+    legend
+      ink "the statement holds"
+      absent "the statement is absent"
 
 A statement that does not hold on all of them says so **as data, not as prose**.
 ``since`` and ``until`` carry the major it starts and stops to hold at, and the

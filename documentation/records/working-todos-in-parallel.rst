@@ -14,11 +14,50 @@ of what accumulates here. Entries that name a decision each and stand against
 different parts of the checkout. It is not worth the cost for two todos about
 one file, and it is not worth it for one.
 
-.. image:: ../images/parallel-todos.svg
+.. diagram::
     :zoomable:
-        :alt: A worktree per todo says which session has it, and one branch carries
-          each session's unfinished work. Completed branches return one at a
-          time through rebase, checks and a fast-forward merge.
+    :caption: A worktree is the claim. Half-finished changes remain isolated until verified.
+
+    flow
+      columns 1,1,1
+    title "Main carries state; branches carry work"
+    description "A worktree per todo says which session has it, and one branch carries each session's unfinished work. Completed branches return one at a time through rebase, checks and a fast-forward merge."
+
+    main `main`
+      at 0,0
+      span 3
+      body "todo/open stays as it is. bin/cli todo:claim <n> gives a todo its branch and worktree, and that worktree is the claim."
+      ink
+    alpha "Branch + worktree"
+      at 0,1
+      tag `todo/alpha`
+      item "own composer install"
+      item "one session, one worktree"
+      item "unfinished diff stays here"
+    bravo "Branch + worktree"
+      at 1,1
+      tag `todo/bravo`
+      item "reads the same queue"
+      item "touches its own todo"
+      item "knows nothing of siblings"
+    charlie "Branch + worktree"
+      at 2,1
+      tag `todo/charlie`
+      item "a question becomes Waiting on"
+      item "the branch keeps completed work"
+      item "todo:park moves the question"
+    home "Bring home one branch at a time"
+      at 0,2
+      span 3
+      body "rebase main → composer ci → merge --ff-only → remove worktree. Then repeat for the next completed branch."
+      emphasis
+
+    main -> alpha
+    main -> bravo
+    main -> charlie
+    alpha -> home
+    bravo -> home
+    charlie -> home
 
 The worktree and the branch
 ---------------------------

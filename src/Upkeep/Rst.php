@@ -135,25 +135,28 @@ final class Rst
     }
 
     /**
-     * A drawing, with the sentence that stands in for it where a reader cannot
-     * see it.
+     * A drawing the theme's engine draws from the diagram text in the
+     * directive's body, with the consequence under it.
      *
-     * The description is the `:alt:` rather than a caption. It says what the
-     * drawing shows for a reader who does not see it, which is not the same as
-     * a title under the figure.
-     *
-     * Every drawing here is a diagram rather than a picture. A diagram renders
-     * at the width of the column it lands in, which is not the width its labels
-     * suit. `:zoomable:` is what gives that back.
+     * The text carries its own title and description, which are the drawing's
+     * accessible name, so the directive takes no `:alt:`. `:zoomable:` gives
+     * back the width a diagram loses in the column it lands in.
      *
      * @return list<string>
      */
-    public static function image(string $path, string $alt): array
+    public static function diagram(string $caption, string $text): array
     {
+        $body = [];
+        foreach (explode("\n", $text) as $line) {
+            $body[] = $line === '' ? '' : self::INDENT . $line;
+        }
+
         return [
-            '.. image:: ' . $path,
+            '.. diagram::',
             self::INDENT . ':zoomable:',
-            self::INDENT . ':alt: ' . Wrap::text($alt, self::INDENT . '      '),
+            self::INDENT . ':caption: ' . $caption,
+            '',
+            ...$body,
             '',
         ];
     }

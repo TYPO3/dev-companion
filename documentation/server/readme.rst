@@ -27,11 +27,48 @@ What a caller can ask it, and where each answer comes from.
   for TYPO3, read as a reference. What it says and what would change here if the
   community ever adopted it.
 
-.. image:: ../images/answer-flow.svg
+.. diagram::
     :zoomable:
-        :alt: A task starts with a read of the project and names its workflow. Then
-          it uses a specialist tool and returns the source, version, scope and
-          limits with the answer.
+    :caption: The route is explicit, so a plausible answer does not silently become the wrong one.
+
+    flow
+      columns 1,1,1
+    title "Context first, specialist lookup second"
+    description "A task starts with a read of the project and names its workflow. Then it uses a specialist tool and returns the source, version, scope and limits with the answer."
+
+    project `typo3_project_describe`
+      at 0,0
+      eyebrow "1 · read the project"
+      ink
+      body "version · extensions · commands"
+    guide `typo3_task_guide`
+      at 1,0
+      eyebrow "2 · identify the task"
+      body "workflow · checks · next lookup"
+    specialist "Ask the specialist tool"
+      at 2,0
+      eyebrow "3 · look it up"
+      body "component · icon · label · schema · changelog · rule · hint · commit · Forge · Gerrit"
+    group sources "What the tool answers from"
+      knowledge "Bundled knowledge"
+        at 0,1
+        body "Version-bound and available offline."
+      installation "Project or installation"
+        at 1,1
+        body "The state that is active here."
+      live "Official live source"
+        at 2,1
+        body "Canonical docs or core service."
+    answer "Answer with evidence"
+      at 0,2
+      span 3
+      body "version · scope · answeredBy · limits · structuredContent"
+      emphasis
+
+    project -> guide
+    guide -> specialist
+    specialist -> sources
+    sources -> answer
 
 The tools are the server. Everything else on this page is either the other
 surface beside them or an account of where their answers come from. That is the

@@ -263,7 +263,7 @@ final class ProseTest extends TestCase
         $document = ".. _a-label:\n\nA heading that is long enough to be wrapped if anything wrapped a heading at all\n"
             . "===============================================================================\n\n"
             . ".. code-block:: php\n\n    \$a = 'one very long line of code that no formatter here is allowed to touch';\n\n"
-            . ".. image:: ../images/answer-sources.svg\n    :alt: A sentence standing under the directive that owns it.\n\n"
+            . ".. diagram::\n    :caption: A sentence standing under the directive that owns it, long enough to pass the column.\n\n    units\n    title \"A drawing whose text no formatter may rewrap, however long a line of it runs\"\n\n"
             . "=========  ==============================================================\n"
             . "Source     What it means\n"
             . "=========  ==============================================================\n"

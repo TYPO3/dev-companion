@@ -14,11 +14,52 @@ the package instead, which is the second section. The
 `readme <../../readme.md>`_ has the short version; this page has the cases it
 leaves out.
 
-.. image:: ../images/install-flow.svg
+.. diagram::
     :zoomable:
-        :alt: The installer puts a standalone checkout or a Composer dependency into
-          a project. That writes client configuration, publishes skills and
-          records the setup. The client then approves and verifies it.
+    :caption: Writing the files is setup; client trust and a fresh session make them active.
+
+    flow
+      columns 1.35,1.15,1,1.1
+    title "From package to an active client"
+    description "The installer puts a standalone checkout or a Composer dependency into a project. That writes client configuration, publishes skills and records the setup. The client then approves and verifies it."
+
+    standalone "Standalone checkout"
+      at 0,0
+      body "bin/typo3-dev-companion"
+    composer "Composer dependency"
+      at 0,1
+      body "vendor/bin/typo3-dev-companion"
+    install "Install or update"
+      at 1,0
+      rows 2
+      item "generic or --agent=<id>"
+      item "DDEV-aware command"
+      ink
+    group files "Project files written"
+      emphasis
+      mcp "MCP configuration"
+        at 2,0
+      skills "Published task skills"
+        at 2,1
+      state `state.json`
+        at 2,2
+    activate "Activate in client"
+      at 3,0
+      rows 2
+      item "1. Trust or approve"
+      item "2. Restart if required"
+      item "3. Start a fresh session"
+      item "tools/list confirms the server"
+    ready "Ready"
+      at 0,3
+      span 4
+      body "The client exposes typo3_* tools and the installed task skills; update refreshes every recorded setup."
+
+    standalone -> install
+    composer -> install
+    install -> files
+    files -> activate
+    activate -> ready
 
 ``install`` and ``update`` write into the directory they run in, which is the
 project under setup. Every command below is therefore run from the root of the

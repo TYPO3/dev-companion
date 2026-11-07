@@ -259,9 +259,9 @@ final class SiteTest extends TestCase
     {
         Site::build($this->target);
 
-        $source = Paths::root() . '/' . Site::SOURCE . '/images/system-overview.svg';
-        self::assertFileExists($this->target . '/images/system-overview.svg');
-        self::assertFileEquals($source, $this->target . '/images/system-overview.svg');
+        $source = Paths::root() . '/' . Site::SOURCE . '/images/signet-m.svg';
+        self::assertFileExists($this->target . '/images/signet-m.svg');
+        self::assertFileEquals($source, $this->target . '/images/signet-m.svg');
     }
 
     /** A page under a new name or gone leaves the site on the next build. */

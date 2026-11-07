@@ -5,12 +5,60 @@ What a forward review is, and the five of them, are in
 `scenarios/forward/readme.md <../../scenarios/forward/readme.md>`_. This is how
 a session carries one out.
 
-.. image:: ../images/forward-run.svg
+.. diagram::
     :zoomable:
-        :alt: A recorded scenario runs in a clean real project with no steer.
-          It produces a transcript and a read of the working tree. A judge
-          holds it to fixed criteria, and reusable findings leave as feedback
-          or a contract case.
+    :caption: The prompt is fixed, the session is unsteered, and the transcript decides the judgment.
+
+    flow
+      columns 1,1,1.15,1.15
+    title "From scenario to a reusable finding"
+    description "A recorded scenario runs in a clean real project with no steer. It produces a transcript and a read of the working tree. A judge holds it to fixed criteria, and reusable findings leave as feedback or a contract case."
+
+    prepare "Prepare"
+      at 0,0
+      tag "1"
+      item "recorded scenario"
+      item "clean real project"
+      item "current skills + server"
+    run "Run"
+      at 1,0
+      tag "2"
+      item "fresh agent session"
+      item "prompt pasted verbatim"
+      item "no steering"
+      ink
+    collect "Collect"
+      at 2,0
+      tag "3"
+      item "transcript + tool arguments"
+      item "skills activated"
+      item "git status afterwards"
+    judge "Judge and record"
+      at 3,0
+      tag "4"
+      item "criteria as written"
+      item "one judgment per criterion"
+      item "one file in scenarios/runs/"
+    transfer "Ask what transfers beyond this project"
+      at 2,1
+      span 2
+      body "The verdict stays in the run; the reusable lesson moves on."
+      emphasis
+    feedback "Server feedback"
+      at 0,2
+      span 2
+      body "missing, wrong or unhelpful answer"
+    contract "New contract case"
+      at 2,2
+      span 2
+      body "repeatable task or failure shape"
+
+    prepare -> run
+    run -> collect
+    collect -> judge
+    judge -> transfer
+    transfer -> feedback
+    transfer -> contract
 
 Running one
 -----------

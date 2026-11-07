@@ -151,11 +151,51 @@ Composer dependency the package lives in ``vendor/``, where the next
 ``composer install`` would lose anything written there. There the server stays
 strictly read-only and neither tool appears in ``tools/list``.
 
-.. image:: ../images/feedback-loop.svg
+.. diagram::
     :zoomable:
-        :alt: A real task exposes a gap and records one feedback. The feedback moves
-          through the queue into a guarded improvement. Another real task
-          verifies it.
+    :caption: Evidence stays in the repository instead of leaving with the session.
+
+    flow
+      columns 1.4,1
+    title "A gap becomes a tested improvement"
+    description "The five steps of the loop, one per row: a real task uses the server, finds a gap, records it as feedback, settles it into a requirement or decision with the check that holds it, and a later task verifies the change. The right column names what the repository keeps at each step, and the emphasis closes the loop from the last step back to the first."
+
+    column 1 "Kept in the repository"
+    use "Real task"
+      at 0,0
+      eyebrow "01 · use"
+      body "Ask the server before searching elsewhere."
+    find "One gap"
+      at 0,1
+      eyebrow "02 · find"
+      body "Missing, wrong or unhelpful, with proof."
+    record "Feedback"
+      at 0,2
+      eyebrow "03 · record"
+      body "One subject, one file, reproducible."
+    settle "Improvement"
+      at 0,3
+      eyebrow "04 · settle"
+      body "The change, and the check that holds it."
+    verify "Next task"
+      at 0,4
+      eyebrow "05 · test"
+      body "Verify what changed; keep the evidence."
+    feedback `feedback/`
+      at 1,2
+      store
+    records `requirements/ · decisions/`
+      at 1,3
+      store
+
+    use -> find
+    find -> record
+    record -> settle
+    settle -> verify
+    record -> feedback
+    settle -> records
+    verify => use
+      via h
 
 Working a feedback off
 ----------------------

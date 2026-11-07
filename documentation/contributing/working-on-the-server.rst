@@ -234,10 +234,10 @@ into the runner's own temporary directory.
 
 The order is not a choice. The renderer publishes the copy rather than these
 sources, so a render before a prepare renders the previous one. The theme's
-finish step reads the pages the renderer has just written. It is what copies the
-stylesheet, the script and the faces beside them and writes the index the search
-bar fetches. The workflow spells the same three steps out, which is the one
-thing here written down twice.
+finish step reads the pages the renderer has just written. It draws every
+element on them ahead of the browser and writes the index the search bar
+fetches. The workflow spells the same three steps out, which is the one thing
+here written down twice.
 
 Delete ``.site/`` to render against the theme as it stands. The preview keeps
 the renderer it fetched, and a deployment resolves it fresh on every run.
@@ -247,19 +247,19 @@ search fetches its index as a file beside the pages, and a browser refuses that
 fetch over ``file://``. Everything else on the page survives it, so a site
 opened from disk looks whole and has no search.
 
-87 of the links here point at a decision, a requirement or a class, and a
+Many of the links here point at a decision, a requirement or a class, and a
 visitor of the site has none of those. The copy turns each of them into the file
 on GitHub and leaves the rest as they are. So these pages keep the paths a
-reader of the checkout follows. It also publishes every ``readme.md`` as the
-``index.md`` a generator serves as the directory itself. It drops the heading a
+reader of the checkout follows. It also publishes every ``readme.rst`` as the
+``index.rst`` a generator serves as the directory itself. It drops the heading a
 link names in another page, which this renderer answers with a dropped link.
 What that costs is ``D-DOC-017``.
 
 The renderer is phpDocumentor Guides, configured in ``guides.xml``. Nothing here
 requires it. The step asks for one package, ``typo3/soul-guides-theme``, and the
 renderer comes with it. Resolved into this package's own ``require-dev`` it
-would add 34 packages to every ``composer install``. So it lands in a directory
-of its own instead (``D-DOC-028``).
+would add the renderer's whole dependency tree to every ``composer install``. So
+it lands in a directory of its own instead (``D-DOC-028``).
 
 That configuration sits beside the pages, as ``documentation/guides.xml``. That
 is where a TYPO3 extension keeps its own and where ``-c documentation`` names it
@@ -285,13 +285,11 @@ grid, a card and a surface take is
 `the theme's own manual <https://typo3.github.io/soul-design-system/guides-theme/directives.html>`_;
 nothing here renders any of them.
 
-Two things in ``guides.xml`` carry weight. ``theme="soul"`` selects a theme that
-has to exist first, and the extension element below it is what makes it exist.
-``automatic-menu`` is the other. The rail and the trail are a ``toctree`` in
-this renderer, which is a reStructuredText directive this markdown corpus cannot
-write. With it on, the same tree comes out of the directories instead. So
-**every directory of this documentation needs its own ``readme.md``**. A page
-whose directory has none attaches to nothing and lands in no menu at all, which
+``theme="soul"`` in ``guides.xml`` selects a theme that has to exist first, and
+the extension element below it is what makes it exist. The rail and the trail
+are the ``toctree`` each directory's own page carries. So **every directory of
+this documentation needs its own ``readme.rst``**. A page whose directory has
+none attaches to nothing and lands in no menu at all, which
 ``SiteTest::everyDirectoryOfTheDocumentationHasItsOwnPage`` stops.
 
 The mark is this repository's own drawing and lives with the pages, as

@@ -4,6 +4,7 @@ TYPO3 Dev Companion
 ===================
 
 .. hero:: images/dev-companion-robot-server-hero.png
+    :plain:
 
     A local MCP server (plain PHP) that helps coding agents implement, review
     and verify TYPO3 work for the three audiences that do it: the core

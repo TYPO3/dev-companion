@@ -64,6 +64,7 @@
         <favicon href="images/signet-l.svg" sizes="32x32"/>
         <brand>TYPO3</brand>
         <product>Dev Companion</product>
+        <cdn>jsdelivr</cdn>
         <!--
             The four sections, and only those. The bar is where a reader goes
             from anywhere; the rail below it is the section they are in, and a

@@ -87,7 +87,7 @@ answer stays small.
     :zoomable:
     :caption: Read the corpus first. The first rung supported by evidence stops the descent.
 
-    flow
+    flow canvas=960
       columns 1,1.6
       even
     title "Walk the feedback down the ladder"

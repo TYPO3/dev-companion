@@ -18,7 +18,7 @@ one file, and it is not worth it for one.
     :zoomable:
     :caption: A worktree is the claim. Half-finished changes remain isolated until verified.
 
-    flow
+    flow canvas=960
       columns 1,1,1
     title "Main carries state; branches carry work"
     description "A worktree per todo says which session has it, and one branch carries each session's unfinished work. Completed branches return one at a time through rebase, checks and a fast-forward merge."

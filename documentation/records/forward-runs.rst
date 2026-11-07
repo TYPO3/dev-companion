@@ -9,7 +9,7 @@ a session carries one out.
     :zoomable:
     :caption: The prompt is fixed, the session is unsteered, and the transcript decides the judgment.
 
-    flow
+    flow canvas=960
       columns 1,1,1.15,1.15
     title "From scenario to a reusable finding"
     description "A recorded scenario runs in a clean real project with no steer. It produces a transcript and a read of the working tree. A judge holds it to fixed criteria, and reusable findings leave as feedback or a contract case."

@@ -10,9 +10,9 @@ in `AGENTS.md <../../AGENTS.md>`_; these are the commands they rest on.
     :zoomable:
     :caption: The server surface and the repository workflow share paths and bootstrap, not responsibilities.
 
-    flow
+    flow canvas=960
       columns 1.5,1.1,1.4,1.1,1.1
-      gap 36,40
+      gap 24,40
     title "Runtime answers; upkeep maintains"
     description "The stdio runtime routes client calls through the Server, Tool and Result classes, which answer from five sources. The separate repository CLI runs upkeep commands over knowledge, evidence and work records. Both stand on one bootstrap and one Paths class."
 

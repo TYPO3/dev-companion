@@ -18,7 +18,7 @@ leaves out.
     :zoomable:
     :caption: Writing the files is setup; client trust and a fresh session make them active.
 
-    flow
+    flow canvas=960
       columns 1.35,1.15,1,1.1
     title "From package to an active client"
     description "The installer puts a standalone checkout or a Composer dependency into a project. That writes client configuration, publishes skills and records the setup. The client then approves and verifies it."

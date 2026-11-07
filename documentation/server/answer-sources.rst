@@ -14,7 +14,7 @@ answered one call is ``answeredBy`` in that answer, where the tool has two.
     :zoomable:
     :caption: A tool declares its sources, so the answer is known to be reachable before the question is asked.
 
-    bars
+    bars canvas=960
       bands "nothing running,files on disk,a booted installation,network reach"
       axis "Required machine state"
     title "Every source has a precondition"

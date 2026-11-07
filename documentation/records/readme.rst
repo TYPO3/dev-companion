@@ -185,7 +185,7 @@ strictly read-only and neither tool appears in ``tools/list``.
     :zoomable:
     :caption: Evidence stays in the repository instead of leaving with the session.
 
-    flow
+    flow canvas=960 margin=60
       columns 1.4,1
     title "A gap becomes a tested improvement"
     description "The five steps of the loop, one per row: a real task uses the server, finds a gap, records it as feedback, settles it into a requirement or decision with the check that holds it, and a later task verifies the change. The right column names what the repository keeps at each step, and the emphasis closes the loop from the last step back to the first."

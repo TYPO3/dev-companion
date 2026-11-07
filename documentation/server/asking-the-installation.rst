@@ -17,7 +17,7 @@ procedure.
     :zoomable:
     :caption: Every path runs outside this process; the shortfall travels with the result instead of being hidden.
 
-    units lines=4
+    units canvas=960 lines=4
       head "what the machine allows"
       key "one square = one entry the registry could return"
     title "A fallback answers less, and says so"

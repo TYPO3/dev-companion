@@ -29,7 +29,7 @@ final class ToolSurface
 {
     /** The drawing of the five sources against the machine state each one needs, in the theme's diagram text. */
     private const SOURCES_DIAGRAM = <<<'DIAGRAM'
-        bars
+        bars canvas=960
           bands "nothing running,files on disk,a booted installation,network reach"
           axis "Required machine state"
         title "Every source has a precondition"

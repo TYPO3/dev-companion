@@ -54,7 +54,7 @@ What a caller can ask it, and where each answer comes from.
     :zoomable:
     :caption: The route is explicit, so a plausible answer does not silently become the wrong one.
 
-    flow
+    flow canvas=960
       columns 1,1,1
     title "Context first, specialist lookup second"
     description "A task starts with a read of the project and names its workflow. Then it uses a specialist tool and returns the source, version, scope and limits with the answer."

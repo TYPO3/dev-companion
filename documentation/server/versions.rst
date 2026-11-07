@@ -18,7 +18,7 @@ line.
     :zoomable:
     :caption: Bind only what changed; keep the surrounding knowledge shared.
 
-    bars
+    bars canvas=960
       bands "12.4 · LTS,13.4 · LTS,14.3 · stable,main · development"
       axis "Covered line"
     title "Version differences are data"

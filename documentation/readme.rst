@@ -3,7 +3,7 @@
 TYPO3 Dev Companion
 ===================
 
-.. hero:: images/dev-companion-robot-server-hero.png
+.. hero:: images/dev-companion-robot-server-hero.webp
     :plain:
 
     A local MCP server (plain PHP) that helps coding agents implement, review

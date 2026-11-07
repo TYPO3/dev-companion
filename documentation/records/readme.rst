@@ -9,20 +9,50 @@ is what each one is for and how the work moves between them.
 
 The pages that carry one of those steps out:
 
-* :doc:`judging` — what a session asks of one open feedback, in which order and
-  on what evidence.
-* :doc:`working-a-todo` — what a session reads before it changes the todo
-  ``bin/cli todo:next`` handed over, and what the queue says afterwards.
-* :doc:`working-todos-in-parallel` — how several sessions get different todos,
-  where each writes, and how it comes back.
-* :doc:`requirements` and :doc:`writing-a-requirement` — what one states, and
-  the sections it consists of.
-* :doc:`decisions` and :doc:`writing-a-decision` — what one carries that a
-  commit message cannot, and what a later session adds to its foot.
-* :doc:`forward-runs` — how to run a forward review, judge it, and read one that
-  stopped without an error.
-* :doc:`asking-for-a-debrief` — the prompt a session in somebody else's agent
-  gets once the work ends, and why it asks what it asks.
+.. grid::
+
+    .. card:: :doc:`working-a-todo`
+
+        What a session reads before it changes the todo ``bin/cli todo:next``
+        handed over, and what the queue says afterwards.
+
+    .. card:: :doc:`working-todos-in-parallel`
+
+        How several sessions get different todos, where each writes, and how it
+        comes back.
+
+    .. card:: :doc:`requirements`
+
+        What a requirement states, and what its three states promise a reader.
+
+    .. card:: :doc:`writing-a-requirement`
+
+        The sections a requirement consists of.
+
+    .. card:: :doc:`decisions`
+
+        What a decision carries that a commit message cannot.
+
+    .. card:: :doc:`writing-a-decision`
+
+        The sections a decision consists of, and what a later session adds to
+        its foot.
+
+    .. card:: :doc:`forward-runs`
+
+        How to run a forward review, judge it, and read one that stopped without
+        an error.
+
+    .. card:: :doc:`judging`
+
+        What a session asks of one open feedback, in which order and on what
+        evidence.
+
+    .. card:: :doc:`asking-for-a-debrief`
+
+        The prompt a session in somebody else's agent gets once the work ends,
+        and why it asks what it asks.
+
 
 Where a session starts
 ----------------------

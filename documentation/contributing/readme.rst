@@ -6,15 +6,27 @@ Contributing
 The commands that keep this repository in order, and what has to be true of the
 session that does the work.
 
-* :doc:`working-on-the-server` — the checkouts a session verifies a knowledge
-  change against, the environments, the test suite, and how the documentation
-  gets published.
-* :doc:`driving-a-session` — what has to be true of an agent session started
-  from a command line. That holds whether it carries a forward run or works a
-  todo in a worktree.
-* :doc:`writing-a-skill` — what a new task skill has to show before it exists,
-  the rules it follows, and what holds each one.
-* :doc:`glossary` — the name of everything here, one line each.
+.. grid::
+
+    .. card:: :doc:`driving-a-session`
+
+        What has to be true of an agent session started from a command line,
+        whether it carries a forward run or works a todo in a worktree.
+
+    .. card:: :doc:`working-on-the-server`
+
+        The checkouts a session verifies a knowledge change against, the
+        environments, the test suite, and how the documentation gets published.
+
+    .. card:: :doc:`writing-a-skill`
+
+        What a new task skill has to show before it exists, the rules it
+        follows, and what holds each one.
+
+    .. card:: :doc:`glossary`
+
+        The name of everything here, one line each.
+
 
 A skill is the one thing written here that leaves the repository and stays. It
 goes as a copy into somebody's project, where the next release of this server

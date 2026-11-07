@@ -6,57 +6,58 @@ Using the server
 Four steps from nothing to the first answered question. Each is short here and
 names the page that has the detail.
 
-1. Install it
--------------
+.. steps::
 
-One standalone checkout serves every project on the machine. ``install`` writes
-into the directory it runs in. So the last two lines run from the root of the
-project the agent works in, never from the checkout:
+    .. step:: Install it
 
-.. code-block:: bash
+        One standalone checkout serves every project on the machine. ``install``
+        writes into the directory it runs in. So the last two lines run from the
+        root of the project the agent works in, never from the checkout:
 
-    git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
-    composer install --working-dir=typo3-dev-companion
-    cd /path/to/your/project
-    /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
+        .. code-block:: bash
 
-Without ``--agent`` that writes the entry into ``.mcp.json`` and the skills into
-``.agents/skills``, the two places a client finds without configuration for it.
-Name a client that reads elsewhere, ``--agent=cursor``, ``--agent=copilot``, and
-:ref:`the client table <installing-clients>` says which file each one gets. A
-project can require the package instead of a pointer at a checkout; that and
-every other case is :doc:`installing`.
+            git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
+            composer install --working-dir=typo3-dev-companion
+            cd /path/to/your/project
+            /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
 
-2. Finish in the client
------------------------
+        Without ``--agent`` that writes the entry into ``.mcp.json`` and the
+        skills into ``.agents/skills``, the two places a client finds without
+        configuration for it. Name a client that reads elsewhere,
+        ``--agent=cursor``, ``--agent=copilot``, and :ref:`the client table
+        <installing-clients>` says which file each one gets. A project can
+        require the package instead of a pointer at a checkout; that and every
+        other case is :doc:`installing`.
 
-A file on disk registers nothing. The client has to read it, and most ask you to
-approve a project server before they start it. Claude Code reads ``.mcp.json``
-when a session starts, so restart the session and approve at the prompt. The
-install prints what your client needs under the line that reports the entry.
-:ref:`installing-finishing-in-the-client` has the same list with each client's
-own documentation behind it.
+    .. step:: Finish in the client
 
-3. Ask it one question
-----------------------
+        A file on disk registers nothing. The client has to read it, and most
+        ask you to approve a project server before they start it. Claude Code
+        reads ``.mcp.json`` when a session starts, so restart the session and
+        approve at the prompt. The install prints what your client needs under
+        the line that reports the entry.
+        :ref:`installing-finishing-in-the-client` has the same list with each
+        client's own documentation behind it.
 
-In the client you work in:
+    .. step:: Ask it one question
 
-    Which icon identifier is the right one for a delete button in the TYPO3
-    backend?
+        In the client you work in:
 
-Then look at what the agent did: a call to ``typo3_icon_lookup`` means the
-server answers. An answer with no call behind it means the client never started
-it, and :doc:`checking-it-answers` is how to find out why.
+            Which icon identifier is the right one for a delete button in the
+            TYPO3 backend?
 
-4. Describe your task
----------------------
+        Then look at what the agent did: a call to ``typo3_icon_lookup`` means
+        the server answers. An answer with no call behind it means the client
+        never started it, and :doc:`checking-it-answers` is how to find out why.
 
-There is nothing more to drive. Describe the work in whatever language you speak
-to your agent in, and the server tells the agent at connect where to start.
-:doc:`working-with-it` is what that changes on your side of the conversation.
-:doc:`task-skills/ <task-skills/index>` lists the workflows the install
-published beside the server, with their complete instructions.
+    .. step:: Describe your task
+
+        There is nothing more to drive. Describe the work in whatever language
+        you speak to your agent in, and the server tells the agent at connect
+        where to start. :doc:`working-with-it` is what that changes on your side
+        of the conversation. :doc:`task-skills/ <task-skills/index>` lists the
+        workflows the install published beside the server, with their complete
+        instructions.
 
 Afterwards
 ----------

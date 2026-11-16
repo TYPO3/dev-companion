@@ -28,5 +28,5 @@ none of them needs its own source read to find out what it does.
 Where a command refuses, that refusal is the thing to read and report — it names
 what is not what the procedure assumes. The pages behind the commands
 ([todo/readme.md](../../todo/readme.md),
-[working-todos-in-parallel.md](../../documentation/records/working-todos-in-parallel.rst))
+[working-todos-in-parallel.rst](../../documentation/records/working-todos-in-parallel.rst))
 are for that case and for changing the procedure, not for running it.

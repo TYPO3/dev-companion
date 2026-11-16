@@ -61,6 +61,7 @@ src/Manual/        # the third source: the versioned TYPO3 manuals, and the core
 src/Contribution/  # the fourth source: the services the core's own process runs through
 src/Publication/   # the fifth source: the registries a TYPO3 extension is published to, what they already hold, and what they find by subject
 src/Http/Fetch.php # the one way this server reads a host outside itself: the timeouts, the redirect limit and the agent
+src/Process/       # the one way this server leaves its own process: CommandRunner, the seam a test takes, and SystemRunner, the real one
 src/Search/        # the lexical matching every prose and label lookup goes through
 src/Feedback/      # the feedback channel; a development tool, offered from a standalone checkout alone
 src/Feedback/Card.php  # the todo a feedback arrives with
@@ -414,10 +415,10 @@ A tool is one class in `src/Tool/`, and it implements
 `TYPO3\DevCompanion\Tool\Tool`. Its name, what it takes, what shape it answers
 in, and the answer itself stand in one file. So a description cannot go stale
 against the answer it describes unless somebody edits the two apart.
-`TYPO3\DevCompanion\Tools` is the list of them, and the only place that switches
-a tool on. Nothing else belongs below `src/Tool/`. What more than one tool
-builds its answer from is `TYPO3\DevCompanion\Result\`, and the adapters onto
-`mcp/sdk` are `TYPO3\DevCompanion\Sdk\`.
+`TYPO3\DevCompanion\Tool\Registry` is the list of them, and the only place that
+switches a tool on. Nothing else belongs below `src/Tool/`. What more than one
+tool builds its answer from is `TYPO3\DevCompanion\Result\`, and the adapters
+onto `mcp/sdk` are `TYPO3\DevCompanion\Sdk\`.
 
 The word is the protocol's: an MCP tool is what the SDK declares as
 `Mcp\Schema\Tool`, beside `Prompt` and `Resource`. Nothing here is a "server

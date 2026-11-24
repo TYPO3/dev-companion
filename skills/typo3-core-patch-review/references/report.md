@@ -91,6 +91,7 @@ severity headings and one field of a finding are this skill's own.
 | Tests                          |                                            |                  |
 | Documentation and changelog    |                                            |                  |
 | Commit shape                   |                                            |                  |
+| Prose                          |                                            |                  |
 | Review readiness               |                                            |                  |
 | The review this patch is in    |                                            |                  |
 | The chain this change sits in  |                                            |                  |

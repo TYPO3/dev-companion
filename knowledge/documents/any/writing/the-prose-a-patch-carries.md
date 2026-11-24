@@ -2,7 +2,7 @@
 description: >-
   How a code comment, a docblock, a test name and a changelog entry in a patch have to read, with the rejected sentence and its replacement for each rule.
 whenToUse: >-
-  Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+  Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 hints: []
 ---
 
@@ -12,9 +12,10 @@ A reviewer reads your comments. A patch whose code is right and whose prose is
 not costs a review round. The reviewer spends that round on sentences rather
 than on the change.
 
-These rules come from one core patch. The reviewer accepted its code after one
-round and rejected its comments twice. Each rule below carries the sentence the
-reviewer rejected and the sentence that replaced it.
+Most of these rules come from one core patch. The reviewer accepted its code
+after one round and rejected its comments twice. The rules on terms and on the
+text as a whole come from a second patch, where the review found the gap late.
+Each rule carries a rejected sentence and the sentence that replaced it.
 
 Nothing here says whether you owe a comment. That is the codebase's own rule.
 The TYPO3 core asks for a comment only where it adds meaning. This page is about
@@ -84,6 +85,50 @@ not parse, take the words back.
   mail."
 - Written: "A stored value has a narrower syntax than an address you can send
   mail to."
+
+## Keep the Sentence Short and Plain
+
+These rules come from ASD-STE100, Simplified Technical English. The core does
+not require STE. A reviewer still reads a plain sentence faster.
+
+- An instruction has at most 20 words. A description has at most 25.
+- Use the simple tenses: present, past and future. Use the present tense where
+  you can.
+- Use a noun cluster of three words at most.
+  - Rejected: "the site root page ancestry query"
+  - Written: "the query for the ancestry of the site root pages"
+- Keep the articles and "that".
+  - Rejected: "Finds sites user has access to through web mounts."
+  - Written: "Finds the sites that the user has access to through the web
+    mounts."
+
+The STE dictionary of approved words is not part of this server. So judge a word
+by the two rules that follow, not from memory of the dictionary.
+
+## One Term for One Thing, Across the Patch
+
+The commit message, the comments, the identifiers and the code near the change
+use one term for one thing. Take the term from the code near the change.
+
+- Rejected: `isSiteReachable()` and the comment "the sites a user can reach", in
+  a patch that calls `SourceHostProvider::getAccessibleHosts()`.
+- Written: `isSiteAccessible()` and "the sites a user has access to".
+
+Compare the terms across all of them, not one sentence at a time. A commit
+message that says "web mount page" beside a docblock that says "web mount" names
+one thing twice. Each text is correct alone, and only the comparison finds it.
+
+## Read the Prose as One Text
+
+Read the commit message and the comments in the order a reviewer reads them.
+Each sentence connects clearly to the sentence before it. A chain of "this", "in
+this case" and "thus" makes the reader carry every step.
+
+- Rejected: "A web mount page can be the parent page of site root pages. This
+  web mount page can belong to no site itself. In this case, the module finds no
+  site and shows no host."
+- Written: "Where a web mount is above site root pages and in no site itself,
+  the module shows no host for those sites."
 
 ## One Fact, One Place
 

@@ -181,6 +181,10 @@ Ask the owner of each obligation rather than recall it:
   extensions is a convention. A review that proposes an alternative and names
   none has argued from taste.
 
+- `typo3_rule_lookup` with `documentId="any/writing/the-prose-a-patch-carries"`
+  for the **Prose** surface. A brief carries that page to a task that writes
+  files, and a review writes none. So the review asks for it here.
+
 Every finding names the changed path it is about. A statement about the
 subsystem that ties to no line in this diff belongs in the issue.
 

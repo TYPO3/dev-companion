@@ -324,7 +324,7 @@ Called with:
                         "body": "- A deprecation must not use `[!!!]`.\n- A deprecation may only use `[TASK]` or `[FEATURE]`.\n- A deprecation must have a changelog RST file.\n- A deprecation needs migration guidance and may need extension scanner\n  considerations.\n- All of the above is the author's side. The reader's side works the other way\n  round. It asks what a given version deprecated, and what that means for code\n  that uses it. The Extension Scanner in the Install Tool checks an installation\n  against two directories. Those are the changelog files below\n  `Documentation/Changelog/` of the core package, and the matchers below the\n  install package's `Configuration/ExtensionScanner/Php/`. Both ship with a\n  Composer installation.",
                         "versions": "",
                         "coverage": 1,
-                        "score": 119,
+                        "score": 120,
                         "truncated": false
                     },
                     {
@@ -430,7 +430,7 @@ Called with:
             - Looking at a Change in a Real Browser: Which Installation Shows It, Reaching a DDEV Site From a Container, Where the Harness and Its Output Go
             - Proving a TypoScript Condition Verdict: What Does Not Answer It, The Marker Only the Branch Produces, A Marker You Put There on Purpose, Which URL You Request, The Negative Control, What Stands Between Two Runs
             - Proving a Rendering Held Across a Change: What to Capture, and Why Not the Templates, Capture Twice Before You Edit Anything, What Has to Run Between the Two Captures, Reading the Diff, What It Does Not Prove
-            - The Prose a Patch Carries: Say What Is, Name Who Acts, One Thought per Sentence, End on the Object, Name the Place Instead of Pointing at It, Use the Words the Codebase Uses, A Longer Correct Sentence Beats a Short Broken One, One Fact, One Place, Say Why, Length Is a Ceiling, The Check Before You Hand It Over
+            - The Prose a Patch Carries: Say What Is, Name Who Acts, One Thought per Sentence, End on the Object, Name the Place Instead of Pointing at It, Use the Words the Codebase Uses, A Longer Correct Sentence Beats a Short Broken One, Keep the Sentence Short and Plain, One Term for One Thing, Across the Patch, Read the Prose as One Text, One Fact, One Place, Say Why, Length Is a Ceiling, The Check Before You Hand It Over
             - The Changelog Entry a Core Patch Owes: Which Change Owes a Changelog File, Where a Changelog File Goes, What a Changelog File Is Called, What a Changelog File Carries, What Checks a Changelog File, Reading Changelog Entries Instead of Writing One
             - TYPO3 Core Commit Message Rules: Who Reads It, Summary Line, Work in Progress, Body, The Longest Line The Hook Accepts, Relationships, Release Targets, The Trailers A Core Commit Carries, What The Commit Hook Writes, Breaking Changes, Changed Signatures, Deprecations, The Changelog Entry a Message Announces
             - The Build Output the Core Commits: Where the Committed Build Output Comes From, Reading a Minified Diff Without a Build, Rebuilding It Where Nothing of Yours Is at Risk, Output No Source Produces Any More, Rebuilding Every Commit of a Chain, A Backport That Conflicts in a Generated File, The Same Module Built on Two Branches
@@ -555,6 +555,9 @@ Called with:
                             "Name the Place Instead of Pointing at It",
                             "Use the Words the Codebase Uses",
                             "A Longer Correct Sentence Beats a Short Broken One",
+                            "Keep the Sentence Short and Plain",
+                            "One Term for One Thing, Across the Patch",
+                            "Read the Prose as One Text",
                             "One Fact, One Place",
                             "Say Why",
                             "Length Is a Ceiling",

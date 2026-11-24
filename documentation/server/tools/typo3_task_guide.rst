@@ -375,7 +375,7 @@ Called with:
             Recognized as: Deprecation
             Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.
             Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
             Hints:
             The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
@@ -582,7 +582,7 @@ Called with:
                     {
                         "id": "any/writing/the-prose-a-patch-carries",
                         "title": "The Prose a Patch Carries",
-                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
                         "scope": "any",
                         "tool": "typo3_rule_lookup"
                     }
@@ -1001,7 +1001,7 @@ Called with:
             Recognized as: Backend UI markup
             Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
             - any/testing/browser-check (any) — Looking at a Change in a Real Browser. When you have to see a defect rather than assert it — a position, a stacking order, something that appears only while the page scrolls — and when a screenshot or a browser session has to run against an installation that already has the content.
-            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
             Hints:
             The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
@@ -1121,7 +1121,7 @@ Called with:
                     {
                         "id": "any/writing/the-prose-a-patch-carries",
                         "title": "The Prose a Patch Carries",
-                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
                         "scope": "any",
                         "tool": "typo3_rule_lookup"
                     }
@@ -1397,7 +1397,7 @@ Called with:
             Possibly also: Registering an event listener, only if the task listens to an event something else dispatches; dispatching a new event from your own code is the other half of the subject and is not this. Its checklist items are marked as conditional below and its checks are listed separately.
             Owned by: typo3-core-patch-development. Load it where this project has it installed, and read typo3://skill/typo3-core-patch-development/SKILL.md where it has none — the skill carries the working order for this kind of work, and this brief is one call inside it.
             Written up in the pages below, each one typo3_rule_lookup call with that documentId, no resource list needed — the procedure for this kind of work, which this brief does not repeat. Read the one whose sentence names the work you are about to do:
-            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+            - any/writing/the-prose-a-patch-carries (any) — The Prose a Patch Carries. Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
 
             Hints:
             The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide.
@@ -1546,7 +1546,7 @@ Called with:
                     {
                         "id": "any/writing/the-prose-a-patch-carries",
                         "title": "The Prose a Patch Carries",
-                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
+                        "when": "Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.",
                         "scope": "any",
                         "tool": "typo3_rule_lookup"
                     }

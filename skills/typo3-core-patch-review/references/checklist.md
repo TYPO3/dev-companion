@@ -51,6 +51,24 @@ a reader cannot check. So where the reading did not happen, write unassessed.
   follow-up goes, not a reason the patch owes none.
 - **Commit shape.** Subject, body, issue reference, target branch line, and the
   markers the change type requires.
+- **Prose.** The comments, the docblocks, the test names and the commit message,
+  read against `any/writing/the-prose-a-patch-carries`. Read them as one text,
+  in the order a reviewer meets them. Compare the terms across all of them, the
+  identifiers, and the core code near the change. One thing has one term, and
+  the term comes from that code.
+
+  A word finding names the rule on that page or the identifier it differs from.
+  This server has no STE dictionary. So a word judged from memory of one says so
+  in its **Evidence** line. The core does not require STE, so a sentence finding
+  is **Worth a change**. A term finding reads like this:
+
+  ```markdown
+  ### 5. The patch says "reach" where the class says "accessible"
+
+  - **Where:** `typo3/sysext/core/Classes/Site/WebMountSiteFinder.php:84`
+  - **Observed:** `isSiteReachable()` beside `getAccessibleHosts()` in `SourceHostProvider`.
+  - **Rule:** One term for one thing, across the patch — `typo3_rule_lookup` documentId=any/writing/the-prose-a-patch-carries
+  ```
 - **Review readiness.** Whether a reader can understand the patch from the issue
   and the message alone. Whether a reviewer can reproduce what it claims to fix.
   Read the issue for that; do not infer it from the message that names it.

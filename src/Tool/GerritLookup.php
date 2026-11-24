@@ -1385,7 +1385,7 @@ final class GerritLookup extends ReadOnlyTool
      */
     public static function namedInMessages(array $entry): array
     {
-        if (($entry['namedInMessages'] ?? []) === [] || $entry['namedInMessages'] === null) {
+        if (($entry['namedInMessages'] ?? []) === []) {
             return [];
         }
 

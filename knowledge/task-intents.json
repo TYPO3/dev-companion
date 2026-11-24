@@ -1196,7 +1196,7 @@
       "typoscript constant",
       "constants"
     ],
-    "condition": "only if the task adds or changes a setting a site set defines; the site configuration itself — its languages, its base, its error handling — is not this and is not covered",
+    "condition": "only if the task adds or changes a setting a site set defines; the site configuration itself — its base, its error handling — is not this and is not covered, and its languages are site-language",
     "rulesQuery": "",
     "checklist": [
       "Decide who the value is for before deciding where it goes. A value an integrator changes per site is a set setting; a value that never differs between sites is the package's own and needs no setting at all. It is not a TypoScript constant either. Sets arrived in TYPO3 v13 and settings.definitions.yaml replaced constants there, so a package on that line or above writes a setting and a package still serving v12 has no set to put one in — typo3_hint_lookup with id=site-set-settings carries the range each statement holds on.",
@@ -1208,6 +1208,40 @@
     "tools": [
       "typo3_hint_lookup with id=site-set-settings, then id=site-sets for the set around it",
       "typo3_project_describe, for the sites this project configures and the sets they already depend on"
+    ]
+  },
+  {
+    "id": "site-language",
+    "title": "Adding a language to a site",
+    "match": [
+      "site language",
+      "second language",
+      "another language",
+      "add a language",
+      "new language",
+      "language menu",
+      "language switch",
+      "multilingual",
+      "translate the site",
+      "translate the pages"
+    ],
+    "matchWeak": [
+      "locale"
+    ],
+    "condition": "only if the task adds a language to a site, or changes what a site language shows",
+    "rulesQuery": "",
+    "checklist": [
+      "Add the language as an entry in the languages of the site configuration. typo3_project_describe lists the sites and the languages they have.",
+      "Register the locale first where TYPO3 does not list it. typo3_hint_lookup with id=user-defined-locale says how.",
+      "Ask the site owner what an untranslated page and an untranslated record show, before you write fallbacks and fallbackType. typo3_hint_lookup with id=site-language-fallback gives the two settings.",
+      "Get the core labels from a language pack, and set typo3Language where the pack name differs from the locale. typo3_hint_lookup with id=site-label-language gives the steps.",
+      "Translate the labels the package ships in a locale-prefixed XLF file beside the source file. typo3_hint_lookup with id=language-files gives the rules.",
+      "Translate a form through its own translation files, not only the labels of the package. typo3_hint_lookup with id=form-framework names translationFiles."
+    ],
+    "checks": [],
+    "tools": [
+      "typo3_project_describe, for the sites and the languages they configure",
+      "typo3_hint_lookup with ids user-defined-locale, site-language-fallback, site-label-language, language-files"
     ]
   },
   {

@@ -957,6 +957,7 @@ final class KnowledgeTest extends TestCase
             'tca-field' => 'Add a TCA column to a table an extension already ships',
             'sitepackage' => 'Create a new sitepackage with the page templates and backend layouts of this site',
             'site-setting' => 'Add a setting to the site set a sitepackage ships',
+            'site-language' => 'Add Kiswahili as a second language of the site',
             'event-listener' => 'Register an event listener for the PSR-14 event a package dispatches',
             'asset-build' => 'Update the npm dependencies of this extension and rebuild its assets',
         ];

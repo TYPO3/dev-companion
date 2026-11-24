@@ -125,13 +125,14 @@ the route the session that reported was on, it points the other way.
 
 ## Since then
 
-A session read three of the four **Wrong if** and none fired. The rewrite has
-gained nothing. The same assignment, the same to-do under it, and no event or
-option beside it, which is what the written statement says. The two corpus
-statements were about one route and now say so, which makes them sentences a
-feature outgrew rather than plain errors.
+Three of the four **Wrong if** were read and none fired. The rewrite gained no
+event or option, and the two corpus statements now name their route. The
+sibling closed the same day as a second statement in a second hint. The second
+**Wrong if** still waits, and no research produces it.
 
-The sibling closed on its own the same day, and its point stands where this
-entry expected the collision instead. That is two statements in two hints, one
-per route, rather than one gap under two cards. What remains is the second, and
-no research produces it.
+On 2026-11-24 a T3CA feedback found page uids in a shipped `settings.yaml`
+pointing at the wrong pages. `Initialisation/Site/` copies the whole site
+directory and rewrites `rootPageId` alone: 12.4 in `InstallUtility`, 13.4,
+14.3 and main in `ImportSiteConfigurationsOnPackageInitialization`. The hint
+now names `settings.yaml`, `csp.yaml` and a set default of type page. The
+feedback's remedy, a listener after the import, had no read and stays out.

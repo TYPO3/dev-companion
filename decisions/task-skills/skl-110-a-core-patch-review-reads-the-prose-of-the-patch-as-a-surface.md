@@ -42,11 +42,9 @@ readability. The review found neither gap on its own.
   **Evidence** line.
 - The delivery stays in the skill. A brief that carried the page to every review
   would change `TaskIntents` for one workflow.
-
-## Assumed
-
-- That the page applies to every caller who writes patch prose. It stands below
-  `any/`, so an extension author receives the STE rules too.
+- The page applies to every caller who writes patch prose, an extension author
+  included. The maintainer confirmed that on 2026-11-24, so the page stays below
+  `any/`.
 
 ## Wrong if
 

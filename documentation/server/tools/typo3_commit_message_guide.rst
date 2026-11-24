@@ -25,8 +25,9 @@ take a patch today, and the ones a change of this shape goes to. A change still
 in work says so with workInProgress or with [WIP] in its own subject. The Forge
 issue is no error there, since the merge is what requires the trailer. A core
 body that counts what the change touched, so many files or so many spellings,
-gets a check that says so. The core's own bodies do not count. Answers from:
-knowledge.
+gets a check that says so. The core's own bodies do not count. So does a core
+body that names a file path or a fully qualified class name, and a body with one
+list item that is a sentence. Answers from: knowledge.
 
 .. facts::
 

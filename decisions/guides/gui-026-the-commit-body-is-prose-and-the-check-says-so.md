@@ -57,3 +57,14 @@ and passed a body of three dashes with "no issues found".
   strike it.
 - The check fires on a body somebody wrote on purpose, often enough that the
   threshold is what is wrong rather than the body.
+
+## Since then
+
+On 2026-11-24 the first **Wrong if** fired in a variant. Patch set 2 of core
+change 97935 put its argument in four paragraphs and three sentence bullets
+between them. Half of the lines were prose, so the check passed it and the
+agent pushed it. The maintainer then chose one sentence bullet as the
+threshold. Over the last thousand merged commits on `main`, read the same day,
+67 bodies carry such an item. So the check now reports what about a fifteenth
+of the core's own bodies do, and the rule is stricter than the core on purpose.
+A list of names beside a paragraph still passes.

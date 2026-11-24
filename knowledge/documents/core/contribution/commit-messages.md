@@ -64,10 +64,51 @@ Guide.
   before the solution, the files the change touched.
 - Do not repeat reproduction instructions from the Forge issue.
 - Wrap body lines by hand at 72 characters.
-- Write the body as short, precise prose rather than as a list.
+- Write the body as short, precise prose rather than as a list. One list item
+  that is a sentence makes the body a list. A list of class or rule names
+  beside a paragraph is an enumeration and stays.
 - Name no count of what the change touched. "In 68 files", "in four spellings",
   "12 occurrences": the number is in the diff. A reviewer asks you to take a
   count out of the body.
+- Name no file path and no fully qualified class name. The diff carries both. A
+  short class or method name stays where the sentence needs it.
+- Describe what the change does, as behaviour. A list of the methods, classes
+  and tests the change adds is in the diff. A vague sentence such as "Improve
+  the handling of sites" says nothing a reader can check.
+- Every sentence carries something the reader needs. Delete a sentence that
+  restates the one before it, and a chain of "Thus" sentences that only
+  connects the others.
+
+The four rules above go further than the official appendix. They are this
+server's rules for every core body, and `typo3_commit_message_guide` reports a
+list and a path.
+
+Rejected, from a body of five paragraphs:
+
+```
+The new internal service `WebMountSiteFinder` finds the sites that a
+backend user has access to:
+
+- An admin has access to all sites.
+- A non-admin backend user has access to a site if its site root
+  page is a web mount or is below a web mount. `isInWebMount()`
+  checks this.
+
+`isInWebMount()` needs the ancestry of each site root page. The new
+method `PageAncestryResolver::resolveMultiple()` resolves the
+ancestries of all site root pages with one query. Thus the number of
+queries does not depend on the number of sites.
+```
+
+Accepted, the whole body of the same change:
+
+```
+The redirects module now shows the hosts of every site whose root page
+is a web mount or is below a web mount, as isInWebMount() decides.
+WebMountSiteFinder resolves the ancestries of all site root pages with
+one query, so the number of queries does not grow with the number of
+sites.
+```
 
 ## The Longest Line The Hook Accepts
 

@@ -269,6 +269,56 @@ final class CommitMessageTest extends TestCase
         ]);
 
         self::assertNotContains('body-written-as-a-list', array_column($enumerating['checks'], 'code'));
+
+        $paragraphsAroundBullets = CommitMessage::create([
+            'keyword' => 'BUGFIX',
+            'summary' => 'Show hosts of sites below a web mount',
+            'body' => "The redirects module shows the hosts of the sites a user has access to.\n"
+                . "The new service finds them:\n\n"
+                . "- An admin has access to all sites.\n\n"
+                . 'The permission guard uses the same hosts. The number of queries stays the same.',
+            'workflow' => CommitMessage::WORKFLOW_PROJECT,
+        ]);
+
+        self::assertContains('body-written-as-a-list', array_column($paragraphsAroundBullets['checks'], 'code'));
+    }
+
+    /**
+     * What a reader of `git log` cannot use and the diff already shows.
+     * `D-GUI-037` measured the pattern over the core's own bodies.
+     */
+    #[Decision('D-GUI-037')]
+    #[Test]
+    #[DataProvider('bodiesThatNameAPath')]
+    public function aCoreBodyNamingAPathIsToldSo(string $body, bool $named): void
+    {
+        $result = CommitMessage::create([
+            'keyword' => 'BUGFIX',
+            'summary' => 'Show hosts of sites below a web mount',
+            'body' => $body,
+            'issue' => '108804',
+            'releases' => ['main'],
+            'workflow' => CommitMessage::WORKFLOW_CORE,
+        ]);
+
+        self::assertSame(
+            $named,
+            in_array('body-names-a-path', array_column($result['checks'], 'code'), true),
+        );
+    }
+
+    /** @return array<string, array{0: string, 1: bool}> */
+    public static function bodiesThatNameAPath(): array
+    {
+        return [
+            'a file in the source tree' => ['It moves into typo3/sysext/core/Classes/Site/WebMountSiteFinder.php.', true],
+            'a relative source file' => ['Tests/Functional/Site/WebMountSiteFinderTest.php covers it.', true],
+            'a fully qualified class name' => ['It uses TYPO3\CMS\Core\Site\SiteFinder now.', true],
+            'a short class name' => ['WebMountSiteFinder finds the sites with one query.', false],
+            'a runtime directory' => ['Processed files go to typo3temp/assets/_processed_/ again.', false],
+            'a module id' => ['The modal comes from typo3/backend/modal.', false],
+            'a link to the issue' => ['See https://forge.typo3.org/issues/108804/history.php for the report.', false],
+        ];
     }
 
     #[Test]

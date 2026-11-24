@@ -1025,24 +1025,6 @@ Called with:
             - A shipped TypeScript module has no compile-time consumer: no .d.ts stands below typo3/sysext and Build/tsconfig.json emits none, so a changed member type breaks no build outside the core. What a consumer reaches is the built JavaScript below Resources/Public/JavaScript, where protected is a word the build dropped, so the surface is every export and every member a module outside the core can call.
             - A moved or renamed export of a shipped module gets a Deprecation changelog entry with the :js: role and a deprecation notice in the browser console, as the core wrote when it moved markFieldAsChanged() out of @typo3/backend/form-engine-validation. A module marked @internal in its TypeScript owes none.
 
-            Rules that apply to this task:
-
-            A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.
-
-            ## Testing
-            Source: TYPO3 Core Contribution Rules (typo3://guides/core/contribution/rules) — matches 50% of the query terms
-
-            - A reviewer expects a unit test for isolated behavior.
-            - A reviewer expects a functional test for persistence, configuration, routing,
-              backend behavior, or integration with TYPO3 services.
-            - An end-to-end test in the `e2e` suite is useful for a change to an editor or
-              administrator workflow. Such a change breaks only in the assembled backend.
-              That suite replaced the former acceptance suites.
-            - Document the tests you could not execute and why.
-
-            Each excerpt above is one section of a longer document, and each page below carries the `##` headings that are not above. Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list:
-            - core/contribution/rules — TYPO3 Core Contribution Rules: 4 of its 5 headings are not above — Contribution Flow, Code Style, Documentation, Review Readiness.
-
             Relevant TYPO3 core checks — the list to run, whatever this task turns out to be:
             - `CI=true ./Build/Scripts/runTests.sh -s unit`
             - `CI=true ./Build/Scripts/runTests.sh -s functional`
@@ -1250,19 +1232,7 @@ Called with:
                 "hintsOwed": "The hints below are typo3_hint_lookup's, matched for these paths and quoted whole. A finding that cites one of these rules is citing that lookup rather than this guide. These are everything typo3_hint_lookup matches for these paths, so calling it again by path adds nothing; a subject it holds under another path or id is still a call away.",
                 "omittedHints": [],
                 "omittedHintsOwed": "",
-                "rules": [
-                    {
-                        "documentId": "core/contribution/rules",
-                        "title": "TYPO3 Core Contribution Rules",
-                        "uri": "typo3://guides/core/contribution/rules",
-                        "heading": "Testing",
-                        "body": "- A reviewer expects a unit test for isolated behavior.\n- A reviewer expects a functional test for persistence, configuration, routing,\n  backend behavior, or integration with TYPO3 services.\n- An end-to-end test in the `e2e` suite is useful for a change to an editor or\n  administrator workflow. Such a change breaks only in the assembled backend.\n  That suite replaced the former acceptance suites.\n- Document the tests you could not execute and why.",
-                        "versions": "",
-                        "coverage": 0.5,
-                        "score": 35,
-                        "truncated": false
-                    }
-                ],
+                "rules": [],
                 "checks": [
                     "CI=true ./Build/Scripts/runTests.sh -s unit",
                     "CI=true ./Build/Scripts/runTests.sh -s functional",
@@ -1386,8 +1356,6 @@ Called with:
                     }
                 ],
                 "owed": [
-                    "A section carries the range it holds for where it has one. What is bound elsewhere: call typo3_hint_lookup with targetVersion for a convention, and typo3_test_run_guide with targetVersion for a runTests.sh command.",
-                    "Where the task is the whole procedure rather than the fact you searched for, read the page — typo3_rule_lookup with documentId, which needs no resource list.",
                     "Suites that match this task, strongest first. Each is one to decide about rather than one the list above left out, and typo3_test_run_guide holds the rest for these paths."
                 ]
             }

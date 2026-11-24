@@ -113,6 +113,15 @@ final class CommitMessage
     private const COUNTED_SCOPE = '/\b\d+\s+(files?|occurrences?|places?|spellings?|classes|methods|instances|usages|call sites)\b/i';
 
     /**
+     * A path into the source tree or a fully qualified class name in the
+     * body, `D-GUI-037`. A URL is taken out before the match. A path that
+     * names a runtime directory or a module id describes behaviour and passes.
+     */
+    private const NAMED_PATH = '~(?<![\w/:])(?:[\w.-]+/){2,}[\w.-]+\.(?:php|ts|js|html|xlf|s?css|rst|typoscript|tsconfig)\b'
+        . '|\btypo3/sysext/\w+/\S+'
+        . '|\\\\?[A-Z]\w*(?:\\\\[A-Z]\w*){2,}~';
+
+    /**
      * @param array{
      *   keyword?: string,
      *   summary: string,
@@ -691,6 +700,19 @@ final class CommitMessage
             ];
         }
 
+        $withoutUrls = preg_replace('~\b\w+://\S+~', '', $body) ?? $body;
+        if ($isCore && preg_match(self::NAMED_PATH, $withoutUrls, $named) === 1) {
+            $checks[] = [
+                'level' => 'warning',
+                'code' => 'body-names-a-path',
+                'message' => sprintf(
+                    'The body names "%s". A core commit body names no file path and no fully qualified class '
+                        . 'name: the diff carries both. Say what the change does in the words a reader knows.',
+                    $named[0],
+                ),
+            ];
+        }
+
         if ($isCore && $releases === []) {
             $checks[] = [
                 'level' => 'warning',
@@ -998,24 +1020,18 @@ final class CommitMessage
      *
      * An item of four words or more is a sentence somebody wrote as a bullet. A
      * shorter one names a class, a path or a rule the change touched, which is
-     * what a list in a body is for. Half of the lines, and only the first kind
-     * counts. Over the thousand merged core commits with a body that
-     * `D-GUI-026` measured, that fires on none of them.
+     * what a list in a body is for. One such sentence is enough, `D-GUI-026`.
      */
     private static function bodyIsWrittenAsAList(string $body): bool
     {
-        $lines = array_values(array_filter(
-            preg_split('/\R/', $body) ?: [],
-            static fn(string $line): bool => trim($line) !== '',
-        ));
-
-        $sentences = array_filter($lines, static function (string $line): bool {
+        foreach (preg_split('/\R/', $body) ?: [] as $line) {
             $item = preg_replace('/^\s*([-*+]\s|\d+[.)]\s)/', '', $line, 1, $replaced);
+            if ($replaced === 1 && count(preg_split('/\s+/', trim((string) $item)) ?: []) >= 4) {
+                return true;
+            }
+        }
 
-            return $replaced === 1 && count(preg_split('/\s+/', trim((string) $item)) ?: []) >= 4;
-        });
-
-        return $sentences !== [] && count($sentences) * 2 >= count($lines);
+        return false;
     }
 
     /**

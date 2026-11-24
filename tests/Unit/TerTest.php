@@ -204,6 +204,24 @@ final class TerTest extends TestCase
         self::assertNull($result->data['unavailable'], 'a key nobody published under was reported as a failure');
         self::assertSame(0, $result->data['total']);
         self::assertStringContainsString('nothing is published under the key', $result->text);
+        self::assertSame([], $result->data['owed']);
+    }
+
+    /**
+     * A system extension is never in the registry. An empty answer there reads
+     * as abandoned to a caller, so the answer says what the key is.
+     */
+    #[Test]
+    public function anEmptyAnswerForASystemExtensionNamesTheCorePackage(): void
+    {
+        Ter::useReader(static fn(): string => '[[]]');
+
+        $result = Registry::call('typo3_ter_lookup', ['extension' => 'indexed_search']);
+
+        self::assertSame('empty', $result->data['status']);
+        self::assertStringContainsString('typo3/cms-indexed-search', $result->text);
+        self::assertCount(1, $result->data['owed']);
+        self::assertStringContainsString('typo3_system_extension_lookup', $result->data['owed'][0]);
     }
 
     /**

@@ -1,7 +1,8 @@
 ---
 date: 2026-11-24T12:44:30+00:00
 category: wrong-answer
-status: open
+status: closed
+closed: 2026-11-24
 model: claude-opus-5-5
 tool: typo3_ter_lookup
 ---

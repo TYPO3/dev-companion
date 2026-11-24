@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tool;
 
+use TYPO3\DevCompanion\Knowledge\Catalog\SystemExtensions;
 use TYPO3\DevCompanion\Publication\Packagist;
 use TYPO3\DevCompanion\Publication\Ter;
 use TYPO3\DevCompanion\Result\Schema;
@@ -61,7 +62,7 @@ final class TerLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Read what the TYPO3 Extension Repository has published under an extension key, live from extensions.typo3.org, or find the published extensions for a subject. Pass query with the subject, for example "news", "calendar" or "cookie consent", before you build a feature yourself. It searches extensions.typo3.org and the TYPO3 extension packages on packagist.org, because an extension can stand on Packagist alone. Each match names its Composer package, its extension key, its description, its downloads, the registries that found it, and from the TER the current version and the TYPO3 majors it declares. Pass extension with the key, the one extra.typo3/cms.extension-key declares and not the Composer package name. Every published version comes back, highest number first. That is the number, the state, the upload day, the TYPO3 majors it declares and the constraints.depends.typo3 of its release. This is the question a release audit cannot answer from the repository under audit. Tailor refuses to package unless ext_emconf.php names the version of the release. So that file still names it after the upload, and a published checkout reads exactly like one nobody has published. Pass extensionVersion as well to learn whether the registry already holds that number. It reports what the registry holds and judges no version free; the comparison against the working tree is yours. A key with nothing published under it gets that answer, which does not say that no such package exists. An extension that ships through Composer alone never registers here. What a release requires of the extension itself is typo3_hint_lookup with id="extension-ter-release". This tool reads only, with no credential. You register a key, upload a version and transfer an extension yourself, through Tailor and the token it carries.';
+        return 'Read what the TYPO3 Extension Repository has published under an extension key, live from extensions.typo3.org, or find the published extensions for a subject. Pass query with the subject, for example "news", "calendar" or "cookie consent", before you build a feature yourself. It searches extensions.typo3.org and the TYPO3 extension packages on packagist.org, because an extension can stand on Packagist alone. Each match names its Composer package, its extension key, its description, its downloads, the registries that found it, and from the TER the current version and the TYPO3 majors it declares. Pass extension with the key, the one extra.typo3/cms.extension-key declares and not the Composer package name. Every published version comes back, highest number first. That is the number, the state, the upload day, the TYPO3 majors it declares and the constraints.depends.typo3 of its release. This is the question a release audit cannot answer from the repository under audit. Tailor refuses to package unless ext_emconf.php names the version of the release. So that file still names it after the upload, and a published checkout reads exactly like one nobody has published. Pass extensionVersion as well to learn whether the registry already holds that number. It reports what the registry holds and judges no version free; the comparison against the working tree is yours. A key with nothing published under it gets that answer, which does not say that no such package exists. An extension that ships through Composer alone never registers here. A system extension of the core is never published here either, and the answer names its package and typo3_system_extension_lookup. The registry carries no price and no licence, so whether an extension has a paid edition is a question for the vendor\'s own page. What a release requires of the extension itself is typo3_hint_lookup with id="extension-ter-release". This tool reads only, with no credential. You register a key, upload a version and transfer an extension yourself, through Tailor and the token it carries.';
     }
 
 
@@ -190,16 +191,42 @@ final class TerLookup extends ReadOnlyTool
             );
         }
         if ($answer['status'] === 'empty') {
+            $core = self::systemExtension($key);
+
             return ToolResult::create(
                 'TYPO3 Extension Repository: nothing is published under the key "' . $key . '" at ' . Ter::HOST . ".\n"
-                . 'The registry holds no extension by that key. That is not a statement that no such package exists: '
-                . 'one distributed through Composer alone is never registered here, and a key can be registered '
-                . 'without a version having been uploaded to it yet.',
+                . ($core !== ''
+                    ? $core
+                    : 'The registry holds no extension by that key. That is not a statement that no such package '
+                        . 'exists: one distributed through Composer alone is never registered here, and a key can be '
+                        . 'registered without a version having been uploaded to it yet.'),
                 $data,
+                [$core],
             );
         }
 
         return ToolResult::create(self::published($key, $version, $held, $answer['versions'], $data['versions']), $data);
+    }
+
+    /**
+     * What an empty answer means for a key the core ships. The registry holds
+     * no system extension, and "empty" reads as abandoned to a caller.
+     */
+    private static function systemExtension(string $key): string
+    {
+        foreach (SystemExtensions::load() as $entry) {
+            if ($entry['key'] === $key) {
+                return sprintf(
+                    '"%s" is a system extension of the TYPO3 core, Composer package %s. It ships with the core and '
+                        . 'its versions are the core\'s, so the registry holds none. typo3_system_extension_lookup '
+                        . 'says on which TYPO3 versions the core ships it.',
+                    $key,
+                    $entry['package'],
+                );
+            }
+        }
+
+        return '';
     }
 
     /**

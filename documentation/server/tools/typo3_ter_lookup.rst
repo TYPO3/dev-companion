@@ -24,11 +24,14 @@ published. Pass extensionVersion as well to learn whether the registry already
 holds that number. It reports what the registry holds and judges no version
 free; the comparison against the working tree is yours. A key with nothing
 published under it gets that answer, which does not say that no such package
-exists. An extension that ships through Composer alone never registers here.
-What a release requires of the extension itself is typo3_hint_lookup with
-id="extension-ter-release". This tool reads only, with no credential. You
-register a key, upload a version and transfer an extension yourself, through
-Tailor and the token it carries. Answers from: network.
+exists. An extension that ships through Composer alone never registers here. A
+system extension of the core is never published here either, and the answer
+names its package and typo3_system_extension_lookup. The registry carries no
+price and no licence, so whether an extension has a paid edition is a question
+for the vendor's own page. What a release requires of the extension itself is
+typo3_hint_lookup with id="extension-ter-release". This tool reads only, with no
+credential. You register a key, upload a version and transfer an extension
+yourself, through Tailor and the token it carries. Answers from: network.
 
 .. facts::
 

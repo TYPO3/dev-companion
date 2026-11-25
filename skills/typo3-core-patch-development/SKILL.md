@@ -57,7 +57,7 @@ else's checkout, and nothing reports it.
      split part needs a number. The `Resolves:` trailer and the changelog file
      name each take one.
 
-     A point that is riskier to change is an argument for an issue of its own, not for a drop. What that issue carries — the tracker, the fields, the markup its description renders as — is `typo3_rule_lookup` with `documentId="core/contribution/reporting-an-issue"`. The user files it, because that takes an account and this server holds none.
+     A point that is riskier to change is an argument for an issue of its own, not for a drop. `typo3_issue_report_guide` drafts that issue, searches the tracker for duplicates and returns its form with every field filled in. The user submits the form, because that takes an account and this server holds none.
 
 4. `typo3_gerrit_lookup` with the same issue number, **before any code exists**.
    Its cheapest outcome is the one that cancels the work, and it costs one call.

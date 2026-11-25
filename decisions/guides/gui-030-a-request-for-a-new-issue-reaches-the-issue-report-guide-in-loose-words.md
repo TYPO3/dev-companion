@@ -30,17 +30,17 @@ The maintainer asked on 2026-10-15 whether "schreib mir ein issue" finds
   title and body, and only that page carried "prepare". Its `whenToUse` takes no
   part in the score.
 - After the change, every request in
-  `KnowledgeTest::aRequestForANewIssueReachesTheIssueReportGuide` matches `reporting`, and the
-  page on a core bug report ranks first. "report a security vulnerability" still
-  ranks the security page first.
+  `KnowledgeTest::aRequestForANewIssueReachesTheIssueReportGuide` matches
+  `reporting`, and the page on a core bug report ranks first. "report a security
+  vulnerability" still ranks the security page first.
 
 ## Decided
 
-- Phrases rather than a verb and a noun matched apart. The intents match
-  phrases throughout, and a second kind of needle is a concept for one intent.
+- Phrases rather than a verb and a noun matched apart. The intents match phrases
+  throughout, and a second kind of needle is a concept for one intent.
 - "bug report", "issue report" and "issue tracker" move to `triage`'s
-  `matchWeak`. A triage still matches strongly on its own work: "triage",
-  "still happens", "already fixed".
+  `matchWeak`. A triage still matches strongly on its own work: "triage", "still
+  happens", "already fixed".
 - "on forge", "in forge", "from forge", "off forge" and "forge.typo3.org" stay
   strong for `triage`, for the reason `D-SKL-081` gives. So "report this on
   forge" matches both intents strongly, and the brief names both.
@@ -57,3 +57,12 @@ The maintainer asked on 2026-10-15 whether "schreib mir ein issue" finds
   go back to `match`, and `reporting` wins by another rule.
 - A forward run shows that an agent picks `typo3_issue_report_guide` from its
   description alone. Then the phrases cost upkeep and buy no call.
+
+## Since then
+
+- **A feedback of 2026-11-25** reports a session that planned to file an issue
+  by hand. On a re-run, `typo3_task_guide` named `typo3_issue_report_guide` for
+  its task. The session had followed `typo3-core-patch-development`, which named
+  only `typo3_rule_lookup` and said that the user files the issue. The routing
+  held and the skill led away, so the skill now names the drafter. The proposed
+  rename to `typo3_issue_draft` stays the maintainer's call (`D-ANS-171`).

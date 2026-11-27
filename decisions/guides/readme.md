@@ -4,6 +4,7 @@ A caller acts on a draft, so what it leaves out has to be visible in it. These a
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-GUI-037`][D-GUI-037] — A core body names no path, and the check says so · 2026-11-24
 - [`D-GUI-035`][D-GUI-035] — A brief opens on the hint its confirmed intent names first · 2026-10-28
 - [`D-GUI-036`][D-GUI-036] — A brief carries a hint for each path before a second for any · 2026-10-28
 - [`D-GUI-033`][D-GUI-033] — A hint the brief names by id is carried or listed as left out · 2026-10-26
@@ -40,6 +41,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-GUI-008`][D-GUI-008] — Operating an installation is a change type of its own · 2026-08-03
 - [`D-GUI-001`][D-GUI-001] — A missing release target becomes a placeholder, not `main` · 2026-07-29
 
+[D-GUI-037]: gui-037-a-core-body-names-no-path-and-the-check-says-so.md
 [D-GUI-035]: gui-035-a-brief-opens-on-the-hint-its-confirmed-intent-names-first.md
 [D-GUI-036]: gui-036-a-brief-carries-a-hint-for-each-path-before-a-second-for-any.md
 [D-GUI-033]: gui-033-a-hint-the-brief-names-by-id-is-carried-or-listed-as-left-out.md

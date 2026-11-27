@@ -3,187 +3,217 @@
 The resource surface
 ====================
 
-What this server offers for a pick, and what a picker chooses by.
-`Factory::resources() <../../../src/Server/Factory.php>`_ declares the list and
-``Factory::skillReferences()`` the one template behind it;
+This page covers the resources this server offers a client to pick from, and the
+fields a picker chooses by. It also says why the skill URI ends in a file name,
+what is generated, and which tests guard the surface.
+
+`Factory::resources() <../../../src/Server/Factory.php>`_ declares the list, and
+``Factory::skillReferences()`` declares the one template behind it.
 `Sdk\ResourceHandler <../../../src/Sdk/ResourceHandler.php>`_ and
 `Sdk\SkillReferenceHandler <../../../src/Sdk/SkillReferenceHandler.php>`_ answer
-a read. Everything offered is a file this package ships, so a read of one
-reaches no installation and no network.
+a read. Every resource is a file this package ships. So a read reaches no
+installation and no network.
 
 The :doc:`tool surface <../tools/index>` is the other thing a client gets. It
-has a page per tool because a tool has a schema and a recorded answer. This is
-one page, because what a resource obliges is the same for every entry, and
-``typo3://guides`` enumerates the entries themselves live.
+has a page per tool, because a tool has a schema and a recorded answer. The
+resources have one page, because the same rules hold for every entry.
+``typo3://guides`` lists the entries themselves, live.
 
 Picked, not called
 ------------------
 
-**The host application or the user picks a resource, where the model calls a
-tool in the middle of a task.** That is the protocol's own distinction, and it
-decides everything else about this surface.
+**The host application or the user picks a resource. The model calls a tool in
+the middle of a task.** The protocol makes that distinction, and it decides
+everything else about this surface.
 
-A tool explains itself in the answer it returns. A resource has its list entry
-and nothing else. So ``description``, ``annotations.priority`` and ``size`` are
-what the choice rests on rather than decoration,
+A tool explains itself in the answer it returns. A resource has only its list
+entry. So ``description``, ``annotations.priority`` and ``size`` are what the
+choice depends on, not decoration —
 `R-ANS-022 <../../../requirements/answers/ans-022-a-resource-is-picked-out-of-a-list.md>`_.
 
-The model's route into the same prose while it works is a tool.
-``typo3_rule_lookup`` searches the documents. ``typo3_task_guide`` names the
-workflow that owns the task it recognized and the document that describes that
-work. It names the document as the ``typo3_rule_lookup`` call that reads it
-rather than as the URI a client may render nowhere.
+While the model works, it reaches the same prose through a tool:
+
+* ``typo3_rule_lookup`` searches the documents.
+
+* ``typo3_task_guide`` names the workflow that the task it recognized belongs
+  to, and the document that describes that work. It names the document as the
+  ``typo3_rule_lookup`` call that reads it. It does not give the URI, because a
+  client may render that nowhere.
 
 The four shapes
 ---------------
 
-* **``typo3://guides``** — the index: the purpose, coverage and routing this
-  client gets, plus every document and skill with its URI, and each skill's
-  references. The one to read first, and the one that enumerates the rest.
+* **``typo3://guides``** — the index. It gives the purpose, coverage and routing
+  this client gets, and every document and skill with its URI. It also lists the
+  references of each skill. Read it first: it lists the rest.
+
 * **``typo3://guides/{documentId}``** — one document from
-  ``knowledge/documents/``, which is also the corpus ``typo3_rule_lookup``
-  searches. Mostly the core's own process.
+  ``knowledge/documents/``. That directory is also the corpus
+  ``typo3_rule_lookup`` searches. Most documents are about the process of the
+  core.
+
 * **``typo3://skill/{skillId}/SKILL.md``** — one published task workflow from
-  ``skills/``. Mostly extension, sitepackage and project work.
-  ``bin/typo3-dev-companion install`` writes the same file into the client's own
-  skills directory, and this is the route for a client that never ran it.
-  Published means the skill's own front matter does not declare it a draft. One
-  that does is a directory in ``skills/`` and appears nowhere.
-* **``typo3://skill/{skillId}/references/{file}``** — what a workflow hands over
-  at a step. A resource template rather than one list entry each, because a
-  reader follows these from the body that names them. A checklist offered beside
-  its own workflow is an entry nobody can choose between.
+  ``skills/``. Most workflows are about extension, sitepackage and project work.
 
-Two families rather than one, because the documents alone serve one audience.
-Most of that corpus is the core's own process, and most of the workflows are the
-work outside it. Both on offer is what leaves each of the three audiences of
+  ``bin/typo3-dev-companion install`` writes the same file into the skills
+  directory of the client. This resource is the route for a client that never
+  ran it.
+
+  A skill is published when its own front matter does not declare it a draft. A
+  draft is a directory in ``skills/`` and appears nowhere.
+
+* **``typo3://skill/{skillId}/references/{file}``** — what a workflow gives the
+  reader at a step. This is a resource template, not one list entry per file. A
+  reader follows these files from the body that names them. A checklist listed
+  beside its own workflow is an entry nobody can choose between.
+
+There are two families, because the documents alone serve one audience. Most of
+the documents are about the process of the core. Most of the workflows are about
+the work outside it. With both on offer, each of the three audiences of
 `R-AUD-001 <../../../requirements/audience/aud-001-core-extension-and-site-work-are-each-served.md>`_
-something to pick.
+has something to pick.
 
-Which of them an entry holds for comes off ``knowledge/server-scope.json`` and
-nowhere else. A covered topic names every document and every published skill,
-and that topic's ``scope`` is what the description and the priority derive from.
-``ScopeTest`` holds it in both directions, so a skill no topic names fails the
-suite rather than reaches an extension author as core-only.
+Only ``knowledge/server-scope.json`` says which audience an entry is for. A
+covered topic names every document and every published skill. The description
+and the priority derive from the ``scope`` of that topic. ``ScopeTest`` checks
+it in both directions. So a skill that no topic names fails the suite, and never
+reaches an extension author as core-only.
 
-``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` reaches the index and not the list.
-``Coverage::offered()`` drops a topic nothing left can answer, so the index a
-client reads matches the tools it has; the resources stay. Excluding a tool
-takes away a call, not a document.
+``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` changes the index and not the list.
+``Coverage::offered()`` drops a topic that no remaining tool can answer. So the
+index a client reads matches the tools it has, and the resources stay. An
+excluded tool takes away a call, not a document.
 
 The skill URI
 -------------
 
-**A skill is a directory, and a pick has to deliver the whole of what the picker
-chose.** The body is short routing, and every one of them opens by sending the
-reader to ``references/base.md``. Served at ``typo3://skill/{id}/SKILL.md``, the
-relative links that prose already carries resolve by ordinary URI rules onto the
-URIs the template answers. Nothing gets a rewrite and nothing gets assembled.
-The published bytes go over the wire as they stand.
+**A skill is a directory, and a pick must deliver all of what the picker
+chose.** The body is short routing. Every body starts by sending the reader to
+``references/base.md``.
 
-Dropping the file name is the simplification not to make. Those links would
-resolve one segment higher, onto URIs nothing serves, and the body would still
-read complete. The first reader to follow one is how anybody finds out.
+The server serves the body at ``typo3://skill/{id}/SKILL.md``. So the relative
+links in that prose resolve by ordinary URI rules onto the URIs the template
+answers. Nothing gets a rewrite, and nothing gets assembled. The published bytes
+go over the wire as they are.
+
+Do not drop the file name from the URI. The links would then resolve one segment
+higher, onto URIs that nothing serves. The body would still look complete, and
+only the first reader who follows a link would find out.
 
 ``references/base.md`` is a file in no skill in this checkout.
-`skills/base.md <../../../skills/base.md>`_ is the single copy, written into
-each published directory by ``Installer`` and served here from that same file
+`skills/base.md <../../../skills/base.md>`_ is the single copy. ``Installer``
+writes it into each published directory, and the server serves it here from that
+same file
 (`D-SKL-001 <../../../decisions/task-skills/skl-001-the-order-a-task-starts-in-is-one-file.md>`_).
-So the resource is the file a client would have had if it had run the install.
+So the resource is the file a client would have after the install.
 
 The Skills extension
 --------------------
 
 **A host that speaks ``io.modelcontextprotocol/skills`` sees the workflows as
-skills; every other host sees them as the resources above.** The declaration
-goes out in the ``initialize`` capabilities. A host may not tell a skill from a
-page by its URI. `Sdk\SkillsExtension <../../../src/Sdk/SkillsExtension.php>`_
-declares it and answers its two methods,
+skills. Every other host sees them as the resources of the four shapes.** The
+server sends the declaration in the ``initialize`` capabilities. A host may not
+tell a skill from a page by its URI.
+`Sdk\SkillsExtension <../../../src/Sdk/SkillsExtension.php>`_ declares it and
+answers its two methods —
 `D-ANS-163 <../../../decisions/answers/ans-163-the-skills-extension-is-served-over-the-typo3-resources.md>`_.
 
-* **``skills/list``** — every published skill, as the URI of its body, its front
-  matter whole, and a manifest. The manifest names each file with the SHA-256
+* **``skills/list``** — every published skill, as the URI of its body, its whole
+  front matter, and a manifest. The manifest names each file with the SHA-256
   and the byte size of what a read returns. ``references/base.md`` is in it,
-  hashed from the file the read serves.
-* **``skills/get``** — one entry by the URI of its body, for a host that holds
-  the URI without the list. A URI that names no skill is ``-32602``.
+  with the hash of the file the read serves.
 
-The reads stay ``resources/read`` on the body and on each reference. The
-extension adds the manifest a host verifies each read against, and the identity
-it binds an approval to. The scheme stays ``typo3://``. The specification
-prefers ``skill://`` and permits another, and the declaration is what makes a
-resource a skill.
+* **``skills/get``** — one entry by the URI of its body, for a host that has the
+  URI without the list. A URI that names no skill gets ``-32602``.
+
+The reads stay ``resources/read``, on the body and on each reference. The
+extension adds the manifest a host checks each read against. It also adds the
+identity a host binds an approval to. The scheme stays ``typo3://``. The
+specification prefers ``skill://`` and permits another. The declaration, not the
+scheme, makes a resource a skill.
 
 What a picker reads
 -------------------
 
-* **``description``** — what the entry is and who its answers oblige. A
-  document's comes from the covered topic. A skill's comes from its own front
-  matter. In front of it stands the sentence that says it is a workflow to
-  follow rather than a page to read. Neither stands a second time, so neither
-  can drift from what it describes.
+* **``description``** — what the entry is and whom its answers are for. The
+  description of a document comes from the covered topic. The description of a
+  skill comes from its own front matter.
+
+  Before it stands the sentence that says the entry is a workflow to follow, not
+  a page to read. Neither text appears a second time, so neither can drift from
+  what it describes.
+
 * **``annotations.priority``** — the order, and nothing else. The index sits
   above everything it lists. What holds wherever the caller works sits above
   what stops at the core. The references sit below all of them, because a reader
-  reads one at the step that sends them to it. The numbers in ``Factory`` are a
-  scale a picker sorts by, and the distance between two of them carries no
-  meaning.
+  reads one at the step that sends them to it.
+
+  The numbers in ``Factory`` are a scale a picker sorts by. The distance between
+  two of them means nothing.
+
 * **``size``** — the bytes the handler really serves, so a client knows what a
-  read of one costs. For the index that is the encoded JSON rather than a file
-  on disk, and ``ResourceSurfaceTest`` asserts every declared size against what
-  a read returns.
+  read costs. For the index, that is the encoded JSON, not a file on disk.
+  ``ResourceSurfaceTest`` checks every declared size against what a read
+  returns.
 
-Two fields the spec has stay absent, and the first is where the confusion is:
+Two fields of the spec stay absent. The first one is where readers get confused:
 
-* **``annotations.audience``** is the protocol's ``user`` and ``assistant``, the
-  SDK's ``Role`` enum. It is never the three audiences of ``R-AUD-001``, which
-  are not values it takes. Everything here is for both roles, so the field says
-  nothing and stays off, and ``ResourceSurfaceTest`` fails on a resource that
-  sets it.
-* **``annotations.lastModified``** is in the spec revision the SDK speaks, and
-  no ``Mcp\Schema\Annotations`` at the mcp/sdk version in ``composer.lock``
-  carries it. That class has ``audience`` and ``priority`` alone. The record
-  says unavailable rather than fakes it through ``_meta``.
+* **``annotations.audience``** is the ``user`` and ``assistant`` of the
+  protocol, the ``Role`` enum of the SDK. It never means the three audiences of
+  ``R-AUD-001``, and it does not take them as values.
+
+  Everything here is for both roles, so the field says nothing and stays off.
+  ``ResourceSurfaceTest`` fails on a resource that sets it.
+
+* **``annotations.lastModified``** is in the spec revision the SDK speaks. No
+  ``Mcp\Schema\Annotations`` at the mcp/sdk version in ``composer.lock`` has it.
+  That class has only ``audience`` and ``priority``. The record says the field
+  is unavailable, and does not fake it through ``_meta``.
 
 What is generated
 -----------------
 
-``bin/cli tools:index`` writes the tool reference because each page restates a
+``bin/cli tools:index`` writes the tool reference, because each page repeats a
 description and two schemas that a class declares. The installed skill catalog
 at :doc:`../../usage/task-skills/index` is a generated page for the same reason.
-It is where a person compares and reads the published workflows before the
-install. ``bin/cli documentation:prepare`` copies the same Markdown the
-installer publishes into the site source and adds one page per skill that embeds
-it.
+There a person compares and reads the published workflows before the install.
+``bin/cli documentation:prepare`` copies the Markdown the installer publishes
+into the site source. It adds one page per skill that embeds that Markdown.
 
-There is no document-resource catalog in the manual. Those entries already stand
-enumerated where they cannot go stale. The same functions build the
-``typo3://guides`` index, and ``knowledge/server-scope.json`` names every
-document with the scope it goes out under. A generated table would be a third
+The manual has no catalog of the document resources. Those entries are already
+listed where they cannot go stale. The same functions build the
+``typo3://guides`` index. ``knowledge/server-scope.json`` names every document
+with the scope the server sends it under. A generated table would be a third
 copy, and its size column would change on every edit to a knowledge document.
 
-What stands here is the half no generator produces. What a resource is, why the
-skill URI carries the file name, and why two fields of the spec are empty. That
-changes when the shape changes, which is a commit somebody writes prose for in
-any case.
+This page is the half that no generator produces. It says what a resource is,
+why the skill URI has the file name, and why two fields of the spec are empty.
+That changes only when the shape changes, and somebody writes prose for that
+commit in any case.
 
 What holds it
 -------------
 
-* ``ResourceSurfaceTest`` — that every resource says what it is, declares the
-  size a read really costs, and sorts where its audience puts it. That it claims
-  no audience the protocol does not mean. Also that every link a skill writes
-  resolves onto a URI this server answers.
+* ``ResourceSurfaceTest`` — every resource says what it is, declares the size a
+  read really costs, and sorts where its audience puts it.
+
+  No resource claims an audience that the protocol does not mean. Every link a
+  skill writes resolves onto a URI this server answers.
+
 * ``ScopeTest::everyKnowledgeDocumentIsAnnouncedByTheScope`` and
-  ``ScopeTest::everyPublishedSkillIsAnnouncedByTheScope`` — that the coverage
-  names each entry, which is where its description and its priority come from.
+  ``ScopeTest::everyPublishedSkillIsAnnouncedByTheScope`` — the coverage names
+  each entry, and the description and the priority of the entry come from there.
+
 * ``StdioServerTest::theResourceListCarriesWhatAPickerChoosesBy`` and
   ``StdioServerTest::aTaskWorkflowIsServedWithWhatItSendsItsReaderTo`` — the
-  list and both families as they go over the wire, including the reference a
+  list and both families as they go over the wire. That includes the reference a
   body sends its reader to.
+
 * ``ResourceSurfaceTest::theManifestOfASkillIsComputedFromTheBytesAReadReturns``
   and
   ``StdioServerTest::theSkillsExtensionListsEachWorkflowWithTheManifestAHostVerifiesAReadBy``
-  — that the manifest names every file of a skill once, with the digest and the
-  size of what a read returns. They also hold that the declaration and the error
-  code reach the wire.
+  — the manifest names every file of a skill once, with the digest and the size
+  of what a read returns.
+
+  The two tests also check that the declaration and the error code reach the
+  wire.

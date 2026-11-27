@@ -3,7 +3,9 @@ id: D-DOC-070
 title: This repository writes in ASD-STE100
 date: 2026-09-14
 status: open
-coveredBy: []
+coveredBy:
+  - ProseTest::aQuotationCountsAsOneWord
+  - ProseTest::everySentenceInAProcedureIsWithinItsMeasure
 ---
 
 # D-DOC-070 — This repository writes in ASD-STE100
@@ -117,16 +119,14 @@ judgement and what the maintainer decided on it.
 
 ## Since then
 
-The records sweep landed on 2026-09-15 and the lead check moved to 25. Every
-requirement and decision now opens within the measure, so the held number of 30
-is gone and `Prose::leadsOverTheMeasure()` reads `Prose::MEASURE`. The third
-**Wrong if** did not fire: no lead needed more than 25 words. What the sweep
-found instead is a lesson about its own method. A first pass that hid sentences
-behind a filter for verb forms left long sentences in the bodies. A second pass
-over each group took them. Every quoted sentence stays as its source wrote it.
+The records and `documentation/` sweeps landed on 2026-09-15, and the lead check
+moved to 25. The third **Wrong if** did not fire. A quoted sentence stays as its
+source wrote it.
 
-The `documentation/` sweep landed the same day, `readme.md` and `CLAUDE.md` with
-it. `bin/cli prose:check` still names `documentation/usage/installing.rst` for
-two sentences the clients' documentation wrote, and the sweep leaves them. The
-generated tool pages come from `ToolSurface` and `ToolAnswers`, so their
-sentences moved in the source and the recorded half ran again.
+On 2026-11-27 the skills had drifted back to 35 sentences over 20 words. The
+maintainer decided that `bin/cli prose:check` fails on such a sentence in
+`skills/` or `knowledge/documents/`, with a quotation counted as one word. The
+other directories stay a report until their todo sweeps them. That sweep had
+swapped "missing" for "absent" to satisfy the -ing counter. The maintainer read
+it as less clear, the second **Wrong if** in small. The word went back, the
+measure stayed, and AGENTS.md says that a common adjective stays.

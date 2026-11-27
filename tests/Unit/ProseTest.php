@@ -68,6 +68,33 @@ final class ProseTest extends TestCase
     }
 
     /**
+     * A caller follows a skill or a knowledge document step by step, so a long
+     * sentence there is a defect and not a report.
+     */
+    #[Decision('D-DOC-070')]
+    #[Test]
+    public function everySentenceInAProcedureIsWithinItsMeasure(): void
+    {
+        $over = Prose::proceduresOverTheMeasure();
+
+        self::assertNotEmpty(array_filter(Prose::documents(), static fn(string $file): bool => Prose::measureOf($file) === Prose::PROCEDURE));
+        self::assertSame([], $over, implode("\n", array_map(
+            static fn(array $sentence): string => sprintf('%s has %d words: %s', $sentence['file'], $sentence['words'], $sentence['text']),
+            $over,
+        )));
+    }
+
+    /**
+     * A quotation is its source's prose, so it counts as one word.
+     */
+    #[Decision('D-DOC-070')]
+    #[Test]
+    public function aQuotationCountsAsOneWord(): void
+    {
+        self::assertSame(5, Prose::words('The guide says "you can even commit on other people\'s patches" here.'));
+    }
+
+    /**
      * `D-DOC-035`. The read reaches the comments, and what they cost is a
      * share.
      *

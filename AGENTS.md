@@ -279,7 +279,9 @@ rewrites to GitHub.
   server. "The rule holds" says nothing about what holds it.
 - A verb stands in the present tense and in a finite form. The -ing form is for
   a name (`working-a-todo.rst`) and for nothing else. "A session settles the
-  question", not "the settlement of the question is the session's".
+  question", not "the settlement of the question is the session's". A common
+  adjective such as "missing" or "existing" stays. A stiffer word in its place
+  makes the sentence harder to read.
 - A paragraph has at most six sentences and opens with its topic.
 - A procedure gives one instruction per sentence. "Run the test, then read the
   log" is one step with an order in it, and STE permits that.
@@ -331,10 +333,12 @@ changes it back. Delete everything else. The prose rules hold for a comment too.
 
 `bin/cli prose:check` counts what that costs: the sentences over the measure,
 worst file first, and the sentences that carry a passive or an -ing form. It
-fails on one of them, the bold sentence a requirement or a decision opens with.
-A reader who stops after it must know what the entry settled. The rest is a
-report. A long sentence can be the right one, and a rewrite driven by a counter
-produces two short sentences that say what one said.
+fails on two of them. One is the bold sentence a requirement or a decision opens
+with: a reader who stops after it must know what the entry settled. The other is
+a sentence over 20 words in `skills/` or `knowledge/documents/`, which a caller
+follows step by step. A quotation counts as one word there, because its source
+wrote it. The rest is a report. A long sentence can be the right one, and a
+rewrite driven by a counter produces two short sentences that say what one said.
 
 It counts the comments too, where what grew is how many there are rather than
 how long each is. It prints the share of the PHP that is comment, and every

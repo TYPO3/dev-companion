@@ -19,9 +19,10 @@ use TYPO3\DevCompanion\Tool\Registry;
  *
  * This class reports and does not judge. A sentence over the measure can be the
  * right sentence. A rewrite that satisfies a counter produces two short
- * sentences that say what one said. `bin/cli prose:check` fails on one thing,
- * the bold lead of a requirement or a decision. A reader who stops after it
- * must know what the entry settled, and nobody stops after 96 words.
+ * sentences that say what one said. `bin/cli prose:check` fails on two things.
+ * One is the bold lead of a requirement or a decision: a reader who stops after
+ * it must know what the entry settled. The other is a sentence in a procedure,
+ * which a caller follows step by step — `D-DOC-070`.
  */
 final class Prose
 {
@@ -143,7 +144,7 @@ final class Prose
         $measure = self::measureOf($file);
         $sentences = self::sentences((string) file_get_contents(Paths::root() . '/' . $file));
         foreach ($sentences as $sentence) {
-            $words = count(explode(' ', $sentence));
+            $words = self::words($sentence);
             if ($words > $measure) {
                 $over[] = ['words' => $words, 'text' => $sentence];
             }
@@ -154,6 +155,37 @@ final class Prose
         usort($over, static fn(array $a, array $b): int => $b['words'] <=> $a['words']);
 
         return ['file' => $file, 'measure' => $measure, 'sentences' => count($sentences), 'over' => $over, 'passive' => $passive, 'ing' => $ing];
+    }
+
+    /**
+     * The words a sentence of this repository carries. A quotation counts as
+     * one word, because its source wrote it and the sweep leaves it as it
+     * stands — `D-DOC-070`.
+     */
+    public static function words(string $sentence): int
+    {
+        return count(explode(' ', (string) preg_replace('/"[^"]*"/', '""', $sentence)));
+    }
+
+    /**
+     * Every sentence in a procedure that runs past its measure. A caller follows
+     * these files step by step, so the check fails on them — `D-DOC-070`.
+     *
+     * @return list<array{file: string, words: int, text: string}>
+     */
+    public static function proceduresOverTheMeasure(): array
+    {
+        $over = [];
+        foreach (self::documents() as $file) {
+            if (self::measureOf($file) !== self::PROCEDURE) {
+                continue;
+            }
+            foreach (self::measure($file)['over'] as $sentence) {
+                $over[] = ['file' => $file, ...$sentence];
+            }
+        }
+
+        return $over;
     }
 
     /**

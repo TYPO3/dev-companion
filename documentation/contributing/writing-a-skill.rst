@@ -118,7 +118,7 @@ The rules
   ``SkillTest::everySkillSaysWhichServerItNeeds``
 * Its front matter has the fields of the standard and nothing else —
   ``SkillTest::everyFrontMatterFieldIsOneTheStandardDefines``
-* Every description fits the budget all of them share —
+* Every description stays within a length of its own —
   ``SkillTest::everyDescriptionIsWrittenToALengthOfItsOwn``
 * Every directory in ``skills/`` goes out —
   ``SkillTest::everySkillInTheDirectoryIsPublished``
@@ -191,8 +191,8 @@ directory. Whether a clause is a summary depends on a read of the body, not on a
 property of the file.
 
 A step clause also **narrows** what the description names, which is the stronger
-half. The patch checkout description listed a way to do the job that moves the
-branch throughout. So a request that named a git worktree read as the case of
+half. The patch checkout description listed steps that each move the branch the
+session stands on. So a request that named a git worktree read as the case of
 another skill altogether.
 ``SkillTest::aWorktreeTaskMatchesTheSkillThatOwnsTheCheckout`` holds the trigger
 and the body it promises, on the one measured description.
@@ -215,7 +215,9 @@ of a list. A domain named by one of its halves sends the other half elsewhere.
 the same element is one such case. That task goes to whichever skill has a word
 of it, and the body that covers it never loads.
 
-That is the second sighting of the same entry, one task later.
+This is the second failure of a description that
+`D-AUD-003 <../../decisions/audience/aud-003-the-instructions-carry-the-entry-point-because-the-tool-descriptions-never-arrive.md>`_
+records, on a task that builds rather than reviews.
 ``SkillTest::aBackendPreviewTaskMatchesTheSkillThatOwnsTheElement`` holds the
 measured pair. Nobody can read off the file which sides a skill covers, so
 nothing holds this over the directory. The author answers it against
@@ -252,18 +254,17 @@ that is every skill of this server.
 
 The dropped skill stays in the list by its name alone, and nothing tells the
 session. So the other skills pay for a description, not the skill itself, and a
-thirteenth skill costs the twelve.
+new skill costs the others.
 `D-SKL-026 <../../decisions/task-skills/skl-026-the-descriptions-are-written-to-the-listing-budget-they-share.md>`_
 says where in the client that arithmetic came from, and what the twelve cost
 after it. It also says what the bundled skills of the client leave over.
 
-The commit that adds a skill answers what the budget asks, because the listing
-grows in that commit
-(`D-SKL-054 <../../decisions/task-skills/skl-054-the-listing-budget-is-what-a-client-reads.md>`_).
-Where the room is missing, that commit is where a description shrinks or a
-workflow merges into an existing one. That question is about which descriptions
-are worth their room. Nobody can answer it with only the newest description in
-hand.
+No test holds the total.
+``SkillTest::everyDescriptionIsWrittenToALengthOfItsOwn`` holds each description
+to 360 characters instead
+(`D-SKL-070 <../../decisions/task-skills/skl-070-a-description-is-held-to-a-length-of-its-own.md>`_).
+A fixed total blocks each new skill for the length of the ones before it.
+Nobody has measured since 2026-08-08 where a client starts to drop descriptions.
 
 The base and the tools
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -325,10 +326,10 @@ it. The four calls the base already fixes are absent from that list on purpose.
 
 **A call named in order not to make it is a discharge.** Where a step would
 prescribe a tool and something the session already has answers it, the step says
-so in one construct. That is the name of the tool, then ``is discharged by``,
-then what answers it instead. ``DISCHARGED_TOOLS`` records the tool rather than
-the routings. The routing assertion finds the name of the tool in the body. So
-any other words for "you already have this" satisfy the assertion while they
+so in one construct. That is what answers it instead, then ``discharges``, then
+the name of the tool in backticks. ``DISCHARGED_TOOLS`` records the tool rather
+than the routings. The routing assertion finds the name of the tool in the body.
+So any other words for "you already have this" satisfy the assertion while they
 tell the caller the opposite.
 
 The assertion skips the construct, and the construct keeps the two lists apart
@@ -394,9 +395,9 @@ fires the crossing and the sentence that does not. The author decides that half,
 as with the sides a description names.
 
 **A crossing the reader's sentence fires names the act that begins the work
-too.** A sentence works only where the session recognises it. A core review
-quoted this crossing and then edited the files it had just reviewed, without the
-crossing
+too.** A crossing that waits for a sentence of the reader works only where the
+session recognises that sentence. A core review quoted this crossing and then
+edited the files it had just reviewed, without the crossing
 (`D-SKL-077 <../../decisions/task-skills/skl-077-the-crossing-out-of-a-review-is-recognised-on-the-first-edit-meant-to-survive.md>`_,
 held by ``SkillTest::theCrossingOutOfAReviewNamesTheEditThatBeginsTheRework``).
 Beside that act the step names what the skill permits that is not the act: a

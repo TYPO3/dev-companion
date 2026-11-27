@@ -65,3 +65,14 @@ checks on the new base and the push stay.**
   what remains.
 - A session follows the brief's test coverage item on a rebase that adds no
   content. Then a rebase needs a brief of its own shape.
+
+## Since then
+
+On 2026-11-27 the owner rule moved from `references/chain.md` into
+`references/checklist.md`, under "Whose change it is". A session rebasing the
+requester's own single change, 87873, could not tell whether the chain rule held
+for it. The section now holds for one change and for a chain. It lifts two stop
+rules, the handful of hunks and generated output, and keeps the rest as a
+question to the requester. The stop that falls away on an own chain with its
+content unchanged is the second kind, because unchanged content leaves only
+mechanical conflicts.

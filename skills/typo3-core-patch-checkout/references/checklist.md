@@ -44,6 +44,25 @@ the work, whatever happened in the first.
   patch is stale. Let its author rebase it. Say how many hunks conflict and
   where.
 
+## Whose change it is
+
+The stop rules protect an author who is not there. The `owner` field of the
+change answers whose change it is. Compare its `email` with
+`git config user.email`. In a chain, each link has an owner of its own, so
+decide per link.
+
+On the requester's own change, two stop rules fall away:
+
+- **More than a handful of hunks.** Resolve them one by one, and say that you
+  did and on whose change.
+- **Generated output.** Resolve the sources, then rebuild the output with the
+  build the checkout declares. `typo3_rule_lookup` with
+  `documentId="core/contribution/committed-build-output"` gives that build.
+
+Every other stop rule stays. Each of them is still a decision, also on the
+requester's own change. There the requester is the author and is present. So the
+stop report is the question to them: which side wins, hunk by hunk.
+
 ## Taking your own work onto the patch
 
 The same rule, applied to a whole file rather than to a hunk. Your work and the

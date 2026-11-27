@@ -37,12 +37,9 @@ Take five things from it:
 
 ## Whose chain it is
 
-The stop rules of this skill protect somebody else's patch. A chain is often the
-requester's own. The `owner` field of each link answers this. Compare its
-`email` with `git config user.email`. Each link has an owner of its own, so
-decide per link. On the requester's own links, the rule against an absent
-author's decisions protects nobody. There you may resolve more than a handful of
-hunks. Say in the result that you did, and on whose change.
+A chain is often the requester's own. "Whose change it is" in
+[checklist.md](checklist.md) says how to tell, per link. It also says which stop
+rules fall away on the requester's own links.
 
 ## Your own chain, with its content unchanged
 

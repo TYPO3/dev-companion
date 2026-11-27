@@ -3258,6 +3258,15 @@ final class SkillTest extends TestCase
         // skill owe them: the sweep and the checks on the new base.
         self::assertStringContainsString('**The deprecation sweep** of the base order', $body);
         self::assertStringContainsString('**The checks on the new base.**', $body);
+
+        // The owner rule holds for one change as for a chain, so it stands in
+        // the checklist, per stop rule.
+        $checklist = self::flat((string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-checkout/references/checklist.md',
+        ));
+        self::assertStringContainsString('## Whose change it is', $checklist);
+        self::assertStringContainsString('On the requester\'s own change, two stop rules fall away', $checklist);
+        self::assertStringContainsString('"Whose change it is" in [checklist.md](checklist.md)', $body);
     }
 
     /**

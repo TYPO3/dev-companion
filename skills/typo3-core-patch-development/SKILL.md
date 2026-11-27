@@ -1,370 +1,390 @@
 ---
 name: typo3-core-patch-development
-description: 'Write a TYPO3 core patch and carry it to review: the changelog entry, the project''s checks, the push to Gerrit. Also amending after review and backporting to a release branch.'
+description: 'Write a TYPO3 core patch and take it to review: the changelog entry, the project''s checks, the push to Gerrit. Also amending after review and backporting to a release branch.'
 compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Core Patch Development
 
-Carry one change from an issue to a patch somebody can review. Keep this skill
-as routing and the order of the work. The suites, the scripts, the contribution
-rules and the Gerrit commands are lookups. A copy of them here goes stale in
-somebody else's checkout, and nothing reports it.
+This skill covers one change to the TYPO3 core, from the issue to a patch
+somebody can review. That is the change, its tests, its changelog entry, its
+checks, its commit message and its push. It also covers the amend after a review
+and the backport to a release branch. It stops before a judgement of a patch,
+which `typo3-core-patch-review` covers. It also stops before a change to an
+extension, a sitepackage or a site project.
+
+Keep this skill as routing and the order of the work. The suites, the scripts,
+the contribution rules and the Gerrit commands come from the lookups. A copy of
+them here goes out of date in somebody else's checkout, and nothing reports it.
+
+## Steps at a glance
+
+1. Establish the issue: what it reports, what it asks for, and whether somebody
+   already fixed it.
+2. Decide what kind of change this is and how far it reaches.
+3. Stop where the finding is a vulnerability.
+4. Make the change.
+5. Verify it with the project's own commands.
+6. Write the changelog entry the change needs.
+7. Commit, then push when the user asks.
+8. Invoke the review on the final diff.
+9. Amend the patch after the review.
 
 ## Establish the issue before you believe it
 
-1. Work through [references/base.md](references/base.md), which fixes the order
-   every task here starts in.
-2. `typo3_rule_lookup` for what this kind of change owes. A bugfix, a feature, a
-   deprecation and a removal are four different sets of obligations. Which one
-   you are in decides the changelog entry, the commit subject and the target
-   branch.
-3. `typo3_forge_lookup` with the issue number. Read what comes back as a report
-   rather than as a specification. An issue can be stale, half fixed, or right
-   about the symptom and wrong about the cause. The maintainers' comments on it
-   can be product judgement rather than an API fact.
+1. Work through [references/base.md](references/base.md) first. It fixes the
+   order every task starts in.
 
-   Three parts of that answer are not in the description a session otherwise
-   starts from:
+2. Call `typo3_rule_lookup` for what this kind of change must include. A bugfix,
+   a feature, a deprecation and a removal each have different obligations. The
+   kind decides the changelog entry, the commit subject and the target branch.
 
-   - The **status and target version as they stand today**. That is where a
-     closure or a reassignment shows without a rewrite of the report.
-   - The **relations**. They are one hop from the change that introduced the
-     behaviour under complaint. They reach it where a query on the wording does
-     not.
+3. Call `typo3_forge_lookup` with the issue number. Read the answer as a report,
+   not as a specification. An issue can be stale or half fixed. It can be right
+   about the symptom and wrong about the cause. A maintainer's comment can be a
+   product judgement rather than a fact about the API.
+
+   The answer has three parts that the issue description does not have:
+
+   - The **status and target version as they stand today**. A closure or a
+     reassignment shows there, without a change to the report.
+
+   - The **relations**. They link directly to the change that introduced the
+     behaviour the issue complains about. A search on the issue's words often
+     does not find that change.
+
    - The **notes**, where a maintainer said why.
 
-   Establish which of those you have before you write code. That is what the
-   reporter saw, what the branch does today, and what the project intends the
-   API for. Three parts of that reading are acts. What they produce goes into
-   the assessment before any code:
+   From them, establish three things before you write code. What the reporter
+   saw, what the branch does today, and what the project intends the API for.
+   Then do these three reads, and write what each one produces into the
+   assessment:
+
    - **Read the closure reason and the target version for what the conversation
      decided. Write that down rather than what the report is worth.** A closure
      for lack of feedback after a long silence has two readings. The reporter
-     could not use the answer, or the reporter gave up. A target version says
-     which branch a fix was still expected on.
+     could not use the answer, or the reporter gave up. A target version says on
+     which branch a fix was still expected.
 
-     Say what the closure settles and what it leaves open. A closed issue is not a finding that the need is absent.
+     Say what the closure settles and what it leaves open. A closed issue is
+     not a finding that the need is absent.
+
    - **Where a comment names an alternative, write out what the alternative
      drops against what the reported code did.** Name the arguments and the
      behaviour the reported code had and the replacement does not. An
      alternative closes an issue only if it does the same work. What it drops is
      usually the capability the reporter wanted.
+
    - **Enumerate the points the issue requires, the ones only a comment names
-     included.** A subject that names two things over comments that name three
-     is the ordinary case. The comment is the list. One patch covers all of
-     them, or each point it leaves gets its own issue here, before any code. A
-     split part needs a number. The `Resolves:` trailer and the changelog file
-     name each take one.
+     included.** A subject often names two things while the comments name three.
+     Then the comments are the list. One patch covers all of them, or each point
+     it leaves gets its own issue here, before any code. Each split part needs
+     an issue number. The `Resolves:` trailer and the changelog file name each
+     take one.
 
-     A point that is riskier to change is an argument for an issue of its own, not for a drop. `typo3_issue_report_guide` drafts that issue, searches the tracker for duplicates and returns its form with every field filled in. The user submits the form, because that takes an account and this server holds none.
+     A point that is riskier to change is an argument for an issue of its own,
+     not for a drop. `typo3_issue_report_guide` drafts that issue. It also
+     searches the tracker for duplicates and returns the filled-in form. The
+     user submits the form, because that needs an account and this server has
+     none.
 
-4. `typo3_gerrit_lookup` with the same issue number, **before any code exists**.
-   Its cheapest outcome is the one that cancels the work, and it costs one call.
-   An answer of nothing is a result, and a narrow one. The server reads the
-   review server without a credential. So the answer says that nothing public
-   names the issue, not that nobody has fixed it. A change pushed unlisted is
-   invisible to it.
+4. Call `typo3_gerrit_lookup` with the same issue number, **before any code
+   exists**. The answer can cancel the work, and it costs one call.
+
+   An empty answer is a result, but a narrow one. The server reads the review
+   server without a login. So the answer says that nothing public names the
+   issue, not that nobody has fixed it. A change pushed unlisted is invisible to
+   it.
 
 5. **Verify in the checkout every rule the issue quotes.** A rule about what an
    API is for is a claim, the way a path or an identifier is. Read the class it
-   names, its docblock and the core's own tests for the form under dispute. Read
-   them and say which of the three carries the rule.
+   names, its docblock and the core's own tests for the form in dispute. Then
+   say which of the three states the rule.
 
-   Enforced in code, warned about as fragile and advised in prose are three
-   different claims. Two APIs side by side regularly make different ones. Carry
-   it at the strength its own source puts on it. An assessment that hardens "may
-   change in a future version" into "must not" argues the patch away on nothing.
+   Code that enforces a rule, a warning that a form is fragile, and advice in
+   prose are three different strengths. Two APIs side by side often differ in
+   this. Repeat the rule at the strength its own source gives it. "May change in
+   a future version" is not "must not". An assessment that reads it so argues
+   the patch away on nothing.
 
 6. **Reproduce against the branch you fix**, not against the version in the
-   report. Half of what a stale issue describes is usually gone, and the half
-   that remains is the patch.
+   report. Often half of what a stale issue describes is gone. The half that
+   remains is the patch.
 
-Whether that reproduction can be a test is a property of what you change.
-`typo3_test_run_guide` with the paths you are about to touch says so. It names
-the suites that can fail on them. A change to backend markup, a build step or
-shipped JavaScript may have none that can hold the bug.
+   Call `typo3_test_run_guide` with the paths you are about to change. It names
+   the suites that can fail on them. A change to backend markup, a build step or
+   shipped JavaScript may have no suite that can show the bug.
 
-Where there is a layer, write the test first. Prove that it fails before the fix
-and passes after it, in that order. A test written afterwards asserts what the
-code now does, which is true of any code. Where there is none, reproduce by
-hand. Write down the steps and what you saw, because that is what a reviewer
-repeats. An unreproducible claim sends a patch back whether or not it is right.
+   - **Where a suite can show it, write the test first.** Show that it fails
+     before the fix and passes after it, in that order. A test written after the
+     fix only asserts what the code now does.
 
-A reason not to do something has a date, and the API it rested on does not. The
-issue may carry a decision to defer. It needs an event that does not exist, or
-there is no API for this yet. Check that blocker against what the branch has
-today before you treat it as valid. An expired objection uses the same words as
-one that still holds, and nothing in the notes separates them.
+   - **Where no suite can show it, reproduce by hand.** Write down the steps and
+     what you saw, because a reviewer repeats them. A claim nobody can reproduce
+     sends a patch back, whether or not it is right.
 
-The argument that carries a bugfix is the same inconsistency inside one version.
-"The branch handles the same input one way here and another there" is a defect a
+7. **Check that blocker against what the branch has today**, where the issue
+   defers the work. Examples are "it needs an event that does not exist" or
+   "there is no API for this yet". The reason for a deferral has a date, and the
+   branch may have changed since. An expired objection reads exactly like one
+   that is still valid.
+
+## Decide what kind of change this is
+
+**The argument for a bugfix is an inconsistency inside one version.** "The
+branch handles the same input one way here and another way there" is a defect a
 reviewer can act on. "This would be better if it also did that" is a wish.
-Agreement with it does not make it a bug.
+Agreement with the wish does not make it a bug.
 
-To find the place where the system already does the right thing turns the second
-into the first. To find none is an answer as well. It says the change is a
-feature, and step 2 has already priced what that owes.
+So look for a place where the system already does the right thing. If you find
+one, the wish becomes a bugfix. If you find none, that is also an answer. The
+change is a feature, and step 2 of the issue section already told you what a
+feature must include.
 
-Establish the blast radius here rather than meet it while you work. How much of
-the behaviour the suites already pin down has to change with it decides the
-kind. It is a quiet bugfix, a change that has to announce itself, or a breaking
-one. That decision sits upstream of the target branch, the commit subject and
-the entry. Discovered step by step, it arrives after you have characterised the
-change. Then you have to take the characterisation back.
+**Establish the blast radius here rather than meet it while you work.** Count
+how much behaviour that the suites already test has to change with the patch.
+That decides the kind of change. It is a quiet bugfix, a change that has to
+announce itself, or a breaking one. The kind decides the target branch, the
+commit subject and the changelog entry. If you find it step by step, you find it
+after you described the change. Then you must take that description back.
 
-Its other half is who may already extend what you are about to edit. No suite in
-the checkout answers it. A green run says no core class overrides the method,
-never that no extension does. The shape you have in mind may touch a public or
-protected member's declaration. That is a parameter, a type, a visibility, a
-`final`. Settle what that commits the patch to before you write it.
-
-Use `typo3_hint_lookup` for the id `public-api-surface`. It decides the target
-branch, so a fix you owe to a maintained release line has to know it first.
+**Then establish who may already extend what you are about to edit.** No suite
+in the checkout answers that. A green run says that no core class overrides the
+method. It does not say that no extension does. Your change may touch the
+declaration of a public or protected member: a parameter, a type, a visibility
+or `final`. Call `typo3_hint_lookup` for the id `public-api-surface` before you
+write it. The answer decides the target branch. A fix for a maintained release
+line must know it first.
 
 ## Where the finding is a vulnerability
 
-**Ask it once the reproduction stands and before you write any code, not when a
-defect happens to look alarming.** This workflow ends in a push, and a push is
-publication. It puts the diff, the test that proves the defect and a message
-about both in front of every reader. Nothing else in this order asks the
-question, so the fix would disclose the defect it fixes.
+**Ask whether the finding is a vulnerability once you have reproduced it.** Ask
+it before you write any code. Ask it of every finding, not only when a defect
+happens to look alarming. This workflow ends in a push, and a push is
+publication. The diff, the test that proves the defect and the commit message
+become public. Without this question, the fix discloses the defect it fixes.
 
-The stopping point is the verified reproduction. It stands, and you do nothing
-after it here. No patch, no test pushed, no entry written, no comment on the
-issue.
+The stopping point is the verified reproduction. Do nothing after it here:
 
-Where it goes instead is `typo3_rule_lookup` with
-`documentId="any/security/reporting-a-vulnerability"`. That is the whole
-procedure, and it also stands as
-`typo3://guides/any/security/reporting-a-vulnerability`. Read the address there
-and never from here. A contact route is the fact that moves, and this file is a
-copy no release of this server corrects.
+- no patch;
+- no pushed test;
+- no changelog entry;
+- no comment on the issue.
 
-Ask it again wherever the work turns into one, because the issue rarely says so.
-A fix whose real effect is that a restriction now holds is this case under
-another name. Where something is already up for review, an amend takes nothing
-back. Every patch set stays fetchable. So name what is public in the report
-rather than repair it.
+Call `typo3_rule_lookup` with
+`documentId="any/security/reporting-a-vulnerability"` instead. That is the whole
+procedure. The server also serves it as
+`typo3://guides/any/security/reporting-a-vulnerability`. Read the contact
+address there, never from this file. A contact address can change, and no
+release of this server corrects this copy.
+
+Ask the question again wherever the work turns into a vulnerability fix. The
+issue rarely says so. A fix whose real effect is that a restriction now applies
+is this case under another name. Where a change is already up for review, an
+amend takes nothing back, because every patch set stays fetchable. So name what
+is already public in the report, and do not try to repair it.
 
 ## Make the change
 
-Ask `typo3_hint_lookup` for the conventions of each subsystem you touch, before
-you write rather than after. A convention you fetch afterwards confirms what you
-already wrote. Ask by id for the hints the brief left out, which `omittedHints`
-names. Ask with the concrete paths only for a path the brief did not see. The
-same paths queried again answer the same hints.
+**Ask `typo3_hint_lookup` for the conventions of each subsystem you touch,
+before you write.** A convention you fetch afterwards only confirms what you
+wrote. Ask by id for the hints that `omittedHints` in the brief names. Ask with
+paths only for a path the brief did not see. The same paths asked again return
+the same hints.
 
-Where the change touches a source below `Build/Sources/`, the generated file
-beside it is part of the patch. `typo3_rule_lookup` with
-`documentId="core/contribution/committed-build-output"` says which source
-produces which committed file. It says how you rebuild one without risk to the
-rest of the tree. It says what a backport that came back with conflict markers
-in it needs.
+**Where the change touches a source below `Build/Sources/`, the generated file
+beside it is part of the patch.** Call `typo3_rule_lookup` with
+`documentId="core/contribution/committed-build-output"`. It says which source
+produces which committed file. It says how to rebuild one file without risk to
+the rest of the tree. It also says what to do with a backport that has conflict
+markers in a built file.
 
-Keep the patch one change. What else you noticed is another issue and another
-patch. A diff that fixes two things is a diff a reviewer has to accept or reject
-as one.
+**Keep the patch one change.** Anything else you noticed is another issue and
+another patch. A reviewer must accept or reject a diff as one, even when it
+fixes two things.
 
-That narrows the work and never the points the issue lists. You settled those
-while you assessed it. All of them are in this patch, or the ones that are not
-already have issues of their own. A point you drop here drops invisibly.
-`Resolves:` closes the issue on every point it names, and nobody reopens a
-closed one.
+That narrows the work and never the points the issue lists. You settled those in
+the assessment. All of them are in this patch, or the others already have their
+own issues. A point you drop here disappears without a trace. `Resolves:` closes
+the issue on every point it names, and nobody reopens a closed one.
 
-Where the request widens after the patch is under way, re-establish three
+**Where the request widens after the patch is under way, re-establish three
 things. That is what kind of change this is now, which branches it reaches, and
-what it owes. Do it before you write the widened part, and say which of the
-three moved.
+what it must include.** Do it before you write the widened part, and say which
+of the three moved.
 
-Step 2 settled the first, the blast radius the second and the changelog section
-the third. Each did so against the narrower request. To carry on derives none of
-them again. A change that gains a second subsystem gains that subsystem's build,
-its checks and its backport constraint with it.
+The rule lookup in step 2 of the issue section settled the first. The blast
+radius settled the second, and the changelog entry the third. Each was settled
+for the narrower request. If you only continue, none of them is decided again. A
+change that gains a second subsystem also gains that subsystem's build, its
+checks and its backport constraint.
 
-The same holds where the fix moves to another system extension rather than grows
-into one. Run the deprecation sweep of the base order again, with the `ext:` tag
-of the extension the change touches now. A sweep for the first extension says
-nothing about what the second one deprecated.
+The same applies where the fix moves to another system extension. Run the
+deprecation sweep of the base order again, with the `ext:` tag of the extension
+the change touches now. A sweep for the first extension says nothing about what
+the second one deprecated.
 
-Find out whether the area moves before you build on it. Fetch and rebase onto
-the branch you target before you finalise. A patch written against code that
-changed underneath it is not a patch that needs adjustment. The method it called
-can be gone, and with it the reason the change looked right.
+**Find out whether the area moves before you build on it.** Fetch and rebase
+onto the branch you target before you finish. Code can change under a patch.
+Then the method it called can be gone, and with it the reason the change looked
+right.
 
 ## Verify with the project's own commands
 
-`typo3_test_run_guide` with the changed paths returns the suites that can fail
-on this change, each with its targeted invocation. `typo3_script_lookup` returns
-the scripts around them. Run the narrow ones while you iterate and the broad
-ones before you push.
+Call `typo3_test_run_guide` with the changed paths. It returns the suites that
+can fail on this change, each with its targeted command. Call
+`typo3_script_lookup` for the scripts around them. Run the narrow ones while you
+work and the broad ones before you push.
 
-Two things decide whether that verification means anything:
+Two rules decide whether a run means anything:
 
-- The runner is the project's. A suite run through the host's own PHP or an
-  installed binary is a green nobody can reproduce.
-- A green that ran over no files is not a green. Where a check reports success,
-  confirm that it inspected something: the count of files, tests or fixtures it
-  names. Do that before you treat it as evidence. A check that found nothing to
-  check without a word is the failure mode that survives review.
+- **Run through the project's own runner.** A suite run through the host's PHP
+  or a globally installed binary is a result nobody can reproduce.
 
-## The changelog entry the change owes
+- **A green that ran over no files is not a green.** Where a check reports
+  success, confirm that it inspected something. Look for the count of files,
+  tests or fixtures it names. A check that silently found nothing to check is
+  the failure that passes review.
 
-The procedure is one page: `typo3_rule_lookup` with
-`documentId="core/contribution/changelog"`, which also stands as
-`typo3://guides/core/contribution/changelog`. It says which of the four types
-the change owes and which release directory the file goes into. It says what its
-name is and what checks it.
+## Write the changelog entry
 
-Decide the type from what the change does rather than from habit. An entry for a
-change that owes none is as much a review finding as a missing one. Write the
-file into the `<lts>.x` directory of the oldest branch the `Releases:` trailer
-names. Write it into both `.x` directories where two maintained lines take the
-change. The branches the patch reaches decide that. The branch you write it on
-decides nothing.
+Call `typo3_rule_lookup` with `documentId="core/contribution/changelog"`. The
+server also serves it as `typo3://guides/core/contribution/changelog`. It says
+which of the four types of entry the change needs. It also says the release
+directory, the file name and what checks the file.
 
-A change can also make a sentence in a manual false. A change to what a core
-ViewHelper renders is the usual case, because the Fluid ViewHelper Reference
-documents each one. `typo3_documentation_lookup` finds the page. What the patch
-owes that manual is in `typo3_rule_lookup` with
+Decide the type from what the change does, not from habit. An entry for a change
+that needs none is as much a review finding as a missing entry.
+
+Write the file into the `<lts>.x` directory of the oldest branch the `Releases:`
+trailer names. Where two maintained lines take the change, write it into both
+`.x` directories. The branches the patch reaches decide this. The branch you
+write the patch on decides nothing.
+
+A change can also make a sentence in a manual false. The usual case is a change
+to what a core ViewHelper renders. The Fluid ViewHelper Reference documents each
+one. `typo3_documentation_lookup` finds the page. What the patch must do for
+that manual is in `typo3_rule_lookup` with
 `documentId="core/contribution/rules"`, section "Documentation".
 
 ## Commit and push
 
-`typo3_commit_message_guide` with `workflow="core"`, the drafted message and the
-change type reports what is still wrong. It does so before the hook does. State
-the workflow. Its default is a repository of your own. That demands neither the
-Forge issue nor the `Releases:` trailer a patch here owes.
+**Check the message with `typo3_commit_message_guide`.** Pass `workflow="core"`,
+the drafted message and the change type. It reports what is still wrong before
+the hook does. Always state the workflow. The default is a repository of your
+own, which needs neither the Forge issue nor the `Releases:` trailer.
 
 The rules behind it are one page: `typo3_rule_lookup` with
-`documentId="core/contribution/commit-messages"`, which also stands as
-`typo3://guides/core/contribution/commit-messages`. It says the subject, the
-trailers, the release targets and the changelog entry the change type owes. One
-read of it here is cheaper than the checks that teach it one call at a time.
+`documentId="core/contribution/commit-messages"`. The server also serves it as
+`typo3://guides/core/contribution/commit-messages`. It gives the subject, the
+trailers and the release targets. One read of it is cheaper than learning each
+rule from a separate check.
 
-`git commit` runs the core's pre-commit hook on the host. It walks the whole
-working directory, ignored folders included, and it aborts on nothing. So
-worktrees or caches in the checkout make it slow. They also make it report paths
-the commit does not carry. Read what it prints against `typo3_rule_lookup` with
-`documentId="core/testing/scripts"`, section "The Pre-Commit Hook", before you
-amend on the strength of it.
+**Read the pre-commit hook's output before you amend because of it.**
+`git commit` runs the core's pre-commit hook on the host. The hook reads the
+whole working directory, ignored folders included. It does not stop on what it
+finds. So worktrees or caches in the checkout make it slow. They also make it
+report paths the commit does not contain. `typo3_rule_lookup` with
+`documentId="core/testing/scripts"`, section "The Pre-Commit Hook", says how to
+read it.
 
-Then the Gerrit workflow. It says what the push is. It says how you amend a
-change into a new patch set rather than a second commit. It says what you must
-not edit between patch sets. That procedure exists whole as `typo3_rule_lookup`
-with `documentId="core/contribution/gerrit-workflow"`, which also stands as
-`typo3://guides/core/contribution/gerrit-workflow`. Read it before the first
-push rather than a section at a time. A search returns the part your words
-matched, and everything below here is a different part of the same page.
+**Read the Gerrit workflow page whole before the first push.** Call
+`typo3_rule_lookup` with `documentId="core/contribution/gerrit-workflow"`. The
+server also serves it as `typo3://guides/core/contribution/gerrit-workflow`. It
+says what the push is. It says how to amend a change into a new patch set rather
+than a second commit. It says what must stay the same between patch sets. A
+search returns only the section your words matched, and this step needs several
+sections.
 
-Before you push, establish where you push to. A core checkout's remote is not
-necessarily the one it fetches from. The answer is in the checkout's own git
-configuration rather than in the repository's name.
+**Establish where you push to.** A core checkout can push to another remote than
+the one it fetches from. The checkout's git configuration says which, not the
+repository's name.
 
-### Rebase where the branch moved under you
+### Rebase where the branch moved
 
-A commit that sat while you verified it is behind `origin/main`. Its rebase is
-part of the push rather than a thing of its own. Two parts of that are not
-obvious. A session with no skill that told it either worked both out from
-scratch:
+A commit that waited while you verified it is behind `origin/main`. Rebase it as
+part of the push. Two rules apply:
 
-- **First stop any `runTests.sh` suite that still runs.** The script mounts the
-  tree and reads it as it goes. So a rebase underneath a run invalidates it
-  without a failure. The run then reports about a tree that no longer exists.
-  Clear the suite's leftover containers before you start.
-- **Confirm that the `Change-Id` survived the rebase.** It makes the push a new
-  patch set on the change you already have. Without it you open a second change
-  instead, and another push does not undo that.
+- **First stop any `runTests.sh` suite that still runs.** The script reads the
+  tree while it runs. A rebase under a running suite makes its result invalid
+  without a failure. Remove the suite's leftover containers before you start.
 
-Then run the checks again on the new base. Inspect the commits you rebased over
-where any of them touch the same files. A suite that passed before the rebase is
-evidence about the old base.
+- **Confirm that the `Change-Id` survived the rebase.** The `Change-Id` makes
+  the push a new patch set on your existing change. Without it, the push opens a
+  second change, and another push does not undo that.
+
+Then run the checks again on the new base. Where the commits you rebased over
+touch the same files, read them. A suite that passed before the rebase only says
+something about the old base.
+
+### A change that is already on the review server
 
 **Where the commit to change is a patch set on the review server, invoke
-`typo3-core-patch-checkout` for that one change.** Work from the copy it leaves.
-Somebody else's change you pick up to finish arrives that way. So does your own
-where this checkout no longer holds it. That workflow's whole subject is the
-ref, the remote, and which of the three destinations the patch goes to. It is
-also how you put the checkout back afterwards.
-
-What crosses back here is the working copy the patch sits in and the patch set
-you fetched. It is also whether you had to carry the patch onto current code to
-apply.
+`typo3-core-patch-checkout` for that one change.** Then work from the copy it
+leaves. That applies to somebody else's change you take over. It also applies to
+your own change where this checkout no longer has it. That skill gets the patch
+set into the checkout and puts the checkout back afterwards. It hands back the
+working copy, the patch set it fetched, and whether it had to rebase the patch.
 
 Your own change that this checkout still holds needs no handover. That is the
-case when the tree is clean and `git cat-file -e <commit>` finds the commit. The
-commit is the one `typo3_gerrit_lookup` gives for the current patch set. Then
+case when the tree is clean and `git cat-file -e <commit>` finds the commit.
+`typo3_gerrit_lookup` gives that commit for the current patch set. Then
 `git switch -c review/<change number> <commit>` is the whole step, and the work
-stays here.
+continues here.
 
-The push is a step of its own, and you take it when the user asks for it.
-Everything above is local and reversible. The push is neither.
+### The push
+
+**Push only when the user asks for it.** Everything before the push is local and
+can be undone. The push is public and cannot.
 
 **Before you ask for the push, end your answer with each step of the base order
-you did not reach.** Give each one a line:
-`Not reached: <step> — <why>`. The user decides the push on
-that list. A walk of the base in an earlier review did not stand in for a step.
-It ran against files nobody would write.
+you did not reach.** Give each one a line: `Not reached: <step> — <why>`. The
+user decides about the push from that list. A walk through the base in an
+earlier review does not replace a step.
 
-**Ask whether the change goes up visible to everyone or unlisted, every time.**
-The two are different refspecs, and the difference is not a preference. One
-publishes the change to whoever watches the project and notifies reviewers.
-Nothing quietly undoes the publication or the notification. `typo3_rule_lookup`
-for the Gerrit workflow has both forms. Which one this change wants is the
-user's decision and never a default read off what the session did last.
+**Ask every time whether the change goes up visible to everyone or unlisted.**
+The two use different refspecs. A visible push publishes the change to everyone
+who watches the project and notifies the reviewers. Nothing undoes the
+publication or the notification. The Gerrit workflow page gives both forms. The
+choice is the user's, never a default taken from what the session did last.
 
 ## Where the patch is finished and the review begins
 
 **When the checks pass and you have written the commit, invoke
 `typo3-core-patch-review` on the diff.** Do that before you push or hand the
-patch over. That is a step, not a note about ownership. Load the skill by name
-and work from it. What crosses over is the diff, the branch it targets, the
-change type and what the checks reported. What comes back is the work list the
-paragraph below already says to take it as.
-
-It stands as a step because the ownership sentence did not fire as one. A
-session finished a push-ready patch here and ran the project's checks. The patch
-was three files, two functional tests, a commit message. It reported the patch
-and never opened the review. That was twenty turns after it invoked this skill
-out of a triage whose crossing stands as an act. The act fired and the boundary
-did not, in one session on one task.
+patch over. Load the skill by name and work from it. Hand over the diff, the
+target branch, the change type and what the checks reported. Take its findings
+back as a work list.
 
 A review of the same change earlier in this session does not take its place. The
 final diff is new, and the earlier findings are about the old one. Where the
-review skill is already loaded, do not load it again. Work its checklist and its
-report section on the final diff from what you already hold.
+review skill is already loaded, do not load it again. Work through its checklist
+and its report section on the final diff.
 
-## Amending after review
+## Amend after review
 
 A patch that came back is the same change, not a new one. Fetch the patch set
-that exists, amend it, and keep the identifier that links it to its review.
-`typo3_rule_lookup` for the Gerrit workflow says how you do each of those.
-Address a reviewer's comment in the patch or answer it in the review. Never drop
-one in silence. A comment nobody replied to is the reason a change sits
-unmerged.
+that exists and amend it. Keep the `Change-Id` that links it to its review. The
+Gerrit workflow page says how to do each of these.
 
-The answer is a reply in the comment's own thread, and it decides whether the
-thread stays open. The same page has it under "Answer a Review Comment". It
-gives the reply's input, the patch set to post it on and how the lookup confirms
-it. Post a reply when the user asks for it, because a reply is publication like
-a push.
+**Answer every review comment.** Address it in the patch or answer it in the
+review. Never ignore one, because an unanswered comment keeps a change unmerged.
+The answer is a reply in the comment's own thread, and the reply decides whether
+the thread stays open. The Gerrit workflow page gives the details under "Answer
+a Review Comment". Post a reply only when the user asks, because a reply is
+public like a push.
 
-Where the change is somebody else's, those steps hold and two more come with
-them. Ask the author before the patch set goes up. Say every decision you took
-on their behalf in a comment on the change. The diff between two patch sets says
-what moved and never why.
+Where the change has another author, read
+[references/foreign-change.md](references/foreign-change.md) before the first
+commit.
 
-The amend leaves them the author and makes you the committer, which is the
-intended shape. The same page carries it. Never overwrite the author line,
-however much of the patch you wrote. `--reset-author` has no use here.
+## Where this skill stops
 
-This skill covers the write and the delivery of a core patch. That is the change
-itself, its tests, its changelog entry, and the checks it has to pass. It is its
-commit message and its push.
+- **A judgement of a patch**, somebody else's or your own, is
+  `typo3-core-patch-review`. It reads other sources than this skill does.
 
-It does not own the judgement of somebody else's patch, and it does not own the
-judgement of its own. Where the request is to say what is wrong with a change
-rather than to make one, `typo3-core-patch-review` owns that. It reads different
-surfaces for it. Take its findings as a work list when it hands them over. A
-change to an extension, a sitepackage or a site project belongs to the extension
-skills. Their conventions are not the core's.
+- **Getting a patch set into a checkout and out again** is
+  `typo3-core-patch-checkout`.
+
+- **A change to an extension, a sitepackage or a site project** belongs to the
+  extension skills. Their conventions are not the core's.

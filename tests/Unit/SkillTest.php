@@ -2454,7 +2454,7 @@ final class SkillTest extends TestCase
         // What the description does not carry, which is the reason the call is
         // here rather than a reading of the report.
         self::assertStringContainsString('status and target version as they stand today', $skill);
-        self::assertStringContainsString('**relations**. They are one hop from the change that introduced', $skill);
+        self::assertStringContainsString('**relations**. They link directly to the change that introduced', $skill);
         self::assertStringContainsString('**notes**, where a maintainer said why', $skill);
 
         // `typo3_gerrit_lookup` with issue 105403 answers empty from a checkout
@@ -2476,7 +2476,7 @@ final class SkillTest extends TestCase
         // concluded, and the order the skill had before carries none.
         self::assertStringContainsString('Check that blocker against what the branch has today', $skill);
         self::assertStringContainsString(
-            'The argument that carries a bugfix is the same inconsistency inside one version',
+            'The argument for a bugfix is an inconsistency inside one version',
             $skill,
         );
         self::assertStringContainsString('Establish the blast radius here rather than meet it while you work', $skill);
@@ -2614,7 +2614,7 @@ final class SkillTest extends TestCase
         // The three, in the skill's own vocabulary rather than restated.
         self::assertStringContainsString(
             're-establish three things. That is what kind of change this is now, which branches it reaches, '
-            . 'and what it owes',
+            . 'and what it must include',
             $skill,
         );
         // Before the widened part, because the cost is work already written.
@@ -2625,7 +2625,8 @@ final class SkillTest extends TestCase
         // Pointers to where each got its first settlement: step 2, the
         // blast-radius paragraph, the changelog section.
         self::assertStringContainsString(
-            'Step 2 settled the first, the blast radius the second and the changelog section the third',
+            'The rule lookup in step 2 of the issue section settled the first. The blast radius settled the second, '
+            . 'and the changelog entry the third',
             $skill,
         );
         // A fix that moved from ext:extbase to ext:fluid kept the sweep of the
@@ -2634,11 +2635,11 @@ final class SkillTest extends TestCase
             'Run the deprecation sweep of the base order again, with the `ext:` tag of the extension the change touches now',
             $skill,
         );
-        self::assertStringContainsString('To carry on derives none of them again', $skill);
+        self::assertStringContainsString('If you only continue, none of them is decided again', $skill);
         // What a widening costs where it gains a subsystem, which is the two
         // discarded rounds in one sentence.
         self::assertStringContainsString(
-            "gains that subsystem's build, its checks and its backport constraint with it",
+            "also gains that subsystem's build, its checks and its backport constraint",
             $skill,
         );
 
@@ -2780,8 +2781,8 @@ final class SkillTest extends TestCase
         // neighbouring ViewHelpers of that report differ.
         self::assertStringContainsString("the class it names, its docblock and the core's own tests", $skill);
         // The three strengths, and the report saying which one it found.
-        self::assertStringContainsString('say which of the three carries the rule', $skill);
-        self::assertStringContainsString('Carry it at the strength its own source puts on it', $skill);
+        self::assertStringContainsString('say which of the three states the rule', $skill);
+        self::assertStringContainsString('Repeat the rule at the strength its own source gives it', $skill);
         // Before the reproduction: a rule read as a prohibition ends the
         // assessment before any reproduction, which is what happened.
         self::assertLessThan(

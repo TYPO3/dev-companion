@@ -336,7 +336,7 @@ final class SiteTest extends TestCase
      * label.
      *
      * Five words where a page label gets four. A section may state a claim, and
-     * the ones this corpus writes are of the form *judged, not executed*.
+     * the ones this corpus writes are of the form *the todo is a claim*.
      *
      * `server/tools/` is not read. `ToolSurface` and `ToolAnswers` write those
      * pages and `bin/cli tools:check` holds them. What heads a recorded answer

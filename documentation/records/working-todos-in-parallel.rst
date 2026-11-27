@@ -29,7 +29,7 @@ The steps at a glance:
     flow canvas=960
       columns 1,1,1
     title "Main holds state; branches hold work"
-    description "A worktree per todo says which session has it, and one branch carries each session's unfinished work. Completed branches return one at a time through rebase, checks and a fast-forward merge."
+    description "A worktree per todo says which session has it, and one branch holds each session's unfinished work. Completed branches return one at a time through rebase, checks and a fast-forward merge."
 
     main `main`
       at 0,0

@@ -142,7 +142,7 @@ the answer small.
     decision "Decision"
       at 1,4
       tag "5"
-      body "Everything worked; the design itself carries the cost."
+      body "Everything worked; the design itself has the cost."
 
     question -> gap
     gap -> delivery

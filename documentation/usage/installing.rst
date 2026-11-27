@@ -755,9 +755,9 @@ ways:
 In every other project, the entry names the absolute path of this server, on the
 machine where ``install`` ran.
 
-The absolute path is right on one machine only. It stands in a file that the
-client documents as shared and committed. ``install`` says so at the terminal.
-The rest of this section says why nothing better exists.
+The absolute path is right on one machine only. It is in a file that the client
+documents as shared and committed. ``install`` says so at the terminal. The rest
+of this section says why nothing better exists.
 
 A relative path resolves against the working directory the client starts the
 process in. The MCP specification does not define that directory. The stdio

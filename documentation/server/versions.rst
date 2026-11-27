@@ -22,7 +22,7 @@ line.
     :caption: Bind only what changed; keep the surrounding knowledge shared.
 
     bars canvas=960
-      bands "12.4 · LTS,13.4 · LTS,14.3 · stable,main · development"
+      bands "12.4 · ELTS,13.4 · LTS,14.3 · LTS,main · development"
       axis "Covered line"
     title "Version differences are data"
     description "The covered lines form the timeline. A statement without since or until holds on all of it. Since and until bind one statement to the lines it holds on, and a check runs on both sides of that boundary."
@@ -89,7 +89,8 @@ Binding a statement
 
 * **Keep version numbers out of the prose.** The bound is in the field, so the
   sentence does not need "since v14". Nothing can filter, re-render or check a
-  sentence with a version number in it. ``HintsTest`` enforces this.
+  sentence with a version number in it.
+  ``VersionsTest::theRangeIsNeverWrittenIntoTheSentence`` enforces this.
 
 What a hint states
 ------------------
@@ -132,7 +133,7 @@ Who must follow it
 A version range is not the only thing an answer must know per caller. Who must
 follow a statement is data as well.
 
-``binding: "core"`` marks what is a condition of a patch to the core and a
+``scope: "core"`` marks what is a condition of a patch to the core and a
 convention anywhere else. Examples are the design system of the backend, the
 changelog artifact and the paths of the mono repository. The marker sits on the
 hint where the whole subject is like that. It sits on the single statement where
@@ -142,10 +143,13 @@ Nothing gets dropped for the marker. Outside the core, the content stays and
 shows the marker. A project that builds a backend module wants exactly those
 rules.
 
-Without the marker, which is the usual case, a statement holds wherever somebody
+``scope: "project"`` and ``scope: "extension"`` mark the other direction: what a
+repository outside the core has to do (``D-KNW-007``).
+
+Without a marker, which is the usual case, a statement holds wherever somebody
 writes TYPO3. An API that throws, throws in a sitepackage too.
-``VersionsTest::whoIsObligedIsWrittenAsDataToo`` limits the vocabulary to that
-one value. A second value is a decision, not a data entry.
+``VersionsTest::whoIsObligedIsWrittenAsDataToo`` limits the values to the
+knowledge cases of ``Knowledge\Scope``. A value outside them fails the test.
 
 The catalogs
 ------------

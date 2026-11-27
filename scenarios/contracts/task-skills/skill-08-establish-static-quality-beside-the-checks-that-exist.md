@@ -1,7 +1,7 @@
 # SKILL-08 — Establish static quality beside the checks that exist
 
-**Environment:** `E-EXT`, in an extension that runs a code style fixer and a
-syntax lint but has no static analyser, no baseline and no test suite ·
+**Environment:** `E-EXT`, in an extension with a code style fixer and a syntax
+lint, and no static analyser, no baseline and no test suite ·
 **Contract:** `held`
 **Held by:**
 `SkillTest::extensionTestingKeepsCheckingApartFromFixing`,

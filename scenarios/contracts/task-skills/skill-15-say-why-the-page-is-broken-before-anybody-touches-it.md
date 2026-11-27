@@ -4,14 +4,13 @@
 the rest of it renders · **Contract:** `held`
 **Held by:** `HintsTest::aFailingInstallationIsSaidWhatItWritesDownAndWhatItOnlyShows`
 holds that both halves of a failing installation are stated and reached from the
-symptom's own words,
-`SkillTest::anInstallationIsBuiltInDependencyOrder`
+symptom's own words. `SkillTest::anInstallationIsBuiltInDependencyOrder` holds
 that the workflow which owns a running installation names that lookup before it
-proves anything, and
-`HintsTest::aRequestForACauseIsAnsweredWithWhatFindingOneNeeds` that a request
-asking for a cause and no change is answered with what finding one needs rather
-than with the workflow that writes a patch. That the session then reaches the
-cause is **not guarded**, because nothing short of a run on `E-SITE` reads it.
+proves anything. `HintsTest::aRequestForACauseIsAnsweredWithWhatFindingOneNeeds`
+holds the answer to a request for a cause and no change. It names what finding
+one needs rather than the workflow that writes a patch. That the session then
+reaches the cause is **not guarded**, because nothing short of a run on `E-SITE`
+reads it.
 
 **Read 2026-09-02, again 2026-09-19, 2026-10-11 and 2026-10-28:** the `diagnosis` intent still changes nothing. It still opens on what the installation wrote down rather than on what it rendered, by `typo3_hint_lookup` with id=installation-exception-output. It exists since 2026-08-21, so the guide recognizes the request as the shape it is instead of by the subject it names. What remains owed is the run. `D-SKL-065`'s first **Wrong if** is a session that has the route and hand-reads its way past both owners anyway.
 

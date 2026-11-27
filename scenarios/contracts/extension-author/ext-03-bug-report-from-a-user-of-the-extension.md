@@ -5,9 +5,9 @@
 `CommitMessageTest::outsideTheCoreNoTrailerIsAddedAndNoneIsDemanded`,
 `CommitMessageTest::outsideTheCoreTheSubjectAndBodyRulesStillHold`,
 `ScopeTest::maintainingAnExtensionIsNotSubmittingAPatchToTheCore`,
-`ScopeTest::theBriefPointsAtTheGuideForTheStepItEndsWith`; the first three hold
-that the guide answers without the trailers **when it is asked to** and the last
-that the brief asks for it by name, but that a session passes
+`ScopeTest::theBriefPointsAtTheGuideForTheStepItEndsWith`. The first three hold
+that the guide answers without the trailers **when it is asked to**. The last
+holds that the brief asks for it by name. That a session passes
 `workflow="project"` at all is **not guarded**. Left out, the draft carries the
 `Releases:` line this case stands against, and the guide reports a hard
 `missing-issue` error besides. Measured on 2026-08-02 and recorded on

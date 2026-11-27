@@ -2,9 +2,9 @@
 
 **Environment:** `E-EXT` · **Contract:** `held`
 **Held by:** `KnowledgeTest::aBriefNamingOneKindOfWorkConfirmsThatKindAndNoOther`
-and `KnowledgeTest::everyKindOfWorkHasSuchABrief`, which hold that a task naming
-this work reaches the `event-listener` intent and no other, and
-`HintsTest::survivingHooksAreNamedByTheirSubsystemAndIntent` for the hook half
+and `KnowledgeTest::everyKindOfWorkHasSuchABrief` hold that a task naming this
+work reaches the `event-listener` intent and no other.
+`HintsTest::survivingHooksAreNamedByTheirSubsystemAndIntent` holds the hook half
 the hint sends back to its subsystem.
 `ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout` holds the same
 of the words below, which is what the two briefs above cannot. That a session

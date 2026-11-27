@@ -1,14 +1,14 @@
 # SITE-10 — A sitepackage built from nothing
 
 **Environment:** `E-SITE`, freshly installed · **Contract:** `held`
-**Held by:** `ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout`,
-which holds that the prompt below confirms the `sitepackage` intent, and
+**Held by:** `ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout`
+holds that the prompt below confirms the `sitepackage` intent.
 `HintsTest::aNewSitepackageIsRoutedToEverySitepackageHint` and
-`HintsTest::aSitepackageIsGeneratedThroughTheBuildersApi`, which hold what that
-intent and its first hint route to. That a session then builds the package the
-way the hints say is **not guarded**. A run of this case is what measures it,
-and the first run without a skill is the baseline for
-`typo3-sitepackage-development` (`D-SKL-101`).
+`HintsTest::aSitepackageIsGeneratedThroughTheBuildersApi` hold what that intent
+and its first hint route to. That a session then builds the package the way the
+hints say is **not guarded**. A run of this case is what measures it, and the
+first run without a skill is the baseline for `typo3-sitepackage-development`
+(`D-SKL-101`).
 
 **Read 2026-10-28:** the prompt confirms the `sitepackage` intent, and the brief names `typo3-sitepackage-development`. The skill asks the design question once, takes the builder from its schema and ends on one rendered page per page layout. Ten recorded runs on 14.3 and 13.4 stand in `D-SKL-101`, the last of which rendered both layouts. No file below `scenarios/runs/` records them.
 
@@ -21,8 +21,8 @@ and the first run without a skill is the baseline for
 - Where a sitepackage comes from, since nothing in the core creates one. That is
   the builder and the schema its request takes, or the console tools of the
   installed major.
-- How the package is laid out: one template root, the page layouts and the
-  content element layouts apart, and the page layouts declared beside the set.
+- How the package is laid out: one template root, and the page layouts apart
+  from the content element layouts. The page layouts stand beside the set.
 - Which major the installation runs and which sets its sites already depend on,
   read from the installation rather than assumed.
 - What keeping or dropping `fluid_styled_content` costs, before the first
@@ -55,9 +55,9 @@ and the first run without a skill is the baseline for
 
 - A second round of questions, or a question about something the request or the
   project already answers.
-- A package written from a tutorial for another major: TypoScript constants
-  where the installed line has set settings, or a page rendered without the
-  mechanism that line renders pages with.
+- A package written from a tutorial for another major. It has TypoScript
+  constants where the installed line has set settings. Or it renders a page
+  without the mechanism that line renders pages with.
 - One shared `Layouts/Default`, so the header and footer appear inside every
   content element on a page that renders without an error.
 - The core's own theme required or extended as the base of a project

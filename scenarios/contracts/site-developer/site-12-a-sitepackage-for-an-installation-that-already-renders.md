@@ -4,13 +4,12 @@
 [`site-12-design/`](site-12-design/index.html) copied to `design/` at the
 project root · **Contract:** `open`
 **Held by:** `HintsTest::aNewcomersDesignReachesTheHintsOnConvertingIt` and
-`SkillTest::theSitepackageSkillConvertsADesignAndCountsTheDocument`, which hold
-what the `sitepackage` intent and its skill say about a design, and
-`ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout`, which holds
-that the prompt below confirms that intent. That a session keeps the content
-rendering, rather than writes rows into the database to see a layout, is **not
-guarded**. That it leaves the project free of `theme_camino` is **not guarded**
-either.
+`SkillTest::theSitepackageSkillConvertsADesignAndCountsTheDocument` hold what
+the `sitepackage` intent and its skill say about a design.
+`ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout` holds that the
+prompt below confirms that intent. That a session keeps the content rendering,
+rather than writes rows into the database to see a layout, is **not guarded**.
+That it leaves the project free of `theme_camino` is **not guarded** either.
 
 `SITE-11` is this case without the one thing that makes it ordinary. Three runs
 of it on 2026-10-29 met all eleven criteria. None of them created a page or a
@@ -22,8 +21,8 @@ This case gives the session a site that already answers. `theme_camino` ships
 its own content, and the core's `setup` command imports it where the package is
 already active. So the environment command requires the package before the setup
 runs, and\n`--distribution` is for a package that is not active yet. Measured on
-v14.3.10, the content is 7 pages and 50 content elements: a root page, three
-content pages, and a folder holding the imprint and the privacy page.
+v14.3.10, the content is 7 pages and 50 content elements. The pages are a root
+page, three content pages, and a folder with the imprint and the privacy page.
 
 Two things the import writes are worth knowing before a run. The site
 configuration it creates carries `base: /camino/`, so the environment command
@@ -78,16 +77,16 @@ records it.
 
 **Run 2026-11-02:** two runs against `af25c0f7`, on the design this case now
 carries, one with this server and one without. The run with it made 20 calls and
-opened 4 skills. It removed `typo3/theme-camino` from the project, registered
-the design's nine blocks as its own types, and shipped
+opened 4 skills. It removed `typo3/theme-camino` from the project and registered
+the design's nine blocks as its own types. It shipped
 `jamboSitepackage_caminoContentMigration`, which moved all 18 rows that stood on
-camino's types. The run without it kept camino installed, built its set on top,
-and said in as many words that the storage still depends on it and that a move
-off it is a migration of its own. Both kept all 50 elements, and both compared
-the stored content against a dump from before the change. Both found that the
-design's `.page-grid` put the running text in the narrow column, and both
-repaired it on their side. So the first of the three pairs took the cost, and
-the shape of the design is what asked for it.
+camino's types. The run without it kept camino installed and built its set on
+top. It said in as many words that the storage still depends on camino. It also
+said that a move off it is a migration of its own. Both kept all 50 elements,
+and both compared the stored content against a dump from before the change. Both
+found that the design's `.page-grid` put the running text in the narrow column,
+and both repaired it on their side. So the first of the three pairs took the
+cost, and the shape of the design is what asked for it.
 
 **What the agent needs from this server**
 

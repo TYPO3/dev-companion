@@ -3,14 +3,14 @@
 **Environment:** `E-SITE`, freshly installed, with
 [`site-11-design/`](site-11-design/index.html) copied to `design/` at the
 project root · **Contract:** `held`
-**Held by:** `ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout`,
-which holds that the prompt below confirms the `sitepackage` intent, and
+**Held by:** `ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout`
+holds that the prompt below confirms the `sitepackage` intent.
 `HintsTest::aNewcomersDesignReachesTheHintsOnConvertingIt` and
-`SkillTest::theSitepackageSkillConvertsADesignAndCountsTheDocument`, which hold
-what that intent and its skill say about a design. That a session converts the
-design rather than pastes it is **not guarded**. Three runs of this case, each
-graded blind, measure it (`D-EVI-013`), and they answered whether a conversion
-needs a skill of its own (`D-SKL-035`).
+`SkillTest::theSitepackageSkillConvertsADesignAndCountsTheDocument` hold what
+that intent and its skill say about a design. That a session converts the design
+rather than pastes it is **not guarded**. Three runs of this case, each graded
+blind, measure it (`D-EVI-013`), and they answered whether a conversion needs a
+skill of its own (`D-SKL-035`).
 
 The design is an ordinary small site. A session of this repository wrote it on
 2026-10-29, the maintainer's choice over the design of the run that failed. It
@@ -33,12 +33,12 @@ settings. The server checkout moved between the run's two halves, so no single
 commit stands behind it.
 
 **Run 2026-11-06:** one run each of `claude-opus-5-5` and `claude-fable-5-1`
-against `39fd0169`, from a pristine directory with this server and the skills,
-on the newcomer sentence of `feedback/2026-10-29-105043`, and graded blind. Each
-met five criteria, and the sixth, what the answer owes the editors, in part.
-None of the failures occurred. Opus took 19 minutes and $4.47, Fable 33 minutes
-and $17.67. Neither asked the user anything. `D-KNW-190` holds what they did
-with the administrator account.
+against `39fd0169`, graded blind. Each started from a pristine directory with
+this server and the skills, on the newcomer sentence of
+`feedback/2026-10-29-105043`. Each met five criteria, and the sixth, what the
+answer owes the editors, in part. None of the failures occurred. Opus took 19
+minutes and $4.47, Fable 33 minutes and $17.67. Neither asked the user anything.
+`D-KNW-190` holds what they did with the administrator account.
 
 > We have a fresh TYPO3 installation, and our agency delivered a static HTML
 > design in the design/ folder. Build it into TYPO3 as our sitepackage, so the
@@ -78,6 +78,6 @@ with the administrator account.
 - The navigation copied as static links from `design/`.
 - The site served from `design/` or with the design's relative paths, so an
   asset answers 404 on a subpage.
-- The same failures as `SITE-10`: a tutorial for another major, a shared layout
+- The same failures as `SITE-10`. A tutorial for another major, a shared layout
   that renders the frame inside every content element, a builder request with
   guessed fields.

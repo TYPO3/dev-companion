@@ -51,8 +51,8 @@ enum Source: string
                 . 'versions rather than to an installation.',
             self::Network => 'A service outside this machine. An unreachable one says so out loud rather than '
                 . 'answers as empty.',
-            self::Checkout => "This server's own checkout, which is why the tool offering it exists only in a "
-                . 'standalone one.',
+            self::Checkout => "This server's own checkout, which is why the tools that answer from it exist only "
+                . 'in a standalone one.',
         };
     }
 

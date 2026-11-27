@@ -127,8 +127,8 @@ answers as empty.
 checkout
 --------
 
-This server's own checkout, which is why the tool offering it exists only in a
-standalone one.
+This server's own checkout, which is why the tools that answer from it exist
+only in a standalone one.
 
 - :doc:`typo3_feedback_list <tools/typo3_feedback_list>`
 - :doc:`typo3_feedback_record <tools/typo3_feedback_record>`

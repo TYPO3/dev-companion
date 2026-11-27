@@ -316,6 +316,21 @@ takes a field list as metadata only while it has found no title. A run of
 says what a band, a grid, a card and a surface take. Nothing here renders any of
 them.
 
+**Write a diagram as a** ``.. diagram::`` **directive in the page.** The finish
+step of the theme draws it into the page before the site ships. So nobody draws
+an SVG for a diagram or generates one. The maintainer settled that on
+2026-11-27.
+`Writing a diagram <https://typo3.github.io/soul-design-system/design-system/brand-and-imagery/diagrams/writing.html>`_
+in the manual of the theme gives the text format and every layout. Three of its
+rules decide whether a page gets a diagram at all:
+
+* One claim per diagram. Write the claim as a sentence before you draw.
+
+* A drawing that still works as a list is no diagram. Write the list.
+
+* ``title`` and ``description`` are necessary. The title is the claim, and the
+  description says what a reader who cannot see the drawing would see.
+
 ``theme="soul"`` in ``guides.xml`` selects a theme that must exist first, and
 the extension element below it makes the theme exist. The rail and the trail are
 the ``toctree`` that each directory's own page has. So **every directory of this

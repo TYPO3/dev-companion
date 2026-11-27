@@ -273,9 +273,10 @@ because a regex cannot tell "is read" the adjective from the passive.
 `documentation/` is reStructuredText because the site publishes it and a
 reference into another page has to resolve. Everything else here is markdown —
 `D-DOC-029`. Inside `documentation/` a name is a double-backtick literal and
-another page is `:doc:`. A place in a page is `:ref:` with a label above the
-heading it names. A path that leaves the tree is an embedded link `Site`
-rewrites to GitHub.
+another page is `:doc:`. A diagram is a `.. diagram::` directive in the page,
+and the theme's finish step draws it. A place in a page is `:ref:` with a label
+above the heading it names. A path that leaves the tree is an embedded link
+`Site` rewrites to GitHub.
 
 - One point per sentence. Delete a sentence that restates the previous one in
   other words; do not shorten it.

@@ -89,13 +89,38 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * A quotation is its source's prose, so it counts as one word.
+     * A quotation is its source's prose, so it counts as one word. The records
+     * quote an answer in italics as often as in double quotes.
      */
     #[Decision('D-DOC-070')]
     #[Test]
-    public function aQuotationCountsAsOneWord(): void
+    #[DataProvider('quotations')]
+    public function aQuotationCountsAsOneWord(string $sentence, int $words): void
     {
-        self::assertSame(5, Prose::words('The guide says "you can even commit on other people\'s patches" here.'));
+        self::assertSame($words, Prose::words($sentence));
+    }
+
+    /** @return array<string, array{string, int}> */
+    public static function quotations(): array
+    {
+        return [
+            'in double quotes' => ['The guide says "you can even commit on other people\'s patches" here.', 5],
+            'in italics' => ['The guide says *you can even commit on other people\'s patches* here.', 5],
+            'the star of a glob' => ['It reads `src/*.php` and `tests/*.php` both.', 6],
+        ];
+    }
+
+    /**
+     * A quotation that holds sentences of its own is one span. Split at its
+     * full stops, it leaves a stray quote mark that counts every word after it.
+     */
+    #[Decision('D-DOC-070')]
+    #[Test]
+    public function aQuotationIsNeverSplitIntoSentences(): void
+    {
+        $sentences = Prose::sentences('The hint reads "One. Two. Three words here, and then more of them." A second sentence follows it here.');
+
+        self::assertSame([4, 6], array_map(Prose::words(...), $sentences));
     }
 
     /**

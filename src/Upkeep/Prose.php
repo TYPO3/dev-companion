@@ -43,6 +43,13 @@ final class Prose
      *
      * @var list<string>
      */
+    /**
+     * An italic span, which is how the records quote what a tool or a page
+     * answered. It opens after a space and closes before one, so the star of a
+     * glob is not one — `D-DOC-070`.
+     */
+    private const ITALIC = '/(?<=^|[\s(])\*(?=[^\s*])[^*]*(?<=[^\s*])\*(?=$|[\s.,;:!?)])/';
+
     public const CHECKED = ['skills/', 'knowledge/documents/', 'requirements/', 'todo/', 'documentation/', 'decisions/'];
 
     /**
@@ -172,7 +179,7 @@ final class Prose
      */
     public static function words(string $sentence): int
     {
-        return count(explode(' ', (string) preg_replace('/"[^"]*"/', '""', $sentence)));
+        return count(explode(' ', (string) preg_replace(['/"[^"]*"/', self::ITALIC], '""', $sentence)));
     }
 
     /**
@@ -624,7 +631,7 @@ final class Prose
      *
      * @return list<string>
      */
-    private static function sentences(string $markdown): array
+    public static function sentences(string $markdown): array
     {
         $markdown = (string) preg_replace('/^---\R.*?\R---\R/s', '', $markdown);
         $markdown = (string) preg_replace('/^ {0,3}```.*?^ {0,3}```/ms', '', $markdown);
@@ -644,10 +651,11 @@ final class Prose
                 if ($line === '' || in_array($line[0], ['#', '|', '>', '='], true) || preg_match('/^\[[^\]]+\]:\s/', $line) === 1) {
                     continue;
                 }
-                // A bold or a quoted sentence ends inside its markers, so
-                // `read.** A` and `read." A` are two sentences and not one of
-                // 33 words.
-                foreach (preg_split('/(?<=[.!?]|[.!?]\*\*|[.!?]")\s+/', $line) ?: [] as $sentence) {
+                // A bold, a struck or a quoted sentence ends inside its
+                // markers, so `read.** A` and `read." A` are two sentences and
+                // not one of 33 words. A quotation is one span, whatever
+                // sentences its source wrote inside it.
+                foreach (preg_split('/"[^"]*"(*SKIP)(*FAIL)|(?<=[.!?]|[.!?]\*\*|[.!?]"|[.!?]~~)\s+/', $line) ?: [] as $sentence) {
                     $sentence = trim($sentence);
                     // Four words is a heading in disguise, a label line, or the
                     // remains of one split on an abbreviation.

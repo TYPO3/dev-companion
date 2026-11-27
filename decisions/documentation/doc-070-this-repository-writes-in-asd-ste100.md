@@ -5,6 +5,7 @@ date: 2026-09-14
 status: open
 coveredBy:
   - ProseTest::aQuotationCountsAsOneWord
+  - ProseTest::aQuotationIsNeverSplitIntoSentences
   - ProseTest::everySentenceInACheckedDirectoryIsWithinItsMeasure
 ---
 

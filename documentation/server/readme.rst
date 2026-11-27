@@ -94,9 +94,9 @@ comes from.
     sources -> answer
 
 The tools are the server. The rest of this section is the other surface beside
-them, or says where their answers come from. A caller cannot see the source from
-the description of a tool. So every answer names its source, its version bound
-and what it left out.
+them, or says where their answers come from. The description of a tool names the
+sources it can answer from. Only the answer shows which source answered one
+call. So every answer names its source, its version bound and what it left out.
 
 .. toctree::
     :hidden:

@@ -61,8 +61,8 @@ one. So an LTS never gets a convention only the development line has. Where you
 work on an older line, say so in the task, and that narrows the answer.
 
 Each answer also says which kind of work it belongs to: the contribution process
-of the core, a project, or an extension. A rule that binds only core patches is
-marked as one. The same person is often two of those in one checkout.
+of the core, a project, or an extension. The server marks a rule that binds only
+core patches as one. The same person is often two of those in one checkout.
 
 A miss is an answer
 -------------------

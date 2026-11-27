@@ -4368,16 +4368,17 @@ final class SkillTest extends TestCase
         // `unsupported: no-installation` where there is no repository either.
         // Both read like the disconnected server the base stops for, while they
         // are the task.
-        self::assertStringContainsString('reports nothing installed in it is the task', $flat);
+        self::assertStringContainsString('Two of its answers are the task, not a failure', $flat);
+        self::assertStringContainsString('reports nothing installed in it', $flat);
         self::assertStringContainsString('Neither is the disconnected server', $flat);
 
         $order = [
             '[references/base.md](references/base.md)',
-            '## Boot what the repository already declares',
-            '## Create one where none is declared',
-            '## Prove it, and how far depends on what the run wrote',
-            '## The installation that already answers',
-            '## Where this stops',
+            '## 3. Boot what the repository declares',
+            '## 4. Create an installation where none is declared',
+            '## 5. Prove that the site answers',
+            '## 6. Diagnose an installation that is already up',
+            '## Where this skill stops',
         ];
         $position = -1;
         foreach ($order as $step) {
@@ -4391,7 +4392,7 @@ final class SkillTest extends TestCase
         // it does. An environment configuration on its own is a trace, and
         // `070448` entered the boot branch on it and found nothing to run.
         self::assertStringContainsString(
-            'the boot procedure it declares rather than the traces an installation has left in it',
+            'the boot procedure it declares rather than from the traces an installation has left in it',
             $flat,
         );
         // Stated in the fork and not in a section of its own, which is what the
@@ -4399,7 +4400,7 @@ final class SkillTest extends TestCase
         $third = strpos($flat, 'One that declares an environment and no procedure is both');
         self::assertNotFalse($third, 'the fork carries no shape for a repository that declares only an environment');
         self::assertLessThan(
-            (int) strpos($flat, '## Boot what the repository already declares'),
+            (int) strpos($flat, '## 3. Boot what the repository declares'),
             $third,
             'the third shape is stated below the branches it sends the session through',
         );
@@ -4424,8 +4425,16 @@ final class SkillTest extends TestCase
         // The environment that generates settings knows only the services it
         // provides itself, which is the collision `162858` paid a debugging
         // cycle for. The hint owns the boundary; this owns the case.
+        // The case is rare, so it stands in a reference the create branch
+        // names with its trigger — `D-SKL-112`.
         self::assertStringContainsString('id=project-configuration-files', $skill);
-        self::assertStringContainsString('knows only the services it provides itself', $flat);
+        self::assertStringContainsString('[references/generated-settings.md](references/generated-settings.md)', $skill);
+        self::assertStringContainsString(
+            'knows only the services it provides itself',
+            self::flat((string) file_get_contents(
+                Paths::root() . '/skills/typo3-development-installation/references/generated-settings.md',
+            )),
+        );
 
         // Step 1 names the two sources that answer before anything exists, and
         // neither is the installation. The hint that owns the installer keys,
@@ -4480,7 +4489,7 @@ final class SkillTest extends TestCase
         // `installation-boot` out by its title while it stood in exactly that
         // case.
         self::assertMatchesRegularExpression(
-            '/`id=installation-boot` owns \w/',
+            '/`id=installation-boot` lists \w/',
             $flat,
             'the boot branch names no lookup for what a declared clone is missing',
         );
@@ -4490,24 +4499,24 @@ final class SkillTest extends TestCase
         // boots one names it too. `071435` took this branch, read the id under
         // the other and probed `typo3conf/ext` by hand instead — `D-SKL-058`.
         self::assertMatchesRegularExpression(
-            '/`id=extension-repository-installation` owns \w/',
+            '/`id=extension-repository-installation` lists \w/',
             $flat,
             'the boot branch names no lookup for the layout it is looking at',
         );
         self::assertLessThan(
-            (int) strpos($flat, '## Create one where none is declared'),
-            (int) strpos($flat, '`id=extension-repository-installation` owns'),
+            (int) strpos($flat, '## 4. Create an installation where none is declared'),
+            (int) strpos($flat, '`id=extension-repository-installation` lists'),
             'the layout lookup is named in the create branch alone',
         );
 
         // The proof page is where a session that has no browser stands when the
         // site does not answer. The same session scraped four rendered error
         // pages for one line of message each — D-KNW-092.
-        $proving = (int) strpos($skill, '## Prove it,');
+        $proving = (int) strpos($skill, '## 5. Prove that the site answers');
         $exceptions = (int) strpos($skill, 'id=installation-exception-output');
         self::assertGreaterThan($proving, $exceptions, 'the exception lookup is named before the site is proved');
         self::assertNotNull(Hints::byId('installation-exception-output'));
-        self::assertStringContainsString('which codes it shows and never writes at all', $flat);
+        self::assertStringContainsString('the codes it shows and never writes at all', $flat);
 
         // What the last section owes comes off the repository and not off the
         // session. `070448` authored every step and committed nothing. So the
@@ -4550,7 +4559,7 @@ final class SkillTest extends TestCase
         // that matched none, and only the second half had a lookup. The first
         // has its route before the site configuration paragraph, because a page
         // this site holds and refuses does not come off a base.
-        $page = (int) strpos($flat, '`id=page-not-found-within-a-site` owns that half');
+        $page = (int) strpos($flat, '`id=page-not-found-within-a-site` covers that half');
         self::assertGreaterThan(0, $page, 'the half where a site did answer is routed nowhere');
         self::assertNotNull(Hints::byId('page-not-found-within-a-site'));
         self::assertLessThan(
@@ -4561,7 +4570,7 @@ final class SkillTest extends TestCase
 
         // And the ownership sentence, which gave the same half away in the
         // clause `071526` quoted back at the server.
-        self::assertStringContainsString('what it answers once it runs', $flat);
+        self::assertStringContainsString('repairs an installation that is up, from what the installation answers', $flat);
         self::assertStringNotContainsString('what runs against the installation once it answers', $flat);
     }
 

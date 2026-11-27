@@ -15,8 +15,8 @@ The steps at a glance:
 3. Write the skill to the rules.
 4. Show the whole skill to the person who asked for it, and ask for feedback by
    name.
-5. Commit it, which publishes it, and run the installer where the skill is
-   measured.
+5. Commit it, which publishes it. Then run the installer where a run measures
+   the skill.
 
 The rules are narrow for one reason: a skill is a copy in somebody else's
 project, not a document this repository keeps. The installer writes it there.
@@ -36,10 +36,10 @@ looked like a skill at some point. A case in
 session used the existing workflow and came up short.
 
 A new skill also needs a **baseline run**. That is the case prompt, run in an
-environment without the skills. It is recorded beside the run it is compared
-with. That run turns "the skill helped" into a measurement, and only a new skill
-needs one. An edit rests on its author's word. The cost would fall on every
-change, and nobody here has seen what such a run would catch
+environment without the skills. A session records it beside the run that uses
+the skill. That run turns "the skill helped" into a measurement, and only a new
+skill needs one. An edit rests on its author's word. The cost would fall on
+every change, and nobody here has seen what such a run would catch
 (`D-SKL-035 <../../decisions/task-skills/skl-035-a-new-skill-is-measured-against-a-run-without-it.md>`_).
 
 What such a run shows is almost always smaller than the domain. It is an order
@@ -51,10 +51,10 @@ another project loads it before it does anything.
 Research first
 --------------
 
-Write a skill from the current state of the practice, never from recall. The
-research costs one session's reading. Recall costs a file in somebody else's
-project that states a practice permanently, as it was when its author last saw
-it. Before the first line:
+Write a skill from the current state of the practice, never from recall. One
+session pays for the research. Recall costs a file in somebody else's project
+that states a practice permanently, as it was when its author last saw it.
+Before the first line:
 
 * Ask this server what it already answers about the domain, with the tools the
   skill will route to. ``typo3_documentation_lookup`` gives the official
@@ -328,8 +328,8 @@ prescribe a tool and something the session already has answers it, the step says
 so in one construct. That is the name of the tool, then ``is discharged by``,
 then what answers it instead. ``DISCHARGED_TOOLS`` records the tool rather than
 the routings. The routing assertion finds the name of the tool in the body. So
-any other wording of "you already have this" satisfies the assertion while it
-tells the caller the opposite.
+any other words for "you already have this" satisfy the assertion while they
+tell the caller the opposite.
 
 The assertion skips the construct, and the construct keeps the two lists apart
 (`D-SKL-055 <../../decisions/task-skills/skl-055-a-call-named-in-order-not-to-make-it-is-a-discharge.md>`_).
@@ -500,7 +500,7 @@ look. This page states them because that is all anybody can do for them. The
 author who skips them is usually the one who has not read this page.
 
 Nothing holds either that a session **does** what a skill says. Most of the list
-reads the file, which makes it a proxy. The wording can stay present through a
+reads the file, which makes it a proxy. The words can stay present through a
 reorganisation while the behaviour goes. One gap narrower than behaviour is
 checkable and has its check. A skill names a tool and also says what to read out
 of the answer. For the four calls the base fixes, a test asserts those keys on

@@ -255,10 +255,10 @@ copy, into ``.site/source``, with no renderer, no theme and no network.
 ``.github/workflows/documentation.yml`` runs it before it installs a renderer
 into the temporary directory of the runner.
 
-The order of the steps is fixed. The renderer publishes the copy rather than
-these sources, so a render before a prepare renders the previous copy. The
-finish step of the theme reads the pages the renderer has just written. It draws
-every element on them ahead of the browser and writes the index the search bar
+Run the steps in this order. The renderer publishes the copy rather than these
+sources, so a render before a prepare renders the previous copy. The finish step
+of the theme reads the pages the renderer has just written. It draws every
+element on them ahead of the browser and writes the index the search bar
 fetches. The workflow spells out the same three steps, the one thing here
 written down twice.
 
@@ -374,10 +374,10 @@ Tests
     composer cgl     # bring every PHP file to the guidelines; cgl:ci only reports
 
 
-``composer ci`` lints, checks the coding guidelines, runs the static analysis
-and runs the test suite. The suite covers the search and ranking logic, every
-tool against its declared schemas and annotations, and the stdio entrypoint as a
-real subprocess. CI runs the same command on every supported PHP version.
+``composer ci`` lints, checks the guidelines, runs the static analysis and runs
+the test suite. The suite covers the search and how it ranks, every tool against
+its declared schemas and annotations, and the stdio entrypoint as a real
+subprocess. CI runs the same command on every supported PHP version.
 
 A test that holds a decision or a requirement declares it where the test is. It
 has ``#[Decision('D-DOC-048')]`` and ``#[Requirement('R-COD-003')]`` over the

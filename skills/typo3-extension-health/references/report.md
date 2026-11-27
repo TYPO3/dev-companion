@@ -98,7 +98,7 @@ severity headings and one field of a finding are this skill's own.
 
 ## Not reached
 
-- Not reached: <step> — <what stood in for it>
+- Not reached: <step> — <why>
 ```
 
 The package table takes one row per package you audit. A project takes its root

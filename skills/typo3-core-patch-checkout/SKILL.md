@@ -6,381 +6,294 @@ compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup
 
 # TYPO3 Core Patch Checkout
 
-Put one change under review into the checkout, in the state it is in. Keep this
-skill as routing and stop rules. The refs, the remotes and the commands are
-lookups. A copy of them here goes stale in somebody else's checkout, and nothing
-reports it.
+This skill covers how one change under review gets into a core checkout and back
+out of it. Use it to try a patch out, to see whether it still applies, or to
+build on somebody else's change. It stops before the push, which
+`typo3-core-patch-development` covers. It also stops before a judgement of the
+patch, which `typo3-core-patch-review` covers.
 
-This is a workflow of its own because of what it must not do. A patch that no
-longer applies is a finding: the branch moved under a change nobody rebased. A
-session that quietly resolves its way to something that compiles has destroyed
-that finding. It has produced a patch nobody wrote. So every step below has an
-end, and to reach one is a result.
+**A patch that no longer applies is a finding.** It shows that the branch moved
+and nobody rebased the change. Do not guess your way through conflicts until the
+code compiles. That produces a patch nobody wrote and destroys the finding. So
+every step below can end the work, and such an end is a result.
 
-**One change, because the work needs it on disk.** What a change touches, what
-its message says and where its review stands come back without a fetch. That is
-step 2 below. So you triage a shortlist before you open this workflow at all.
-You reach the checkout for the one change that survived the triage.
+**Fetch only the one change the work needs.** The review server tells you what a
+change touches, its message and its review status without a fetch. So compare
+the candidates first, and fetch only the one you chose. Every fetched change
+leaves refs behind that later look like the user's own work.
 
-Afterwards nobody can tell refs you pulled in for a read from the branches with
-the reader's own work. One session fetched eight open changes into somebody's
-checkout, and the user stopped it over them.
+Keep this skill as routing and stop rules: it says which tool to ask and when to
+stop. The refs, the remotes and the commands come from the lookups. A copy of
+them here would go out of date in somebody else's checkout.
 
-## Establish the change before you touch the checkout
+## Steps at a glance
 
-1. Work through [references/base.md](references/base.md), which fixes the order
-   every task here starts in.
-2. `typo3_gerrit_lookup` with the change number or the Change-Id. Use the issue
-   number where you reached the change through its issue. Four things it answers
-   decide everything below.
+1. Establish the change: its target branch, current patch set and status.
+2. Choose one of four ways to check it out.
+3. Check the working tree, the target branch and your way back.
+4. Fetch the current patch set and apply it.
+5. Rebase it onto current code, only where the work needs that.
+6. Run the suites that cover the change.
+7. Put the checkout back, and report the end state.
 
-   The **branch the change targets** is what you apply it onto. It is regularly
-   not the one you stand on. The **patch set that is current on the server**
-   matters because an older one is still fetchable. An older one silently
-   reviews a revision nobody looks at. The **status** matters since MERGED and
-   ABANDONED are both answers that end the work. The **commit** says afterwards
-   whether the checkout holds the revision under review.
-3. `typo3_rule_lookup` for the Gerrit workflow. It carries the ref you fetch a
-   patch set by. That is the one thing about a core change fetch nobody can
-   guess. It says which remote the ref is on, which is not the one the checkout
-   fetches from. It says the form the third way in below takes. It says what a
-   patch set opened on somebody else's change owes its author.
+With option 4, also follow "Option 4: add your own work to the patch set". When
+a rule stops the work, follow "When a rule stops the work".
 
-   Those are sections of one page, and a search returns the one your words
-   matched. So read it whole where the fetch is the task, and always on the
-   fourth way in. That is `typo3_rule_lookup` with
-   `documentId="core/contribution/gerrit-workflow"`, which also stands as
-   `typo3://guides/core/contribution/gerrit-workflow`.
+## 1. Establish the change
 
-## Four ways in
+1. Work through [references/base.md](references/base.md) first. It fixes the
+   order every task starts in.
 
-The patch goes onto the branch it targets in the checkout you stand in, or into
-a worktree beside it. Or it goes onto current code as a commit of your own. Or
-it goes under work of your own, as the base you carry it on. The request usually
-says which.
+2. Call `typo3_gerrit_lookup` with the change number or the Change-Id. If you
+   only have the issue, use the issue number. Read four things from the answer:
 
-The first two hold the patch as its author wrote it. Whether the checkout is
-free decides between them. The branch path needs it to itself. A worktree leaves
-the current branch and everything uncommitted on it alone.
+   - **The target branch.** Apply the change onto this branch. It is often not
+     the branch you are on.
+   - **The current patch set.** Older patch sets can still be fetched. If you
+     fetch one, you work on a revision nobody reviews.
+   - **The status.** MERGED and ABANDONED both end the work.
+   - **The commit.** Later you compare it with the checkout. It shows whether
+     you hold the revision under review.
 
-A worktree does not save that work, it moves it. It starts without the installed
-dependencies, which git ignores and so does not bring. So no suite runs in it
-until you install them there.
+3. Read the Gerrit workflow page whole, not through a search. A search returns
+   only the section your words matched. Call `typo3_rule_lookup` with
+   `documentId="core/contribution/gerrit-workflow"`. It is also served as
+   `typo3://guides/core/contribution/gerrit-workflow`. The page gives:
 
-`typo3_test_run_guide` states that precondition above its suites. Beside it
-stands the one check whose file list comes from git. In a worktree it reports
-success after it read nothing. Read both before you run anything in one.
+   - the ref you fetch a patch set by, which nobody can guess;
+   - the remote that ref is on, which is not the one the checkout fetches from;
+   - the command for a rebase onto current code;
+   - what the author must get from you when you upload to their change.
 
-The third answers a different question: whether the change still applies to
-current code and still passes there. "Cherry-pick it onto main" asks for it. It
-takes the patch off the code its author wrote it on. So what the checkout then
-holds is a commit this session made, not the revision under review.
+A change can be part of a chain: several changes that build on each other. If
+the answer of step 2 has a `chain` with more than one open link, read
+[references/chain.md](references/chain.md) before the fetch.
 
-That commit gets a name, `review/<change number>`, because the rest of the work
-reads it. A reader can tell a named branch from the checkout's own work. A
-reader can find it again after anything moves, and remove it on purpose. Where
-the checkout is not free, this way in takes the worktree as the second does. You
-create the branch there.
+## 2. Choose how to check it out
 
-The fourth is the one the other three read as an obstacle. The patch is the
-base, and work of your own goes on top of it. "Extend their patch with ours",
-"amend somebody else's change" and "add this to the change" all ask for it. What
-comes out is a further patch set on that change rather than a change of yours.
-It uses the third's branch, started at the fetched patch set instead of at
-current code. The section below says what it owes before you commit anything.
+The request usually says which of the four it wants.
 
-## One change, or a chain of them
+1. **On the target branch.** You get the patch as its author wrote it, in your
+   current checkout. This needs a clean checkout.
 
-`typo3_gerrit_lookup` answers a `chain` with every change read by name. A chain
-longer than one open link changes the whole of what follows. A large refactoring
-arrives this way, and the request says so. "Rebase the chain" names it outright.
+2. **In a worktree beside the checkout.** You also get the patch as its author
+   wrote it. Your current branch and your uncommitted work stay as they are.
 
-Read the chain before the fetch and take five things off it.
+3. **Rebased onto current code.** This answers another question: does the change
+   still apply and pass on current code? "Cherry-pick it onto main" asks for it.
+   The result is a commit you made, not the revision under review. Put it on a
+   branch named `review/<change number>`. A reader can tell that branch from the
+   user's work, find it again and delete it on purpose. If the checkout is not
+   clean, create the branch in a worktree.
 
-- **Which links are still open.** You have to carry those, and their number is
-  how many commits the move is. The merged ones below them are already on the
-  branch, or should be.
-- **Whether the merged link below is an ancestor.** `chainedAt` against
-  `patchSet` on that link says it. A link that shows `chainedAt` 18 and
-  `patchSet` 23 merged as a revision the chain never sat on. So
-  `git merge-base --is-ancestor` answers no, and a share of the conflicts below
-  follow from that one difference. Nothing in a checkout says it.
-- **The move is a range.** Where one change is `git cherry-pick FETCH_HEAD`, a
-  chain is `git cherry-pick BASE..TIP`. `git rebase --onto origin/main BASE TIP`
-  is the same thing. The branch keeps the `review/<change number>` convention.
-  It takes the number of the **tip** change, which is the one the request named.
-- **Every later amend is two steps.** You cannot amend a conflict resolution or
-  a fixer finding that belongs to the lower commit from the tip. Detach to it,
-  amend, apply again what sat on top, and move the branch. Budget for it rather
-  than discover it at the end. A rebuild of the output in every link is one step
-  instead. `typo3_rule_lookup` with
-  `documentId="core/contribution/committed-build-output"` gives it, section
-  "Rebuilding Every Commit of a Chain".
+4. **As the base for your own work.** "Extend their patch with ours", "amend
+   somebody else's change" and "add this to the change" ask for it. The result
+   is a further patch set on that change, not a change of your own. Use the
+   branch of option 3, but start it at the fetched patch set. Read "Option 4:
+   add your own work to the patch set" before you commit anything.
 
-- **Which links are red.** Every link carries its labels. A link that Verified
-  rejects names the jobs core-ci failed it on, each with its log. A rebase that
-  rebuilds output has to know whether the build is the failure.
+**A worktree needs its own dependencies.** A new worktree has no installed
+dependencies, because git does not track them. So no suite runs in it until you
+install them there. `typo3_test_run_guide` says this above its suites. The same
+answer names a check that gets its file list from git. In a worktree, that check
+reports success after it read nothing. Read both before you run anything in a
+worktree.
 
-The stop rules below are for somebody else's patch, and a chain is regularly the
-requester's own. The answer's owner field settles whether the change owner is
-the person who asks. Hold its `email` against `git config user.email`. Every
-link carries an owner of its own, so the rule applies per link. Where they are,
-the rule that stops you from an absent author's decisions has nothing left to
-protect. To resolve past a handful of hunks is the right call. Say in the result
-that you did, and on whose change.
+## 3. Before you change the checkout
 
-## Your own chain, with its content unchanged
+Check these three, in this order. Stop at the first that fails. On the worktree
+path, the first and the third apply to the worktree.
 
-A rebase of the requester's own chain is the third way in on every link. Most of
-this workflow guards somebody else's patch. If the requester owns every link,
-three steps fall away: the ask, the comment on the change, and the stop. That
-stop is the one at a conflict the change does not decide.
+- **The working tree is clean.** Uncommitted work and a fetched patch set cannot
+  be told apart afterwards. Stop and say what the uncommitted work is. Do not
+  stash it to get it out of the way. Where that work is in the way, use a
+  worktree.
 
-The rest stays, in this order:
+  With option 4 the uncommitted work is the material you add. Commit it on its
+  current branch, before you fetch anything. Say in the answer which branch and
+  which commit that is. The file-by-file rule in the checklist compares against
+  it.
 
-- **The target branch**, established before anything moves.
-- **The build in every link**, where the chain commits build output. The section
-  on the rebuild is the one the chain bullets above name.
-- **`git range-diff`** from the old range to the new one. `=` on every link is
-  the proof that neither the content nor the message moved.
-- **The deprecation sweep** of the base order. The code under the chain moved,
-  and the sweep says whether it deprecated something a link calls. Narrow it
-  with the tag of each system extension the chain touches.
-- **The checks on the new base.** `typo3_test_run_guide` with the paths the
-  chain touches names them. A run before the rebase is evidence about the old
-  base.
-- **The push, in `typo3-core-patch-development`.** Where every link came back
-  `=`, that workflow owes its rebase section and the push. The message, the
-  changelog entry and the review stand as they were pushed.
+- **The target branch is there and current.** A change applied onto the wrong
+  release branch produces conflicts. Those look exactly like a stale patch.
 
-## Before you change the checkout
+- **You know your way back.** Write down the current commit before anything
+  moves it. A worktree changes nothing in your checkout. To undo it, you remove
+  the worktree.
 
-Establish these three, in this order, and stop at the first that fails. The
-first and the third are about the working copy the patch goes into. On the
-worktree path that is the worktree.
+## 4. Fetch and apply
 
-- **The working tree is clean.** Afterwards nobody can tell uncommitted work and
-  a fetched patch set on top of each other apart. What a carry does to the
-  mixture is not recoverable from the checkout alone. Stop and say what the
-  uncommitted work is. Do not stash it as a convenience.
+Fetch the patch set the server reports as current. It is somebody else's commit,
+so do not put it on a local branch of yours as it is. The fetch is the same for
+all four options. Only the destination differs:
 
-  Where that uncommitted work is what stands in the way, the worktree is the way
-  past it.
+- Option 1: check out the commit detached.
+- Option 2: create a worktree on the commit. Your branch stays where it is.
+- Option 3: cherry-pick the commit onto a new branch `review/<change number>` at
+  current code.
+- Option 4: start the branch `review/<change number>` at the commit itself.
 
-  On the fourth way in it is the material instead. Commit it where it stands,
-  before you fetch anything. Say in the answer which branch and which commit
-  that is. Then it has a base, which is what the file by file rule below reads
-  against.
-- **The target branch is there and current.** A change that targets a release
-  branch, carried onto the wrong one, produces conflicts. Those are an artefact
-  of the mistake, and they look exactly like a stale patch.
-- **Where you are is where you can get back to.** Write down the commit the
-  checkout is on before anything moves it. A worktree moves nothing, so what you
-  write down there is where the worktree is. To remove it is the whole of the
-  undo.
+Then compare the checkout's commit with the commit from step 1. If they differ,
+explain why. With option 3 they always differ, and step 5 says what to report.
 
-## Fetch and apply
+## 5. Rebase onto current code only where the work needs it
 
-Fetch the patch set the server says is current, and put the checkout on it. It
-is somebody else's commit. It belongs on no local branch of yours for as long as
-it is still that commit. The detached checkout and the worktree say that.
+Rebase when the change does not sit on current code and the work needs it there.
+That is when you run the suites or read it against code that changed since. It
+is also when the user asks for it. Do not rebase by default. A patch read on its
+original base is the patch its author wrote, and every move can go wrong.
 
-The fetch is the same on every path, and only its destination differs. That is
-the checkout detached onto the commit, or a worktree on it while your branch
-stays where it is. Or it is the branch named for the change with the commit
-carried onto it. Or it is that same branch started at the commit itself.
+A core patch is one commit, so a rebase and a cherry-pick onto current code do
+the same. Either way the result is a commit made here that exists nowhere else.
+That is why it sits on a named branch, and why the clean-up deletes that branch.
+The Gerrit workflow page gives the command.
 
+**A clean rebase.** Say that it applied clean, and nothing more. A clean rebase
+does not prove that the patch still works. The change can rewrite, move or
+delete a class that `main` fixed in the meantime. Then the rebase can silently
+drop that fix. Git shows no conflict, because the patch and the fix change
+different files. Before you report that the patch survived, follow the four
+steps of `typo3_rule_lookup` with
+`documentId="core/contribution/rebasing-a-stale-patch"`.
 
+**Name the commit.** The rebased commit has another hash than the patch set.
+Every result after this point is about your commit, so say that. Otherwise a
+finding names a revision nobody else can look up.
 
-Then establish what you hold before you judge anything about it. The checkout's
-commit is the change's current revision, or it is not, and only the second needs
-an explanation. A carry onto current code is the second by construction. The
-section below says what you have to say instead.
+**A conflict.** Read [references/checklist.md](references/checklist.md) at the
+first conflict, not after you resolved a few. It decides, one conflict at a
+time, whether you resolve or stop. You cannot check resolutions against it after
+the fact.
 
-## Carry it onto current code only where the work needs it
-
-Carry the patch when the change does not sit on current code and the work needs
-it to. That is when you run the suites or read it against code that has since
-changed. It is also when the user asked for the carry. Not as a matter of
-course. A patch read against the code its author wrote it on is the patch its
-author wrote. A move is a step that can go wrong.
-
-A rebase of the fetched commit and a cherry-pick onto current code are one move
-under two names. A core patch is exactly one commit. A chain is the range above.
-Either way, what comes out is a commit made here that exists nowhere else. That
-is why it sits on a branch named for the change, and why the undo below deletes
-that branch. The command form belongs to the page the fetch is on.
-
-Where it applies clean, say so, and only that. A clean rebase is not a patch
-that still holds. Where the change rewrites, moves or deletes a class, the
-rebase reverts a fix `main` landed there. There is no conflict to show for it.
-The files are different ones.
-
-`typo3_rule_lookup` with `documentId="core/contribution/rebasing-a-stale-patch"`
-holds the four steps that settle it. You owe them before the result says the
-patch survived.
-
-Say which commit every result after this is about. The carried commit's hash is
-not the patch set's. A finding that quotes the local one without a word about
-that names a revision nobody else can look up.
-
-Where it conflicts, [references/checklist.md](references/checklist.md) decides
-whether you resolve or stop, one conflict at a time. Read it at the first
-conflict rather than after you resolved a few. The rule it carries is about what
-you may know, and you cannot apply it backwards.
-
-## Carry your own work onto the patch set
-
-The ask comes first, and the author answers it. To extend a change under review
-is ordinary practice, and you ask before you do it. So a session that does not
-know whether somebody made the ask makes it rather than assumes it.
-
-Where the ask has no answer, the answer is a comment on the change. The same
-holds where what you would change is the author's own decision rather than a
-correction. This workflow then stops with what it found. That is a result and
-not a failure to deliver.
-
-The page step 3 reads whole says the rest. It says what the amend does to the
-author and to the committer. It says what the upload owes the author on the
-change itself. It says what stays fixed whoever pushes. Read it before the first
-commit and not before the push. The ask is not a step you can take afterwards.
-
-Then the work moves one file at a time, and the rule is the one that already
-decides a conflict. The checklist carries both halves. It says whether a file of
-yours can go onto the patch whole. It says whether a hunk where the two collide
-is yours to write.
-
-Say what came from where. Say the patch set the branch started at and the commit
-your own work was on. Say which files came from which side. The author will read
-the diff between two patch sets, and that diff says what moved and never why.
-
-**Once the result stands, invoke `typo3-core-patch-development`.** The push
-belongs to that workflow. The amend, the message and the question of what goes
-up visible to everyone are its steps. What crosses over is the change number,
-the patch set the branch started at, and the result's branch. It is every
-decision you took on the author's behalf. That last one is what the comment on
-the change has to carry.
-
-## A stop is the normal end
-
-When a rule above ends the work, undo what you started rather than leave the
-checkout half-way. The section below is that undo, and it is the same one that
-ends a run that went fine. A checkout left half-way through a carry is a trap
-for whoever opens it next, you included.
-
-Report what you found and not what you attempted. Report the change, its patch
-set, its target branch, how far it got, and the specific thing that stopped it.
-That is the files that conflicted, the hunks, and why the change alone did not
-decide them. That report is the useful outcome. Somebody who rebases the patch
-properly starts from it.
-
-## Once it is in and applies
+## 6. Run the suites
 
 `typo3_test_run_guide` with the paths the change touches names the suites that
-can fail on it and their targeted invocations. Run them through the checkout's
-own runner. A suite run through an installed binary is a result nobody can
-reproduce. A check that inspected no files is not a green. The second is what a
-worktree does by default. The same answer says what you have to install there
-before any suite runs at all.
+can fail on it, with targeted commands. Run them through the checkout's own
+runner. A suite run through a globally installed binary is a result nobody can
+reproduce. A check that inspected no files has not passed. In a worktree, the
+check that reads its file list from git does exactly that by default. The same
+answer says what to install in a worktree first.
 
-Say which branch and which patch set every result is about. Say which working
-copy it ran in where that was a worktree, and which commit where you carried the
-patch. A green reported without them has no owner the moment somebody pushes a
-new patch set.
+Say which branch and which patch set every result is about. Name the worktree
+where you ran in one, and the commit where you rebased. A pass without them
+means nothing once somebody pushes a new patch set.
 
-## Put the checkout back
+## 7. Put the checkout back
 
-A checkout on somebody's patch set is not a state to leave behind. It is not a
-state to start the next piece of work from either. To restore it is a step of
-its own, whether the patch applied or stopped. On the branch path it is these
-six, in this order, because each part makes the next one possible.
+Do not leave the checkout on somebody's patch set, and do not start the next
+work from it. Restore it whether the patch applied or a rule stopped the work.
 
-There is one end it does not run for, and it is the handover above. The work
-continues on the review branch. So steps 2, 3, 5 and 6 would move the checkout
-off the result or delete it.
+**Exception: the handover to `typo3-core-patch-development`.** There the work
+goes on, on the review branch. Steps 2, 3, 5 and 6 below would move the checkout
+off the result or delete it. So run only steps 1 and 4. Then report the branch,
+the commit, and what on it is not the author's. Say that you left the checkout
+there on purpose. Neither "restored" nor silence is a correct report.
 
-What that end owes is steps 1 and 4 and then the answer. That is the branch, the
-commit, and what on it is not the author's. It is that you left the checkout
-there on purpose. Neither "restored" nor silence is what such a session reports.
+On the branch path, run these six steps in this order. Each one makes the next
+one possible.
 
-1. **End whatever is in progress first.** A carry that is half applied, or one
-   that stopped in a conflict, owns the tree until you abort it. Every later
-   step fails against it in a way that reads like something else.
-2. **Return to the branch you recorded at the start**, not to whichever branch
-   looks right. Where you only fetched the patch, it was on no branch. So to
-   leave it loses nothing that is not still on the review server. Say the commit
-   in the answer, because that is the only local name it had.
-3. **Delete the branch you carried the patch onto**, where there was one. Git
-   refuses the ordinary deletion, and the forced one gets past that refusal
-   rather than answers it. `typo3_gerrit_lookup` with `commit` and the tip the
-   branch is on answers it. A commit somebody pushed comes back as the change it
-   is a patch set of, superseded patch sets included. The ref beside it is the
-   undo, and you say it in the answer before the branch goes.
+1. **End whatever is in progress.** A half-applied or stopped rebase blocks the
+   tree until you abort it. Every later step fails against it in a way that
+   looks like something else.
 
-   An empty answer is a commit nobody pushed, or one an anonymous reader may not
-   see. Nothing brings that one back. A carried commit is the second kind by
-   construction. So read what is about to go: what you resolved in a conflict is
-   in it and in nothing else. Ask the same of any other ref this workflow has to
-   remove. Nothing says in advance which of the two it is.
+2. **Return to the branch you wrote down at the start**, not to whichever branch
+   looks right. Where you only fetched the patch, it was on no branch. The
+   review server still has it, so nothing is lost. Name its commit in the
+   answer, because that is its only local name.
+
+3. **Delete the branch you rebased the patch onto**, if there is one. Git
+   refuses the normal deletion, because the commit is on no other branch. Before
+   you force it, call `typo3_gerrit_lookup` with `commit` and the branch tip. A
+   pushed commit comes back as the change it belongs to, superseded patch sets
+   included. Name the ref from that answer before you delete the branch. With
+   that ref, anybody can fetch the commit again.
+
+   An empty answer means nobody pushed the commit, or an anonymous reader may
+   not see it. Then nothing brings that commit back. A rebased commit is always
+   that case. So read what you are about to delete, because your conflict
+   resolutions exist only there. Do the same for any other ref you must remove.
 
    Then say in the answer that the branch is gone. "The checkout is back on its
-   branch" is true with the review branch still beside it.
-4. **Establish that nothing of the patch remains.** An aborted carry can leave
-   files the change added untracked. They belong to no commit and to no branch.
-   The next suite run picks them up and fails for a reason that has nothing to
-   do with anything. What the working tree holds and what git does not track are
-   two different questions, and you ask both.
+   branch" is also true with the review branch still there.
+
+4. **Check that nothing of the patch remains.** An aborted rebase can leave the
+   files the change added as untracked files. They belong to no commit. The next
+   suite run picks them up and fails for an unrelated reason. Check both what
+   the working tree holds and what git does not track.
+
 5. **Update the branch from the remote it fetches from, not from the review
-   server.** These are two different URLs on a core clone. `typo3_rule_lookup`
-   for the Gerrit workflow says which is which. The change refs live on only one
-   of them. Take the update as a fast-forward. A merge commit on a local branch
-   that tracks the core is a state nothing here asked for.
-6. **Bring the installed dependencies back in step with the branch.** A move
-   between a patch set and current code can change what the lock file pins. A
-   suite run against the other revision's dependencies fails for a reason that
-   is not in the diff. This is the step people skip and then spend an hour on as
-   a test failure.
+   server.** On a core clone, these are two different URLs. The Gerrit workflow
+   page says which is which. Update as a fast-forward. A merge commit on a local
+   branch that tracks the core is a state nobody asked for.
 
-The worktree path ends shorter, and the difference is not a shortcut. Nothing
-moved the branch, so steps 2, 5 and 6 have nothing to put back. They are about a
-checkout that went somewhere.
+6. **Bring the installed dependencies in line with the branch.** The lock file
+   can differ between the patch set and current code. A suite run against the
+   wrong dependencies fails for a reason that is not in the diff. People skip
+   this step and then lose an hour on a test failure.
 
-What remains is to end whatever is in progress and then remove the worktree. Git
-refuses that while anything in it is modified or untracked. That refusal is step
-4 one layer out. To force past it throws away the only copy of whatever you
-resolved in there. Step 3 stands there too, because a removed worktree leaves
-the branch you created it on behind.
+**On the worktree path** the clean-up is shorter, because nothing moved the
+branch. Steps 2, 5 and 6 have nothing to restore. End whatever is in progress,
+then remove the worktree. Git refuses that while anything in it is modified or
+untracked. That is the check of step 4. If you force the removal, you delete the
+only copy of what you resolved there. Step 3 still applies, because a removed
+worktree leaves its branch behind.
 
-Say the end state in the answer: which branch, which commit, and that the tree
-is clean. On the worktree path, say that the worktree is gone. Or say where it
-still is and why you kept it on purpose. Where you carried the patch, say that
-you deleted the branch you carried it on. "Restored" without those is the claim
-rather than the result.
+**Report the end state:** the branch, the commit, and that the tree is clean. On
+the worktree path, say that the worktree is gone, or where it is and why you
+kept it. Where you rebased, say that you deleted the branch. "Restored" without
+these details is a claim, not a result.
 
 End the answer with each step of the base order you did not reach. Give each one
-a line: `Not reached: <step> — <what stood in for it>`.
+a line: `Not reached: <step> — <why>`.
 
-This skill covers how a change under review gets into a checkout and back out of
-it. What that covers, in order:
+## Option 4: add your own work to the patch set
 
-- Find it, and fetch the patch set.
-- Put it on the branch it targets, into a worktree beside it, or onto current
-  code on a named branch. Or put it under work of your own where you extend that
-  change.
-- Resolve what the change itself decides, and stop where it does not.
-- Leave behind a clean branch current with its remote, no worktree of its own
-  and no branch it made. It owns the undo as much as the do, and the undo runs
-  whichever way the rest went. The one exception is the branch it hands over,
-  which is the result.
+Ask the author first. To extend a change under review is normal practice, and
+you ask before you do it. If you do not know whether somebody asked, ask.
 
-It does not own the judgement of the patch. Where the request is to say what is
-wrong with it, `typo3-core-patch-review` owns that. That skill starts from the
-working copy this one leaves the patch in, before the undo runs. That is the
-worktree, the checkout or the review branch. Carry across which commit the
-findings will be about.
+If the author does not answer, write a comment on the change instead. Do the
+same where your change would replace a decision of the author rather than
+correct an error. Then stop with what you found. That is a result, not a
+failure.
 
-It does not own a change to what is on the review server either. To amend a
-change into a new patch set and push it belongs to
-`typo3-core-patch-development`. Carry over the change number and the patch set
-you fetched. Carry over whether you had to carry it onto current code to apply.
-Carry over what you decided on the author's behalf.
+The Gerrit workflow page from step 1 says the rest. It says what the amend does
+to the author and the committer. It says what the upload must give the author on
+the change. It says what must stay unchanged, whoever pushes. Read it before the
+first commit, not before the push. You cannot ask afterwards.
+
+Then move your work onto the patch one file at a time. The checklist decides
+this with the same rule as for a conflict. It says whether a file of yours can
+go onto the patch whole. It says whether a hunk where the two collide is yours
+to write.
+
+Say where everything came from. Name the patch set the branch started at and the
+commit your work was on. Say which files came from which side. The author will
+read the diff between two patch sets. That diff shows what moved and never why.
+
+**When the result is ready, invoke `typo3-core-patch-development`.** That skill
+covers the push, the amend, the message and what becomes public. Hand over the
+change number, the patch set the branch started at, and the result's branch.
+Hand over every decision you took for the author too. The comment on the change
+must name those decisions.
+
+## When a rule stops the work
+
+A stop is a normal end. Undo what you started with the clean-up in step 7, and
+do not leave the checkout half-way. A checkout left half-way through a rebase
+breaks the next work in it, yours included.
+
+Report what you found, not what you tried. Name the change, its patch set, its
+target branch, how far it got, and what stopped it. For a conflict, name the
+files, the hunks, and why the change alone did not decide them. The person who
+rebases the patch later starts from that report.
+
+## Where this skill stops
+
+- **A judgement of the patch** is `typo3-core-patch-review`. It starts from the
+  working copy this skill leaves the patch in, before the clean-up. That is the
+  worktree, the checkout or the review branch. Hand over which commit the
+  findings will be about.
+
+- **A new patch set on the review server** is `typo3-core-patch-development`.
+  Hand over the change number and the patch set you fetched. Hand over whether
+  you had to rebase it to apply, and every decision you took for the author.

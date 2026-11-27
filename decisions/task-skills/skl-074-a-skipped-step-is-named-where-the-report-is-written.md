@@ -145,3 +145,6 @@ its report and pushed first. That is the third sighting, from the two skills the
 form did not reach yet. `typo3-core-patch-review` now carries the form in its
 *Report* section, and `typo3-core-patch-development` carries it before it asks
 for the push. `D-SKL-072` holds the account.
+
+On 2026-11-27 the form became `Not reached: <step> — <why>` in every skill that
+carries it. The base now asks for the reason in the same words (`D-SKL-112`).

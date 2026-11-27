@@ -305,18 +305,18 @@ final class SkillTest extends TestCase
         // sessions in a week finished and never learned the guides exist
         // (`feedback/2026-08-07-233512`).
         self::assertStringContainsString(
-            'the whole procedures this server carries, as ids',
+            'The answer ends with a list of guides, by id',
             self::flat($base),
         );
 
         // The near miss, not the omission: a runtime lookup answers what the
         // registry holds, never whether it is right.
         self::assertStringContainsString(
-            'its own runtime lookup confirmed can still break every rule that governs it',
+            'A runtime lookup can confirm a subsystem that still breaks every rule for it',
             self::flat($base),
         );
         self::assertStringContainsString(
-            'settled into the opposite of a rule is a finding, not a local style',
+            'follows the opposite of a rule is a finding, not a local style',
             self::flat($base),
         );
 
@@ -330,7 +330,7 @@ final class SkillTest extends TestCase
             $base,
         );
         self::assertMatchesRegularExpression(
-            '/a trade-off, not a\s+defect\. Name it with its cost/',
+            '/a trade-off, not a\s+defect\.\s+Name it with its cost/',
             $base,
         );
         // And what the answer owes about its own evidence. Three recorded
@@ -342,7 +342,7 @@ final class SkillTest extends TestCase
         // with, which is what an absent server answers too. The bullet under
         // this one turns that into an absence (`D-SKL-084`).
         self::assertStringContainsString(
-            'Look for the qualified form before you read an empty result as an answer about the server',
+            'Search for the full name before you decide that the server is missing',
             self::flat($base),
         );
         // The sentence above worked and stopped one word short. A second
@@ -350,7 +350,7 @@ final class SkillTest extends TestCase
         // round trip anyway. The bare name is no good as a search argument
         // either (`D-SKL-084`).
         self::assertStringContainsString(
-            'A `select:` on the bare names returns nothing where the tools are there',
+            'A `select:` on the bare names finds nothing too',
             self::flat($base),
         );
 
@@ -359,7 +359,7 @@ final class SkillTest extends TestCase
         // read itself as exempt and skipped in silence. The rule already
         // decided against that and no illustration said so (`D-SKL-083`).
         self::assertStringContainsString(
-            'A test file is one of those wherever it sits',
+            'A test file always counts, wherever it sits',
             self::flat($base),
         );
 
@@ -368,12 +368,12 @@ final class SkillTest extends TestCase
         // it as borderline skipped the one step that would have said whether
         // the code it landed on had deprecated anything.
         self::assertStringContainsString(
-            "To carry somebody else's patch onto current code is on the same side",
+            "A rebase of somebody else's patch onto current code also writes commits",
             self::flat($base),
         );
-        self::assertStringContainsString('What a finding rests on is part of the finding', $base);
+        self::assertStringContainsString('## Say what each finding rests on', $base);
         self::assertStringContainsString(
-            'A file you read, at its path and its line. A command you ran, with what it printed. A mechanism you traced into an installed package',
+            '- A file you read, at its path and its line. - A command you ran, with what it printed. - A mechanism you traced into an installed package',
             self::flat($base),
         );
         self::assertStringContainsString('Read several files with one call per file, and send the calls together.', self::flat($base));
@@ -386,7 +386,7 @@ final class SkillTest extends TestCase
             $base,
         );
         self::assertStringContainsString(
-            'A check reports and hands the code back as it was. So even a task told not to change files runs it',
+            'A check reports and leaves the code as it was. So run it even in a task told not to change files',
             self::flat($base),
         );
         self::assertStringContainsString(
@@ -536,7 +536,7 @@ final class SkillTest extends TestCase
         // `D-GUI-013`. Two sessions read `"omittedHints": []` beside that
         // sentence and asked for a machine-readable form of it. The step named
         // the key it warns off and not the one that answers.
-        self::assertStringContainsString('`omittedHints` is that sentence as data', $base);
+        self::assertStringContainsString('Read its `omittedHints` field', $base);
 
         // Step 4: one query per subsystem with its concrete paths. And the id
         // route step 3 sends the session down where the brief already spent the
@@ -710,7 +710,7 @@ final class SkillTest extends TestCase
         // still does not know the caller's paths.
         self::assertStringNotContainsString('end to end', $base);
         self::assertStringContainsString(
-            'builds the brief from the paths as well as the task text. No skill knows which paths the caller holds',
+            'builds the brief from the paths as well as the task text. No skill knows which paths the caller works on',
             self::flat($base),
         );
         // What a skip costs is the path-specific brief and nothing else. This
@@ -725,7 +725,7 @@ final class SkillTest extends TestCase
         // A condition that reads as an invitation works as one. So the order
         // says once what a skipped prescription costs the steps around it.
         self::assertStringContainsString(
-            'A skipped prescription teaches the next reader to skip the ones that matter too',
+            'If you leave a step out, say why in the report',
             self::flat($base),
         );
     }
@@ -852,22 +852,22 @@ final class SkillTest extends TestCase
         );
         self::assertStringContainsString('`type: deprecation`', $base);
         self::assertStringContainsString(
-            'Omit the query and raise `limit` to carry that major whole',
+            'Omit the query and raise `limit` to get that major whole',
             self::flat($base),
         );
         // One call per major, and the round trips the tag composition cost are
         // gone rather than reordered.
-        self::assertStringContainsString('That is one call per declared major', self::flat($base));
+        self::assertStringContainsString('you make one call per declared major', self::flat($base));
         self::assertStringNotContainsString('per declared major per tag', self::flat($base));
         // The extension's surface picks the entries out of that answer, which
         // is the half of "from the extension's surface" that survives.
         self::assertStringContainsString(
-            "Step 2 picks the package's entries out of that answer by those tags",
+            'Use step 2 to choose the tags that matter',
             self::flat($base),
         );
-        self::assertStringContainsString('name the system extension a change is **in**', $base);
+        self::assertStringContainsString('name the system extension a change is **in**', self::flat($base));
         self::assertStringContainsString(
-            'An extension key of your own is not among them',
+            'An extension key of your own is not among the tags',
             self::flat($base),
         );
         // And the wording that cost the two sweeps is gone rather than softened.
@@ -875,8 +875,8 @@ final class SkillTest extends TestCase
         // And what the caller does with the answer. An identifier the checkout
         // does not use is not a finding, and the tag decides who has to read
         // the remaining call sites.
-        self::assertStringContainsString('Verify each identifier that comes back in the', $base);
-        self::assertStringContainsString('`FullyScanned` / `PartiallyScanned`', $base);
+        self::assertStringContainsString('Check in the checkout whether the code calls each identifier that comes back', self::flat($base));
+        self::assertStringContainsString('`FullyScanned` / `PartiallyScanned`', self::flat($base));
 
         // Written once. The conformance skill carried the weaker copy, the
         // sweep "when an upgrade or a deprecated API is in scope". That is the
@@ -923,26 +923,26 @@ final class SkillTest extends TestCase
         // Empty rather than merely unlikely to find anything, which is the
         // whole of what makes the call skippable.
         self::assertStringContainsString(
-            'a change that calls none has nothing for the sweep to land on',
+            'a change that calls no API cannot produce a deprecation finding',
             self::flat($base),
         );
         // And what the condition is worth stating against, now that the cost is
         // one answer rather than eleven calls (`D-ANS-093`).
         self::assertStringContainsString(
-            'this step is the largest answer the order asks for',
+            'This step returns the largest answer of the order',
             self::flat($base),
         );
         // And what keeps a tool task that ends in an edit to one PHP file from
         // a read of the condition off the task description.
         self::assertStringContainsString(
-            'off the files it touches, never off the task it started as',
+            'from the files the change touches, never from the task description',
             self::flat($base),
         );
         // And what keeps the same task from a read of it off the size of the
         // diff. That is the other half a session took as an exemption
         // (`D-GUI-025`).
         self::assertStringContainsString(
-            'How small the change is decides nothing either',
+            'The size of the change decides nothing',
             self::flat($base),
         );
 
@@ -952,7 +952,7 @@ final class SkillTest extends TestCase
         // sweep across seven tags on a triage of one issue (`D-AUD-009`,
         // `feedback/2026-08-07-233512`).
         self::assertStringContainsString(
-            'A task that produces no change does not reach this step at all',
+            'A task that produces no change skips this step',
             self::flat($base),
         );
         // As the three examples it was, that exemption held for the shape it
@@ -962,14 +962,14 @@ final class SkillTest extends TestCase
         // (`feedback/2026-08-11-055337`, `D-SKL-037`). So what the exemption
         // states is the property and the examples illustrate it.
         self::assertStringContainsString(
-            'A triage, a reproduction and a review illustrate it; they are not the list you read it off',
+            'Triage, a reproduction and a review are examples, not a complete list',
             self::flat($base),
         );
         // The property's own boundary, which the enumeration never had to
         // carry. A review asked to make the change is a workflow that produces
         // one, and it reaches this step with files in hand.
         self::assertStringContainsString(
-            'The exemption ends where the workflow produces a change',
+            'This exemption ends as soon as the work produces a change',
             self::flat($base),
         );
     }
@@ -1279,11 +1279,11 @@ final class SkillTest extends TestCase
         // and a brief that carried everything the lookup matched discharges
         // step 4.
         self::assertStringContainsString(
-            'That is an answer already in the session, a condition that made the step empty, or an exemption',
+            'The reason is an earlier answer that already covered it, a condition that made it empty, or an exemption',
             $base,
         );
         self::assertStringContainsString(
-            'A reader cannot tell a step passed over in silence from one somebody dropped',
+            'a reader cannot tell a step you skipped on purpose from one you forgot',
             $base,
         );
 
@@ -1299,7 +1299,7 @@ final class SkillTest extends TestCase
         $skills = ['typo3-core-issue-triage', 'typo3-core-patch-checkout', 'typo3-core-patch-review', 'typo3-core-patch-development'];
         foreach ($skills as $skill) {
             self::assertStringContainsString(
-                '`Not reached: <step> — <what stood in for it>`',
+                '`Not reached: <step> — <why>`',
                 self::flat((string) file_get_contents(Paths::root() . '/skills/' . $skill . '/SKILL.md')),
                 $skill . ' writes a report and carries no form for the steps it did not reach',
             );
@@ -1332,7 +1332,7 @@ final class SkillTest extends TestCase
 
         // Held to the four calls' own answers, so it stays a few lines.
         self::assertStringContainsString('the version that filters every later answer', $base);
-        self::assertStringContainsString('which steps what discharged', $base);
+        self::assertStringContainsString('which steps an earlier answer made unnecessary', $base);
     }
 
     /**
@@ -1355,7 +1355,7 @@ final class SkillTest extends TestCase
         self::assertGreaterThan((int) strpos($base, '**Then** read the checkout'), $named);
         self::assertLessThan((int) strpos($base, 'names every step of this order it did not reach'), $named);
 
-        self::assertStringContainsString("A deletion is the caller's to ask for", $base);
+        self::assertStringContainsString('Delete a file only when the user asks for it', $base);
     }
 
     #[Requirement('R-SKL-005')]
@@ -1384,7 +1384,7 @@ final class SkillTest extends TestCase
             'the manual is offered only after the checkout has been read',
         );
         self::assertStringContainsString(
-            'A changelog records change events. So a pattern nothing has touched for ten majors has no entry at all',
+            'A changelog records changes. A feature nobody changed for ten majors has no entry at all',
             self::flat($base),
         );
         self::assertStringContainsString('"Does this still work in version N"', self::flat($base));
@@ -1393,8 +1393,8 @@ final class SkillTest extends TestCase
         // instance, an ext_localconf.php content-render registration, is a key
         // the manual has no page for. So a miss there is a result rather than a
         // licence to rebuild the contract from the installed core.
-        self::assertStringContainsString('that is a result and not an answer', self::flat($base));
-        self::assertStringContainsString('Undocumented is not unsupported', $base);
+        self::assertStringContainsString('Report that you found none', self::flat($base));
+        self::assertStringContainsString('Undocumented does not mean unsupported', self::flat($base));
 
         // And what that half is worth has its bound in what the manual can take
         // as a question. `feedback/2026-08-03-164805` followed this route and
@@ -1414,12 +1414,12 @@ final class SkillTest extends TestCase
         // commands it documents, so the sentence bounds the identifier route
         // to what a manual does not declare.
         self::assertStringContainsString(
-            'The manual matches page titles, section paths and what each manual declares by name, never the'
-            . ' text of a page',
+            'The search matches page titles, section names and the names a manual declares. It never searches'
+            . ' the text of a page',
             self::flat($base),
         );
-        self::assertStringContainsString('A PHP identifier the manual does not declare has no page named after it', self::flat($base));
-        $identifier = strpos($base, 'An identifier goes to');
+        self::assertStringContainsString('A PHP identifier the manual does not declare**: it has no page named after it', self::flat($base));
+        $identifier = strpos($base, 'Search `typo3_changelog_lookup` for a PHP identifier');
         self::assertNotFalse($identifier, 'the base leaves a PHP identifier pointed at the manual');
         self::assertLessThan(
             (int) strpos($base, '**Then** read the checkout'),
@@ -1430,7 +1430,7 @@ final class SkillTest extends TestCase
         // limits has its order rather than here, where nobody reads the core.
         // That is the section below, which `D-SKL-004` earned.
         self::assertStringContainsString(
-            'what this installation does and never what TYPO3 supports',
+            'The source shows what this installation does, not what TYPO3 supports in general',
             self::flat($base),
         );
 
@@ -1490,7 +1490,7 @@ final class SkillTest extends TestCase
             'the base sends the session into the installed source before its own calls',
         );
         self::assertStringContainsString(
-            'A behaviour question that survives the lookups above is one you read out of the installed source',
+            'If a behaviour question is still open after the lookups above, read the answer in the installed source',
             self::flat($base),
         );
         // An act with an object, because the same position has already cost a
@@ -1501,24 +1501,24 @@ final class SkillTest extends TestCase
         );
         // What it replaces is what the session that filed it did, named in
         // those words rather than left behind a prohibition.
-        self::assertStringContainsString('It replaces a change to the code until it works', self::flat($base));
+        self::assertStringContainsString('Read them instead of changing the code until it works', self::flat($base));
 
         // `D-ANS-010`'s boundary, carried in the sentence that orders the
         // reading: one installation's implementation is not what TYPO3
         // supports.
         self::assertStringContainsString(
-            'What it settles is what this installation does and never what TYPO3 supports',
+            'The source shows what this installation does, not what TYPO3 supports in general',
             self::flat($base),
         );
         // And both dispositions, because a name for the first alone is what
         // this step joined the queue to repair. A session that reports and a
         // session that has to produce something that works.
         self::assertStringContainsString(
-            'a finding says that you could not settle the question beyond the version installed',
+            'say in the finding that the answer holds only for the installed version',
             self::flat($base),
         );
         self::assertStringContainsString(
-            'An answer built on the reading names the version it holds for',
+            'and name that version',
             self::flat($base),
         );
     }
@@ -1559,7 +1559,7 @@ final class SkillTest extends TestCase
             'typo3_icon_lookup' => 'whether any installed package registers an identifier',
             'typo3_label_lookup' => 'the labels as the installation resolves them',
             'typo3_fluid_namespace_list' => 'from every package at once',
-            'typo3_configuration_lookup' => 'after every extension has had its say',
+            'typo3_configuration_lookup' => 'after every extension has changed it',
             // The four the section left out until 2026-09-02, when an audit's
             // persistence and services surfaces had no runtime owner to go to.
             // Each reads the installation as the five do.
@@ -1598,7 +1598,7 @@ final class SkillTest extends TestCase
         // The half that survives the correction: what the registry holds is not
         // a verdict on it, whichever call established it.
         self::assertStringContainsString(
-            'None of these says whether what it reports is right',
+            'None of these says whether what it reports is correct',
             $base,
         );
 
@@ -3213,7 +3213,7 @@ final class SkillTest extends TestCase
         $body = self::flat((string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-checkout/SKILL.md',
         ));
-        self::assertStringContainsString('## Four ways in', $body);
+        self::assertStringContainsString('## 2. Choose how to check it out', $body);
         // What the worktree path costs and the branch path does not. That is
         // the half a trigger alone would route a task into a body without.
         self::assertStringContainsString('no suite runs in it until you install them there', $body);
@@ -3235,7 +3235,7 @@ final class SkillTest extends TestCase
         self::assertContains('typo3-core-patch-checkout', $brief['skills']);
 
         $body = self::flat((string) file_get_contents(
-            Paths::root() . '/skills/typo3-core-patch-checkout/SKILL.md',
+            Paths::root() . '/skills/typo3-core-patch-checkout/references/chain.md',
         ));
         self::assertStringContainsString('## Your own chain, with its content unchanged', $body);
         self::assertStringContainsString('three steps fall away: the ask, the comment on the change, and the stop', $body);
@@ -3274,9 +3274,9 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('the base for extending somebody else', self::description(
             'typo3-core-patch-checkout',
         ));
-        self::assertStringContainsString('## Carry your own work onto the patch set', $skill);
-        self::assertStringContainsString('On the fourth way in it is the material instead', $skill);
-        self::assertStringContainsString('There is one end it does not run for', $skill);
+        self::assertStringContainsString('## Option 4: add your own work to the patch set', $skill);
+        self::assertStringContainsString('With option 4 the uncommitted work is the material you add', $skill);
+        self::assertStringContainsString('Exception: the handover to `typo3-core-patch-development`', $skill);
 
         self::assertStringContainsString('## Taking your own work onto the patch', $checklist);
         self::assertStringNotContainsString(
@@ -5376,7 +5376,7 @@ final class SkillTest extends TestCase
     public function theBaseSendsAContradictionToThePersonBeforeTheWork(): void
     {
         self::assertStringContainsString(
-            'Where the project contradicts the brief, say so before you build on either reading.',
+            'Where the project contradicts the user\'s request, say so before you build on either.',
             self::flat((string) file_get_contents(Paths::root() . '/skills/base.md')),
         );
     }

@@ -7,6 +7,9 @@ order it works.
 See [the decisions readme](../readme.md) for how an entry is written and when
 one is added.
 
+- [`D-SKL-112`][D-SKL-112] — A skill opens on its scope and a list of its steps · 2026-11-27
+- [`D-SKL-110`][D-SKL-110] — A core patch review reads the prose of the patch as a surface · 2026-11-24
+- [`D-SKL-111`][D-SKL-111] — Adding a language to a site is a task intent · 2026-11-24
 - [`D-SKL-102`][D-SKL-102] — A core review runs its suites in a worktree or asks for one · 2026-10-28
 - [`D-SKL-103`][D-SKL-103] — A review brief carries the surface list it is written from · 2026-10-28
 - [`D-SKL-105`][D-SKL-105] — A review's Not run line lists the suites that verify · 2026-10-28
@@ -110,6 +113,9 @@ one is added.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-112]: skl-112-a-skill-opens-on-its-scope-and-a-list-of-its-steps.md
+[D-SKL-110]: skl-110-a-core-patch-review-reads-the-prose-of-the-patch-as-a-surface.md
+[D-SKL-111]: skl-111-adding-a-language-to-a-site-is-a-task-intent.md
 [D-SKL-102]: skl-102-a-core-review-runs-its-suites-in-a-worktree-or-asks-for-one.md
 [D-SKL-103]: skl-103-a-review-brief-carries-the-surface-list-it-is-written-from.md
 [D-SKL-105]: skl-105-a-reviews-not-run-line-lists-the-suites-that-verify.md

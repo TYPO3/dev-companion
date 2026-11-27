@@ -1048,6 +1048,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### task-skills
 
+- [`D-SKL-112`][D-SKL-112] — A skill opens on its scope and a list of its steps · 2026-11-27
 - [`D-SKL-110`][D-SKL-110] — A core patch review reads the prose of the patch as a surface · 2026-11-24
 - [`D-SKL-111`][D-SKL-111] — Adding a language to a site is a task intent · 2026-11-24
 - [`D-SKL-102`][D-SKL-102] — A core review runs its suites in a worktree or asks for one · 2026-10-28
@@ -1153,6 +1154,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-112]: task-skills/skl-112-a-skill-opens-on-its-scope-and-a-list-of-its-steps.md
 [D-SKL-110]: task-skills/skl-110-a-core-patch-review-reads-the-prose-of-the-patch-as-a-surface.md
 [D-SKL-111]: task-skills/skl-111-adding-a-language-to-a-site-is-a-task-intent.md
 [D-SKL-102]: task-skills/skl-102-a-core-review-runs-its-suites-in-a-worktree-or-asks-for-one.md

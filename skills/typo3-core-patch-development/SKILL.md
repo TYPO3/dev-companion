@@ -302,7 +302,7 @@ Everything above is local and reversible. The push is neither.
 
 **Before you ask for the push, end your answer with each step of the base order
 you did not reach.** Give each one a line:
-`Not reached: <step> — <what stood in for it>`. The user decides the push on
+`Not reached: <step> — <why>`. The user decides the push on
 that list. A walk of the base in an earlier review did not stand in for a step.
 It ran against files nobody would write.
 

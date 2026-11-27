@@ -332,7 +332,7 @@ not applicable to this diff. A reader cannot tell a review that reports only
 findings from one that looked at less.
 
 End the report with each step of the base order you did not reach. Give each one
-a line: `Not reached: <step> — <what stood in for it>`.
+a line: `Not reached: <step> — <why>`.
 
 **The report is markdown the reader can copy, and the answer is where it goes.**
 Everything this section asks for makes it long, and length makes the form

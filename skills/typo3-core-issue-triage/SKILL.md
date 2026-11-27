@@ -99,7 +99,7 @@ Say which of those decided. Say of the rows you passed over that you passed over
 them. A skip is not a triage, and the list is still what the user asked for.
 
 **End the list with each step of the base order you did not reach.** Give each
-one a line: `Not reached: <step> — <what stood in for it>`. A list of the
+one a line: `Not reached: <step> — <why>`. A list of the
 backlog changes nothing, so the deprecation sweep is one of them.
 
 ## Establish what the issue claims
@@ -275,7 +275,7 @@ stopped at the code path says so. The next person's work is exactly the part you
 left.
 
 End the verdict with each step of the base order you did not reach. Use the same
-form: `Not reached: <step> — <what stood in for it>`.
+form: `Not reached: <step> — <why>`.
 
 **The verdict is markdown the reader can copy, and the answer is where it
 goes.** You write it for the person who will act on it, and rendered output does

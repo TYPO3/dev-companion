@@ -1,308 +1,371 @@
 # Where every task starts
 
+Every TYPO3 task starts in the same order. This file gives that order and the
+rules for the evidence behind a finding. The skill that links here adds its own
+steps after it.
+
+Two words have a fixed meaning here:
+
+- **checkout**: the repository you work in, with its files.
+- **major**: a major TYPO3 version, such as one a package declares in its
+  constraints.
+
+In short:
+
+1. Check that the server answers.
+2. Make the calls of the order that the task needs, in sequence.
+3. Write down what they established.
+4. Then read the checkout.
+5. Before the first edit, name the files you will create, change or delete.
+6. In the report, say what each finding rests on and which steps you skipped.
+
 ## Nothing starts until the server answers
 
-A skill is a file the installer left behind. It loads and reads the same whether
-the tools behind it are there or not, and neither side notices. So the first
-call below is also the check.
+This skill needs the typo3-dev-companion server. The skill also loads when the
+server is not connected, and nothing warns you then. So check first that the
+server answers. The first call of the order does that.
 
-- A client may carry this server's name in each tool's name:
-  `mcp__<server>__typo3_project_describe`. So a search for the bare name comes
-  back empty where the server is there. A search for a tool's schema needs the
-  same form. A `select:` on the bare names returns nothing where the tools are
-  there. Look for the qualified form before you read an empty result as an
-  answer about the server.
+- Your client may put the server name in front of each tool name, as in
+  `mcp__<server>__typo3_project_describe`. A search for the bare name then finds
+  nothing, although the server is there. A `select:` on the bare names finds
+  nothing too. Search for the full name before you decide that the server is
+  missing.
+
 - No `typo3_` tool in this session, or a first call that errors: stop. Say that
-  this workflow needs the server and it is not there, and name what came back.
+  this workflow needs the server and that it is not there. Name what came back.
+
 - Do not fall back to general TYPO3 knowledge, and do not start to read the
-  checkout. That answer carries this workflow's order and confidence and none of
-  its evidence. Nothing in it says which of the two it is.
-- Continue only when the user asks you to after you said so. Repeat it in the
-  answer and in every finding a lookup would have carried.
+  checkout. An answer built that way looks like one from this workflow, but it
+  has none of its evidence. Nothing in it shows the difference.
+
+- Continue only when the user asks you to after you said so. Then say in the
+  answer that the server was missing. Say it again in every finding a lookup
+  would have supported.
 
 ## The order
 
-This is an order rather than a list. Each step decides what the next one is
-worth. Where a step below carries a condition to skip it, that condition is
-narrow on purpose. A skipped prescription teaches the next reader to skip the
-ones that matter too.
+Make the calls in this sequence, and only the ones the task needs. Steps 1 and 3
+apply to every task. Steps 2, 4 and 5 each say when the task needs them. Later
+calls use what earlier answers returned. If you leave a step out, say why in the
+report.
 
-1. **`typo3_project_describe`** — the repository and whether it holds an
-   installation yet. It reports the TYPO3 and PHP version, the project's own
-   extensions, its sites, and the commands this repository declares. That
-   version filters every later answer. A check the repository does not declare
-   is a wrong answer however sensible it sounds.
+1. **`typo3_project_describe`** — the repository, and whether it has a TYPO3
+   installation yet. The answer gives:
 
-   The answer ends with the whole procedures this server carries, as ids. That
-   list is the only place a client that renders no resource list sees their
-   names. Each one is a `typo3_rule_lookup` with that `documentId` rather than a
-   search.
-2. **`typo3_extension_describe`** for each extension in scope. It says what the
-   extension registers, and what it ships beside that. That is its manual, its
-   README, its test layers, and its XLF files with the source language each one
-   declares. It also says what the extension does *not* ship, and that is the
-   half no file listing gives you.
+   - the TYPO3 and PHP version, which filters every later answer;
+   - the project's own extensions and its sites;
+   - the commands the repository declares.
 
-   Where step 1 reported no extension, that answer is this step, and there is
-   nothing to call. Say so. A core checkout is that case, because step 1 names
-   the project's own extensions and not TYPO3's.
+   Recommend only checks the repository declares. Any other check is a wrong
+   answer, however sensible it sounds.
+
+   The answer ends with a list of guides, by id. Each guide is a complete
+   procedure, such as the Gerrit workflow. Some clients show these guides
+   nowhere else. Read a guide with `typo3_rule_lookup` and its `documentId`, not
+   with a search.
+
+2. **`typo3_extension_describe`** for each extension in scope. The answer gives:
+
+   - what the extension registers;
+   - what it ships: its manual, its README, its test layers and its XLF files;
+   - the source language of each XLF file;
+   - what the extension does *not* ship, which a file listing cannot show.
+
+   If step 1 reported no extension, there is nothing to call here. Say so. A
+   core checkout is that case: step 1 lists the project's own extensions, not
+   the ones TYPO3 ships.
+
 3. **`typo3_task_guide`** with a short English task, the paths it touches and
-   the change type. It answers the workflow this task belongs to and the checks
-   that come with it.
+   the change type. The answer is called the brief. It names the workflow the
+   task belongs to and the checks that come with it.
 
    Leave `targetVersion` out unless the task is about one major alone. Without
-   it, the guide answers for every major the package declares. The installed
-   version is one of those majors. A version you state narrows the answer to it.
+   it, the guide answers for every major the package declares, the installed one
+   included. A version you pass narrows the answer to that version.
 
-   Run it in every session, this skill's own tasks included. The guide builds
+   Run it in every session, also for this skill's own tasks. The guide builds
    the brief from the paths as well as the task text. No skill knows which paths
-   the caller holds.
+   the caller works on.
 
-   A skill that covers the task is not that brief. A skipped step costs the
-   hints and the core checks those paths match. Where the guide's own answer
-   named this skill, this is one call for an answer already in the session. The
-   price of a step there is nothing to decide about.
+   An installed skill does not replace the brief. Without the call, you miss the
+   hints and the core checks that match your paths. The call is cheap, even
+   where the brief only confirms this skill.
+
 4. **`typo3_hint_lookup`** for each subsystem in scope, with its concrete paths.
-   One query per subsystem. A single broad query is not subsystem evidence.
+   Send one query per subsystem. A single broad query is no evidence about a
+   subsystem.
 
-   Where step 3 ran with those paths, its answer says whether you still owe this
-   step. A brief that carried everything the lookup matched says so: "these are
-   everything typo3_hint_lookup matches for these paths". There the guide made
-   the call, and the same query returns the same hints. A brief that stopped
-   short says that instead and names the ids it left. You owe those: fetch them
-   by id rather than repeat the query.
+   If step 3 ran with those paths, its answer says whether you still need this
+   step. Read its `omittedHints` field:
 
-   Read the sentence rather than the populated `hints` key. That key is present
-   either way and does not tell the two apart. `omittedHints` is that sentence
-   as data. It is empty where the brief carried everything, and it holds the ids
-   the brief left where it stopped short.
-5. **`typo3_changelog_lookup` with `type: deprecation`**, at each major the
-   package declares. Omit the query and raise `limit` to carry that major whole.
-   Those two are the changelog's own axes, and the extension's vocabulary is not
-   among them. An entry carries a query only when its title carries every word
-   of it at once. The core titled those entries about its own code.
+   - **Empty:** the brief already has every hint this lookup returns for those
+     paths. Its text then says "these are everything typo3_hint_lookup matches
+     for these paths". The same query returns the same hints, so do not send it.
+   - **Not empty:** it lists the ids the brief left out. Fetch those by id
+     rather than repeat the query.
 
-   That is one call per declared major, and what comes back is the major. Every
-   entry carries its own index tags. `ext:core`, `ext:frontend`, `ext:form` and
-   the rest name the system extension a change is **in**. `TCA`, `TypoScript`,
-   `Fluid`, `YAML`, `Backend`, `Frontend` name the surface.
+   The `hints` field is present in both cases and does not tell them apart.
 
-   Step 2 picks the package's entries out of that answer by those tags. The tags
-   are the system extensions it requires, renders through or registers into, and
-   the kinds of file it ships. That costs no further call. An extension key of
-   your own is not among them and matches nothing. `tag` narrows one question
-   inside a major rather than composes the sweep out of eleven.
+5. **`typo3_changelog_lookup` with `type: deprecation`**, once for each major
+   the package declares. This is the deprecation sweep. The section "The
+   deprecation sweep" says how to make the call, how to read the answer and when
+   to skip it.
 
-   You check the answers against step 2, which is the other half the words did.
-   Verify each identifier that comes back in the checkout. A deprecation nothing
-   here calls is not a finding.
+## The deprecation sweep
 
-   Carry the `FullyScanned` / `PartiallyScanned` tag into the answer. It says
-   whether the Extension Scanner can find the call sites that remain or whether
-   that reading is yours. Bounded this way, you can write the sweep before you
-   open a file. That is why it is a step of the order rather than something the
-   reading stumbles into.
+### The call
 
-   **What its silence is worth.** A changelog records change events. So a
-   pattern nothing has touched for ten majors has no entry at all. An empty
-   sweep is therefore not an answer about what still works. "Does this still
-   work in version N" goes to `typo3_documentation_lookup` at that version. Ask
-   it here, and whenever the reading raises it again.
+Omit the query and raise `limit` to get that major whole. Do not search with
+words from the extension. A query matches an entry only when the entry title has
+every word of it. The core titled those entries after its own code, so your
+words miss most of them. So you make one call per declared major, and each
+answer is that whole major.
 
-   That is a question for a documented surface: a ViewHelper, a TCA type, a
-   TypoScript setting. The manual matches page titles, section paths and what
-   each manual declares by name, never the text of a page. Declared is a
-   property, a class or method the manual documents, a console command. You
-   reach one by its own name where the query writes that name the way code does.
-   You also reach it where the query is nothing but the name. A PHP identifier
-   the manual does not declare has no page named after it.
+### Pick the entries that concern the package
 
-   An identifier goes to `typo3_changelog_lookup` under its own name. That
-   reaches the entries that write it, however the core titled the change. Then
-   it goes to the class below. Where the manual has no page for a surface
-   either, that is a result and not an answer. Undocumented is not unsupported.
+Every entry has tags of two kinds:
 
-   **A second declared major.** A package that declares more than one asks a
-   second question of every deprecation the sweep returns. Is the replacement on
-   the lower one? The entry's `issue` is a query of its own, and it reaches
-   every entry filed under that number. The Feature the core announced the
-   replacement in is among them.
+- `ext:core`, `ext:frontend`, `ext:form` and the rest name the system extension
+  a change is **in**.
+- `TCA`, `TypoScript`, `Fluid`, `YAML`, `Backend`, `Frontend` name the area.
 
-   The version the core released it in settles that question. Where the number
-   reaches no sibling, nobody wrote an entry for the replacement.
-   `typo3_rule_lookup` with
-   `documentId="extension/compatibility/a-declared-major-that-is-not-installed"`
-   is the reading that closes it.
+Use step 2 to choose the tags that matter. They are the system extensions the
+package requires, renders through or registers into. They are also the kinds of
+file it ships. Keep the entries with those tags. This costs no further call.
 
-   **Where you do not owe the sweep.** A task that produces no change does not
-   reach this step at all. The property is what the task produces. A triage, a
-   reproduction and a review illustrate it; they are not the list you read it
-   off. The sweep asks which calls a package will have to stop. A task that
-   writes nothing will call nothing.
+An extension key of your own is not among the tags and matches nothing. The
+`tag` parameter is for one narrow question, not for the sweep.
 
-   The exemption ends where the workflow produces a change. A review asked to
-   make the change is that other workflow. It starts this order again with the
-   files it is about to write. To carry somebody else's patch onto current code
-   is on the same side. It writes commits. The sweep says whether the code that
-   moved under the patch deprecated something the patch calls.
+### Check every hit
 
-   Skip the sweep only where the change touches no TYPO3 API: a code style
-   fixer, a CI file, an `.editorconfig`. A deprecation is a statement about API
-   the package calls. So a change that calls none has nothing for the sweep to
-   land on. The sweep is empty before it runs.
+Check in the checkout whether the code calls each identifier that comes back. A
+deprecation the code does not call is not a finding.
 
-   That condition is worth a statement, because this step is the largest answer
-   the order asks for. It is one call per declared major, with that major's
-   deprecations whole. You read which side a change falls on off the files it
-   touches, never off the task it started as. One PHP file edited along the way
-   puts it back among the ordinary ones.
+Put the `FullyScanned` / `PartiallyScanned` tag into the answer. It says whether
+the Extension Scanner can find the remaining call sites, or whether you must
+read them.
 
-   A skip there costs the deprecation no finding would have walked into. How
-   small the change is decides nothing either. Three statements can call a
-   deprecated API as easily as three hundred.
+The sweep needs no file of the checkout, so it comes before the reading.
 
-   A test file is one of those wherever it sits. It calls the API it exercises
-   and the framework around it, and both deprecate. A fixture is exempt where it
-   is data the suite reads, and not where it is a class.
+### What an empty sweep means
 
-**Before the reading**, write down what the order established. That is the
-version that filters every later answer, the packages in scope, and the commands
-this repository declares. Write down which steps what discharged. Those are
-answers already in the session rather than a second reading. What the files show
-belongs to the report at the other end. A caller who cannot see what an answer
-rests on cannot tell it from one that rests on nothing.
+A changelog records changes. A feature nobody changed for ten majors has no
+entry at all. So an empty sweep says nothing about what still works. Ask "Does
+this still work in version N" whenever the question comes up, and send it here:
 
-**Then** read the checkout. Not before. A file list first makes everything after
-the list look optional. The conventions then arrive as a footnote to a verdict
-that has already formed.
+- **A documented feature**, such as a ViewHelper, a TCA type or a TypoScript
+  setting: `typo3_documentation_lookup` at that version. The search matches page
+  titles, section names and the names a manual declares. It never searches the
+  text of a page. A manual declares properties, classes, methods and console
+  commands. Query such a name the way code writes it, or query the name alone.
+
+- **A PHP identifier the manual does not declare**: it has no page named after
+  it. Search `typo3_changelog_lookup` for a PHP identifier by its exact name.
+  That finds every entry that mentions it, whatever the core titled the change.
+  After that, read the class itself, as "When the lookups run out" says.
+
+The manual may have no page for a feature either. Report that you found none.
+Undocumented does not mean unsupported.
+
+### A second declared major
+
+A package that declares more than one major asks one more question of every
+deprecation the sweep returns. Is the replacement there on the lower major?
+
+1. Query the entry's `issue` number. It returns every entry filed under that
+   number, the Feature entry of the replacement included.
+2. The version of that Feature entry answers the question.
+3. If the number returns no other entry, nobody wrote one for the replacement.
+   Then read `typo3_rule_lookup` with
+   `documentId="extension/compatibility/a-declared-major-that-is-not-installed"`.
+
+### When to skip the sweep
+
+The sweep finds calls that new code must replace. Skip it in two cases:
+
+- **No change.** A task that produces no change skips this step. Triage, a
+  reproduction and a review are examples, not a complete list.
+- **No TYPO3 API.** Skip the sweep only where the change touches no TYPO3 API: a
+  code style fixer, a CI file, an `.editorconfig`. A deprecation is a statement
+  about API the package calls. So a change that calls no API cannot produce a
+  deprecation finding.
+
+This exemption ends as soon as the work produces a change. These cases need the
+sweep:
+
+- A review that is asked to make the change. Start this order again with the
+  files it will write.
+- A rebase of somebody else's patch onto current code also writes commits. The
+  sweep says whether the code under the patch deprecated something the patch
+  calls.
+- One PHP file edited along the way.
+- A test file always counts, wherever it sits. It calls the API it tests and the
+  test framework, and both deprecate. A fixture is exempt where it is data the
+  suite reads, not where it is a class.
+
+Decide it from the files the change touches, never from the task description.
+The size of the change decides nothing. Three statements can call a deprecated
+API as easily as three hundred. This step returns the largest answer of the
+order, so skip it where it finds nothing.
+
+## After the calls
+
+**Before the reading**, write down what the order established:
+
+- the version that filters every later answer;
+- the packages in scope;
+- the declared commands;
+- which steps an earlier answer made unnecessary, and which answer that was.
+
+What the files show belongs in the report at the end. A reader who cannot see
+what an answer rests on cannot tell it from a guess.
+
+**Then** read the checkout, and not before. If you read the files first, the
+later steps seem optional. You then judge the code before you know its
+conventions.
 
 **Before the first edit**, name the files this change will create, change or
-delete. A deletion is the caller's to ask for, and this is somebody else's
-checkout. It is the one act nothing here can put back.
+delete. Delete a file only when the user asks for it. This is somebody else's
+checkout, and you cannot undo a deletion here.
 
-**Last**, the report names every step of this order it did not reach, and what
-stood in for it. That is an answer already in the session, a condition that made
-the step empty, or an exemption. A reader cannot tell a step passed over in
-silence from one somebody dropped.
+**Last**, the report names every step of this order it did not reach, and why.
+The reason is an earlier answer that already covered it, a condition that made
+it empty, or an exemption. Without this, a reader cannot tell a step you skipped
+on purpose from one you forgot.
 
 ## When the lookups run out
 
-A behaviour question that survives the lookups above is one you read out of the
-installed source. Do not guess at it. The class that implements the behaviour
-and the one it inherits from answer it. That reading is the step after the
-lookups. It replaces a change to the code until it works.
+If a behaviour question is still open after the lookups above, read the answer
+in the installed source. Do not guess. The class that implements the behaviour
+and the one it inherits from answer it. Read them instead of changing the code
+until it works.
 
-A first change that did not work is evidence about the reading. So the second
-attempt at one failure reads the source rather than changes the code again.
+If a first change did not work, your reading was probably wrong. Read the source
+again before a second attempt.
 
-What it settles is what this installation does and never what TYPO3 supports. So
-a finding says that you could not settle the question beyond the version
-installed. An answer built on the reading names the version it holds for.
+The source shows what this installation does, not what TYPO3 supports in
+general. So say in the finding that the answer holds only for the installed
+version, and name that version.
 
 ## What each runtime lookup adds after the extension answer
 
 `typo3_extension_describe` in step 2 says what one package registers. The
-lookups below say what the installation resolved. That is a different fact even
-where the words are the same. So step 2 has made none of these calls:
+lookups below say what the running installation really uses, with all packages
+combined. That is a different fact, even where the words are the same. Step 2
+replaces none of these calls:
 
 - `typo3_backend_module_lookup` — the tree position, the labels, the access
   level, the routes and the navigation component the parent module supplies.
-  Step 2 lists the modules the package declares. A declaration cannot show that
-  inheritance.
+  Step 2 lists the modules the package declares. A declaration cannot show what
+  a module inherits from its parent.
+
 - `typo3_icon_lookup` — whether any installed package registers an identifier.
   That validates the ones a template uses. Step 2 lists the identifiers this
   package contributes.
+
 - `typo3_label_lookup` — the labels as the installation resolves them, with its
   overrides applied. Step 2 lists the package's XLF files and the source
   language each declares, never what a unit says here.
+
 - `typo3_fluid_namespace_list` — the prefixes any template may use without a
   declaration, from every package at once. Step 2 lists the package's own
   declarations. So an empty list there is no evidence that no package registers
   a prefix globally.
+
 - `typo3_configuration_lookup` — the resolved configuration value, after every
-  extension has had its say. For a form data group it gives the order the
-  providers really run in. Step 2 answers nothing about that surface at all.
-  What a registration declares is not what the installation resolves.
+  extension has changed it. For a form data group it gives the order the
+  providers really run in. Step 2 says nothing about that. What a registration
+  declares is not what the installation resolves.
+
 - `typo3_service_lookup` — the class the container really injects for a service
   id, an interface or a tag. Decorations and overrides count. Step 2 lists what
-  the package's own `Services.yaml` declares, never what won.
+  the package's own `Services.yaml` declares, not what the container uses in the
+  end.
+
 - `typo3_schema_lookup` — the columns TYPO3 derives for a table from its TCA. It
-  gives the type, the nullability and the default each one gets. Step 2 lists
-  the tables the package registers and nothing about their shape.
+  gives the type, the nullability and the default of each. Step 2 lists the
+  tables the package registers and nothing about their columns.
+
 - `typo3_flexform_lookup` — the data structure the installation resolves a
   `type=flex` field to, sheet by sheet, with listeners and migrations applied.
   Step 2 lists the content elements a package registers, never the structure
   each one's form builds.
+
 - `typo3_record_lookup` — the rows of any table the installation has TCA for. It
-  says how many there are and where they sit. It says what one column holds
-  across them and which rows depart from its default. Step 2 has no row in its
+  says how many there are and on which pages. It says what one column holds
+  across them and which rows differ from its default. Step 2 has no row in its
   answer at all.
 
-None of these says whether what it reports is right. `typo3_hint_lookup` and
-`typo3_documentation_lookup` do. A subsystem its own runtime lookup confirmed
-can still break every rule that governs it. So it is not established until you
-asked both.
+None of these says whether what it reports is correct. `typo3_hint_lookup` and
+`typo3_documentation_lookup` say that. A runtime lookup can confirm a subsystem
+that still breaks every rule for it. So ask both before you call a subsystem
+correct.
 
-## A rule reads in both directions
+## A rule applies to existing code too
 
-It says what new code should do, and it says what this checkout already does
-wrong. A file that settled into the opposite of a rule is a finding, not a local
-style to preserve. Consistency with a project's own habit establishes nothing
-about whether the habit is right.
+A rule says what new code should do. It also says what this checkout already
+does wrong. A file that follows the opposite of a rule is a finding, not a local
+style to keep. A project's own habit says nothing about whether the habit is
+right.
 
-## What the code is for is evidence, and the repository states it
+## Find out why a costly mechanism exists
 
 A mechanism that costs something is not a defect because it costs. Before you
-report one, find what it is there for and say so. That is the manual, the
+report one, find what it is there for and say so. Look in the manual, the
 README, the changelog, the setting that drives it, or the declared versions.
 
-Where the documentation states a purpose, what you have is a trade-off, not a
-defect. Name it with its cost and its alternative. Where you cannot find one,
-the finding says that you could not establish one, not that none exists. If you
-skip this, your review is a list of everything the author did on purpose.
+Where the documentation states a purpose, you have a trade-off, not a defect.
+Name it with its cost and its alternative. Where you cannot find one, the
+finding says that you could not find one, not that none exists. Skip this, and
+your review lists everything the author did on purpose.
 
-## What contradicts the brief goes to the person first
+## Ask when the project contradicts the request
 
-Where the project contradicts the brief, say so before you build on either
-reading. This server states what the project holds, and it does not state what
-the person meant. Where two answers are both right, name them and ask. A
-question after the work is a correction with a sunk cost beside it.
+Where the project contradicts the user's request, say so before you build on
+either. This server states what the project contains. It does not state what the
+person meant. Where two answers are both right, name them and ask. A question
+after the work can mean the work was wasted.
 
-## What a finding rests on is part of the finding
+## Say what each finding rests on
 
-Three things carry one. A file you read, at its path and its line. A command you
-ran, with what it printed. A mechanism you traced into an installed package. Say
-which of the three it is. If you leave it unsaid, a finding from a CI file
-weighs as much as one with a verified line.
+A finding rests on one of three things:
+
+- A file you read, at its path and its line.
+- A command you ran, with what it printed.
+- A mechanism you traced into an installed package.
+
+Say which of the three it is. Otherwise a finding from a CI file weighs as much
+as one with a verified line.
 
 Read several files with one call per file, and send the calls together. One
-command that prints them all numbers its own output. A line cited from that
-output is wrong in every file after the first.
+command that prints them all counts its lines across all files. A line number
+from that output is wrong in every file after the first.
 
 Where one of the project's own commands would settle it, run it.
 `typo3_project_describe` marks each command it lists **check**, **change** or
-**unknown**, read off the declared body. A check reports and hands the code back
-as it was. So even a task told not to change files runs it. The linter the
-repository already declares is the cheapest evidence in it.
+**unknown**, from what the command runs:
 
-Do not run a change under that instruction. Name an unknown in the answer as
-evidence that is available, and do not run it unasked. An unknown is a test
-suite, a shell pipeline, a console command.
+- **check** — A check reports and leaves the code as it was. So run it even in a
+  task told not to change files. The linter the repository already declares is
+  the cheapest evidence in it.
+- **change** — In a task told not to change files, do not run it.
+- **unknown** — A test suite, a shell pipeline, a console command. Name an
+  unknown in the answer as evidence that is available, and do not run it
+  unasked.
 
-What a check prints is not the finding. The configuration that makes it fail is
-still what the finding is about. The run takes that finding from derived to
-established.
+What a check prints is not the finding. The finding is about the configuration
+that makes the check fail. The run confirms the finding.
 
 ## What this server does not know
 
-It does not read your working tree. You establish which files changed, which
-branch you are on, and whether a path or an identifier still exists there. Then
-pass the concrete paths back, because that turns a general convention into an
-answer about this code.
+It does not read your working tree. You find out which files changed and which
+branch you are on. You also check whether a path or an identifier still exists
+there. Then pass the concrete paths to the tools. That turns a general
+convention into an answer about this code.
 
 ## Query it in English
 
-The knowledge is English and the match is lexical. So a query in another
-language reaches the loanwords the two happen to share and nothing else.
-Translate the subject before the call and the answer back afterwards, whatever
-language you speak with the user.
+The knowledge is English, and the search matches words, not meaning. A query in
+another language finds only the loanwords the two languages share. Translate the
+subject before the call and the answer back afterwards, whatever language you
+speak with the user.

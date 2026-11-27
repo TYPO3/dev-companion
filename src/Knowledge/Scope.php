@@ -95,6 +95,11 @@ enum Scope: string
         'core issue', 'core bug', 'core checkout', 'core backlog', 'core tracker',
         // The tracker as people name it: "Forge 15984", not the host.
         'forge',
+        // The review server as people name it. A patch from review is a change
+        // on review.typo3.org, because elsewhere it is a pull request. The
+        // words of SKILL-13 carried nothing else, and a session that fetches
+        // has no path yet (`D-SCO-018`).
+        'patch from review',
     ];
 
     /**

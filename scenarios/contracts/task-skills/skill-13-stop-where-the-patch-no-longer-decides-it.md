@@ -14,10 +14,12 @@ Its body still carries every outcome below. The stop rules stand in
 files, the hunks and what each side wanted. Step 7 still puts the checkout back
 in six steps, with a fast-forward from the remote and not from the review
 server. The chain case moved to `references/chain.md`, which this case does not
-reach. **The route does not hold.** The prompt confirms `tests` and matches
-`patch-checkout` only weakly, so the brief names `typo3-extension-testing`. With
-a path below `typo3/sysext/`, it names `typo3-core-patch-checkout` and
-`typo3-core-patch-development`. `T-261127-8ff0` holds the repair.
+reach. The route failed on the first read of the day. The prompt confirmed
+`tests` and matched `patch-checkout` only weakly, so the brief named
+`typo3-extension-testing`. A "patch from review" now counts as core work
+(`D-SCO-018`), and the brief names `typo3-core-patch-checkout` and
+`typo3-core-patch-development`.
+`ScenariosTest::aPatchFromReviewReachesTheCoreCheckout` holds it.
 
 > Pull down that patch from review and get it onto current main so I can run the
 > tests against it.

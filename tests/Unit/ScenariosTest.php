@@ -15,6 +15,7 @@ use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Directory;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
+use TYPO3\DevCompanion\Tool\Registry;
 use TYPO3\DevCompanion\Upkeep\Cli;
 use TYPO3\DevCompanion\Upkeep\Scenarios;
 
@@ -154,6 +155,22 @@ final class ScenariosTest extends TestCase
         );
     }
 
+    /**
+     * The intent alone is not the route. `patch-checkout` is core-only, and a
+     * task that names no core work leaves it weak, so the brief named the
+     * testing skill. A patch from review is a change on the review server.
+     */
+    #[Decision('D-SCO-018')]
+    #[Test]
+    public function aPatchFromReviewReachesTheCoreCheckout(): void
+    {
+        $skills = Registry::call('typo3_task_guide', [
+            'task' => (string) (Scenarios::contracts()['SKILL-13']['prompt'] ?? ''),
+        ])->data['skills'];
+
+        self::assertContains('typo3-core-patch-checkout', $skills);
+    }
+
     /** @return array<string, array{0: string, 1: string}> */
     public static function theCasesWhoseOwnWordsHaveToReachAnIntent(): array
     {
@@ -169,6 +186,7 @@ final class ScenariosTest extends TestCase
             'a sitepackage for a site that already renders' => ['SITE-12', 'sitepackage'],
             'the majors a package declares, in the words a maintainer states them' => ['EXT-01', 'compatibility'],
             'the content of a site that travels inside its package' => ['SKILL-14', 'distribution-content'],
+            'a patch fetched from review onto current code' => ['SKILL-13', 'patch-checkout'],
         ];
     }
 

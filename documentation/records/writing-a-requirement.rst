@@ -1,16 +1,18 @@
 Writing a requirement
 =====================
 
-What a requirement is, what it stands on and what its states mean is
-:doc:`requirements`. This page is where an entry goes and how to write it.
+This page covers where a requirement goes, what an entry holds and what it rests
+on. It also covers how a session judges an entry that stays open or unguarded.
+:doc:`requirements` says what a requirement is, what it rests on and what its
+states mean.
 
 Where an entry lives
 --------------------
 
 One requirement is one file, named after its id, in the group its id names. The
-group is not a file preference. It is what the requirement is about, and the
-prefix carries it. So a file's id decides its path and two entries cannot
-quietly share a number.
+group is what the requirement is about, and the prefix of the id names it. So
+the id of a file decides its path, and two entries cannot quietly share a
+number. The groups:
 
 * `audience/ <../../requirements/audience/readme.md>`__ — Who the answer has to
   be right for
@@ -35,31 +37,30 @@ quietly share a number.
 * `code/ <../../requirements/code/readme.md>`__ — What must hold of the source
   itself
 
-The number is three digits wide, in the file name and in the id alike. That is
-what lists a group in the order of its writers. Without the pad, ``dis-10``
-sorts between ``dis-1`` and ``dis-2`` in every directory listing and in anything
-that compares the ids as text. A decision takes its number the same way, so one
-habit covers both. ``bin/cli requirements:check`` fails on any other width.
+Write the number three digits wide, in the file name and in the id alike. The
+pad lists a group in the order of its writers. Without it, ``dis-10`` sorts
+between ``dis-1`` and ``dis-2`` in every directory listing and in anything that
+compares the ids as text. A decision takes its number the same way, so one habit
+covers both. ``bin/cli requirements:check`` fails on any other width.
 
 Each group's ``readme.md`` says what that group is about, and
 ``bin/cli requirements:index`` generates the listing at the foot of it. The same
-command generates the listing at the foot of ``requirements/readme.md``, which
-carries the whole of it under a heading per group. A listing kept by hand is a
-second copy of the directory that only says what was true once.
+command generates the listing at the foot of ``requirements/readme.md``. That
+listing holds the whole directory, under a heading per group. A listing kept by
+hand is a second copy of the directory that only says what was true once.
 
-Prose above either listing may not use a third-level heading. That is what the
-command reads as the start of the generated half, and it would go with the next
-regeneration.
+Use no third-level heading in the prose above either listing. The command reads
+such a heading as the start of the generated half, and the next regeneration
+would remove it.
 
-An id never sees a second use. A withdrawn requirement takes its number with it.
-So a number that appears in an old commit, feedback or scenario still means the
-one thing it always meant. An implemented entry never goes. An entry goes only
-when somebody withdraws the requirement itself, and then the reason goes in
-``decisions/``.
+Nobody uses an id twice. A withdrawn requirement takes its number with it. So a
+number in an old commit, feedback or scenario still means the one thing it
+always meant. An implemented entry stays. An entry goes only when somebody
+withdraws the requirement itself, and then the reason goes into ``decisions/``.
 
 Where a feedback is the route, the entry comes when the session works the
-feedback off rather than when it arrives. A feedback nobody has judged yet is a
-feedback, not a requirement.
+feedback off, not when the feedback arrives. A feedback nobody has judged yet is
+a feedback, not a requirement.
 
 What an entry holds
 -------------------
@@ -89,34 +90,42 @@ What an entry holds
     installation until the client was restarted (2026-07-29).
 
 
-* The **title** is the front matter's, and the heading repeats it so a reader of
+* The front matter has the **title**, and the heading repeats it, so a reader of
   the file sees it where a heading belongs. ``bin/cli requirements:check`` holds
-  the two to each other, so a rewrite of one is a rewrite of both. It names the
-  demand in twelve words or so and leaves the demand itself to the bold
-  sentence. :doc:`writing-a-decision` has the measure, and this corpus is what
-  showed it is writable.
-* The **bold first sentence** is the requirement. Everything under it is why it
-  is one, and a reader who stops after the bold line has read the whole demand.
-* **From** is the session, review or feedback the demand came out of, with its
-  date. It is evidence, not decoration: it is what tells the next person whether
-  the requirement still describes a real failure.
-* ``heldBy`` lists the tests that hold it, and it is **generated**. The test
-  declares ``#[Requirement('R-DIS-002')]`` and ``bin/cli requirements:cover``
-  writes the front matter from every such attribute. A whole test class is a
-  legitimate item. The attribute stands over the class, and ``VersionsTest`` in
-  full is a claim about every method in it.
+  the two to each other, so a rewrite of one is a rewrite of both.
+
+  The title names the demand in twelve words or so, and leaves the demand itself
+  to the bold sentence. :doc:`writing-a-decision` has the measure, and this
+  corpus showed that the measure is writable.
+
+* The **bold first sentence** is the requirement. Everything under it says why
+  it is one. A reader who stops after the bold line has read the whole demand.
+
+* **From** names the session, review or feedback the demand came out of, with
+  its date. It is evidence, not decoration. It tells the next person whether the
+  requirement still describes a real failure.
+
+* ``heldBy`` lists the tests that hold the requirement, and it is **generated**.
+  The test declares ``#[Requirement('R-DIS-002')]``, and
+  ``bin/cli requirements:cover`` writes the front matter from every such
+  attribute.
+
+  A whole test class is a legitimate item. The attribute then sits above the
+  class, and ``VersionsTest`` in full is a claim about every method in it.
   `D-DOC-049 <../../decisions/documentation/doc-049-a-requirements-tests-are-declared-where-the-test-is.md>`_
-  is why the attribute is the source and the entry the copy.
-* **Held by** is the section for what is not a test. A ``bin/cli`` command that
-  re-derives the claim, a clause that says what one of the tests holds, a half
-  nothing guards. A bullet that is only a test name fails
-  ``bin/cli requirements:check`` — that name is the front matter's. An entry
-  nothing holds keeps the section and says ``not guarded`` in as many words.
+  says why the attribute is the source and the entry the copy.
+
+* **Held by** is the section for what is not a test. That is a ``bin/cli``
+  command that derives the claim again, a clause that says what one of the tests
+  holds, or a half nothing guards. A bullet that is only a test name fails
+  ``bin/cli requirements:check``, because that name belongs in the front matter.
+  An entry nothing holds keeps the section and says ``not guarded`` in as many
+  words.
 
 What it rests on
 ----------------
 
-A requirement may name the decisions it stands on in its front matter:
+A requirement may name the decisions it rests on in its front matter:
 
 .. code-block:: markdown
 
@@ -130,24 +139,23 @@ A requirement may name the decisions it stands on in its front matter:
 
 
 ``bin/cli requirements:check`` fails on an id no decision has. Whether somebody
-later revoked a decision it rests on is a read rather than a failure, and
-``bin/cli unresolved:list`` is where it comes out. A revoked decision leaves the
-requirement's test green and the reason under it gone, which nothing else would
-say.
+later revoked a decision the requirement rests on is a read, not a failure.
+``bin/cli unresolved:list`` reports it. A revoked decision leaves the test of
+the requirement green and removes the reason under it. Nothing else would say
+so.
 
 .. _judging-a-requirement:
 
 Judging one that stays
 ----------------------
 
-**open** and **not guarded** are legitimate states, which is why no check may
-fail on them and why ``bin/cli unresolved:list`` reads them out instead. What
-that read could not see is the difference between an entry nobody has decided
-about and one a session read and deliberately left alone. It named every
-unguarded entry every time, so every session that ran it derived the same
-judgement again.
+**open** and **not guarded** are legitimate states. So no check may fail on
+them, and ``bin/cli unresolved:list`` reads them out instead. That read could
+not tell an entry nobody has decided about from one a session read and left
+alone on purpose. It named every unguarded entry every time. So every session
+that ran it derived the same judgement again.
 
-``judged`` is that difference, and it is a date:
+``judged`` records that difference, as a date:
 
 .. code-block:: markdown
 
@@ -158,19 +166,21 @@ judgement again.
     restsOn: [D-COD-004]
     ---
 
-**Why** it stays is not in the front matter. That is the sentence **Held by**
-owes, ``not guarded`` in as many words. Or, where the reason is a decision, the
-entry the requirement rests on. The date says only that somebody went and read
-it.
+The reason the entry stays goes into **Held by**: ``not guarded`` in as many
+words. Where the reason is a decision, the reason is the entry the requirement
+rests on. The date says only that somebody went and read the entry.
 
-A date rather than a word, because the judgement is about the entry as it read
-that day. Somebody can rewrite the entry under it. Nothing catches that.
-``bin/cli requirements:check`` holds the shape, and the date is what lets a
-reader see that the judgement is older than what it judged. Re-judging one is
-overwriting the date.
+The judgement is a date, not a word, because it is about the entry as it read
+that day. Somebody can rewrite the entry under it, and nothing catches that.
+``bin/cli requirements:check`` holds the shape. The date lets a reader see that
+the judgement is older than what it judged. To judge an entry again, overwrite
+the date.
+
+What checks an entry
+--------------------
 
 ``bin/cli requirements:check`` holds every file to the shape this page
-describes, and ``composer test`` runs the same check through
-``RequirementsTest``, except the listing. That one comes from every file in a
-group, so the command alone holds it, see
+describes. ``composer test`` runs the same check through ``RequirementsTest``,
+except for the listing. The listing comes from every file in a group, so the
+command alone holds it, see
 `D-FBK-011 <../../decisions/feedback/fbk-011-the-suite-holds-what-one-branch-can-be-right-about.md>`_.

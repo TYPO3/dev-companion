@@ -17,7 +17,7 @@ measured its own names against it. The judgement is
 `D-SCO-010 <../../decisions/scope/sco-010-all-three-typo3-namespaces-are-kept.md>`_,
 and this page gives the reasons for that judgement.
 
-A session read the draft whole on 2026-08-04 at
+The session behind ``D-SCO-010`` read the draft whole on 2026-08-04 at
 `RFC-XXXX, An Official MCP Interface Contract for TYPO3 <https://gist.github.com/dkd-dobberkau/1f87ba4051fc85efbb9475d96babf1d5>`_,
 in its revision of 2026-08-03. The gist had one revision and no comments. Its
 Process History gave a date only for the row "Draft created". Its own target for
@@ -67,7 +67,8 @@ This server cannot change the scheme quietly, because callers depend on it:
 * Every prose answer gives the ``typo3://guides/{id}`` of the document it
   matched, and the shared record shape declares that field.
 
-* Two tool descriptions send the model that calls them to the resource.
+* The output schemas of several tools send the model that calls them to the
+  resource.
 
 * A skill body sits at a URI that ends in its own file name. So its relative
   links resolve onto the reference URIs this server answers, see
@@ -87,9 +88,9 @@ as ``typo3://tca/…`` for the mandatory part.
 
 The tool prefix is the cheaper half. ``typo3.`` reads as a reservation of names
 that begin with ``typo3.``, with the dot. So it does not reach a tool named
-``typo3_rule_lookup``, and the 26 tools here stay as they are. This
-interpretation rests on one sentence. The draft states the prefix once and gives
-no rule for the separator.
+``typo3_rule_lookup``, and every tool here stays as it is. This interpretation
+rests on one sentence. The draft states the prefix once and gives no rule for
+the separator.
 
 The draft is also the first document to define what may present itself as the
 MCP surface of TYPO3. The package name meets the draft there. This package
@@ -102,9 +103,10 @@ What adoption would cost
 ------------------------
 
 * ``typo3://`` **reserved as a whole.** Both trees move to a scheme of this
-  server's own. That is a rename in ``ResourceHandler``, ``Factory``,
-  ``Result\Prose``, ``Result\Schema``, and the two tool descriptions that name
-  the URI.
+  server's own. That is a rename in ``ResourceHandler`` and ``Documents``, which
+  hold the two prefixes. It is also a rename in every sentence that names the
+  URI, in ``Factory``, ``Installer``, ``Result\Schema`` and several tool
+  schemas.
 
   It is also a rename in every published skill body, because its relative links
   resolve against the URI the body sits at.
@@ -115,7 +117,7 @@ What adoption would cost
 
 * **A reservation that catches** ``typo3_``, a rule about the string ``typo3``
   under any separator. Or a conformance suite that rejects a non-contract tool
-  whose name begins with it. Then all 26 tool names go.
+  whose name begins with it. Then every tool name here goes.
 
 * **A policy on the** ``typo3`` **Packagist vendor for MCP packages.** Then
   ``composer.json`` has a name this package may not use. The published package

@@ -635,8 +635,14 @@ final class Prose
      */
     public static function flags(string $sentence): array
     {
-        // A quotation is its source's words, as in `words()`.
-        $sentence = (string) preg_replace(['/"[^"]*"/', self::ITALIC], '""', $sentence);
+        // A quotation is its source's words, as in `words()`. A literal, a
+        // link and a role name a thing rather than say something, so a path
+        // with "carry" in it is no sentence that carries.
+        $sentence = (string) preg_replace(
+            ['/(?::[a-z]+:)?`[^`]*`_*/', '/"[^"]*"/', self::ITALIC],
+            ['``', '""', '""'],
+            $sentence,
+        );
         $flags = [];
         if (preg_match(self::PASSIVE, $sentence) === 1) {
             $flags[] = 'passive';

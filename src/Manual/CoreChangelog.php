@@ -16,9 +16,9 @@ use TYPO3\DevCompanion\Knowledge\Versions;
  * manual and it has no versions: every version in the URL of
  * `/c/typo3/cms-core/` redirects to `main`. What it publishes beside the pages
  * is one listing per major, as JSON, and every page as the Markdown the build
- * rendered from the RST (`D-ANS-165`). One read per covered major, held under
+ * rendered from the RST (`D-ANS-165`). One read per covered major, cached under
  * its entity tag and revalidated per call, and one page read per entry an
- * answer shows, held the same way. The listing also names the PHP classes each
+ * answer shows, cached the same way. The listing also names the PHP classes each
  * page writes, so an identifier costs no read of its own (`D-ANS-190`).
  */
 final class CoreChangelog
@@ -34,7 +34,7 @@ final class CoreChangelog
      * Each major's listing as it was last read, with the tag it came under.
      *
      * Static because the tool builds an instance per call and the manual is one
-     * artefact for the process. `Documentation` holds its indexes the same way
+     * artefact for the process. `Documentation` caches its indexes the same way
      * and for the same reason.
      *
      * @var array<int, array{etag: string, entries: list<array{type: string, issue: string, version: string, key: string, source: string, stated: string, tags: list<string>, url: string, path: string, named: list<string>}>}>
@@ -73,7 +73,7 @@ final class CoreChangelog
     /**
      * What a test hands in, so nothing it drives reaches docs.typo3.org.
      *
-     * What this holds goes with it. Another reader is another server, and
+     * What this caches goes with it. Another reader is another server, and
      * entries kept across the two would answer for a changelog nobody read.
      *
      * @param (\Closure(string): ?string)|null $reader
@@ -111,8 +111,8 @@ final class CoreChangelog
      * The listing of one major, in the shape the installation's own entries
      * have.
      *
-     * A listing this holds is asked for again under its tag, and a 304 is the
-     * held one. So the second call of a session pays one round trip and no
+     * A listing this caches is asked for again under its tag, and a 304 is the
+     * cached one. So the second call of a session pays one round trip and no
      * payload for a listing that is still current, and a render after a merge
      * arrives with the next call.
      *
@@ -120,18 +120,18 @@ final class CoreChangelog
      */
     private function major(int $major): ?array
     {
-        $held = self::$index[$major] ?? null;
-        if ($held === null && self::$unreachable) {
+        $cached = self::$index[$major] ?? null;
+        if ($cached === null && self::$unreachable) {
             return null;
         }
 
         $response = $this->reader->read(
             self::BASE . 'Changelog-' . $major . '.json',
-            $held === null ? [] : ['If-None-Match: ' . $held['etag']],
+            $cached === null ? [] : ['If-None-Match: ' . $cached['etag']],
         );
 
-        if ($held !== null && $response['status'] === 304) {
-            return $held['entries'];
+        if ($cached !== null && $response['status'] === 304) {
+            return $cached['entries'];
         }
 
         // A server that gave nothing at all is not asked for the next major.
@@ -139,13 +139,13 @@ final class CoreChangelog
         // has no listing for this major: the knowledge covers a major
         // docs.typo3.org has not opened, or the other way round.
         if ($response['body'] === null) {
-            self::$unreachable = $held === null;
+            self::$unreachable = $cached === null;
 
-            return $held['entries'] ?? null;
+            return $cached['entries'] ?? null;
         }
         $entries = self::listed(Fetch::decode($response['body']));
         if ($entries === null) {
-            return $held['entries'] ?? null;
+            return $cached['entries'] ?? null;
         }
         if (is_string($response['etag']) && $response['etag'] !== '') {
             self::$index[$major] = ['etag' => $response['etag'], 'entries' => $entries];
@@ -221,16 +221,16 @@ final class CoreChangelog
         return preg_match($pattern, $url, $entry) === 1 ? $entry[1] : null;
     }
 
-    /** One page, held under its tag and asked for again the way a listing is. */
+    /** One page, cached under its tag and asked for again the way a listing is. */
     private function page(string $url): ?string
     {
-        $held = self::$pages[$url] ?? null;
-        $response = $this->reader->read($url, $held === null ? [] : ['If-None-Match: ' . $held['etag']]);
-        if ($held !== null && $response['status'] === 304) {
-            return $held['body'];
+        $cached = self::$pages[$url] ?? null;
+        $response = $this->reader->read($url, $cached === null ? [] : ['If-None-Match: ' . $cached['etag']]);
+        if ($cached !== null && $response['status'] === 304) {
+            return $cached['body'];
         }
         if ($response['body'] === null) {
-            return $held['body'] ?? null;
+            return $cached['body'] ?? null;
         }
         if (is_string($response['etag']) && $response['etag'] !== '') {
             self::$pages[$url] = ['etag' => $response['etag'], 'body' => $response['body']];

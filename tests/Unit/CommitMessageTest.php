@@ -1046,7 +1046,7 @@ final class CommitMessageTest extends TestCase
     public function aMaintainedLineFurtherBackSaysWhatItClaims(): void
     {
         $older = ReleaseLines::releasable()[2] ?? null;
-        self::assertNotNull($older, 'the list carries no line beyond the ordinary reach to hold this against');
+        self::assertNotNull($older, 'the list carries no line beyond the ordinary reach to compare this with');
 
         $result = CommitMessage::create([
             'keyword' => 'BUGFIX',
@@ -1058,7 +1058,7 @@ final class CommitMessageTest extends TestCase
         ]);
 
         $checks = $this->checksWithCode($result['checks'], 'older-release-line');
-        self::assertCount(1, $checks, 'the lines within the ordinary reach are not held against the trailer');
+        self::assertCount(1, $checks, 'the lines within the ordinary reach are not compared with the trailer');
         self::assertSame('warning', $checks[0]['level']);
         self::assertStringContainsString($older, $checks[0]['message']);
         self::assertStringContainsString('priority bug fix', $checks[0]['message']);
@@ -1101,7 +1101,7 @@ final class CommitMessageTest extends TestCase
 
     /**
      * The trailer belongs to the core repository alone. A project that writes
-     * one names its own releases, and there is nothing here to hold it against.
+     * one names its own releases, and there is nothing here to compare it with.
      */
     #[Test]
     public function outsideTheCoreNoBranchIsHeldAgainstTheLines(): void

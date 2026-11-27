@@ -217,7 +217,7 @@ CI=true ./Build/Scripts/runTests.sh -s composer -- dumpautoload
 A changed `composer.lock` fails as assertions about behaviour the checkout does
 not state, which reads like a broken patch. The installed package is an older
 release than the lock names. `typo3_project_describe` says whether that is what
-happened. It holds the lock against `vendor/composer/installed.json` and names
+happened. It compares the lock with `vendor/composer/installed.json` and names
 the packages the two disagree about. Here the fix is the reinstall:
 
 ```bash

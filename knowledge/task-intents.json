@@ -554,7 +554,7 @@
     ],
     "checks": [],
     "tools": [
-      "typo3_gerrit_lookup with change=<number>, for the patch set the change is actually on and the commit to hold the checkout against"
+      "typo3_gerrit_lookup with change=<number>, for the patch set the change is actually on and the commit to compare the checkout with"
     ]
   },
   {

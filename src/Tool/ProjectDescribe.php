@@ -94,7 +94,7 @@ final class ProjectDescribe extends ReadOnlyTool
                 'state' => [
                     'type' => 'string',
                     'enum' => [Instance::LOCK_MATCHES, Instance::LOCK_DIFFERS, Instance::LOCK_NOT_INSTALLED, Instance::LOCK_ABSENT],
-                    'description' => 'matches: every package composer.lock names sits installed at that version, so a failure here is not a stale install. differs: packages says which of them are not, and the install is behind or ahead of the lock. not-installed: there is a lock and no Composer metadata below the vendor directory to hold it against. So the packages it names are not on disk. no-lock: this root has no composer.lock, so nothing states which versions it fixed.',
+                    'description' => 'matches: every package composer.lock names sits installed at that version, so a failure here is not a stale install. differs: packages says which of them are not, and the install is behind or ahead of the lock. not-installed: there is a lock and no Composer metadata below the vendor directory to compare it with. So the packages it names are not on disk. no-lock: this root has no composer.lock, so nothing states which versions it fixed.',
                 ],
                 'packages' => Schema::listOf(Schema::object([
                     'package' => Schema::string('The Composer package name, as both files spell it.'),
@@ -111,7 +111,7 @@ final class ProjectDescribe extends ReadOnlyTool
                 'type' => 'object',
                 'description' => 'How the four PHP numbers above stand to each other, which none of them says on its own. Derived from the constraints, the bound and the environment as the files spell them. Nothing ran on any of these versions, so this is what the project claims and not evidence that any of it works. Null where phpConstraint names no floor: the project requires no PHP, or spells it in a way this will not claim to read. A constraint it cannot read costs this object rather than buys a wrong relation. installedPhpBound stands on its own either way.',
                 'properties' => [
-                    'floor' => Schema::string('The lowest PHP phpConstraint admits, as major.minor. What the project promises to run on, and the number to hold its own commands against.'),
+                    'floor' => Schema::string('The lowest PHP phpConstraint admits, as major.minor. What the project promises to run on, and the number to compare its own commands with.'),
                     'coreFloor' => Schema::nullableString('The same, read off corePhpConstraint. Null where the tool found no core package to read one from.'),
                     'againstCore' => Schema::nullable(['type' => 'string', 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE], 'description' => 'Where floor sits against coreFloor. below: the project declares support for a PHP its own installed core refuses, so the promise cannot hold. same: it declares what the core requires. above: it declares more than the core needs, which is a range the project narrowed itself and can widen without a change to a dependency. Null where coreFloor is.']),
                     'inEnvironment' => Schema::nullable(['type' => 'string', 'enum' => [Project::BELOW, Project::SAME, Project::ABOVE], 'description' => 'Where the PHP environment.php states sits against floor. same: the declared floor is the version the commands run on. above: the environment runs higher, so the floor is a version nothing configured here ever executes — a claim no check tests. below: the environment runs a PHP the project says it does not support. Null where there is no environment or it states no version. The comparison takes the floors alone, so a version over what the constraint\'s own upper bound allows reads here like one inside it.']),
@@ -137,7 +137,7 @@ final class ProjectDescribe extends ReadOnlyTool
                     ], ['workflow', 'from', 'states', 'version']), 'Every actions/setup-node step below .github/workflows/, one entry per distinct statement rather than per job. A matrix of five jobs on the same version is one fact. Empty means no workflow here sets Node up, so nothing states which Node CI runs these commands on.'),
                     'relation' => Schema::nullable([
                         'type' => 'object',
-                        'description' => 'How those numbers stand to each other, in the same three words phpRelation uses. Null where neither .nvmrc nor engines.node names a version this will read. There is then nothing this repository declares to hold the others against, and the numbers above still stand.',
+                        'description' => 'How those numbers stand to each other, in the same three words phpRelation uses. Null where neither .nvmrc nor engines.node names a version this will read. There is then nothing this repository declares to compare the others with, and the numbers above still stand.',
                         'properties' => [
                             'declared' => Schema::string('The Node this repository declares for itself, and what the other two stand against.'),
                             'declaredBy' => Schema::string('Which file that came from, relative to the project root — the nvmrcIn or the enginesIn above. The .nvmrc wins where both state one: the pin is what a version manager selects and therefore what a run executes on. engines.node is a range, and only its lowest version could stand in a comparison.'),
@@ -157,7 +157,7 @@ final class ProjectDescribe extends ReadOnlyTool
                 'properties' => [
                     'via' => ['type' => 'string', 'enum' => ['ddev', 'override'], 'description' => 'ddev: the repository carries a .ddev/config.yaml. override: nothing in the files says so, and TYPO3_DEV_COMPANION_CONSOLE names a command that reaches this installation somewhere other than the caller\'s own shell.'],
                     'php' => Schema::nullableString('The PHP that environment runs, where its files state it. Null is not "none": a DDEV project that states no php_version gets the default of the installed DDEV. An environment named by TYPO3_DEV_COMPANION_CONSOLE states its version nowhere this server can read, and typo3_server_scope reports the version the console actually answers on.'),
-                    'node' => Schema::nullableString('The Node that environment runs, where its files state one — nodejs_version in the .ddev configuration. Null where they state none, and then the installed DDEV\'s own default applies. The node object above holds it against what this repository declares.'),
+                    'node' => Schema::nullableString('The Node that environment runs, where its files state one — nodejs_version in the .ddev configuration. Null where they state none, and then the installed DDEV\'s own default applies. The node object above compares it with what this repository declares.'),
                     'source' => Schema::string('Where this comes from: the .ddev config file that states the version last, or TYPO3_DEV_COMPANION_CONSOLE.'),
                     'project' => Schema::nullableString('The DDEV project name, which is what every ddev command takes and what names the containers: ddev-<project>-web and ddev-<project>-db. Where no file states it, DDEV uses the directory name and so does this. Null where the environment is not DDEV.'),
                     'hostnames' => Schema::listOf(Schema::string(), 'The hostnames those files declare for the site: <project>.ddev.site, every additional_hostnames entry with the same top-level domain, and every additional_fqdns entry as written. What the configuration declares, not what runs. The ports the router binds and its address on the container network are not in these files, and `ddev describe -j` is what carries them. Empty where the environment is not DDEV.'),
@@ -730,7 +730,7 @@ final class ProjectDescribe extends ReadOnlyTool
             ),
             Project::SAME => sprintf('The installed core requires %s as well, so the two agree.', (string) $relation['coreFloor']),
             default => 'Nothing readable here says what the installed core requires, so there is no second floor to '
-                . 'hold that against.',
+                . 'compare that with.',
         };
         $sentences[] = match ($relation['inEnvironment']) {
             Project::SAME => sprintf(
@@ -906,7 +906,7 @@ final class ProjectDescribe extends ReadOnlyTool
                 ),
                 default => sprintf(
                     'Its %s admits %s, in a spelling this will not read a lowest version out of, so the two are not '
-                        . 'held against each other.',
+                        . 'compared with each other.',
                     $manifest,
                     $node['engines'],
                 ),

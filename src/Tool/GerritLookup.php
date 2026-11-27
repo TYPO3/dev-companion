@@ -134,7 +134,7 @@ final class GerritLookup extends ReadOnlyTool
                     'type' => 'integer',
                     'minimum' => 1,
                     'maximum' => 2,
-                    'description' => 'Only changes somebody holds at least this Code-Review vote on. 1 is a change a reviewer has been through once, 2 is one with approval. With negativeVotes false this is "almost ready": somebody is for it and nobody against.',
+                    'description' => 'Only changes where somebody has given at least this Code-Review vote. 1 is a change a reviewer has been through once, 2 is one with approval. With negativeVotes false this is "almost ready": somebody is for it and nobody against.',
                 ],
                 'negativeVotes' => [
                     'type' => 'boolean',
@@ -201,7 +201,7 @@ final class GerritLookup extends ReadOnlyTool
             'query' => Schema::string('The Gerrit query that answered this, so you can ask the same question again by hand.'),
             'changes' => Schema::listOf(Schema::object([
                 'number' => Schema::integer('Change number, the digits its review URL ends with.'),
-                'changeId' => Schema::string('The Change-Id its commit message carries, empty where the server named none. It survives an amend and a rebase onto another branch, so it is what to hold the commit in front of you against. Changes that share one are the same patch on more than one branch, and change with this id reads all of them.'),
+                'changeId' => Schema::string('The Change-Id its commit message carries, empty where the server named none. It survives an amend and a rebase onto another branch, so it is what to compare the commit in front of you with. Changes that share one are the same patch on more than one branch, and change with this id reads all of them.'),
                 'subject' => Schema::string(),
                 'message' => Schema::nullable([
                     'type' => 'string',
@@ -324,8 +324,8 @@ final class GerritLookup extends ReadOnlyTool
                     'description' => 'The comments on the change, oldest first, each with the thread it is in and '
                         . 'what that thread stands at. Empty means it carries none. Null means the call did not '
                         . 'read them. A search asks for none, and a change lookup whose comment call did not '
-                        . 'answer says so here rather than with an empty list. Hold it '
-                        . 'against commentCount.',
+                        . 'answer says so here rather than with an empty list. Compare it '
+                        . 'with commentCount.',
                     'items' => Schema::object([
                         'id' => Schema::string('What the inReplyTo of a reply names.'),
                         'author' => Schema::string(),
@@ -523,7 +523,7 @@ final class GerritLookup extends ReadOnlyTool
         return Schema::object([
             'name' => Schema::string('Empty where the call read the account id alone, which is a search.'),
             'username' => Schema::string(),
-            'email' => Schema::string('Hold it against `git config user.email` in the checkout. Where the two agree, the change is the requester\'s own, and the checkout skill\'s rule about an absent author\'s decisions has nothing to protect.'),
+            'email' => Schema::string('Compare it with `git config user.email` in the checkout. Where the two agree, the change is the requester\'s own, and the checkout skill\'s rule about an absent author\'s decisions has nothing to protect.'),
             'accountId' => Schema::integer('The review server\'s own account id, which every row carries.'),
         ], ['name', 'username', 'email', 'accountId']);
     }
@@ -1052,7 +1052,7 @@ final class GerritLookup extends ReadOnlyTool
             // there is one to make.
             if ($named) {
                 $lines[] = '';
-                $lines[] = $owed[] = 'Hold the commit against `git rev-parse HEAD` in the checkout. Where the two '
+                $lines[] = $owed[] = 'Compare the commit with `git rev-parse HEAD` in the checkout. Where the two '
                     . 'differ, the checkout is not the revision under review, and a review says which of '
                     . 'the two it read.';
             }
@@ -1344,7 +1344,7 @@ final class GerritLookup extends ReadOnlyTool
     }
 
     /**
-     * One person as a reader holds them against the requester.
+     * One person as a reader compares them with the requester.
      *
      * @param array<string, mixed> $owner
      */

@@ -204,7 +204,7 @@ final class ChangelogLookupTest extends TestCase
 
     /**
      * The fourth `REVIEW-02` run of 2026-10-28 got 41 breaking entries and
-     * held 10 against the code. Breaking-110702 names the event
+     * compared 10 with the code. Breaking-110702 names the event
      * `ImageInfoService` listens to and was among the other 31 — `D-ANS-192`.
      */
     #[Decision('D-ANS-192')]

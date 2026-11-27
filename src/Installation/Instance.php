@@ -46,7 +46,7 @@ final class Instance
     /** One of them is at another version, absent, or installed and locked nowhere. */
     public const LOCK_DIFFERS = 'differs';
 
-    /** There is a lock and no installed metadata below the vendor directory to hold it against. */
+    /** There is a lock and no installed metadata below the vendor directory to compare it with. */
     public const LOCK_NOT_INSTALLED = 'not-installed';
 
     /** This root has no composer.lock, so nothing here states which versions it fixed. */
@@ -526,14 +526,14 @@ final class Instance
 
                 continue;
             }
-            // An entry that states no version is one this cannot hold against
+            // An entry that states no version is one this cannot compare with
             // anything, and it is there either way.
             if ($installed[$package] !== null && $version !== null && $installed[$package] !== $version) {
                 $drift[] = ['package' => $package, 'locked' => $version, 'installed' => $installed[$package]];
             }
         }
         foreach ($installed as $package => $version) {
-            // Held against both halves of the lock whichever of them installed.
+            // Compared with both halves of the lock whichever of them installed.
             // A dev package the install left out is the absent case above, and
             // a report of it here as well would say it twice.
             if (!array_key_exists($package, $locked) && !array_key_exists($package, $lockedForDevelopment)) {

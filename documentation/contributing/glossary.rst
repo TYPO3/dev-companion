@@ -25,7 +25,10 @@ Glossary
         ``bin/cli hints:probe``.
     :hold: Two senses, told apart by the preposition. A statement *holds on* a
         version or *for* a scope: it is true there. A test *holds* a rule and
-        the rule is *held by* it: the test fails when the rule breaks.
+        the rule is *held by* it: the test fails when the rule breaks. Beside
+        "contains", every other sense takes a plain word. A person is *assigned* an issue, one
+        thing is *compared with* another, a cache *keeps* an answer, and a
+        caller *has* a value.
     :installation: The TYPO3 a caller works in. The server reads its own facts
         from it rather than bundles them.
     :judge: To work out what should become of one open feedback, on evidence.

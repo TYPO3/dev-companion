@@ -131,9 +131,10 @@ Takes
     # example 60. That is what "small in scope" comes to, and it decides whether a
     # review fits into a session at all.
     maxSize: integer  # optional
-    # Only changes somebody holds at least this Code-Review vote on. 1 is a change a
-    # reviewer has been through once, 2 is one with approval. With negativeVotes
-    # false this is "almost ready": somebody is for it and nobody against.
+    # Only changes where somebody has given at least this Code-Review vote. 1 is a
+    # change a reviewer has been through once, 2 is one with approval. With
+    # negativeVotes false this is "almost ready": somebody is for it and nobody
+    # against.
     minCodeReview: integer  # optional
     # Whether changes that carry a Code-Review-1 or a Verified-1 are in the answer.
     # True, the default, keeps them. False drops both — a reviewer who objects and
@@ -218,7 +219,7 @@ Answers with
         number: integer  # optional
         # The Change-Id its commit message carries, empty where the server named
         # none. It survives an amend and a rebase onto another branch, so it is what
-        # to hold the commit in front of you against. Changes that share one are the
+        # to compare the commit in front of you with. Changes that share one are the
         # same patch on more than one branch, and change with this id reads all of
         # them.
         changeId: string  # optional
@@ -248,7 +249,7 @@ Answers with
           # Empty where the call read the account id alone, which is a search.
           name: string
           username: string
-          # Hold it against `git config user.email` in the checkout. Where the two
+          # Compare it with `git config user.email` in the checkout. Where the two
           # agree, the change is the requester's own, and the checkout skill's rule
           # about an absent author's decisions has nothing to protect.
           email: string
@@ -422,7 +423,7 @@ Answers with
         # and what that thread stands at. Empty means it carries none. Null means
         # the call did not read them. A search asks for none, and a change lookup
         # whose comment call did not answer says so here rather than with an empty
-        # list. Hold it against commentCount.
+        # list. Compare it with commentCount.
         comments:  # optional
           - # What the inReplyTo of a reply names.
             id: string
@@ -495,7 +496,7 @@ Answers with
               # Empty where the call read the account id alone, which is a search.
               name: string
               username: string
-              # Hold it against `git config user.email` in the checkout. Where the
+              # Compare it with `git config user.email` in the checkout. Where the
               # two agree, the change is the requester's own, and the checkout
               # skill's rule about an absent author's decisions has nothing to
               # protect.

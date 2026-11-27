@@ -44,8 +44,8 @@ final class Paths
      * A prose corpus other than this checkout's, which only a test asks for.
      *
      * `R-COD-003`: a unit test writes into no directory this repository keeps.
-     * What the section range of `D-VER-005` does has no hold against the corpus
-     * itself. A document that carries a `**Since:**` for a test would be a
+     * Nothing in the corpus itself can show what the section range of
+     * `D-VER-005` does. A document that carries a `**Since:**` for a test would be a
      * statement in the knowledge base whose purpose is the test. Every guard
      * over that directory would have to make an exception for it.
      */

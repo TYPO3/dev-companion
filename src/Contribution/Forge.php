@@ -278,7 +278,7 @@ final class Forge implements IssueProvider
      *
      * `/search.json` answers with a title and a URL. A record with the area,
      * the people and the dates empty is a false statement rather than an absent
-     * one: it reads as an issue nobody has categorised, nobody holds and
+     * one: it reads as an issue nobody has categorised, nobody is assigned to and
      * nothing has moved on (`feedback/2026-08-05-033902`). Where the read is out
      * of reach the hits stand as they came back.
      *
@@ -382,7 +382,7 @@ final class Forge implements IssueProvider
 
         $answer = $scan ? $this->shape($reads) : $this->page($reads, $limit, $filters['sort']);
         // Two reads answer one question, and their counts overlap by the issues
-        // this person both filed and holds. That overlap is a third read of one
+        // this person both filed and is assigned. That overlap is a third read of one
         // row and the only thing that makes the union countable at all.
         if ($answer['rows'] !== null && count($reads) > 1) {
             $answer['total'] -= $this->overlap($sides, $filters);
@@ -777,7 +777,7 @@ final class Forge implements IssueProvider
             $answer = $this->api($url, 'memberships', self::LIST_CACHE_DURATION);
             foreach ($answer['part'] ?? [] as $membership) {
                 // A membership is a person or a group, and only a person files
-                // and holds issues.
+                // issues and is assigned to them.
                 $user = is_array($membership) ? $membership['user'] ?? null : null;
                 if (is_array($user) && is_string($user['name'] ?? null) && is_numeric($user['id'] ?? null)) {
                     $people[$user['name']] = (int) $user['id'];

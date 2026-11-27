@@ -290,7 +290,7 @@ final class GerritTest extends TestCase
 
     /**
      * Both forms ask for the commit message and each reads it for its own
-     * thing. The search holds what the server matched against what the message
+     * thing. The search compares what the server matched with what the message
      * says (`D-ANS-055`). A change lookup lifts the issues its trailers name
      * out of it (`D-ANS-098`).
      *
@@ -633,7 +633,7 @@ final class GerritTest extends TestCase
 
     /**
      * A change is a series of patch sets, and a review is of one of them. The
-     * commit is what a reviewer holds a local `HEAD` against. The number alone
+     * commit is what a reviewer compares a local `HEAD` with. The number alone
      * cannot say whether the two are the same thing, and neither comes back
      * unless the query asks for the current revision.
      */
@@ -2652,7 +2652,7 @@ final class GerritTest extends TestCase
      * branch -r` against a remote 59 commits behind
      * (`feedback/2026-08-24-122348`).
      *
-     * Held against `ReleaseLines` rather than against the branches it carries
+     * Compared with `ReleaseLines` rather than with the branches it carries
      * today. The file is a calendar. A test that names 14.3 would fail on the
      * day 13.4 leaves regular support rather than on the day this placement
      * breaks.

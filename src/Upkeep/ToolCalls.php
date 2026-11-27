@@ -26,7 +26,7 @@ final class ToolCalls
      * it and neither of them opens this class. `ToolSurface` states the absence
      * at the tool somebody stands at in `documentation/server/tools/`, where an
      * absent link otherwise renders as nothing at all. `ToolAnswers` says the
-     * same on the map of the record. `ToolAnswersTest` holds this list against
+     * same on the map of the record. `ToolAnswersTest` compares this list with
      * the table. So the next tool to drop out has to arrive here with a reason
      * before the suite goes green again. That is the whole of what the prose
      * could not do.
@@ -332,7 +332,7 @@ final class ToolCalls
                 'limit' => 3,
             ]],
             // The release audit's own question, in the form the audit asks it:
-            // the number ext_emconf.php names, held against what the registry
+            // the number ext_emconf.php names, compared with what the registry
             // publishes.
             'ter: is this version already out' => ['typo3_ter_lookup', [
                 'extension' => 'blog',

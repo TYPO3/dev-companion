@@ -42,7 +42,7 @@ final class KnowledgeTest extends TestCase
     private const WAITING_SUITES = ['e2e-prepare', 'e2e-browser'];
 
     /**
-     * A corpus of this test's own, because nothing can hold `D-VER-005` against
+     * A corpus of this test's own, because nothing can test `D-VER-005` on
      * the real one. No bundled document declares a bound. One written with a
      * `**Since:**` for a test would be a statement in the knowledge base whose
      * purpose is the test.
@@ -1411,7 +1411,7 @@ final class KnowledgeTest extends TestCase
         self::assertStringContainsString('core/testing/scripts', $result->text);
         self::assertStringContainsString('typo3_rule_lookup with documentId', $result->text);
 
-        // What it claims the guide carries, held against the guide.
+        // What it claims the guide carries, compared with the guide.
         $guide = Documents::read('core/testing/scripts');
         self::assertStringContainsString('bin/phpunit: not found', $guide);
         self::assertStringContainsString('SUCCESS', $guide);
@@ -1474,7 +1474,7 @@ final class KnowledgeTest extends TestCase
         self::assertStringContainsString('any/testing/browser-check', $result->text);
         self::assertStringContainsString('typo3_rule_lookup with documentId', $result->text);
 
-        // What it claims the page carries, held against the page.
+        // What it claims the page carries, compared with the page.
         $guide = Documents::read('any/testing/browser-check');
         self::assertStringContainsString('styleguide', $guide);
         self::assertStringContainsString('ddev_default', $guide);
@@ -1505,7 +1505,7 @@ final class KnowledgeTest extends TestCase
         self::assertStringContainsString('core/testing/proving-a-rendering', $result->text);
         self::assertStringContainsString('typo3_rule_lookup with documentId', $result->text);
 
-        // What it claims the page carries, held against the page.
+        // What it claims the page carries, compared with the page.
         $guide = Documents::read('core/testing/proving-a-rendering');
         self::assertStringContainsString('fwrite(STDERR', $guide);
         self::assertStringContainsString('PROBE-HEADERDATA', $guide);

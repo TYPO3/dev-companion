@@ -64,7 +64,7 @@ final class Manuals
      * What a test hands in, so nothing it drives reaches docs.typo3.org. Null
      * puts the host back.
      *
-     * What this holds goes with it. Another reader is another host, and an
+     * What this caches goes with it. Another reader is another host, and an
      * inventory kept across the two would answer for a manual nobody read.
      *
      * @param (\Closure(string): ?string)|null $reader

@@ -371,7 +371,7 @@ final class Permalink
      * What an inventory carries that a dead URL is about.
      *
      * Nothing derives the page a manual moved a subject to from the URL it left
-     * behind. The words of that URL are all a caller holds.
+     * behind. The words of that URL are all a caller has.
      * `Columns/Properties/OnChange.html` is gone from the TCA reference and
      * `columns-onchange` is what replaced it. So the lookup matches the
      * segments of the path against the names. The answer says these are near

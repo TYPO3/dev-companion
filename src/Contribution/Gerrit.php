@@ -466,7 +466,7 @@ final class Gerrit implements ChangeProvider
     /**
      * The same answer for the one handle a checkout hands over: a commit.
      *
-     * A session on old issues holds hashes out of `git log` and nothing else,
+     * A session on old issues has hashes out of `git log` and nothing else,
      * and `change:` refuses one. `change:cc880c67777` answers HTTP 400 `Invalid
      * change format`, which reads here as a review server with no answer at all
      * (`D-ANS-106`). `commit:` takes it, short as a caller pastes it, and what
@@ -1086,7 +1086,7 @@ final class Gerrit implements ChangeProvider
      * The option that makes the answer say which patch set it is about.
      *
      * A change query answers with the change and not with its revisions. So the
-     * commit a reviewer would hold its checkout against is absent by default.
+     * commit a reviewer would compare its checkout with is absent by default.
      * That is what a review of the wrong patch set looks like from here. It
      * comes over the same anonymous path as everything else (`D-ANS-033`). A
      * check ran against `review.typo3.org` on 2026-08-03 for a `change:` lookup
@@ -1120,7 +1120,7 @@ final class Gerrit implements ChangeProvider
 
     /**
      * The options that answer what state the review is in: the value every
-     * voter holds per label, and the account each of them is.
+     * voter gave per label, and the account each of them is.
      *
      * Asked only where a caller named a change. An issue search answers up to
      * 25 of them and asks whether a patch exists at all, which no vote on one
@@ -1294,7 +1294,7 @@ final class Gerrit implements ChangeProvider
             // nothing.
             'files' => self::files($current['files'] ?? null),
             // The one handle that survives a rebase onto another branch, and
-            // what a reviewer holds the commit in front of it against.
+            // what a reviewer compares the commit in front of it with.
             'changeId' => is_string($entry['change_id'] ?? null) ? $entry['change_id'] : '',
             'subject' => is_string($entry['subject'] ?? null) ? $entry['subject'] : '',
             'status' => is_string($entry['status'] ?? null) ? $entry['status'] : '',
@@ -1429,7 +1429,7 @@ final class Gerrit implements ChangeProvider
      * so a search does not ask for it, `D-ANS-107`. So a search answers the
      * states with `votes` null, and a change read by name answers both.
      *
-     * `all` is every voter with the value they hold, the zeros included.
+     * `all` is every voter with the value they gave, the zeros included.
      * Whether a label passes is the submit rule's judgement rather than one
      * from here. Verified runs -1 to +2 on review.typo3.org, so no threshold
      * off the values would be right.
@@ -1449,8 +1449,8 @@ final class Gerrit implements ChangeProvider
                 if ($name === '' || $status === 'MAY') {
                     continue;
                 }
-                $held = $states[$name] ?? null;
-                $states[$name] = $held === null || self::worse($status, $held) ? $status : $held;
+                $worst = $states[$name] ?? null;
+                $states[$name] = $worst === null || self::worse($status, $worst) ? $status : $worst;
             }
         }
         // Every label the voters name and every label a rule names, because
@@ -1481,13 +1481,13 @@ final class Gerrit implements ChangeProvider
     private static function worse(string $status, string $than): bool
     {
         $at = array_search($status, self::SEVERITY, true);
-        $held = array_search($than, self::SEVERITY, true);
+        $other = array_search($than, self::SEVERITY, true);
 
-        return $at !== false && ($held === false || $at < $held);
+        return $at !== false && ($other === false || $at < $other);
     }
 
     /**
-     * Everyone on one label with the value they hold.
+     * Everyone on one label with the value they gave.
      *
      * @param array<string, mixed> $label
      * @return list<array<string, mixed>>
@@ -1502,7 +1502,7 @@ final class Gerrit implements ChangeProvider
             $votes[] = [
                 'voter' => is_string($vote['name'] ?? null) ? $vote['name'] : '',
                 'value' => isset($vote['value']) && is_numeric($vote['value']) ? (int) $vote['value'] : 0,
-                // Empty on a reviewer who holds no vote, since nothing was
+                // Empty on a reviewer with no vote, since nothing was
                 // cast to carry a date.
                 'on' => is_string($vote['date'] ?? null) ? $vote['date'] : '',
             ];
@@ -1548,7 +1548,7 @@ final class Gerrit implements ChangeProvider
      * patch set. The change payload carries no such field, no revision carries
      * one either, and only the message says it (`D-ANS-121`).
      *
-     * Held against the patch set the message is about, which is the whole of
+     * Compared with the patch set the message is about, which is the whole of
      * the field. A report on a patch set somebody has replaced is history, and
      * 7 of the 8 open core changes with one are that.
      *

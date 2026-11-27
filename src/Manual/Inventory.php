@@ -42,20 +42,20 @@ final class Inventory
      *
      * @var array<string, array{etag: string, inventory: array{title: string, branch: string, objects: list<array{name: string, role: string, uri: string, display: string}>}}>
      */
-    private static array $held = [];
+    private static array $cached = [];
 
     public function __construct(private readonly Fetch $reader) {}
 
     /** What a reader handed in leaves behind: another reader is another host. */
     public static function forget(): void
     {
-        self::$held = [];
+        self::$cached = [];
     }
 
     /**
      * The inventory of the manual published at one base URL.
      *
-     * A read that failed answers the same way a 304 does, with what this holds.
+     * A read that failed answers the same way a 304 does, with what this has cached.
      * The objects are what this host published. A caller that reaches one of
      * them while the host is down gets a stale answer rather than a book that
      * is gone.
@@ -65,18 +65,18 @@ final class Inventory
     public function of(string $base): ?array
     {
         $url = $base . self::FILE;
-        $held = self::$held[$url] ?? null;
-        $response = $this->reader->read($url, $held === null ? [] : ['If-None-Match: ' . $held['etag']]);
+        $cached = self::$cached[$url] ?? null;
+        $response = $this->reader->read($url, $cached === null ? [] : ['If-None-Match: ' . $cached['etag']]);
         if ($response['body'] === null) {
-            return $held['inventory'] ?? null;
+            return $cached['inventory'] ?? null;
         }
 
         $inventory = self::parse($response['body']);
         if ($inventory === null) {
-            return $held['inventory'] ?? null;
+            return $cached['inventory'] ?? null;
         }
         if ($response['etag'] !== null) {
-            self::$held[$url] = ['etag' => $response['etag'], 'inventory' => $inventory];
+            self::$cached[$url] = ['etag' => $response['etag'], 'inventory' => $inventory];
         }
 
         return $inventory;

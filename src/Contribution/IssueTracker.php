@@ -314,7 +314,7 @@ final class IssueTracker
         $vocabulary = array_flip($areas);
         $used = $category === '' ? [] : self::named($vocabulary, $category);
         // A word that names no area is regularly a system extension key, which
-        // is what a caller in a checkout holds (`D-ANS-142`).
+        // is what a caller in a checkout has (`D-ANS-142`).
         if ($used === [] && $category !== '') {
             $filed = SystemExtensions::forgeCategory($category);
             $used = isset($vocabulary[$filed]) ? [$filed] : [];
@@ -523,7 +523,7 @@ final class IssueTracker
             }
         }
         // One word has nothing to tell apart, and its count is the zero the
-        // caller is already holding.
+        // caller already has.
         if (count($words) < 2 || count($words) > self::TERMS) {
             return [];
         }

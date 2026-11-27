@@ -1044,7 +1044,7 @@ final class ForgeTest extends TestCase
     /**
      * The filters go to the tracker and the entries come back as fields.
      *
-     * What this holds against the search above is where a triage state comes
+     * What this compares with the search above is where a triage state comes
      * from. A search hit carries it in a title and an enumeration carries it in
      * fields. That is why the two dates are answerable here at all —
      * `D-ANS-054`.
@@ -1069,8 +1069,8 @@ final class ForgeTest extends TestCase
         self::assertSame([14858, 23633], array_column($answer['results'], 'issue'));
         self::assertSame('Backend User Interface', $answer['results'][0]['category']);
         self::assertSame('Sacha Vorbeck', $answer['results'][0]['assignedTo']);
-        // Who holds an issue is what says whether it is free to take, and
-        // nobody holding it is a state rather than a missing field.
+        // Who an issue is assigned to is what says whether it is free to take,
+        // and nobody assigned is a state rather than a missing field.
         self::assertSame('', $answer['results'][1]['assignedTo']);
         self::assertSame('2005-07-11T10:22:33Z', $answer['results'][0]['createdOn']);
         self::assertSame('2026-01-23T08:11:00Z', $answer['results'][0]['updatedOn']);

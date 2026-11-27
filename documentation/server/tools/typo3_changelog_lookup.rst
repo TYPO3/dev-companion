@@ -83,7 +83,7 @@ Takes
     # directory the session runs in. The answer keeps the entries that name a class
     # this PHP imports or writes fully qualified, and each one names the files. It
     # also keeps the entries that name no class at all, because nothing here can
-    # hold those against PHP. That is the sweep of a major held against the code in
+    # compare those with PHP. That is the sweep of a major compared with the code in
     # one call: pass the package's Classes directory with the version and the type.
     paths: [string]  # optional
     # Maximum number of entries. Raise it to list a version and a type whole. The
@@ -155,7 +155,7 @@ Answers with
             # call gave the path.
             files: [string]
     # The PHP files read at paths. Returned where the call gave paths, so 0 says
-    # that nothing was held against the code.
+    # that nothing was compared with the code.
     filesRead: integer  # optional
     # What each word of the query reaches on its own, inside the version and the
     # type the call named. A word at 0 is the one that emptied the answer: a

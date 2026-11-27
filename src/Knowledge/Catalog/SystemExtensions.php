@@ -91,7 +91,7 @@ final class SystemExtensions
     /**
      * The issue tracker area a word names by being an extension key.
      *
-     * A caller standing in `typo3/sysext/impexp/` holds that key and nothing
+     * A caller standing in `typo3/sysext/impexp/` has that key and nothing
      * else, and half the keys reach no area of their own name — `D-ANS-142`.
      * The key and the Composer package are both accepted, matched whole,
      * because a substring here would answer "form" with the area of another

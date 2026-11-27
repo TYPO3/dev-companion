@@ -162,7 +162,7 @@ final class Typo3Cli
         // is not what a stopped project takes away; the runtime the project
         // declares is. Which answer meets that limit is a property of the
         // installation rather than of the tool in question. Naming the way out
-        // is half of it. The caller that acts on it holds an answer from the
+        // is half of it. The caller that acts on it has an answer from the
         // weaker source, and nothing revises that answer where it stands. So
         // the step that ends the state is the second call. A caveat that names
         // only the first leaves the session at work on what it heard to stop to

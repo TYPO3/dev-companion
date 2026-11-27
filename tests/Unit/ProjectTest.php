@@ -700,7 +700,7 @@ final class ProjectTest extends TestCase
         ], Project::describe()['phpRelation']);
 
         $text = Registry::call('typo3_project_describe', [])->text;
-        self::assertStringContainsString('no second floor to hold that against', $text);
+        self::assertStringContainsString('no second floor to compare that with', $text);
         self::assertStringContainsString('No environment here states a PHP', $text);
     }
 

@@ -3633,7 +3633,7 @@ final class HintsTest extends TestCase
             self::assertStringContainsString('A --div-- has no label', $text);
             // The silent skip, and the guard for it.
             self::assertStringContainsString('nothing is logged', $text);
-            self::assertStringContainsString('every item of every type against the columns', $text);
+            self::assertStringContainsString('every item of every type with the columns', $text);
         }
 
         // Writing your own form and extending somebody else's name each other.

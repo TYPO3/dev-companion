@@ -127,17 +127,17 @@ Takes
     # for the shape of it rather than the first page. involving is the union of this
     # and assignedTo.
     reportedBy: string  # optional
-    # Only issues this person holds, by their name, resolved the same way as
-    # reportedBy. What somebody reported is their history; what they hold is what
-    # they are on the hook for. An assignee on an old issue is usually who last
-    # touched it rather than who works on it. Both of these together are the issues
-    # somebody filed and holds; involving is their union.
+    # Only issues assigned to this person, by their name, resolved the same way as
+    # reportedBy. What somebody reported is their history; what is assigned to them
+    # is what the tracker expects of them. An assignee on an old issue is usually
+    # who last touched it rather than who works on it. Both of these together are
+    # the issues somebody filed and is assigned; involving is their union.
     assignedTo: string  # optional
-    # Only issues this person is on either side of — what they filed and what they
-    # hold, as one set. The tracker cannot answer this: it ANDs its filters, so
-    # reportedBy and assignedTo together mean filed AND holds, a set nobody wants.
-    # Pass it instead of those two, not beside them. Each row's reportedBy and
-    # assignedTo say which side it came in on.
+    # Only issues this person is on either side of — what they filed and what is
+    # assigned to them, as one set. The tracker cannot answer this: it ANDs its
+    # filters, so reportedBy and assignedTo together mean filed AND assigned, a set
+    # nobody wants. Pass it instead of those two, not beside them. Each row's
+    # reportedBy and assignedTo say which side it came in on.
     involving: string  # optional
     # Only issues whose subject or description carries one of these words at the
     # start of a word, for example "translat l10n overlay fallback" — "translat"
@@ -302,9 +302,9 @@ Answers with
       # Bug, Feature, Task, Epic.
       tracker: string
       priority: string
-      # Who the tracker says holds this, empty where nobody does. An assignee is not
-      # a promise that somebody works on it. On an issue nothing has moved on for
-      # years it is usually who last did.
+      # Who the tracker says this is assigned to, empty where nobody is. An assignee
+      # is not a promise that somebody works on it. On an issue nothing has moved on
+      # for years it is usually who last did.
       assignedTo: string
       # The release the tracker schedules it for, empty where it names none.
       targetVersion: string
@@ -489,9 +489,9 @@ Answers with
         # Who filed it. This is the dimension reportedBy selects on, and a read of
         # it off a set answers who reports a backlog without a call per row.
         reportedBy: string
-        # Who the tracker says holds this, empty where nobody does. What it decides
-        # for a triage is whether the issue is free to take. On an old one it is
-        # usually who last touched it rather than who is on it.
+        # Who the tracker says this is assigned to, empty where nobody is. What it
+        # decides for a triage is whether the issue is free to take. On an old one
+        # it is usually who last touched it rather than who is on it.
         assignedTo: string
         # When it was filed.
         createdOn: string

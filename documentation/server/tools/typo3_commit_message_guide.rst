@@ -74,7 +74,7 @@ Takes
     relatedIssues: [string]  # optional
     # Target releases, for example main or 13.4. Left out, the draft carries a
     # RELEASE_TARGET placeholder and the checks name the lines that take a patch
-    # today. The tool guesses no release branch. It holds each one you pass against
+    # today. The tool guesses no release branch. It compares each one you pass with
     # those lines. A branch out of regular support is an error, since ELTS releases
     # come from the ELTS partners rather than from a patch to that branch.
     releases: [string]  # optional

@@ -154,12 +154,12 @@ final class ForgeLookup extends ReadOnlyTool
                 'assignedTo' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only issues this person holds, by their name, resolved the same way as reportedBy. What somebody reported is their history; what they hold is what they are on the hook for. An assignee on an old issue is usually who last touched it rather than who works on it. Both of these together are the issues somebody filed and holds; involving is their union.',
+                    'description' => 'Only issues assigned to this person, by their name, resolved the same way as reportedBy. What somebody reported is their history; what is assigned to them is what the tracker expects of them. An assignee on an old issue is usually who last touched it rather than who works on it. Both of these together are the issues somebody filed and is assigned; involving is their union.',
                 ],
                 'involving' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Only issues this person is on either side of — what they filed and what they hold, as one set. The tracker cannot answer this: it ANDs its filters, so reportedBy and assignedTo together mean filed AND holds, a set nobody wants. Pass it instead of those two, not beside them. Each row\'s reportedBy and assignedTo say which side it came in on.',
+                    'description' => 'Only issues this person is on either side of — what they filed and what is assigned to them, as one set. The tracker cannot answer this: it ANDs its filters, so reportedBy and assignedTo together mean filed AND assigned, a set nobody wants. Pass it instead of those two, not beside them. Each row\'s reportedBy and assignedTo say which side it came in on.',
                 ],
                 'words' => [
                     'type' => 'string',
@@ -254,7 +254,7 @@ final class ForgeLookup extends ReadOnlyTool
                     'status' => Schema::string('New, Accepted, Resolved, Closed, Rejected — the tracker\'s own word.'),
                     'tracker' => Schema::string('Bug, Feature, Task, Epic.'),
                     'priority' => Schema::string(),
-                    'assignedTo' => Schema::string('Who the tracker says holds this, empty where nobody does. An assignee is not a promise that somebody works on it. On an issue nothing has moved on for years it is usually who last did.'),
+                    'assignedTo' => Schema::string('Who the tracker says this is assigned to, empty where nobody is. An assignee is not a promise that somebody works on it. On an issue nothing has moved on for years it is usually who last did.'),
                     'targetVersion' => Schema::string('The release the tracker schedules it for, empty where it names none.'),
                     'typo3Version' => Schema::string('The TYPO3 version the report names, which is not the version it still reproduces on.'),
                     'phpVersion' => Schema::string(),
@@ -290,7 +290,7 @@ final class ForgeLookup extends ReadOnlyTool
                 'status' => Schema::string('Where it stands: New, Accepted, Under Review, Resolved, Closed, Rejected.'),
                 'category' => Schema::string('The area the core files it under, empty where it names none. A search hit is a title and carries none of the five fields below, so one further call reads them for the whole page. Empty here can mean that call did not reach the tracker rather than that the issue has no area.'),
                 'reportedBy' => Schema::string('Who filed it. This is the dimension reportedBy selects on, and a read of it off a set answers who reports a backlog without a call per row.'),
-                'assignedTo' => Schema::string('Who the tracker says holds this, empty where nobody does. What it decides for a triage is whether the issue is free to take. On an old one it is usually who last touched it rather than who is on it.'),
+                'assignedTo' => Schema::string('Who the tracker says this is assigned to, empty where nobody is. What it decides for a triage is whether the issue is free to take. On an old one it is usually who last touched it rather than who is on it.'),
                 'createdOn' => Schema::string('When it was filed.'),
                 'updatedOn' => Schema::string('When anything last moved on it, which is the measure of neglect rather than of age.'),
                 'url' => Schema::string('Where a person reads it.'),
@@ -579,7 +579,7 @@ final class ForgeLookup extends ReadOnlyTool
             sprintf('%s · %s · priority %s · %s', $found['tracker'], $found['status'], $found['priority'], $found['url']),
         ];
         $lines[] = $found['assignedTo'] !== ''
-            ? 'Assigned to ' . $found['assignedTo'] . ' — which says who holds it and not that somebody is working on it.'
+            ? 'Assigned to ' . $found['assignedTo'] . ' — which says what the tracker records and not that somebody is working on it.'
             : 'Assigned to nobody.';
         if ($found['targetVersion'] !== '') {
             $lines[] = 'Target version: ' . $found['targetVersion'];

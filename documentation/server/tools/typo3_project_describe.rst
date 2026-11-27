@@ -74,7 +74,7 @@ Answers with
       # composer.lock names sits installed at that version, so a failure here is not
       # a stale install. differs: packages says which of them are not, and the
       # install is behind or ahead of the lock. not-installed: there is a lock and
-      # no Composer metadata below the vendor directory to hold it against. So the
+      # no Composer metadata below the vendor directory to compare it with. So the
       # packages it names are not on disk. no-lock: this root has no composer.lock,
       # so nothing states which versions it fixed.
       state: string
@@ -123,7 +123,7 @@ Answers with
     # buys a wrong relation. installedPhpBound stands on its own either way.
     phpRelation:  # optional
       # The lowest PHP phpConstraint admits, as major.minor. What the project
-      # promises to run on, and the number to hold its own commands against.
+      # promises to run on, and the number to compare its own commands with.
       floor: string
       # The same, read off corePhpConstraint. Null where the tool found no core
       # package to read one from.
@@ -213,8 +213,8 @@ Answers with
           version: string or null
       # How those numbers stand to each other, in the same three words phpRelation
       # uses. Null where neither .nvmrc nor engines.node names a version this will
-      # read. There is then nothing this repository declares to hold the others
-      # against, and the numbers above still stand.
+      # read. There is then nothing this repository declares to compare the others
+      # with, and the numbers above still stand.
       relation:
         # The Node this repository declares for itself, and what the other two stand
         # against.
@@ -261,7 +261,7 @@ Answers with
       php: string or null
       # The Node that environment runs, where its files state one — nodejs_version
       # in the .ddev configuration. Null where they state none, and then the
-      # installed DDEV's own default applies. The node object above holds it against
+      # installed DDEV's own default applies. The node object above compares it with
       # what this repository declares.
       node: string or null
       # Where this comes from: the .ddev config file that states the version last,

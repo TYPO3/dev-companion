@@ -78,7 +78,7 @@ final class ChangelogLookup extends ReadOnlyTool
                 'excludeTags' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Leave out the entries that carry any of these index tags. A package that ships no PHP sweeps with PHP-API here, because those entries are about calls it cannot make.'],
                 'tags' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'Restrict to entries that carry any of these index tags, together with tag where both are passed. A package sweeps the major once with the kinds of file it ships, for example TypoScript, TSConfig, Fluid, YAML and Frontend, rather than reads every entry.'],
                 'tag' => ['type' => 'string', 'description' => 'Restrict to entries with this index tag. "ext:form" is the system extension a change is in. "FullyScanned" or "NotScanned" is what the Extension Scanner has a matcher for. "PHP-API", "TCA", "Backend" and "Frontend" are the surface. This bounds one question inside a version and a type. The sweep of a major does not need it. That version and type come back whole under a raised limit, and every entry carries its own tags to read by. The changelog says nothing about which third-party extension a change affects, so an extension key of your own matches no tag.'],
-                'paths' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'The PHP of your own code, as files or directories, absolute or relative to the directory the session runs in. The answer keeps the entries that name a class this PHP imports or writes fully qualified, and each one names the files. It also keeps the entries that name no class at all, because nothing here can hold those against PHP. That is the sweep of a major held against the code in one call: pass the package\'s Classes directory with the version and the type.'],
+                'paths' => ['type' => 'array', 'items' => ['type' => 'string'], 'default' => [], 'description' => 'The PHP of your own code, as files or directories, absolute or relative to the directory the session runs in. The answer keeps the entries that name a class this PHP imports or writes fully qualified, and each one names the files. It also keeps the entries that name no class at all, because nothing here can compare those with PHP. That is the sweep of a major compared with the code in one call: pass the package\'s Classes directory with the version and the type.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 200, 'default' => 20, 'description' => 'Maximum number of entries. Raise it to list a version and a type whole. The largest covered major holds 128 deprecations, and that sweep is one call rather than one per tag.'],
             ],
         ];
@@ -108,7 +108,7 @@ final class ChangelogLookup extends ReadOnlyTool
                     'files' => Schema::listOf(Schema::string(), 'The files that import it or write it fully qualified, in the form the call gave the path.'),
                 ], ['class', 'files']), 'The classes of the code at paths this entry names. Empty where the call gave no paths, and on an entry that names no class.'),
             ], ['type', 'version', 'issue', 'title', 'name', 'removal', 'migration', 'tags', 'file', 'url', 'publishedIn'])),
-            'filesRead' => Schema::integer('The PHP files read at paths. Returned where the call gave paths, so 0 says that nothing was held against the code.'),
+            'filesRead' => Schema::integer('The PHP files read at paths. Returned where the call gave paths, so 0 says that nothing was compared with the code.'),
             'termCounts' => Schema::termCounts('What each word of the query reaches on its own, inside the version and the type the call named. A word at 0 is the one that emptied the answer: a misspelt word, or nothing here carries its name. Returned on a miss that carried words. These are counts and not a query; termSubsets is what you ask outright.'),
             'termCountsWithoutTheNarrowing' => Schema::termCounts('The same words counted over the whole changelog rather than inside the version and the type. Returned only where a word reaches there and nothing inside the narrowed set. Then the filter emptied this answer rather than the words: ask again without it.'),
             'termSubsets' => Schema::listOf(Schema::object([
@@ -336,8 +336,8 @@ final class ChangelogLookup extends ReadOnlyTool
                 return true;
             }));
         }
-        // A review that got the 41 breaking entries of 15 held 10 of them
-        // against the code, and the one its code calls was among the rest
+        // A review that got the 41 breaking entries of 15 compared 10 of them
+        // with the code, and the one its code calls was among the rest
         // (`D-ANS-192`).
         $filesRead = null;
         $beforePaths = count($matching);
@@ -579,7 +579,7 @@ final class ChangelogLookup extends ReadOnlyTool
         if ($filesRead !== null) {
             $unnamed = count(array_filter($matching, static fn(array $entry): bool => $entry['touches'] === []));
             $lines[] = sprintf(
-                'Held against the %d PHP files at those paths: %d of the %d entries name a class they use, and %d '
+                'Compared with the %d PHP files at those paths: %d of the %d entries name a class they use, and %d '
                 . 'name no class at all, so read %s against the rest of the code yourself.',
                 $filesRead,
                 count($matching) - $unnamed,

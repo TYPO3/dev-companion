@@ -17,27 +17,27 @@ procedure.
 
 .. diagram::
     :zoomable:
-    :caption: Every path runs outside this process; the shortfall travels with the result instead of being hidden.
+    :caption: The answer names its source, so a caller sees what the fallback left out.
 
-    units canvas=960 lines=4
+    units canvas=960 lines=2
       head "what the machine allows"
-      key "one square = one entry the registry could return"
+      key "one square = one registry entry, counts for illustration"
     title "A fallback answers less, and says so"
-    description "One square per entry the registry could return. The console path and the booted runtime return all of them. The package-file fallback returns every declared entry and none of the ones registered at runtime, and the answer states that."
+    description "One square per registry entry, in counts for illustration. The console path and the booted runtime return all of them. The package-file fallback returns every declared entry and none of the ones registered at runtime, and the answer states that."
 
     row "A console command exists"
       sub "Typo3Cli::run()"
       note "answeredBy: installation"
-      parts 88
+      parts 40
     row "No command — boot the runtime"
       sub "Typo3Runtime::ask()"
       note "answeredBy: installation"
-      parts 88
+      parts 40
     row "Failsafe mode, or unreachable"
       sub "package files, read not executed"
       note "answeredBy: packages"
       missing "dynamic registrations, never read"
-      parts 68 degraded=20
+      parts 30 degraded=10
 
 The order
 ---------

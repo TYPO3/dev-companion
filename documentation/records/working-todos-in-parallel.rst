@@ -34,30 +34,30 @@ The steps at a glance:
     main `main`
       at 0,0
       span 3
-      body "todo/open stays as it is. bin/cli todo:claim <n> gives a todo its branch and worktree, and that worktree is the claim."
+      body "bin/cli todo:claim <n> gives a todo a branch and a worktree. The worktree is the claim."
       ink
     alpha "Branch + worktree"
       at 0,1
       tag `todo/alpha`
-      item "own composer install"
-      item "one session, one worktree"
-      item "unfinished diff stays here"
+      item "its own composer install"
+      item "one session works here"
+      item "the diff stays on the branch"
     bravo "Branch + worktree"
       at 1,1
       tag `todo/bravo`
       item "reads the same queue"
-      item "touches its own todo"
-      item "knows nothing of siblings"
+      item "changes only its own todo"
+      item "sees no other branch"
     charlie "Branch + worktree"
       at 2,1
       tag `todo/charlie`
-      item "a question becomes Waiting on"
-      item "the branch keeps completed work"
-      item "todo:park moves the question"
+      item "an open question stops it"
+      item "todo:park moves it to waiting/"
+      item "finished work stays on the branch"
     home "Bring home one branch at a time"
       at 0,2
       span 3
-      body "rebase main → composer ci → merge --ff-only → remove worktree. Then repeat for the next completed branch."
+      body "rebase onto main → composer ci → merge --ff-only → remove the worktree"
       emphasis
 
     main -> alpha

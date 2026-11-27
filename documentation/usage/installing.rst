@@ -515,7 +515,10 @@ client entry:
 
 .. code-block:: bash
 
-    vendor/bin/typo3-dev-companion update
+    /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion update
+
+As a Composer dependency, the command is
+``vendor/bin/typo3-dev-companion update``.
 
 ``update`` takes ``--agent=<client>`` too, but rarely needs it. ``install``
 writes every client it set up into ``.typo3-dev-companion/state.json``. This

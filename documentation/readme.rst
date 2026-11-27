@@ -48,7 +48,11 @@ in:
     git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
     composer install --working-dir=typo3-dev-companion
     cd /path/to/your/project
-    /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
+    /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install --agent=claude
+
+``--agent=claude`` is for Claude Code.
+:ref:`The client table <installing-clients>` gives the value for every other
+client.
 
 Then restart the client, and approve the server when the client asks. Ask one
 question that a client cannot answer from memory: *Which icon identifier is the

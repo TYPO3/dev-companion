@@ -31,6 +31,15 @@ Then look at what the agent did, not at what it said. A client that shows tool
 calls shows one named ``typo3_icon_lookup``. Where your client does not show
 them, ask the agent afterwards which tools it used.
 
+Without a TYPO3 installation, the call still happens, and its answer says that
+the question is not answerable here. That answer proves that the server works.
+Then ask a question the bundled knowledge answers, with no installation at all:
+
+    Which rules does the subject line of a TYPO3 core commit message follow?
+
+A client that shows tool calls shows one named ``typo3_commit_message_guide`` or
+``typo3_rule_lookup``.
+
 **An answer with no call behind it is the failure this page is about.** The
 model knows enough about TYPO3 to produce something plausible. You cannot check
 something that is only plausible.
@@ -140,8 +149,15 @@ from a client that never started it:
 
     printf '%s\n' \
       '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"t","version":"1"}}}' \
+      '{"jsonrpc":"2.0","method":"notifications/initialized"}' \
       '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
+      '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"typo3_server_scope","arguments":{}}}' \
       | php /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion
+
+The answer is three JSON lines. The first names the server as
+``typo3-dev-companion``, the second lists its ``typo3_`` tools, and the third is
+what ``typo3_server_scope`` says about your project. The server stops when its
+input ends.
 
 Run it from the project you installed into, with the path your entry names. The
 server has no directory of its own, and the directory it starts in decides what
@@ -149,9 +165,11 @@ it reads. For the same reason, the wrong work directory gives answers about the
 wrong site.
 
 The server writes what it has to say at the start to stderr. Each line starts
-with ``typo3-dev-companion:``. A PHP without an extension that ``composer.json``
-requires gets one of those lines, and the line names the PHP that ran. Where a
-client did start the server, every call answers with the same sentence.
+with ``typo3-dev-companion:``. Such a line also appears where the server reads
+no project or finds no installed skills, and it says what to do. A PHP without
+an extension that ``composer.json`` requires gets one of those lines, and the
+line names the PHP that ran. Where a client did start the server, every call
+answers with the same sentence.
 
 The MCP Inspector sends the same two lines, with a form around them. Its default
 protocol era, ``Legacy``, opens with ``initialize``. The server answers with the

@@ -24,8 +24,9 @@ Each step is short here and names the page with the detail.
         Without ``--agent``, ``install`` writes the entry into ``.mcp.json``
         and the skills into ``.agents/skills``. A client finds those two places
         without any configuration. For a client that reads from other places,
-        name it, as in ``--agent=cursor`` or ``--agent=copilot``. :ref:`The
-        client table <installing-clients>` says which file each client gets.
+        name it, as in ``--agent=claude`` for Claude Code or ``--agent=cursor``.
+        :ref:`The client table <installing-clients>` says which file each
+        client gets.
 
         A project can also require the package instead of naming a checkout.
         :doc:`installing` covers that case and every other one.

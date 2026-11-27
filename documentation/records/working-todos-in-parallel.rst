@@ -77,9 +77,10 @@ worktree on the branch of a todo says that somebody has that todo in hand. Every
 command that gives out work passes over that todo. The half-finished diff is on
 the branch of that worktree, where nobody else has to look at it.
 
-No file records the claim (``D-DOC-060``). The branch is the id of the todo, and
-the worktree takes the name of the branch. So ``bin/cli todo:list`` answers the
-question from the worktrees that exist, and it cannot disagree with itself.
+No file records the claim (``D-DOC-060``). The branch is ``todo/`` and the id of
+the todo, and the worktree takes the id as its name. So ``bin/cli todo:list``
+answers the question from the worktrees that exist, and it cannot disagree with
+itself.
 
 **A todo's name is its id**, ``T-<yymmdd>-<hash>``. Every listing prints it, and
 every command takes it. The worktree is how this repository holds a todo in
@@ -170,8 +171,8 @@ repository back at the main checkout. ``bin/cli`` then reads and writes the
 todos, requirements and decisions of a checkout the session is not in, and
 nothing in the output looks wrong.
 
-``.checkouts/`` is the opposite case, and a symlink on purpose. It is 861 MB,
-git ignores it, and a session at work on a todo only ever reads it. Only
+``.checkouts/`` is the opposite case, and a symlink on purpose. It is large, git
+ignores it, and a session at work on a todo only ever reads it. Only
 ``bin/cli checkouts:update`` writes there, and that is not the work of a claim.
 
 Starting the sessions
@@ -199,9 +200,8 @@ machine, not of the repository. :doc:`../contributing/driving-a-session` says
 what the launch has to get right. Each session reports into
 ``.worktrees/.sessions/<name>.log``.
 
-The start of the sessions is a fourth step beside the three of the setup: the
-worktree, the branch and the ``composer install``. The claim does it for the
-same reason it does those. A step that somebody has to do after a read of a page
+The claim starts the sessions for the same reason it makes the worktrees, the
+branches and the installs. A step that somebody has to do after a read of a page
 is the step that breaks.
 
 Without the file, nothing starts, and the command prints the handover instead.
@@ -323,7 +323,7 @@ the todo comes back:
 
 .. code-block:: bash
 
-    git checkout <branch> -- todo/open/<id>-<name>.md
+    git checkout <branch> -- todo/open/<id>.md
 
 That keeps a half-finished change off ``main``. ``main`` still says, in one
 place, what is open and where the work behind it is.
@@ -369,6 +369,7 @@ todo:
 .. code-block:: bash
 
     git -C .worktrees/<name> rebase main
+    (cd .worktrees/<name> && bin/cli todo:park)
     (cd .worktrees/<name> && bin/cli requirements:index && bin/cli decisions:index)
     (cd .worktrees/<name> && bin/cli links:repair)
     git -C .worktrees/<name> commit --amend --no-edit -- <what they rewrote>
@@ -395,9 +396,8 @@ rebase and the suite can run in, and its return costs a fresh
 moment the work of the session rests on what ``main`` has become. It is the only
 run that says anything. A run from before the rebase checked a tree that no
 longer exists. One branch at a time, for the same reason: a suite that fails
-after three branches says nothing about which one broke it. The claims
-themselves never conflict, because each session touched one file in ``todo/``
-and its own.
+after three branches says nothing about which one broke it. The todos themselves
+never conflict, because no two sessions change one file in ``todo/``.
 
 Where one branch fixes something the others also fail on, that branch goes
 first. Otherwise every merge behind it runs against a suite that was already
@@ -469,11 +469,12 @@ files claim, and names both files. Two runs of 2026-08-18 moved the entry
 already on ``main`` back, when the command picked between them itself.
 
 The command moves the entry and every reference whose own line names its file.
-It prints the rest. The rest are the bare references, and both wrong pointers
-were bare ones. Read those one at a time. ``git diff main -- <file>`` settles an
-ambiguous one: a line this branch added means this branch's entry. The list is
-complete, so a reference nobody read is one that somebody skipped, not one that
-nothing mentioned —
+It also moves a bare reference on a line this branch added, and prints it. It
+prints the rest, the bare references that stand on ``main`` as well. Both wrong
+pointers were bare ones. Read those one at a time. ``git diff main -- <file>``
+settles an ambiguous one: a line this branch added means this branch's entry.
+The list is complete, so a reference nobody read is one that somebody skipped,
+not one that nothing mentioned —
 `D-DOC-015 <../../decisions/documentation/doc-015-a-renumber-moves-what-a-link-path-settles-and-names-the-rest.md>`_.
 
 **A marker that survives the resolution is what nothing used to catch.** A file
@@ -499,5 +500,5 @@ not do itself. The session ended on the question and left the todo in the queue,
 where the next session would get it as ordinary work. So ``todo:home`` runs
 ``bin/cli todo:park`` in the worktree, beside the listings. The move then
 reaches ``main`` in the commit the work is in. To give the todo back needs
-nothing at all. The worktree comes down two steps later. The todo is then in
+nothing at all. The worktree comes down after the merge. The todo is then in
 ``waiting/``, which ``bin/cli todo:next`` offers to nobody.

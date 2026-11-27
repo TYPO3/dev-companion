@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Sdk;
 
 use Mcp\Schema\Extension\ExtensionIdentifier;
-use Mcp\Schema\Extension\ExtensionInterface;
+use Mcp\Server\Extension\ServerExtensionInterface;
 
 /**
  * The Skills extension, `io.modelcontextprotocol/skills`, over the resources
@@ -16,7 +16,7 @@ use Mcp\Schema\Extension\ExtensionInterface;
  * the manifest a host verifies them against is what the extension adds.
  * `D-ANS-163` holds the scheme and the index beside it.
  */
-final class SkillsExtension implements ExtensionInterface
+final class SkillsExtension implements ServerExtensionInterface
 {
     public const ID = 'io.modelcontextprotocol/skills';
 

@@ -158,7 +158,7 @@ final class StdioServerTest extends TestCase
      * A client that opens with `server/discover` is served the modern
      * revision, and the Skills extension is declared where that revision
      * looks for it. A notification before it gets no answer, which the SDK's
-     * own transport gives one on v0.9.0 (`D-ANS-184`). A subscription is
+     * own transport has held since v0.10.0 (`D-ANS-184`). A subscription is
      * acknowledged, and a handshake after the first request is told which
      * revisions the connection speaks.
      */

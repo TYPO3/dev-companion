@@ -11,7 +11,7 @@ use Mcp\Schema\ResourceTemplate;
 use Mcp\Schema\ServerCapabilities;
 use Mcp\Schema\Tool;
 use Mcp\Schema\ToolAnnotations;
-use Mcp\Server;
+use Mcp\Server\Server;
 use TYPO3\DevCompanion\Feedback\Channel;
 use TYPO3\DevCompanion\Knowledge\Coverage;
 use TYPO3\DevCompanion\Knowledge\Documents;

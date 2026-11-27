@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Sdk;
 
-use Mcp\Exception\ResourceNotFoundException;
 use Mcp\Schema\JsonRpc\Error;
 use Mcp\Schema\JsonRpc\Request;
 use Mcp\Schema\JsonRpc\Response;
+use Mcp\Server\Exception\ResourceNotFoundException;
 use Mcp\Server\Handler\Request\RequestHandlerInterface;
 use Mcp\Server\Session\SessionInterface;
 

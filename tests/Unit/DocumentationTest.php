@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tests\Unit;
 
-use Mcp\Capability\Discovery\SchemaValidator;
+use Mcp\Server\Capability\Discovery\SchemaValidator;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Manual\CoreChangelog;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Sdk;
 
-use Mcp\Exception\InvalidArgumentException;
+use Mcp\Schema\Exception\InvalidArgumentException;
 use Mcp\Schema\JsonRpc\Request;
 
 /**

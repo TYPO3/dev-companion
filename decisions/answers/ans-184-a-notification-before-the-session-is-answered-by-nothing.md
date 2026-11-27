@@ -47,3 +47,10 @@ connection has a session.**
   `Entrypoint` takes the SDK's transport.
 - A client sends a notification before its first request and relies on an error
   back. Nothing in the specification asks for one.
+
+## Since then
+
+The first **Wrong if** fired on 2026-11-27. mcp/sdk v0.10.0 logs a refused
+notification before `initialize` and answers nothing. `Server\StdioTransport`
+went, and `Entrypoint` runs the SDK's transport. The smoke test that held the
+override passes on the SDK alone.

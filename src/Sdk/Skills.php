@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Sdk;
 
-use Mcp\Exception\ResourceNotFoundException;
+use Mcp\Server\Exception\ResourceNotFoundException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;

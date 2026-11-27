@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Server;
 
+use Mcp\Server\Transport\StdioTransport;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Knowledge\Coverage;
 

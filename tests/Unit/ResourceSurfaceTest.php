@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tests\Unit;
 
-use Mcp\Capability\Registry\ResourceTemplateReference;
-use Mcp\Exception\ResourceNotFoundException;
 use Mcp\Schema\ResourceDefinition;
+use Mcp\Server\Capability\Registry\ResourceTemplateReference;
 use Mcp\Server\ClientGateway;
+use Mcp\Server\Exception\ResourceNotFoundException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;

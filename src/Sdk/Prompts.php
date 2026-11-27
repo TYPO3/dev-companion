@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Sdk;
 
-use Mcp\Capability\Attribute\CompletionProvider;
+use Mcp\Server\Capability\Attribute\CompletionProvider;
 use TYPO3\DevCompanion\Knowledge\CommitMessage;
 use TYPO3\DevCompanion\Paths;
 use TYPO3\DevCompanion\Tool\Registry;

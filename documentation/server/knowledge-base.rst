@@ -7,8 +7,8 @@ This page covers the knowledge the package ships in
 `knowledge/ <../../knowledge/>`_. It says what is there, how the server reads
 it, and how a writer words a statement in it.
 
-The tools and resources answer from files in the package. They need nothing
-else: no installation, no network, no database.
+The tools of the ``knowledge`` source and the resources answer from files in the
+package. They need nothing else: no installation, no network, no database.
 :doc:`asking the installation <asking-the-installation>` says what the server
 reads from an installation instead, and why.
 
@@ -42,12 +42,15 @@ reads from an installation instead, and why.
      * ``release-lines.json`` which core branches take a patch today
      * ``manuals.json`` the manuals docs.typo3.org publishes
 
-Each hint names in its own ``domains`` field the domains a query reaches it
-from. So the file says what the hint is about, and the tag says which query
-reaches it.
+Each hint names its technical domains, such as ``php`` or ``fluid``, in its own
+``domains`` field. The server detects the domains of a query from its paths and
+its text, and offers the hints whose domains match. So the file says what the
+hint is about, and the tag says which query reaches it.
 
-The server reads all of it fresh on every request. So an edit to a file takes
-effect at once, with no restart and no rebuild.
+The server reads it fresh on every request, except ``classes.json`` and
+``elements.json`` below ``catalog/component/``, which it reads once per process.
+So an edit to any other file takes effect at once, with no restart and no
+rebuild.
 
 Which TYPO3 lines a statement holds for is data on the statement, not a version
 number in its sentence: :doc:`versions`.

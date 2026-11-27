@@ -12,24 +12,39 @@ else: no installation, no network, no database.
 :doc:`asking the installation <asking-the-installation>` says what the server
 reads from an installation instead, and why.
 
-* ``documents/`` — the prose corpus that ``typo3://guides/{documentId}`` serves
-  and ``typo3_rule_lookup`` searches: ``core/contribution/rules.md``,
-  ``core/testing/scripts.md``, ``core/contribution/commit-messages.md``,
-  ``core/contribution/gerrit-workflow.md``, ``core/contribution/sources.md``.
+.. directory-tree::
+   :level: 2
 
-* ``hints/`` — one file per subject: ``datahandler.json``, ``fal.json``,
-  ``labels.json``, ``site-sets.json`` and many more.
+   * ``knowledge/``
 
-  Each entry names in its own ``domains`` field the domains a query reaches it
-  from. So the file says what the hint is about, and the tag says which query
-  reaches it.
+     * ``documents/`` the prose corpus that ``typo3://guides/{documentId}``
+       serves and ``typo3_rule_lookup`` searches, one directory per scope
 
-* ``catalog/`` — the component catalog (``component/entries.json``,
-  ``component-checklist.json``, ``references.json``, ``meta.json``) and the
-  shipped system extensions (``system-extensions.json``).
+       * ``any/``
+       * ``core/``
+       * ``extension/``
+       * ``project/``
 
-* ``test-suite-hints.json``, ``task-intents.json``, ``icon-concepts.json``,
-  ``server-scope.json``, ``versions.json``.
+     * ``hints/`` one file per subject, such as ``datahandler.json``
+
+     * ``catalog/`` the component catalog and the shipped system extensions
+
+       * ``component/``
+       * ``reference/``
+       * ``system-extension/``
+       * ``meta.json``
+
+     * ``task-intents.json`` the workflows a task routes to
+     * ``test-suite-hints.json`` the suites a path reaches
+     * ``icon-concepts.json`` the icons a concept maps to
+     * ``server-scope.json`` what the server covers, and its instructions
+     * ``versions.json`` the TYPO3 lines the knowledge covers
+     * ``release-lines.json`` which core branches take a patch today
+     * ``manuals.json`` the manuals docs.typo3.org publishes
+
+Each hint names in its own ``domains`` field the domains a query reaches it
+from. So the file says what the hint is about, and the tag says which query
+reaches it.
 
 The server reads all of it fresh on every request. So an edit to a file takes
 effect at once, with no restart and no rebuild.

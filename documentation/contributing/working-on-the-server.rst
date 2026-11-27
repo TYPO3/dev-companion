@@ -358,15 +358,6 @@ The deployment
 the root or ``/docs``, and this directory is neither. Node is there for the
 finish step alone, which is one bundled file and installs nothing.
 
-The drawings are still open
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A markdown image is an inline node, and the theme renders a figure only for the
-reStructuredText directive. A plain ``<img>`` is a document of its own and
-cannot learn which mode the page is in. So a reader in dark mode sees a light
-drawing. A drawing also appears at the width of the column rather than at its
-drawn size. ``D-DOC-024`` says what each would need.
-
 Tests
 -----
 

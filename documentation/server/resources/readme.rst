@@ -16,7 +16,7 @@ installation and no network.
 
 The :doc:`tool surface <../tools/index>` is the other thing a client gets. It
 has a page per tool, because a tool has a schema and a recorded answer. The
-resources have one page, because the same rules hold for every entry.
+resources have one page, because every entry has the same fields and no schema.
 ``typo3://guides`` lists the entries themselves, live.
 
 Picked, not called
@@ -48,8 +48,8 @@ The four shapes
   references of each skill. Read it first: it lists the rest.
 
 * ``typo3://guides/{documentId}`` — one document from ``knowledge/documents/``.
-  That directory is also the corpus ``typo3_rule_lookup`` searches. Most
-  documents are about the process of the core.
+  That directory is also the corpus ``typo3_rule_lookup`` searches. The largest
+  group of documents is about the process of the core.
 
 * ``typo3://skill/{skillId}/SKILL.md`` — one published task workflow from
   ``skills/``. Most workflows are about extension, sitepackage and project work.
@@ -58,25 +58,27 @@ The four shapes
   directory of the client. This resource is the route for a client that never
   ran it.
 
-  The server publishes a skill when its own front matter does not declare it a
-  draft. A draft is a directory in ``skills/`` and appears nowhere.
+  The server publishes every directory in ``skills/`` that has a ``SKILL.md``.
+  There is no draft status (``D-SKL-087``).
 
 * ``typo3://skill/{skillId}/references/{file}`` — what a workflow gives the
   reader at a step. This is a resource template, not one list entry per file. A
   reader follows these files from the body that names them. A checklist listed
   beside its own workflow is an entry nobody can choose between.
 
-There are two families, because the documents alone serve one audience. Most of
-the documents are about the process of the core. Most of the workflows are about
-the work outside it. With both on offer, each of the three audiences of
+There are two families: the documents and the workflows. The largest group of
+documents is about the process of the core. Most of the workflows are about the
+work outside it. With both on offer, each of the three audiences of
 `R-AUD-001 <../../../requirements/audience/aud-001-core-extension-and-site-work-are-each-served.md>`_
 has something to pick.
 
-Only ``knowledge/server-scope.json`` says which audience an entry is for. A
-covered topic names every document and every published skill. The description
-and the priority derive from the ``scope`` of that topic. ``ScopeTest`` checks
-it in both directions. So a skill that no topic names fails the suite, and never
-reaches an extension author as core-only.
+A document says which audience it is for by the directory it sits in
+(``D-KNW-058``). A skill says so through the ``scope`` of the topic in
+``knowledge/server-scope.json`` that names it. That audience decides the
+priority and the last sentence of the description. ``ScopeTest`` checks that a
+covered topic names every document and every published skill. It also checks
+that the scope of a document's topic fits its directory. So a skill that no
+topic names fails the suite, and never reaches an extension author as core-only.
 
 ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` changes the index and not the list.
 ``Coverage::offered()`` drops a topic that no remaining tool can answer. So the
@@ -134,13 +136,13 @@ scheme, makes a resource a skill.
 What a picker reads
 -------------------
 
-* ``description`` — what the entry is and whom its answers are for. The
-  description of a document comes from the covered topic. The description of a
-  skill comes from its own front matter.
+* ``description`` — what the entry is, and a last sentence on the work it holds
+  for. The description of a document and of a skill comes from its own front
+  matter.
 
-  Before it stands the sentence that says the entry is a workflow to follow, not
-  a page to read. Neither text appears a second time, so neither can drift from
-  what it describes.
+  Before the text of a skill stands the sentence that says the entry is a
+  workflow to follow, not a page to read. Neither text appears a second time, so
+  neither can drift from what it describes.
 
 * ``annotations.priority`` — the order, and nothing else. The index sits above
   everything it lists. What holds wherever the caller works sits above what
@@ -166,8 +168,8 @@ Two fields of the spec stay absent. The first one is where readers get confused:
 
 * ``annotations.lastModified`` is in the spec revision the SDK speaks. No
   ``Mcp\Schema\Annotations`` at the mcp/sdk version in ``composer.lock`` has it.
-  That class has only ``audience`` and ``priority``. The record says the field
-  is unavailable, and does not fake it through ``_meta``.
+  That class has only ``audience`` and ``priority``. The server leaves the field
+  out, and does not fake it through ``_meta``.
 
 What is generated
 -----------------
@@ -201,7 +203,8 @@ What holds it
 
 * ``ScopeTest::everyKnowledgeDocumentIsAnnouncedByTheScope`` and
   ``ScopeTest::everyPublishedSkillIsAnnouncedByTheScope`` — the coverage names
-  each entry, and the description and the priority of the entry come from there.
+  each entry, under a scope that matches the sentence the server offers it
+  under.
 
 * ``StdioServerTest::theResourceListCarriesWhatAPickerChoosesBy`` and
   ``StdioServerTest::aTaskWorkflowIsServedWithWhatItSendsItsReaderTo`` — the
@@ -214,5 +217,5 @@ What holds it
   — the manifest names every file of a skill once, with the digest and the size
   of what a read returns.
 
-  The two tests also check that the declaration and the error code reach the
+  The stdio test also checks that the declaration and the error code reach the
   wire.

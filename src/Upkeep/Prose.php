@@ -638,10 +638,11 @@ final class Prose
     {
         // A quotation is its source's words, as in `words()`. A literal, a
         // link and a role name a thing rather than say something, so a path
-        // with "carry" in it is no sentence that carries.
+        // with "carry" in it is no sentence that carries. "Working tree" is a
+        // name too.
         $sentence = (string) preg_replace(
-            ['/(?::[a-z]+:)?`[^`]*`_*/', '/"[^"]*"/', self::ITALIC],
-            ['``', '""', '""'],
+            ['/(?::[a-z]+:)?`[^`]*`_*/', '/"[^"]*"/', self::ITALIC, '/\bworking (?=tree|directory|copy)/i'],
+            ['``', '""', '""', ''],
             $sentence,
         );
         $flags = [];

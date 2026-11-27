@@ -645,6 +645,7 @@ final class ProseTest extends TestCase
             'a vague verb' => ['The answer carries the version, and the skill owns the order.', ['carries', 'owns']],
             'own as an adjective' => ['Each project keeps its own copy of the skills.', []],
             'a quoted word' => ['The rules replace "carries" with a plain verb.', []],
+            'a working tree' => ['Read the working tree and the working directory afterwards.', []],
             'a link and a role' => [':doc:`writing-a-decision` and `D-AUD-003 <aud-003-the-instructions-carry-it.md>`_ say where.', []],
         ];
     }

@@ -1,7 +1,7 @@
 ---
 serves: [tests/]
 every: 30 days
-checked: 2026-10-11
+checked: 2026-11-27
 run: [composer outdated --direct]
 ---
 

@@ -6,92 +6,135 @@ compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup
 
 # TYPO3 Extension Documentation
 
-Document the implementation that exists, and bind TYPO3 claims to the active
-version. Keep this skill as routing and documentation workflow. Do not copy API
-reference material into it.
+This skill covers the documentation of a TYPO3 project or extension and its
+user-facing wording. That is the manual, the README, examples, migration notes
+and XLF labels. It stops at the code the page describes. Where the page would
+claim behaviour the code does not have, another skill changes the code first.
+"Where this skill stops" names those skills.
 
-## Gather authoritative evidence
+**Document the implementation that exists.** The code in the checkout is the
+source for what the package does. A page that claims more than the code does is
+the defect this skill exists to prevent.
 
-Work through [references/base.md](references/base.md) first. It fixes the order
-every task here starts in and says why that order is not interchangeable. This
-workflow leans hardest on its second step. `typo3_extension_describe` reports
-whether a manual and a README exist at all. It reports which XLF files there
-are, with the source language each declares.
+**Bind every TYPO3 claim to the active version.** An API, a module or an option
+can differ between TYPO3 versions. A claim without a version can be wrong for
+the reader's installation.
 
-Then, for this workflow:
+Keep this skill as routing and workflow: it says which tool to ask and in which
+order. The API reference comes from the lookups. A copy of it here would go out
+of date.
 
-- `typo3_documentation_lookup` with several short English queries and the target
-  version, for every external TYPO3 API or workflow claim. Prefer the links it
-  returns over hand-built documentation URLs.
-- `typo3_label_lookup` before you add or reword a label, and
-  `typo3_translation_domain_lookup` for the extension's own XLF path.
-- Read its public configuration, registration files, templates, examples,
-  current manual and tests. Code is the source for what this package implements.
-  Documentation that outruns it is the defect this workflow exists to avoid.
+## Steps at a glance
 
-For backend documentation, verify modules through `typo3_backend_module_lookup`,
-icons through `typo3_icon_lookup`, and undeclared Fluid prefixes through
-`typo3_fluid_namespace_list` when those facts appear.
+1. Collect the evidence: the project, the code and the TYPO3 facts.
+2. Choose where the documentation goes and who reads it.
+3. Write the page.
+4. Verify the page, and report.
 
-## Choose the documentation surface
+When a page would claim behaviour the code does not have, follow "Where this
+skill stops" before you write it.
 
-Read [references/checklist.md](references/checklist.md) for the audience and
-surface selection, secret hygiene, evidence conflicts, and the completion gate.
+## 1. Collect the evidence
 
-- Extend the existing `Documentation/` structure. Do not create a second manual
-  layout. Where step 2 reported no manual, or one older than `guides.xml`, call
-  `typo3_rule_lookup` with `documentId="extension/documentation/manual"`. It
-  holds the files that make a directory a manual, whole, and the command that
+1. Work through [references/base.md](references/base.md) first. It fixes the
+   order every task starts in. This skill needs its second step most.
+   `typo3_extension_describe` reports whether a manual and a README exist. It
+   also reports the XLF files and the source language each one declares.
+
+2. Call `typo3_documentation_lookup` for every claim about a TYPO3 API or
+   workflow. Use several short English queries and the target version. Use the
+   links it returns, not URLs you build by hand.
+
+3. Call `typo3_label_lookup` before you add or reword a label. Call
+   `typo3_translation_domain_lookup` for the XLF path of the extension itself.
+
+4. Read the code: the public configuration, the registration files, the
+   templates, the examples, the current manual and the tests. The code is the
+   source for what this package implements.
+
+5. Verify the backend facts the page names. Use `typo3_backend_module_lookup`
+   for a module and `typo3_icon_lookup` for an icon. Use
+   `typo3_fluid_namespace_list` for a Fluid prefix the template does not
+   declare.
+
+## 2. Choose where the documentation goes
+
+Read [references/checklist.md](references/checklist.md) now. It says who the
+reader is and which file serves that reader. It also has the rules for secrets
+and for evidence that disagrees, and the check before you finish.
+
+- **Extend the existing `Documentation/` structure.** Do not create a second
+  manual layout.
+
+- **Where step 1 found no manual, or one without `guides.xml`, set one up.**
+  Call `typo3_rule_lookup` with `documentId="extension/documentation/manual"`.
+  It gives the files that make a directory a manual, and the command that
   renders it before you publish.
-- Keep README content concise: the purpose, the essential setup, and the
-  canonical documentation link where one exists.
-- Separate the administrator and developer setup from the editor workflows.
-- Derive configuration keys, defaults, types, and examples from the checkout.
-- Mark a version requirement or a migration behavior only with evidence. That is
-  Composer constraints, the installed changelog, or the official documentation.
-- Use runnable, minimal examples that match the extension's namespaces and file
-  layout.
 
-Do not claim that a command, module, option, label, or rendered result exists
-without a check with its owner. Do not document an internal implementation
-detail as stable public API.
+- **Keep the README short:** the purpose, the essential setup, and the link to
+  the manual where there is one.
 
-## Write and verify
+- **Separate the readers.** Setup for administrators and developers goes apart
+  from what editors do.
 
-- Preserve the repository's markup format, heading hierarchy, link style,
-  terminology, and line-wrap conventions.
-- Reuse canonical TYPO3 terminology and the project's own labels.
-- Make prerequisites, commands, expected outcomes, and failure conditions
-  explicit.
-- Validate internal links, referenced paths, configuration examples, and code
-  identifiers against the checkout.
-- Validate every docs.typo3.org link the page carries with
-  `typo3_permalink_lookup`. It takes the identifiers and the URLs together and
-  answers what each one reaches. A link the host redirects still resolves in a
-  browser and points at another branch than the page claims. So a read of the
-  page is not the check.
-- Run documentation, lint, and test commands only when the project declares them
-  or the task establishes them.
-- Report the files you updated and the validation you performed. Report any
-  behavior you could not verify from the installation or project.
-- Draft the message for what you wrote with `typo3_commit_message_guide` and
-  `workflow="project"`. A manual ships from the repository it documents, which
-  is the workflow that argument names.
+## 3. Write the page
 
-## Where the page stops and the code begins
+- Take configuration keys, defaults, types and examples from the checkout.
 
-**When a page would claim what the code does not do, invoke the skill that owns
-that code first.** That is a step, not a note about ownership. Load the skill by
+- Mark a version requirement or a migration behaviour only with evidence. The
+  evidence is the Composer constraints, the installed changelog or the official
+  documentation.
+
+- Write small examples that run, with the namespaces and the file layout of the
+  extension.
+
+- Keep the markup, the heading levels, the link style, the terms and the line
+  wrap the repository already uses.
+
+- Use the TYPO3 terms and the labels of the project.
+
+- State the prerequisites, the commands, the expected result and what can go
+  wrong.
+
+Do not claim that a command, module, option, label or rendered result exists
+before you check it. The check is the lookup for it or the code. Do not document
+an internal detail as stable public API.
+
+## 4. Verify and report
+
+1. Check every internal link, referenced path, configuration example and code
+   identifier against the checkout.
+
+2. Check every docs.typo3.org link on the page with `typo3_permalink_lookup`.
+   Give it the identifiers and the URLs together. It says what each one reaches.
+   A link the host redirects still opens in a browser. But it can point at
+   another branch than the page says. So a look at the page is not the check.
+
+3. Run documentation, lint and test commands only where the project declares
+   them or the task names them.
+
+4. Report the files you changed and the checks you ran. Report every behaviour
+   you could not verify in the installation or the project.
+
+5. Write the commit message with `typo3_commit_message_guide` and
+   `workflow="project"`. A manual ships from the repository it documents, and
+   that is the workflow this argument names.
+
+## Where this skill stops
+
+**When a page would claim behaviour the code does not have, invoke the skill
+that covers that code first.** This is a step, not a note. Load the skill by
 name and work from it. The finding at that moment is that the behaviour is
-missing, not the manual.
+missing, not the manual. If you write the page anyway, the manual promises more
+than the package does.
 
-If you write the page anyway, the manual outruns the package it ships with. What
-crosses over is the surface, the behaviour the page would claim, and its source
-files. You write the page from what comes back verified.
+Hand over the surface, the behaviour the page would claim, and its source files.
+Then write the page from what comes back verified.
 
-This skill covers documentation and user-facing wording changes. Test
-implementation is `typo3-extension-testing`. Conformance assessment is
-`typo3-extension-health`. Backend-module code is
-`typo3-backend-module-development`, and a content element is
-`typo3-content-element-development`. Stop before you edit that owner's files.
-Document only the public behaviour it hands back verified.
+- **Tests** are `typo3-extension-testing`.
+- **A conformance assessment** is `typo3-extension-health`.
+- **Backend-module code** is `typo3-backend-module-development`.
+- **A content element** is `typo3-content-element-development`.
+
+Stop before you edit the files of those skills. Document only the public
+behaviour that comes back verified.

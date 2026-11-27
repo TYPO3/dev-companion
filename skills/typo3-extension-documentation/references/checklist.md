@@ -1,52 +1,61 @@
 # Documentation decision checklist
 
-Read this before you choose the documentation surface, and again before you
+Read this before you choose where the documentation goes, and again before you
 finish.
 
-## Audience and surface
+## Reader and file
 
-- Identify the reader: evaluator, integrator or administrator, editor, extension
-  developer, or maintainer.
-- Put the purpose and the essential setup in the README. Use the existing
-  Documentation/ manual for durable configuration, workflows, API, and migration
-  material.
-- Separate installation and administration from editor workflows and developer
-  extension points.
-- Extend the repository's structure and markup. Do not create a second canonical
-  manual.
+- Name the reader: an evaluator, an integrator or administrator, an editor, an
+  extension developer, or a maintainer.
 
-## Evidence and conflicts
+- Put the purpose and the essential setup in the README. Put configuration,
+  workflows, API and migration material in the existing `Documentation/` manual,
+  because it lasts longer.
 
-- The checkout is the authority for what this package implements: registration,
-  keys, defaults, paths, examples, and supported behavior.
-- The installation lookups are the authority for effective registrations and
-  runtime state. A parser miss is not proof of absence. If dynamic PHP code and
-  parsed output disagree, describe the parser limitation and verify the code
-  path.
-- Composer constraints and versioned official documentation own compatibility
-  and external TYPO3 API claims.
-- Tests may demonstrate behavior. They do not turn internal implementation
-  details into promised public API.
+- Keep installation and administration apart from what editors do and from the
+  extension points for developers.
 
-## Secret hygiene
+- Extend the structure and the markup the repository has. Do not create a second
+  main manual.
 
-- Never copy passwords, tokens, private keys, personal addresses, internal
-  hosts, or machine-specific paths into examples.
-- Replace required credentials with named placeholders. Explain how the reader
-  supplies them securely.
-- When the documentation contains plausible credentials or personal data, flag
-  it explicitly and do not reproduce it.
+## Which source decides
 
-## Completion gate
+- **The checkout** decides what this package implements: registration, keys,
+  defaults, paths, examples and supported behaviour.
 
-Stop the evidence search when every requested audience and surface has:
+- **The installation lookups** decide what is registered and active at runtime.
+  A parser that finds nothing does not prove that nothing is there. Where the
+  PHP code builds something dynamically and the parsed output disagrees, say
+  that the parser has this limit. Then verify the code path.
 
-1. an authoritative implementation source;
-2. version evidence for external TYPO3 claims;
-3. a verified example or an explicit unverified marker;
-4. validated paths, identifiers, and links; and
-5. no unresolved contradiction that changes user instructions.
+- **The Composer constraints and the versioned official documentation** decide
+  compatibility and every claim about a TYPO3 API.
 
-Report the unknowns that remain instead of a broad search. Run only declared
-validation commands. Finish with the changed files, the checks, and the
-unverified behavior.
+- **Tests** can show behaviour. They do not make an internal detail a public API
+  the package promises.
+
+## Secrets and personal data
+
+- Never copy passwords, tokens, private keys, personal addresses, internal hosts
+  or machine-specific paths into an example.
+
+- Replace a credential the example needs with a named placeholder. Say how the
+  reader supplies it safely.
+
+- Where the documentation already contains a plausible credential or personal
+  data, say so in the answer. Do not repeat it.
+
+## Before you finish
+
+Stop the search for evidence when every reader and every file you were asked for
+has:
+
+1. a source in the code for what the page says;
+2. version evidence for every claim about TYPO3;
+3. an example you verified, or a clear mark that it is not verified;
+4. paths, identifiers and links you checked; and
+5. no open contradiction that changes what the reader must do.
+
+Report what is still unknown instead of a wider search. Run only the checks the
+project declares. End with the changed files, the checks you ran and the
+behaviour you could not verify.

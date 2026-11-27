@@ -77,17 +77,18 @@ What an entry holds
 
     # R-DIS-009 — A negative is never remembered
 
-    **Nothing that says "there is no installation" is remembered.**
+    **The server remembers nothing short of a whole answer: neither "there is no
+    installation" nor a console reached outside the runtime the project declares.**
 
-    A successful resolution is memoized for the process; a failure is retried on
-    every call, because the caller who reads that answer is the one likely to
-    install, migrate or start something and ask again in the same session.
+    The process memoizes a successful resolution. It retries a failure on every
+    call. The caller who reads that answer is the one likely to install, migrate or
+    start something and ask again in the same session.
 
     ## From
 
-    A session lost to a cached negative — the agent ran `composer install`, started
-    DDEV, verified `bin/typo3` answered, and every tool kept reporting no
-    installation until the client was restarted (2026-07-29).
+    A session lost to a cached negative. The agent ran `composer install`, started
+    DDEV and verified that `bin/typo3` answered. Every tool kept its report of no
+    installation until a restart of the client (2026-07-29).
 
 
 * The front matter has the **title**, and the heading repeats it, so a reader of
@@ -132,7 +133,7 @@ A requirement may name the decisions it rests on in its front matter:
     ---
     id: R-FBK-007
     status: held
-    restsOn: [D-FBK-005]
+    restsOn: [D-FBK-012, D-FBK-016]
     heldBy:
       - SomeTest::theTestThatHoldsIt      # written by requirements:cover
     ---
@@ -180,7 +181,7 @@ What checks an entry
 --------------------
 
 ``bin/cli requirements:check`` holds every file to the shape this page
-describes. ``composer test`` runs the same check through ``RequirementsTest``,
+describes. ``composer test`` holds the same shape through ``RequirementsTest``,
 except for the listing. The listing comes from every file in a group, so the
 command alone holds it, see
 `D-FBK-011 <../../decisions/feedback/fbk-011-the-suite-holds-what-one-branch-can-be-right-about.md>`_.

@@ -8,7 +8,7 @@ works in. It gives the order in which the server asks for them, and what each
 step can see and what it cannot see. It also says what an answer must state when
 the files answered where the installation should have.
 
-Three of the answers of this server come from outside it. The installation the
+Some of the answers of this server come from outside it. The installation the
 caller works in decides them, and no bundled snapshot can be right about them.
 
 The rules are in `AGENTS.md <../../AGENTS.md>`_. What a change assumed is in
@@ -87,7 +87,7 @@ The container answers in these cases:
   reads ``SYS/fluid/namespaces``, where those versions keep the registry
   (``D-ANS-136``).
 
-The probe reads two topics only where a caller asks for them, because each one
+The probe reads some topics only where a caller asks for them, because each one
 costs more than any other read needs. The whole of ``TYPO3_CONF_VARS`` is around
 50 kB of JSON. The resolution of one ``type=flex`` column runs four events, a
 file read and the TCA preparation behind it.
@@ -140,7 +140,7 @@ The three states
 ===============  ================================================================  ===================================================================
 State            What it means                                                     What the server does with it
 ===============  ================================================================  ===================================================================
-``full``         The container came up with every extension in it                  It is the answer, and the server keeps it for the session
+``full``         The container came up with every extension in it                  It is the answer, and the server keeps it for the tool call
 ``failsafe``     TYPO3 booted without essential configuration: core packages only  The server never passes it on. The files answer, with the reason
 ``unreachable``  No console, no interpreter, or the boot failed                    Same — the files answer, with the reason
 ===============  ================================================================  ===================================================================
@@ -156,10 +156,11 @@ for the extension under work. What comes back is a core-only subset that looks
 complete. A measurement against ``georgringer/news`` gave 1259 icons, and not
 one of them came from the extension.
 
-The server keeps only a ``full`` read. A caller can read "the DDEV project is
-stopped", start the project and ask again. That caller must get the better
-answer in the same session. ``Typo3Cli::resolve()`` and ``Instance::describe()``
-follow the same rule.
+The server keeps a read for one tool call, and ``Registry::call()`` drops it
+when the call ends. A caller can read "the DDEV project is stopped", start the
+project and ask again. That caller must get the better answer in the same
+session. So ``Instance::describe()`` keeps only a success, and
+``Typo3Cli::resolve()`` keeps only a success without a caveat.
 
 What an answer states
 ---------------------

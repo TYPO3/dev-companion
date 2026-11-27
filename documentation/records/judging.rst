@@ -102,54 +102,6 @@ expensive answer and often the right one. The cheap steps exist so that nobody
 rebuilds a rule that already exists and never arrived. They do not exist to keep
 the answer small.
 
-.. diagram::
-    :zoomable:
-    :caption: Read the corpus first. The first rung supported by evidence stops the descent.
-
-    flow canvas=960
-      columns 1,1.6
-      even
-    title "Walk the feedback down the ladder"
-    description "A session diagnoses a feedback from gap through delivery, routing and wording to a design decision. It stops at the first step the repository's evidence supports."
-
-    question "Could the server have prevented it?"
-      at 0,0
-      eyebrow "the one question"
-      ink
-    evidence "Evidence before appetite"
-      at 0,1
-      rows 2
-      item "Check knowledge, skills, tools, transcripts and recorded runs."
-      item "Name the diagnosed gap first."
-      item "Choose the remedy afterwards."
-    gap "Gap"
-      at 1,0
-      tag "1"
-      body "The knowledge, tool or task skill is not here."
-      emphasis
-    delivery "Delivery"
-      at 1,1
-      tag "2"
-      body "The answer exists, but the session never received it."
-    routing "Routing"
-      at 1,2
-      tag "3"
-      body "The right skill or tool existed and did not fire."
-    wording "Wording"
-      at 1,3
-      tag "4"
-      body "The answer arrived, but its wording did not take."
-    decision "Decision"
-      at 1,4
-      tag "5"
-      body "Everything worked; the design itself has the cost."
-
-    question -> gap
-    gap -> delivery
-    delivery -> routing
-    routing -> wording
-    wording -> decision
-
 1. Gap
 ~~~~~~
 
@@ -279,7 +231,6 @@ Source  What is asked                   Cost                            Answers
 3       ``typo3_documentation_lookup``  network                         what the official manual says
 4       the open web                    most expensive, least reliable  only where 0–3 give nothing
 ======  ==============================  ==============================  ==================================================
-
 
 Every feedback that makes a claim about TYPO3 itself needs sources 2 to 4. Such
 a claim is a changelog number, a deprecation or a version boundary. A feedback
@@ -517,7 +468,6 @@ open, no todo serves it  nobody has judged it        ``bin/cli todo:check``, whi
 open, a todo serves it   judged, the work is queued  ``Todo::serves()``, which ``feedback:list`` marks
 ``feedback/archive/``    the improvement landed      ``bin/cli feedback:archive``, in that commit
 =======================  ==========================  =================================================
-
 
 Be exact about the middle state. ``typo3_feedback_list`` answers an agent
 somewhere else, and that agent reads the archive as ``closed``. A feedback

@@ -26,53 +26,6 @@ A PHP without such an extension still starts the server. The server names the
 extension on stderr and answers every call with that sentence —
 `D-ANS-176 <../../decisions/answers/ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md>`_.
 
-.. diagram::
-    :zoomable:
-    :caption: Writing the files is setup; client trust and a fresh session make them active.
-
-    flow canvas=960
-      columns 1.35,1.15,1,1.1
-    title "From package to an active client"
-    description "The installer puts a standalone checkout or a Composer dependency into a project. That writes client configuration, publishes skills and records the setup. The client then approves and verifies it."
-
-    standalone "Standalone checkout"
-      at 0,0
-      body "bin/typo3-dev-companion"
-    composer "Composer dependency"
-      at 0,1
-      body "vendor/bin/typo3-dev-companion"
-    install "Install or update"
-      at 1,0
-      rows 2
-      item "generic or --agent=<id>"
-      item "DDEV-aware command"
-      ink
-    group files "Project files written"
-      emphasis
-      mcp "MCP configuration"
-        at 2,0
-      skills "Published task skills"
-        at 2,1
-      state `state.json`
-        at 2,2
-    activate "Activate in client"
-      at 3,0
-      rows 2
-      item "1. Trust or approve"
-      item "2. Restart if required"
-      item "3. Start a fresh session"
-      item "tools/list confirms the server"
-    ready "Ready"
-      at 0,3
-      span 4
-      body "The client exposes typo3_* tools and the installed task skills; update refreshes every recorded setup."
-
-    standalone -> install
-    composer -> install
-    install -> files
-    files -> activate
-    activate -> ready
-
 Choose a way in
 ---------------
 
@@ -100,7 +53,6 @@ Clone the repository and install its dependencies once:
     cd typo3-dev-companion
     composer install
 
-
 The clone takes its name from the binary, not from the repository. In every
 command below, the absolute path is the directory ``git clone`` just made.
 
@@ -110,7 +62,6 @@ Then change into your project and install the entrypoint into its ``.mcp.json``:
 
     cd /path/to/your/project
     /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
-
 
 ``install`` writes this entry, with the real absolute path:
 
@@ -125,7 +76,6 @@ Then change into your project and install the entrypoint into its ``.mcp.json``:
         }
       }
     }
-
 
 Use this setup to work on the knowledge base itself. The ``feedback/`` tools
 exist only in a checkout.
@@ -145,7 +95,6 @@ scope as the place for tools somebody uses across projects:
 .. code-block:: bash
 
     claude mcp add --scope user typo3-dev-companion -- php /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion
-
 
 Name the checkout by its absolute path. Each machine has its own user scope, so
 each machine writes its own path. Do not use a bare command name. It depends on
@@ -188,7 +137,6 @@ requires it, and needs nothing else:
 
     composer require "typo3/dev-companion:@dev"
 
-
 The constraint names a stability, because no release has a tag yet. ``dev-main``
 is the only version, and the default minimum stability refuses a plain require.
 The experimental note in the `readme <../../readme.md>`_ says why. Pin a commit
@@ -200,7 +148,6 @@ entry names a path inside the project. Install it from the root of the project:
 .. code-block:: bash
 
     vendor/bin/typo3-dev-companion install
-
 
 ``vendor/bin/typo3-dev-companion help`` lists both commands and every client
 they accept. Any other argument prints the same text and fails.
@@ -225,7 +172,6 @@ entrypoint there. Everywhere else it names the absolute path of this server:
       }
     }
 
-
 :ref:`installing-which-path-is-written` says which clients resolve a path inside
 the project, and why the others get an absolute one. The knowledge base is part
 of the package, so nothing else needs a deployment or a configuration.
@@ -238,7 +184,6 @@ live in the project at once:
 
     git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
 
-
 .. code-block:: json
 
     {
@@ -246,7 +191,6 @@ live in the project at once:
         { "type": "path", "url": "/absolute/path/to/typo3-dev-companion" }
       ]
     }
-
 
 The require stays the same. Composer resolves it against the checkout instead.
 
@@ -258,7 +202,6 @@ Run the installer inside DDEV:
 .. code-block:: bash
 
     ddev exec vendor/bin/typo3-dev-companion install
-
 
 The project directory is a mount, so the host sees the skills at
 ``.agents/skills``. The entry starts the server with the PHP of the project's
@@ -278,7 +221,6 @@ uses that. Most extension repositories declare ``.build/bin``:
         }
       }
     }
-
 
 This server's own checkout is a DDEV project too, where it has a
 ``.ddev/config.yaml``. ``install`` in it names ``bin/typo3-dev-companion`` the
@@ -318,7 +260,6 @@ Antigravity  ``antigravity``  a plugin, see below          ``.agents/skills``
 Pi           ``pi``           none                         ``.pi/skills``
 ===========  ===============  ===========================  ===================
 
-
 ``typo3-dev-companion help`` prints the same identifiers. Two clients differ
 from the rest:
 
@@ -338,7 +279,6 @@ Turn on ``chat.useAgentSkills`` in VS Code. It is off by default:
 .. code-block:: json
 
     "chat.useAgentSkills": true
-
 
 ``--agent=copilot`` writes the skills to ``.github/skills``. VS Code searches
 that location by default, but only with this switch on. Without it, VS Code
@@ -517,7 +457,6 @@ client entry:
 
     vendor/bin/typo3-dev-companion update
 
-
 ``update`` takes ``--agent=<client>`` too, but rarely needs it. ``install``
 writes every client it set up into ``.typo3-dev-companion/state.json``. This
 page calls that file the record. Without ``--agent=``, ``update`` refreshes
@@ -592,7 +531,6 @@ runs ``post-update-cmd`` after ``composer update``. Add it to the project's own
             ]
         }
     }
-
 
 This package does not write that line. ``install`` and ``update`` write the
 client configuration, the skills and the record. A file that decides what the
@@ -782,7 +720,6 @@ Droid        not documented                                         expansion "d
 Antigravity  ``cwd``, else the plugin's own directory               not documented
 ===========  =====================================================  ===============================================================
 
-
 One client documents the workspace as the default, and four let you set a
 ``cwd``. Two resolve a variable for the project root. One refuses expansion in
 those fields.
@@ -809,7 +746,6 @@ sessions use asks for exactly that:
         }
       }
     }
-
 
 For the other nine, a relative entry would be wrong even on the machine that
 wrote it. An absolute one is at least right there. So ``install`` says so, per

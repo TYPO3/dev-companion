@@ -25,7 +25,7 @@ line.
       bands "12.4 · LTS,13.4 · LTS,14.3 · stable,main · development"
       axis "Covered line"
     title "Version differences are data"
-    description "TYPO3 12 through 15 form the covered timeline. A statement without since or until holds on all of it. Since and until bind one statement to the lines it holds on, and a check runs on both sides of that boundary."
+    description "The covered lines form the timeline. A statement without since or until holds on all of it. Since and until bind one statement to the lines it holds on, and a check runs on both sides of that boundary."
 
     row `no since / until`
       sub "Holds on every covered line."

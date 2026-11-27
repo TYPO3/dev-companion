@@ -55,7 +55,6 @@ These pages describe one step each:
         The prompt a session in somebody else's agent gets when the work ends,
         and why it asks what it asks.
 
-
 Where a session starts
 ----------------------
 
@@ -220,51 +219,16 @@ dependency, the package lives in ``vendor/``, and the next ``composer install``
 would lose anything written there. So there the server stays strictly read-only,
 and neither tool appears in ``tools/list``.
 
-.. diagram::
-    :zoomable:
-    :caption: Evidence stays in the repository instead of leaving with the session.
+A feedback runs through five steps, and the repository keeps the evidence of
+each one:
 
-    flow canvas=960 margin=60
-      columns 1.4,1
-    title "A gap becomes a tested improvement"
-    description "The five steps of the loop, one per row: a real task uses the server, finds a gap, records it as feedback, settles it into a requirement or decision with the check that holds it, and a later task verifies the change. The right column names what the repository keeps at each step, and the emphasis closes the loop from the last step back to the first."
-
-    column 1 "Kept in the repository"
-    use "Real task"
-      at 0,0
-      eyebrow "01 · use"
-      body "Ask the server before searching elsewhere."
-    find "One gap"
-      at 0,1
-      eyebrow "02 · find"
-      body "Missing, wrong or unhelpful, with proof."
-    record "Feedback"
-      at 0,2
-      eyebrow "03 · record"
-      body "One subject, one file, reproducible."
-    settle "Improvement"
-      at 0,3
-      eyebrow "04 · settle"
-      body "The change, and the check that holds it."
-    verify "Next task"
-      at 0,4
-      eyebrow "05 · test"
-      body "Verify what changed; keep the evidence."
-    feedback `feedback/`
-      at 1,2
-      store
-    records `requirements/ · decisions/`
-      at 1,3
-      store
-
-    use -> find
-    find -> record
-    record -> settle
-    settle -> verify
-    record -> feedback
-    settle -> records
-    verify => use
-      via h
+1. A real task asks the server before it searches anywhere else.
+2. The task finds one gap: an answer that is missing, wrong or unhelpful, with
+   proof.
+3. The session records the gap as one feedback, in ``feedback/``.
+4. A later session settles it: the change, and the check that holds it, in
+   ``requirements/`` or ``decisions/``.
+5. The next task verifies what changed, and the loop starts again.
 
 Working a feedback off
 ----------------------

@@ -377,10 +377,12 @@ the verified behaviour it needs
 (`R-SKL-003 <../../requirements/task-skills/skl-003-crossing-into-another-skills-work-is-an-explicit-transition.md>`_).
 
 **And the crossing sits where it happens.** A reader learns the boundary from
-that paragraph, and it is the last thing in the file. A session reads it at the
-moment it leaves a workflow, the moment of least appetite for another one. So
-the crossing itself is a step at the point where it occurs. That step tells the
-session to invoke the successor by name, and says what crosses over
+that paragraph, and it stands at the start of the file
+(`D-SKL-112 <../../decisions/task-skills/skl-112-a-skill-opens-on-its-scope-and-a-list-of-its-steps.md>`_).
+A session reads it before the work, long before it leaves the workflow. That
+moment has the least appetite for another workflow. So the crossing itself is a
+step at the point where it occurs. That step tells the session to invoke the
+successor by name, and says what crosses over
 (`R-SKL-018 <../../requirements/task-skills/skl-018-a-skill-that-hands-over-tells-the-session-to-invoke-the-next-one.md>`_).
 
 An imperative alone is not enough. One skill closed on ``Activate`` and the
@@ -446,12 +448,13 @@ produce a report, from the bodies.
 Publishing it
 -------------
 
-To publish a skill, delete the ``metadata`` declaration above.
-``Installer::skills()`` is the directory minus the skills that still have it.
+The commit that adds the directory publishes the skill. ``Installer::skills()``
+is every directory below ``skills/`` with a ``SKILL.md``
+(`D-SKL-087 <../../decisions/task-skills/skl-087-every-skill-in-the-directory-is-published.md>`_).
 There is no list to add the name to. A list existed once, and a list beside the
 file is a second place for the same fact.
 
-That one edit turns on three things:
+That commit turns on three things:
 
 * ``bin/typo3-dev-companion install`` copies the skill into the skills directory
   of every client.

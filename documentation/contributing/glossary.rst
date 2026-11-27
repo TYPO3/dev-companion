@@ -21,8 +21,9 @@ word has one meaning, and the page gives it in one entry.
     :a feedback: One report about this server, from a session that works
         somewhere else. Countable here: one report, one file, one subject.
     :the feedback channel: ``feedback/``, where feedback arrives and waits.
-        ``typo3_feedback_record`` writes into it, and ``bin/cli feedback`` reads
-        it.
+        ``typo3_feedback_record`` writes into it, ``bin/cli feedback:list``
+        lists it, and ``bin/cli feedback:archive`` moves a feedback into
+        ``feedback/archive/``.
     :forward review: An open scenario in ``scenarios/forward/`` that names no
         subsystem, skill or expected finding.
     :hint: One statement in ``knowledge/hints/``. ``bin/cli hints:probe``
@@ -52,7 +53,7 @@ word has one meaning, and the page gives it in one entry.
     :todo: One entry in the order of the work.
     :tool: One ``typo3_<subject>_<verb>`` this server offers its callers. It is
         the MCP primitive of that name and one class in ``src/Tool/``.
-        ``TYPO3\DevCompanion\Tools`` lists it.
+        ``TYPO3\DevCompanion\Tool\Registry`` lists it.
     :tool verb: One of ``lookup``, ``guide``, ``list``, ``scope``, ``describe``,
         ``record``. It tells a caller the shape of the answer.
     :verdict: How a recorded run came out: ``covered``, ``partial``, ``gap``.

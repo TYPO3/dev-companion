@@ -49,7 +49,7 @@ final class DocumentationLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Search or read the official live TYPO3 documentation for a covered TYPO3 line. It searches four manuals: TYPO3 Explained, TypoScript Explained, the TCA Reference and the Fluid ViewHelper Reference, by page title, heading, path and the names each declares. Search with several short English queries; every result carries a canonical URL, with the anchor of the heading where one answered. Pass one of those URLs back as page with the same targetVersion to receive that page as text, headings and code examples included. A query that names a Fluid tag such as f:if gets its answer from the ViewHelper reference alone. Ask without the prefix for the other manuals\' Fluid chapters. This reaches docs.typo3.org, unlike the bundled convention lookups.';
+        return 'Search or read the official live TYPO3 documentation for a covered TYPO3 line. It searches four manuals: TYPO3 Explained, TypoScript Explained, the TCA Reference and the Fluid ViewHelper Reference. It matches the page title, the heading, the path and the names each declares. Search with several short English queries; every result carries a canonical URL, with the anchor of the heading where one answered. Pass one of those URLs back as page with the same targetVersion to receive that page as text, headings and code examples included. A query that names a Fluid tag such as f:if gets its answer from the ViewHelper reference alone. Ask without the prefix for the other manuals\' Fluid chapters. This reaches docs.typo3.org, unlike the bundled convention lookups.';
     }
 
 

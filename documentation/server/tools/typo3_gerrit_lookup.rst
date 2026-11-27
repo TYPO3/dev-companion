@@ -30,11 +30,11 @@ diff itself in a checkout: fetch.ref gets you there, and files says how much of
 the file list to carry. An empty answer says whether it means an absence, since
 a private change is invisible to an anonymous read. issue, query, path and a
 backlog without a person or a vote filter read Forger first, the index of
-review.typo3.org, and the review server where Forger does not answer. A change
-read by name always comes from the review server. source names the host that
-answered. Forger finds any of the query words, the review server every one. The
-issue itself is typo3_forge_lookup. This tool reads only: you review, vote and
-upload yourself. Answers from: network.
+review.typo3.org. Where Forger does not answer, they read the review server. A
+change read by name always comes from the review server. source names the host
+that answered. Forger finds any of the query words, the review server every one.
+The issue itself is typo3_forge_lookup. This tool reads only: you review, vote
+and upload yourself. Answers from: network.
 
 .. facts::
 

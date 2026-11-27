@@ -11,15 +11,15 @@ Pass query with the subject, for example "news", "calendar" or "cookie consent",
 before you build a feature yourself. It searches extensions.typo3.org and the
 TYPO3 extension packages on packagist.org, because an extension can stand on
 Packagist alone. Each match names its Composer package, its extension key, its
-description, its downloads, the registries that found it, and from the TER the
-current version and the TYPO3 majors it declares. Pass extension with the key,
-the one extra.typo3/cms.extension-key declares and not the Composer package
-name. Every published version comes back, highest number first. That is the
-number, the state, the upload day, the TYPO3 majors it declares and the
-constraints.depends.typo3 of its release. This is the question a release audit
-cannot answer from the repository under audit. Tailor refuses to package unless
-ext_emconf.php names the version of the release. So that file still names it
-after the upload, and a published checkout reads exactly like one nobody has
+description, its downloads and the registries that found it. From the TER it
+also names the current version and the TYPO3 majors it declares. Pass extension
+with the key, the one extra.typo3/cms.extension-key declares and not the
+Composer package name. Every published version comes back, highest number first.
+That is the number, the state, the upload day, the TYPO3 majors it declares and
+the constraints.depends.typo3 of its release. This is the question a release
+audit cannot answer from the repository under audit. Tailor refuses to package
+unless ext_emconf.php names the version of the release. So that file still names
+it after the upload, and a published checkout reads exactly like one nobody has
 published. Pass extensionVersion as well to learn whether the registry already
 holds that number. It reports what the registry holds and judges no version
 free; the comparison against the working tree is yours. A key with nothing

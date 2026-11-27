@@ -15,7 +15,7 @@ recently. What separates a current answer from a two-major-old one stands here
 and almost nowhere else. A deprecation carries the version it stops to work in
 where the entry states one, and the rule that answers the rest beside it. The
 tool reads the entries from docs.typo3.org, which renders them after every
-merge, so a version you have not installed and a change merged today are both in
+merge. So a version you have not installed and a change merged today are both in
 reach. Where docs.typo3.org does not answer, it reads the core package on disk.
 An entry has to carry every word of the query; narrow further with type and
 version. A version and a type with the query omitted list whole under a raised

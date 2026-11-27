@@ -411,7 +411,7 @@ final class ToolSurface
                 ...Rst::heading($source->value, 1),
                 self::wrap($source->meaning()),
                 '',
-                self::wrap($tools === [] ? 'No tool answers from it.' : implode(', ', $tools) . '.'),
+                ...($tools === [] ? ['No tool answers from it.'] : array_map(static fn(string $tool): string => '- ' . $tool, $tools)),
                 '',
             ];
         }

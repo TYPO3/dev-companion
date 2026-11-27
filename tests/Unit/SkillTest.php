@@ -2211,30 +2211,35 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-issue-triage/SKILL.md',
         ));
 
+        $attempt = self::flat((string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-issue-triage/references/previous-attempt.md',
+        ));
+
         // The general form, which is the part that transfers off this issue.
         self::assertStringContainsString(
             'A reverted core fix becomes re-attemptable when somebody has rebuilt the shared consumer that made it '
                 . 'expensive. It also does when the caller set has shrunk to the one site the fix needs',
-            $skill,
+            $attempt,
         );
-        // The trigger, read off the answer rather than out of the reading.
-        self::assertStringContainsString('A relation marked `precedes` or `duplicates` carries its subject', $skill);
+        // The trigger, read off the answer rather than out of the reading. It
+        // stands in the step that names the reference (`D-SKL-112`).
+        self::assertStringContainsString('A relation marked `precedes` or `duplicates` comes with its subject', $skill);
         self::assertStringContainsString('`reviews` names every change the journal mentions', $skill);
-        // And the boundary, because the step sits directly above the handoff
-        // and a skill that starts designing here has taken the next one's work.
-        self::assertStringContainsString('It is not a design and not a patch', $skill);
+        // And the boundary, because the step feeds the handoff and a skill
+        // that starts designing here has taken the next one's work.
+        self::assertStringContainsString('It is not a design and not a patch', $attempt);
         // What leads to the attempt. A second lookup of a change the issue
         // answer already carried returns its state a second time. It never
         // returns the diff the step says it is after. So the step routes to the
         // page the fetch is on instead (`D-SKL-028`).
-        self::assertGreaterThan(
-            strpos($skill, 'What a previous attempt cost'),
-            strpos($skill, 'typo3://guides/core/contribution/gerrit-workflow'),
+        self::assertStringContainsString(
+            'typo3://guides/core/contribution/gerrit-workflow',
+            $attempt,
             'the step does not route to the page the fetch is on',
         );
         self::assertLessThan(
             strpos($skill, 'Where the triage ends and the patch begins'),
-            strpos($skill, 'What a previous attempt cost'),
+            strpos($skill, '[references/previous-attempt.md](references/previous-attempt.md)'),
             'the step stands after the handoff it feeds',
         );
     }
@@ -2298,7 +2303,7 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString(
-            '**A verdict that ends the issue carries the comment that closes it.**',
+            '**A verdict that ends the issue comes with the comment that closes it.**',
             $skill,
         );
         // The markup, because the answer's own form is markdown and something
@@ -2320,16 +2325,16 @@ final class SkillTest extends TestCase
             '**Gone**, **Superseded** and **Not a defect** end the issue',
             $checklist,
         );
-        self::assertStringContainsString('The other three hand over nothing', $checklist);
+        self::assertStringContainsString('The other three come with no comment', $checklist);
         self::assertStringContainsString(
-            '**A security defect** owes the tracker nothing',
+            '**A security defect** gives the tracker nothing',
             $checklist,
             'the verdict that withholds the answer is offered a closing comment',
         );
 
         // What the comment carries that the status cannot, and where the release
         // it names comes from.
-        self::assertStringContainsString('Forge carries no resolution field', $checklist);
+        self::assertStringContainsString('Forge has no resolution field', $checklist);
         self::assertStringContainsString('`git tag --contains <commit>`', $checklist);
         self::assertStringContainsString(
             'The `Releases:` trailer names the branches the author wrote the change for',
@@ -2371,8 +2376,8 @@ final class SkillTest extends TestCase
 
             // Asked of every finding, because a rule that fires on how alarming
             // something looks fires on the findings that were never the danger.
-            self::assertStringContainsString(
-                '## Where the finding is a vulnerability',
+            self::assertMatchesRegularExpression(
+                '/## (\\d+\\. )?Where the finding is a vulnerability/',
                 $skill,
                 $name . ' names no stopping point for a finding that is a vulnerability',
             );
@@ -3344,14 +3349,14 @@ final class SkillTest extends TestCase
         $body = self::flat((string) file_get_contents(
             Paths::root() . '/skills/typo3-core-issue-triage/SKILL.md',
         ));
-        self::assertStringContainsString('## Find the candidates', $body);
+        self::assertStringContainsString('## 1. Find the candidates', $body);
         // What makes that section a job rather than a first step. And the half
         // a trigger alone would route a backlog request into a body without.
         self::assertStringContainsString(
             'Triaging a backlog and triaging an issue are two different jobs',
             $body,
         );
-        self::assertStringContainsString('pass the name as `involving`', $body);
+        self::assertStringContainsString('**`involving`**, where the request names a person rather than an area', $body);
     }
 
     /**

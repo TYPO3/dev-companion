@@ -1,366 +1,377 @@
 ---
 name: typo3-core-issue-triage
-description: 'Find the issues worth working on in an area of the forge.typo3.org backlog or in one person''s — old or untouched ones, and whether anybody is on one — or say what is still true about one issue: whether it still happens in the checkout, was fixed, or was never a defect. A task that ends in a patch starts here; the patch is typo3-core-patch-development''s.'
+description: 'Find the issues worth working on in an area of the forge.typo3.org backlog or in one person''s — old or untouched ones, and whether anybody is on one — or say what is still true about one issue: whether it still happens in the checkout, was fixed, or was never a defect. A task that ends in a patch starts here; typo3-core-patch-development writes it.'
 compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Core Issue Triage
 
-Take one open issue and say what is still true about it. Or take an area of the
-backlog and hand back the candidates worth work. Keep this skill as routing and
-the order of the work. The tracker, the review server and the checkout's own
-commands are lookups. A copy of what they answer goes stale here, and nothing
-reports it.
+This skill covers what is still true about issues on forge.typo3.org. Use it to
+find the issues in an area of the backlog that are worth work. Use it also to
+say whether one issue still happens, was fixed, or was never a defect. It stops
+before the fix, which `typo3-core-patch-development` covers. It also stops at
+the tracker: nothing here comments on an issue, assigns, closes or reopens it.
 
-Triage is not a smaller version of the patch. What it produces is a statement
-somebody can act on. This still happens, this is gone, this was never a defect,
-nobody can settle this without X. The outcome that ends the work early is the
-valuable one.
+**A triage produces a statement somebody can act on.** "This still happens",
+"this is gone", "this was never a defect" or "nobody can settle this without X".
+A result that ends the work early is the most valuable one.
 
-## Find the candidates
+Keep this skill as routing and stop rules: it says which tool to ask and when to
+stop. The tracker, the review server and the checkout's own commands give the
+facts. A copy of their answers here would go out of date, and nothing would
+report it.
 
-1. Work through [references/base.md](references/base.md), which fixes the order
-   every task here starts in. It establishes the checkout you stand in, which
-   the verification below runs against.
-2. `typo3_forge_lookup` with `backlog` to get it rather than one issue. `oldest`
-   and `stale` are two different questions, and the second is usually the one
-   the user asks. Filed long ago is about the report. Untouched for years is
-   about the attention it got. Somebody works on an issue filed in 2009 with a
-   comment from last month.
+## Steps at a glance
 
-   Narrow with `category` in the user's own words, and with `tracker`. An old
-   Bug and an old Feature are two different findings. One claims something is
-   broken today, the other that somebody wanted something once.
+1. Find the candidates in the backlog, and let the user choose.
+2. Establish what the issue claims.
+3. Ask what happened since the report.
+4. Verify the claim against the checkout you work in.
+5. Check whether the finding is a vulnerability.
+6. Write the verdict.
+7. Hand over to the patch when the user asks for the fix.
 
-   Where the request names a person rather than an area, pass the name as
-   `involving`. That is what they filed and what they hold, as one set. Never
-   pass a name as `query`, which matches the text of an issue rather than whose
-   it is.
+Before step 1, work through [references/base.md](references/base.md). It fixes
+the order every task starts in. It also establishes the checkout that step 4
+verifies against. Where the request names one issue, start at step 2.
 
-   Where the request names a topic inside an area, pass its words as `words`.
-   They match the subject and the description inside the set the area selects.
-   `offset` pages through a set larger than 50.
+## 1. Find the candidates
 
-   Read the count that comes back against the number of entries. A page is not
-   the set. A triage that takes thirty of two thousand for the problem has
-   measured the limit rather than the backlog.
+Call `typo3_forge_lookup` with `backlog` to get a list rather than one issue.
+Then narrow it:
 
-**Nothing in that list is a finding.** Age makes an issue a candidate and says
-nothing about whether it is right. A report from 2011 can describe behaviour the
-branch still has. One from last year can be about code that no longer exists.
-The rest of this order separates them.
+- **`oldest` or `stale`.** These answer two different questions, and users
+  usually mean the second. `oldest` is about when somebody filed the report.
+  `stale` is about when anybody last touched it. An issue filed in 2009 can have
+  a comment from last month.
 
-**The list is the first deliverable, and the choice from it is not yours.**
-Triaging a backlog and triaging an issue are two different jobs. The step below
-is the second one: it takes a number. Hand the backlog over first, one row per
-candidate with what the user chooses on. That is the number, the area, the
-subject, and how long it has sat untouched. It is whether the code its text
-names is still installed here.
+- **`category`**, in the user's own words.
 
-Let whoever asked pick. A session that picks for itself reports on four issues
-out of thirty-nine. It has silently answered a question nobody asked. Where the
-request really was "just find me something", say which rows you would take and
-why. Let that be the choice.
+- **`tracker`.** An old Bug and an old Feature are different findings. A Bug
+  claims that something is broken today. A Feature says that somebody once
+  wanted something.
 
-**Where you do pick, pick on where the symptom is visible and on how much the
-checkout already models it.** Age is not it, and neither is the subject matter.
-Read in this order and stop at the first that decides:
+- **`involving`**, where the request names a person rather than an area. It
+  returns what the person filed and what is assigned to them, as one set. Never
+  pass a name as `query`. That matches the text of an issue, not the people on
+  it.
 
-- **What has already happened to it.** A change on the review server is the
-  cheapest description of what a fix looks like. One somebody abandoned is a
-  verdict somebody wrote down. A relation to an epic, or to an accepted parent,
-  says the report is one strand of a larger piece. That piece's decision is not
-  a session's to take.
-- **Whether the code it names is still there.** Every row carries the classes,
-  methods and core files its own text cites. Each comes with where it stands in
-  the packages installed here. So a report whose names are all gone settles
-  without one open file. A name the answer could not place decides nothing, and
-  neither does one that stands. A class that is still there is a candidate to
-  read rather than a defect that still reproduces.
-- **The category, against the branch you stand on.** One that names a subsystem
-  the branch no longer ships settles the issue before you read the report. The
-  tracker keeps a category long after the code goes. Most of an old backlog
-  still names subsystems that are there.
-- **Where the symptom appears.** A rendered fragment, a stored row, a resolved
-  value: you reach anything a process produces in the cheap layers. Those need
-  neither an installation nor a browser. One that appears only after an
-  interaction in the backend needs both, and that is most of the session.
-- **How far the mechanism reaches.** A report that names one class and the
-  behaviour in it is the shape you can settle. One that names several and the
-  order between them has already said it is an interaction. A reporter who
-  worked that out is usually right.
-- **What the suite already models.** Look for a test over the class the report
-  is about, at the level the symptom appears at. A case added to a file that
-  exists is a reproduction with no fixture to build. The level is the whole of
-  it. A component tested on its own cannot see an order between components. The
-  core models more constellations than a category suggests.
+- **`words`**, where the request names a topic inside an area. They match the
+  subject and the description inside the set the area selects.
+
+- **`offset`**, to page through a set larger than 50.
+
+Compare the count in the answer with the number of entries. A page is not the
+whole set. A triage that takes thirty of two thousand for the backlog has
+measured the page limit.
+
+**Nothing in that list is a finding yet.** Age makes an issue a candidate. It
+says nothing about whether the report is right. A report from 2011 can describe
+behaviour the branch still has. A report from last year can be about code that
+no longer exists. Steps 2 to 4 tell the two apart.
+
+### Hand the list over
+
+**The list is the first deliverable, and the user chooses from it.** Triaging a
+backlog and triaging an issue are two different jobs. Step 2 starts the second
+job, and it needs one issue number. Give one row per candidate, with what the
+user chooses on:
+
+- the number, the area and the subject;
+- how long nobody has touched it;
+- whether the code its text names is still installed here.
+
+Let the user pick. A session that picks for itself reports on four issues out of
+thirty-nine. It answers a question nobody asked. Where the request really was
+"just find me something", say which rows you would take and why. Then let the
+user choose.
+
+### When you choose
+
+**Choose by where the symptom is visible and by how much the checkout already
+models it.** Age does not decide it, and the subject does not either. Read these
+in order, and stop at the first that decides:
+
+1. **What already happened to it.** A change on the review server is the
+   cheapest description of a fix. An abandoned change is a verdict somebody
+   wrote down. A relation to an epic or to an accepted parent makes the report
+   one part of larger work. The decision about that larger work is not yours.
+
+2. **Whether the code it names is still there.** Every row lists the classes,
+   methods and core files its text cites. Each comes with where it is in the
+   packages installed here. A report whose names are all gone is settled without
+   one open file. A name the answer could not find decides nothing. A name that
+   is still there decides nothing either. Its class is a candidate to read, not
+   a defect that still reproduces.
+
+3. **The category, against your branch.** A category that names a subsystem the
+   branch no longer ships settles the issue before you read the report. The
+   tracker keeps a category long after the code is gone. But most of an old
+   backlog names subsystems that are still there.
+
+4. **Where the symptom appears.** You reach a rendered fragment, a stored row or
+   a resolved value without an installation or a browser. A symptom that appears
+   only after a click in the backend needs both. That takes most of the session.
+
+5. **How far the mechanism reaches.** A report that names one class and its
+   behaviour is one you can settle. A report that names several classes and the
+   order between them describes an interaction. A reporter who worked that out
+   is usually right.
+
+6. **What the suite already models.** Look for a test of the class the report is
+   about, at the level where the symptom appears. A case added to an existing
+   file is a reproduction with no fixture to build. The level decides it. A test
+   of one component alone cannot see the order between components. The core
+   models more combinations than a category suggests.
 
 Say which of those decided. Say of the rows you passed over that you passed over
-them. A skip is not a triage, and the list is still what the user asked for.
+them. A skipped row is not a triaged row, and the list is still what the user
+asked for.
 
 **End the list with each step of the base order you did not reach.** Give each
-one a line: `Not reached: <step> — <why>`. A list of the
-backlog changes nothing, so the deprecation sweep is one of them.
+one a line: `Not reached: <step> — <why>`. A list of the backlog changes no
+code, so the deprecation sweep is one of them.
 
-## Establish what the issue claims
+## 2. Establish what the issue claims
 
-3. `typo3_forge_lookup` with the number. Read what comes back as a report rather
-   than as a specification. Three parts of it are not in the description a
-   session otherwise starts from. Those are the **status and target version as
-   they stand today**, the **relations**, and the **notes**. The relations are
-   one hop from the change that introduced the behaviour. The notes are where a
-   maintainer said why.
+Call `typo3_forge_lookup` with the issue number. Read the answer as a report,
+not as a specification. Four parts of it are not in the description:
 
-   The assignee is the fourth. On an old issue it usually names who last touched
-   it rather than who is on it. An assignee is not evidence that anybody works
-   on it, and an unassigned issue is not evidence that nobody minds.
+- **The status and the target version**, as they are today.
 
-Separate the three claims the report mixes before you verify any of them. Those
-are what the reporter saw, what they believed caused it, and what they wanted
-instead. The first is the only one a checkout can settle. A report is regularly
-right about the symptom and wrong about the cause. To verify the cause and
-report the issue as invalid is the most common way this work goes wrong.
+- **The relations.** They often lead directly to the change that introduced the
+  behaviour.
 
-Where the issue quotes a rule, verify it in the checkout. A rule is "do not use
-an API this way" or "this is not supported". Do not carry it at the strength the
-reporter put on it. Enforced in code, warned about in a docblock and advised in
-prose are three different claims. The reporter's word for all three is the same.
+- **The notes.** A maintainer wrote the reasons there.
 
-## Ask what happened since the report
+- **The assignee.** On an old issue it usually names who last touched it, not
+  who works on it. An assignee is not evidence that anybody works on it. An
+  issue without one is not evidence that nobody cares.
 
-4. `typo3_gerrit_lookup` with the issue number, **before you open the
-   checkout**. Its cheapest outcome is the one that ends the work. Somebody has
-   a patch up, and the triage is that it is under review rather than
-   unaddressed. An answer of nothing is a result, and a narrow one. The server
-   reads the review server without a credential. So nothing public names the
-   issue, which is not that nobody fixed it.
-5. `typo3_changelog_lookup` with the words the report uses. It says whether the
-   core deprecated, removed or reworked the area since the report. A rework
-   turns a valid report into one about code that is gone. It also makes the
-   reproduction below fail for a reason that has nothing to do with the defect.
+Before you verify anything, separate the three claims a report mixes:
 
-A changelog records change events. So an area nobody has touched has no entry at
-all. An empty answer is not evidence that the behaviour stayed the same.
+- what the reporter saw;
+- what they believed caused it;
+- what they wanted instead.
 
-## Verify against the checkout you stand in
+A checkout can settle only the first. A report is often right about the symptom
+and wrong about the cause. This work most often fails like this: you disprove
+the cause and report the whole issue as invalid.
+
+The report can quote a rule, such as "do not use an API this way" or "this is
+not supported". Verify that rule in the checkout. Do not repeat it at the
+strength the reporter gave it. Code can enforce a rule, a docblock can warn
+about it, or prose can advise it. Those are three different claims, and a
+reporter uses the same words for all three.
+
+## 3. Ask what happened since the report
+
+Make these two calls before you open the checkout:
+
+1. **`typo3_gerrit_lookup` with the issue number.** Its cheapest result ends the
+   work: somebody has a patch up. Then the triage is that the issue is under
+   review. An empty answer is a result, but a narrow one. The server reads the
+   review server without a login. So it shows only that nothing public names the
+   issue, not that nobody fixed it.
+
+2. **`typo3_changelog_lookup` with the words the report uses.** It says whether
+   the core deprecated, removed or reworked the area since the report. After a
+   rework, a valid report can be about code that is gone. A rework also makes a
+   reproduction fail for a reason unrelated to the defect.
+
+A changelog records changes, so an area nobody changed has no entry. An empty
+answer is not evidence that the behaviour stayed the same.
+
+**When the history shows a fix that somebody reverted, read
+[references/previous-attempt.md](references/previous-attempt.md).** The issue
+answer shows that history before you open the checkout. A relation marked
+`precedes` or `duplicates` comes with its subject. `reviews` names every change
+the journal mentions.
+
+## 4. Verify against the checkout you work in
 
 Reproduce against what the branch does today, never against the version in the
-report. Half of what an old issue describes is usually gone, and the half that
+report. Much of what an old issue describes is usually gone. The part that
 remains is the finding.
 
-Establish the code path first. Find the class the report is about and read
-whether the behaviour it describes is still there. That separates "still
-happens" from "cannot happen any more, the method is gone". The second is a
-verdict that needs no reproduction at all.
+### Find the code path
+
+Find the class the report is about. Read whether the behaviour it describes is
+still there. That separates "still happens" from "cannot happen any more, the
+method is gone". The second is a verdict that needs no reproduction.
+
+### Look for a test the core switched off
 
 **Before you write a test, look for the one the core already wrote and switched
-off.** Where people knew a defect and nobody fixed it, the suite regularly
-carries it as a commented-out data-provider row. The reason stands beside it.
-The fixture under it already models the constellation.
+off.** Where a defect was known and not fixed, the suite often keeps it as a
+data-provider row in a comment. The reason is in a comment beside it. The
+fixture under it already models the situation.
 
-`grep -rn "@todo" <sysext>/Tests` narrowed to the subsystem the report is about
-is the whole of the search. The reason text says whether a hit is this report.
-"Fails, not expanded to sub-pages" is one, and "wrong assertion" is a note to
-whoever wrote the test. There are few of them and they are worth the one grep.
-To remove a comment is a reproduction with no fixture to build and no harness to
-prove.
+Run `grep -rn "@todo" <sysext>/Tests` for the subsystem the report is about.
+That is the whole search. The reason text says whether a hit is this report.
+"Fails, not expanded to sub-pages" is one. "Wrong assertion" is a note to
+whoever wrote the test. There are few hits, and they are worth the one grep.
+Where you find one, remove the comment. That is a reproduction with no fixture
+to build.
 
-`markTestSkipped` is a different thing and rarely this one. Most of them are
-about the machine: no APCu, no Redis, no ImageMagick, a case-sensitive
-filesystem. A test skipped for the environment says nothing about the report.
+`markTestSkipped` is a different thing and rarely this one. Most skips are about
+the machine: no APCu, no Redis, no ImageMagick, a case-sensitive file system. A
+test skipped for the environment says nothing about the report.
 
-`typo3_test_run_guide` with the paths you have just read says which suites can
-fail on them. It says whether a test can pin the behaviour at all. Where it can,
-a test that fails is the strongest thing a triage produces. It survives a
-handover to somebody else, and it is the patch's first half already written.
-Where no layer can hold it — backend markup, a build step, shipped JavaScript —
-say so. Reproduce by hand instead, and write down the steps and what you saw.
+### Write a test that fails
 
-That test is a throwaway until a patch adopts it, and it has three rules of its
-own. It goes where the suite already looks. It mirrors the path of the class it
-is about, because a file the runner does not collect proves nothing.
+Call `typo3_test_run_guide` with the paths you read. It names the suites that
+can fail on them, and whether a test can pin the behaviour at all. Where it can,
+a failing test is the strongest result of a triage. It stays valid when somebody
+else takes over, and it is the first half of the patch.
 
-**Watch it fail before you believe it.** A reproduction that is green on its
-first run tests nothing until you have shown it red. A first run may fail for a
-reason that is not the issue. That is a field the type does not show, or a
-fixture nobody loaded. That is a result about your harness and not about the
-report. And it comes out again when the triage ends, unless the work carries on
-into the patch that keeps it.
+Where no test layer can hold the behaviour, say so. Backend markup, a build step
+and shipped JavaScript are such cases. Then reproduce by hand, and write down
+the steps and what you saw.
 
-**The core's suites are not the ones a manifest here declares. You do not run
-them the way you run an extension's.** They belong to the core's own runner,
-which no `composer` script names. `typo3_test_run_guide` gives the targeted
-invocation for the paths in hand rather than a suite name to guess at.
+That test is a throwaway until a patch adopts it. Three rules apply to it:
 
-`typo3_script_lookup` is the rest of what that runner offers. That is the
-options that decide which PHP and which database a suite runs against. An old
-report turns on exactly that when it says the behaviour depends on either.
+- **Put it where the suite already looks.** Mirror the path of the class it
+  tests. The runner does not collect a file anywhere else, and a test it never
+  runs proves nothing.
 
-Where the symptom is in the rendered output, the throwaway has to produce it
-before it can assert anything. The value is the unknown rather than the
-expectation. `typo3_rule_lookup` with
-`documentId="core/testing/proving-a-rendering"` is that harness. It says how the
-snippet goes into TypoScript and which operator forms silently do something
-else. It says how you print the rendered HTML at all.
+- **Watch it fail before you believe it.** A reproduction that passes on its
+  first run tests nothing until you have seen it fail. A first run can also fail
+  for a reason that is not the issue. A field the type does not show and a
+  fixture nobody loaded are examples. That is a result about your test, not
+  about the report.
 
-Two of those decide whether a reproduction means anything. The step the base
-opens with already answered both:
+- **Remove it when the triage ends**, unless the work goes on into the patch
+  that keeps it.
 
-- **Where the checkout has a DDEV project, the suites and the console run inside
-  it.** The same command in your own shell runs on whatever PHP the machine
-  carries and against whatever database it has. That reproduces something else
-  and looks identical in the output. `typo3_project_describe` says whether this
-  checkout is one of those and what the form is. Take it from there rather than
-  from what worked in another repository.
+### Run the core's suites
+
+**The core's suites run through the core's own runner.** No `composer` script
+names them, unlike an extension's. `typo3_test_run_guide` gives the targeted
+command for the paths in hand. Do not guess a suite name.
+
+`typo3_script_lookup` gives the other options of that runner. They include which
+PHP and which database a suite runs against. An old report often depends on
+exactly that.
+
+Where the symptom is in the rendered output, the test has to produce that output
+before it can assert anything. The output is the unknown, not the expected
+value. Call `typo3_rule_lookup` with
+`documentId="core/testing/proving-a-rendering"`. It says how the snippet goes
+into TypoScript, and which operator forms silently do something else. It also
+says how to print the rendered HTML.
+
+Check three things before you believe a run. The base order answered the first
+two at its start:
+
+- **Where the checkout has a DDEV project, run the suites and the console inside
+  it.** The same command in your own shell uses the PHP and the database of your
+  machine. It reproduces something else, and the output looks the same.
+  `typo3_project_describe` says whether this checkout has one and what the
+  command is. Take it from there, not from what worked in another repository.
+
 - **A green that ran over no files is not a green.** Where a suite reports
   success, confirm it inspected something — the count of tests or files it
-  names. Do that before you read it as proof that the behaviour is gone. That is
-  the failure mode a triage is most exposed to. "The suite passes" is the
-  evidence it is about to write a verdict on.
-- **Once you commit the change, `git stash` measures nothing.** The same failure
-  in a second costume. The stash finds nothing to save on a clean tree. The run
-  that follows is the patched code, and the result reads as a without-patch
-  measurement.
+  names. Do that before you read it as proof that the behaviour is gone. A
+  triage is most exposed to this failure. Its verdict is about to rest on "the
+  suite passes".
 
-  Compare against the parent instead: a worktree on `HEAD~1`, or
-  `git revert --no-commit` with a restore after. Confirm that the tree changed
-  before you believe the run. `git stash list` that names nothing new should
-  stop you.
+- **Once you commit the change, `git stash` measures nothing.** On a clean tree
+  the stash saves nothing. The next run tests the patched code, but it reads as
+  a measurement without the patch.
 
-An old report frequently names the versions the reporter saw it on. Those are
-what the reporter had, not what it still reproduces on. The version the suites
-run against here is a property of this checkout. Say which one the verification
-used. A verdict that names no version and no branch is one nobody can repeat.
+  Compare against the parent commit instead: a worktree on `HEAD~1`, or
+  `git revert --no-commit` and a restore after it. Confirm that the tree changed
+  before you believe the run. Stop when `git stash list` names nothing new.
 
-**A reproduction that fails to reproduce is a result and not a dead end.** Say
-which of the three it is. The behaviour is gone, the steps were insufficient, or
-the report never contained enough to try. They lead to opposite outcomes. They
-look identical in a session that only writes down "could not reproduce".
+### Name the version
 
-## Where the finding is a vulnerability
+An old report often names the versions the reporter saw it on. Those are what
+the reporter had, not where it still reproduces. The version the suites run
+against is a property of this checkout. Say which version and which branch the
+verification used. Nobody can repeat a verdict that names neither.
 
-**Ask it of every finding before you write the verdict, not when one happens to
-look alarming.** A triage produces what makes up a vulnerability report: a
-step-by-step reproduction against a branch people run. It produces it for the
-tracker. Nothing else in this order asks the question. So the step that was
-meant to report the finding would disclose it.
+**A reproduction that fails is a result, not a dead end.** Say which of three it
+is:
 
-The stopping point is the verified reproduction. It stands, and you take no
-public step. Nothing about the finding goes into the issue, onto the review
-server or into a chat. Not the reproduction, not the test that fails, not the
-verdict.
+- the behaviour is gone;
+- your steps were not enough;
+- the report never had enough to try.
 
-Where it goes instead is `typo3_rule_lookup` with
+They lead to opposite outcomes. In a report that only says "could not
+reproduce", they look the same.
+
+## 5. Where the finding is a vulnerability
+
+**Ask this of every finding before you write the verdict, not only when one
+happens to look alarming.** A triage produces what a vulnerability report
+consists of: a step-by-step reproduction against a branch people run. And it
+produces it for a public tracker. No other step asks the question. Without this
+step, the report of the finding would disclose it.
+
+**The stopping point is the verified reproduction.** Keep it, and take no public
+step. Put nothing about the finding into the issue, onto the review server or
+into a chat. That includes the reproduction, the failing test and the verdict.
+
+Instead, call `typo3_rule_lookup` with
 `documentId="any/security/reporting-a-vulnerability"`. That is the whole
-procedure, and it also stands as
-`typo3://guides/any/security/reporting-a-vulnerability`. Read the address there
-and never from here. A contact route is the fact that moves, and this file is a
-copy no release of this server corrects.
+procedure. It is also served as
+`typo3://guides/any/security/reporting-a-vulnerability`. Read the contact
+address there, never from this file. A contact address can change, and no
+release of this server corrects a copy of this skill.
 
-Hand over what that report needs: the branch, the code path, the reproduction
-and the version it ran on. Say that you withhold the ordinary verdict and why.
-The user files it. This workflow supplies what the report rests on and takes no
-step of its own.
+Hand over what the report needs: the branch, the code path, the reproduction and
+the version it ran on. Say that you hold back the normal verdict, and why. The
+user files the report. This skill supplies the material and takes no step of its
+own.
 
-## Say what the triage found
+## 6. Write the verdict
 
-[references/checklist.md](references/checklist.md) carries the verdicts, what
-evidence each one owes, and the questions that decide between them. Read it
-before you write the answer rather than after. The verdicts are not degrees of
-confidence in one finding. The one you pick first decides what you still have to
+Read [references/checklist.md](references/checklist.md) before you write the
+answer, not after. It lists the verdicts, the evidence each one needs, and the
+questions that decide between them. The verdicts are not degrees of confidence
+in one finding. The verdict you pick first decides what you still have to
 establish.
 
-Report what you did not establish beside what you did. A triage whose reading
-stopped at the code path says so. The next person's work is exactly the part you
+Report what you did not establish beside what you did. Where your reading
+stopped at the code path, say so. The next person's work is exactly the part you
 left.
 
 End the verdict with each step of the base order you did not reach. Use the same
 form: `Not reached: <step> — <why>`.
 
 **The verdict is markdown the reader can copy, and the answer is where it
-goes.** You write it for the person who will act on it, and rendered output does
-not survive the move. Put the whole verdict in one fenced `markdown` block, with
-a fence of four backticks. A client that renders the answer hands a copy over as
-rendered text, and the fence keeps the source. Write it to a file only where the
-caller asks for one, at a path outside the checkout. This workflow leaves that
-tree as it found it.
+goes.** You write it for the person who acts on it, and rendered output does not
+survive the move. Put the whole verdict in one fenced `markdown` block, with a
+fence of four backticks. A client that renders the answer copies it as rendered
+text, and the fence keeps the source. Write it to a file only where the caller
+asks for one, at a path outside the checkout. This skill leaves the checkout as
+it found it.
 
-**A verdict that ends the issue carries the comment that closes it.** Three of
-them do. The checklist says which, what that comment holds and which markup the
-tracker renders. Forge is not markdown. The comment stands in the answer beside
-the verdict it rests on. Filing it is the maintainer's act. This workflow holds
-no credential and comments on nothing.
+**A verdict that ends the issue comes with the comment that closes it.** Three
+verdicts end an issue, and the checklist names them. It also says what the
+comment contains and which markup Forge renders. Forge is not markdown. Put the
+comment in the answer, beside the verdict. Filing it is the maintainer's act.
+This skill has no login and comments on nothing.
 
-## What a previous attempt cost
+## 7. Where the triage ends and the patch begins
 
-Where somebody fixed the issue once and reverted the fix, the verdict is not the
-answer people wait for. "Still happens" and "somebody tried and reverted it" are
-the same verdict and opposite propositions. What separates them is why they
-reverted it and whether that reason still holds.
+**When the issue still happens and the user asks for the fix, invoke
+`typo3-core-patch-development` before you make the change.** Load that skill by
+name and work from it. Hand over the issue number, the verdict, the code path
+you established and any failing test.
 
-The trigger is in the issue answer rather than in the reading. A relation marked
-`precedes` or `duplicates` carries its subject, and `reviews` names every change
-the journal mentions. So an issue whose history is a merged-then-reverted fix
-says so before you open the checkout.
+This is a step, not a note. A session that read it as a note wrote a whole patch
+without that skill. It then worked out the changelog, the suites, the commit
+message and the release branches again by itself.
 
-- Read the related issue somebody filed the revert under. The reason lives there
-  and nowhere else. The commit that reverts says what it reverted, and the issue
-  says what it cost.
-- Read the attempt itself, which is the one thing no lookup here returns. The
-  issue answer carries the change numbers, and the Gerrit search by issue number
-  their state. So what remains is the diff: fetch the patch set into the
-  checkout and read it. The ref it is under and the remote it is on are two
-  sections of one page. That remote is not the one a core checkout fetches from.
-  So where the fetch is the task, read it whole: `typo3_rule_lookup` with
-  `documentId="core/contribution/gerrit-workflow"`, which also stands as
-  `typo3://guides/core/contribution/gerrit-workflow`.
+## Where this skill stops
 
-  Abandoned is a verdict somebody wrote down. The diff under it is the cheapest
-  description of what a fix looks like against a modern core. Read the patch
-  set; put it onto no branch. To rebase an abandoned attempt is to write the
-  patch rather than judge the issue.
+- **The fix** is `typo3-core-patch-development`. Step 7 says when to hand over.
 
-  `typo3_gerrit_lookup` with a change number earns a call of its own for a
-  `reviews` entry the issue search left out. That search finds a change whose
-  commit message names the issue. So an entry missing from it is the one whose
-  branch, patch set and status nothing else has stated.
-- Find every production caller of the method the reverted patch touched, in the
-  checkout. A fix scoped to one call site is a different proposition from one
-  that changes a shared path.
-- Establish whether the path the revert names still routes through that method.
-  A subsystem rebuilt since is what turns the old objection into history.
+- **Every act on the tracker** stays with a person. Nothing here comments on an
+  issue, assigns, closes or reopens it. You write the verdict and the closing
+  comment for the person who does.
 
-**A reverted core fix becomes re-attemptable when somebody has rebuilt the
-shared consumer that made it expensive. It also does when the caller set has
-shrunk to the one site the fix needs.** That is the form that transfers. Neither
-half is readable off the issue, and both are one grep and one file in the
-checkout.
-
-What comes out of this is what a maintainer needs before the issue can move.
-That is what the answer owes. It is not a design and not a patch. To name the
-constraint the last attempt broke is the deliverable. To propose the code that
-respects it is the next workflow's.
-
-## Where the triage ends and the patch begins
-
-**When it still happens and the user asks for the fix, invoke
-`typo3-core-patch-development` before you make the change.** That is a step, not
-a note about ownership. Load the skill by name and work from it. What crosses
-over is the issue number, the verdict, the established code path and any test
-that fails.
-
-It stands as a step because it did not fire as anything else. A session read
-this paragraph and held exactly that handoff. The user asked for the patch, and
-the session wrote it over forty more turns without the skill. It decided for
-itself the changelog obligation, the suites and databases to run, the commit
-trailers and the release branches. Nothing it decided was wrong in the report;
-it reconstructed all of it.
-
-This skill covers the statement of what is still true about an issue. That is
-the choice out of the backlog and the report read against the branch. It is the
-reproduction or the failure to reproduce, and the verdict that comes out.
-
-It stops at the tracker. Nothing here comments, assigns, closes or reopens
-anything. You write the verdict, with the comment that closes the issue, for the
-person who will. The judgement of a patch somebody pushed is
-`typo3-core-patch-review`, which reads the diff rather than the report.
+- **A judgement of a patch somebody pushed** is `typo3-core-patch-review`. That
+  skill reads the diff, not the report.

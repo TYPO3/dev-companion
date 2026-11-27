@@ -3,49 +3,49 @@
 The server
 ==========
 
-What a caller can ask it, and where each answer comes from.
+This section covers what a caller can ask the server, and where each answer
+comes from.
 
 .. grid::
 
     .. card:: :doc:`initialize`
 
         What a client gets at ``initialize`` and in the lists it fetches right
-        after: the result as the server sends it, the instructions in their
-        wording, the prompts, and what the tool list weighs.
+        after. It shows the result as the server sends it, the exact
+        instructions, the prompts, and what the tool list weighs.
 
     .. card:: :doc:`Tools <tools/index>`
 
-        Every tool, one page each. What it is for, what it takes, which fields
-        it answers with, and what one call to it came back with.
+        One page for each tool. Each page says what the tool is for, what it
+        takes, which fields it answers with, and what one call returned.
 
     .. card:: :doc:`Resources <resources/index>`
 
-        The other surface a client gets, the one a user picks out of a list
-        rather than calls mid-task.
+        The other surface a client gets. A user picks a resource from a list,
+        and the agent does not call it in the middle of a task.
 
     .. card:: :doc:`answer-sources`
 
-        The five sources an answer can come from, and what each one needs up
-        before it can.
+        The five sources an answer can come from, and what must run before each
+        source can answer.
 
     .. card:: :doc:`knowledge-base`
 
-        What ships in ``knowledge/``, which is where almost every answer comes
-        from.
+        What ``knowledge/`` contains. Almost every answer comes from there.
 
     .. card:: :doc:`versions`
 
-        How a statement that holds for some TYPO3 versions and not others says
-        so, and why a catalog withholds an entry instead of a qualification.
+        How a statement shows that it holds for some TYPO3 versions only. Also
+        why a catalog withholds an entry rather than add a qualification.
 
     .. card:: :doc:`asking-the-installation`
 
-        The order the server looks an installation's own answers up in, how it
-        delivers the probe, and what a fallback owes the caller.
+        The order in which the server asks an installation for its own answers,
+        how it delivers the probe, and what a fallback must tell the caller.
 
     .. card:: :doc:`interface-contract`
 
-        A community proposal for an MCP interface contract for TYPO3, read as a
+        A community proposal for an MCP interface contract for TYPO3, as a
         reference. What it says, and what would change here if the community
         adopted it.
 
@@ -93,10 +93,10 @@ What a caller can ask it, and where each answer comes from.
     specialist -> sources
     sources -> answer
 
-The tools are the server. Everything else on this page is either the other
-surface beside them or an account of where their answers come from. That is the
-one thing a caller cannot see from a tool's own description. It is the reason
-every answer names its source, its version bound and what it left out.
+The tools are the server. The rest of this section is the other surface beside
+them, or says where their answers come from. A caller cannot see the source from
+the description of a tool. So every answer names its source, its version bound
+and what it left out.
 
 .. toctree::
     :hidden:

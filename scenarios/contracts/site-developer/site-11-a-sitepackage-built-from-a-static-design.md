@@ -49,6 +49,15 @@ answer owes the editors, in part. None of the failures occurred. Opus took 19
 minutes and $4.47, Fable 33 minutes and $17.67. Neither asked the user anything.
 `D-KNW-190` holds what they did with the administrator account.
 
+**Run 2026-11-27:** one headless run of `claude-opus-5-5` against `ad78c87e`,
+from a pristine directory on the same newcomer sentence. It took 11 minutes and
+$3.99. Each page renders one document frame, and the menu comes from the page
+tree with the active page marked. Two page layouts exist, and the stylesheet is
+an asset of the sitepackage, included once. The tiles and the notices are plain
+text elements, so editors can change them. The design of the home page is lost
+until they get content elements of their own. The answer says so, and asks
+whether to build them next. None of the failures occurred.
+
 > We have a fresh TYPO3 installation, and our agency delivered a static HTML
 > design in the design/ folder. Build it into TYPO3 as our sitepackage, so the
 > editors can maintain the pages themselves.

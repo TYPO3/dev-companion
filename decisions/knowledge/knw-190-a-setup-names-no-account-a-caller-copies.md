@@ -43,3 +43,10 @@ session choose one and commit `settings.php` without its secrets.**
 
 - The next pair still names `admin` or commits a default password. Then a
   statement is not the lever, and the setup needs a command the session runs.
+
+## Since then
+
+The second pair ran by 2026-11-27, and `T-261029-bb2b` holds both rows. Fable
+named the account `clinic_admin`, and Opus named it `admin`. Neither committed a
+password. So the **Wrong if** holds for the name on one model of two, and the
+password moved on both.

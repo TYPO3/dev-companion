@@ -37,9 +37,9 @@ Take five things from it:
 
 ## Whose chain it is
 
-A chain is often the requester's own. "Whose change it is" in
-[checklist.md](checklist.md) says how to tell, per link. It also says which stop
-rules fall away on the requester's own links.
+A chain is often the requester's own. The section "Whose change it is" in
+[checklist.md](checklist.md) says how you find the owner of each link. It also
+says which stop rules fall away on the requester's own links.
 
 ## Your own chain, with its content unchanged
 

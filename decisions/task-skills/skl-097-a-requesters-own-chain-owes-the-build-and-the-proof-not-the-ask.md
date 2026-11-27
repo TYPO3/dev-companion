@@ -69,10 +69,10 @@ checks on the new base and the push stay.**
 ## Since then
 
 On 2026-11-27 the owner rule moved from `references/chain.md` into
-`references/checklist.md`, under "Whose change it is". A session rebasing the
-requester's own single change, 87873, could not tell whether the chain rule held
-for it. The section now holds for one change and for a chain. It lifts two stop
-rules, the handful of hunks and generated output, and keeps the rest as a
-question to the requester. The stop that falls away on an own chain with its
-content unchanged is the second kind, because unchanged content leaves only
-mechanical conflicts.
+`references/checklist.md`, under "Whose change it is". The session that rebased
+the requester's own single change, 87873, could not tell whether the chain rule
+held for it. The section now holds for one change and for a chain. On the
+requester's own change, the handful of hunks and generated output no longer stop
+the work. The other stop rules still hold, and the stop report asks the
+requester. An own chain with its content unchanged has only mechanical
+conflicts. So the stop that falls away there is one of those two.

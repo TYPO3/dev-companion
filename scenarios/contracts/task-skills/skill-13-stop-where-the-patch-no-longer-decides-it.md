@@ -33,12 +33,12 @@ put `main` back clean and level with `origin/main`. The report named each file
 and what each side wanted. It named `40717de1785` as the commit on `main` that
 reworked the same dropdown differently.
 
-The fifth criterion is not measured. The session classified each conflict and
-named the two that the change decides. It resolved none of them, because the
-checklist stops at generated output. The seventh does not apply, because no
-rebased checkout came out. The session never called `typo3_task_guide`, which
-`base.md` asks for. It reported that itself in the debrief, which left four
-feedbacks.
+This run does not measure the fifth criterion. The session classified each
+conflict and named the two that the change decides. It resolved none of them,
+because the checklist stops at generated output. The seventh does not apply,
+because no rebased checkout came out. The session never called
+`typo3_task_guide`, which `base.md` asks for. It reported that itself in the
+debrief, which left four feedbacks.
 
 > Pull down that patch from review and get it onto current main so I can run the
 > tests against it.

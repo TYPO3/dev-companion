@@ -59,9 +59,9 @@ On the requester's own change, two stop rules fall away:
   build the checkout declares. `typo3_rule_lookup` with
   `documentId="core/contribution/committed-build-output"` gives that build.
 
-Every other stop rule stays. Each of them is still a decision, also on the
-requester's own change. There the requester is the author and is present. So the
-stop report is the question to them: which side wins, hunk by hunk.
+The other stop rules still hold. The conflicts they name are decisions, also on
+the requester's own change. There the requester is the author and is present. So
+the stop report asks the requester which side wins, hunk by hunk.
 
 ## Taking your own work onto the patch
 

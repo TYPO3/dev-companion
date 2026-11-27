@@ -4,7 +4,7 @@ Forward runs
 This page covers how a session runs a forward review, judges it and records what
 the run teaches. It also covers a run that hangs.
 `scenarios/forward/readme.md <../../scenarios/forward/readme.md>`_ says what a
-forward review is, and lists the five of them.
+forward review is, and lists the three of them.
 
 Running one
 -----------
@@ -106,14 +106,15 @@ and to grade a claim are two different things.
 
   The check reports and does not fail, because from there two cases read alike.
   One is a judgment that quotes a call the session never made. The other names a
-  tool to say that the session never called it. ``REVIEW-03`` is the second, and
-  the defect it reports turned up by hand
+  tool to say that the session never called it. When the check arrived, the
+  ``REVIEW-03`` run was the second case. Its judge had found by hand two hints
+  quoted from a call the session never made
   (`D-EVI-009 <../../decisions/evidence/evi-009-a-run-is-read-against-its-own-trace.md>`_).
 
-* **One change, one run.** An edit to the criteria resets the recorded run to
-  ``unrun``, by design. The digest check catches a judgment that answers
-  criteria somebody has since rewritten. So the superseded run survives only in
-  its commit. Name that commit in the new run's feedback.
+* **One change, one run.** An edit to the criteria makes the recorded run fail
+  ``bin/cli scenarios:check``, by design. The digest check catches a judgment
+  that answers criteria somebody has since rewritten. So the superseded run
+  survives only in its commit. Name that commit in the new run's ``notes``.
 
 * **Reset the environment between runs.** A restored work tree is not enough
   where the session wrote to the database. The next run finds what the last one

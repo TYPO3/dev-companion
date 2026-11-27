@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Paths;
+use TYPO3\DevCompanion\Process\CommandRunner;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
 use TYPO3\DevCompanion\Tool\Registry;
+use TYPO3\DevCompanion\Upkeep\Checkouts;
 use TYPO3\DevCompanion\Upkeep\Prose;
 use TYPO3\DevCompanion\Upkeep\Wrap;
 
@@ -624,4 +627,76 @@ final class ProseTest extends TestCase
         }
     }
 
+    #[After]
+    public function putGitBack(): void
+    {
+        Checkouts::useRunner(null);
+    }
+
+    /**
+     * @return array<string, array{string, list<string>}>
+     */
+    public static function sentencesAndWhatTheRulesReplace(): array
+    {
+        return [
+            'a plain sentence' => ['The server answers every call with the version it read.', []],
+            'a passive' => ['The version is written into the answer by the server.', ['passive']],
+            'an -ing form' => ['The server answers, reading the version from the checkout.', ['-ing']],
+            'a vague verb' => ['The answer carries the version, and the skill owns the order.', ['carries', 'owns']],
+            'own as an adjective' => ['Each project keeps its own copy of the skills.', []],
+            'a quoted word' => ['The rules replace "carries" with a plain verb.', []],
+        ];
+    }
+
+    /** @param list<string> $flags */
+    #[Decision('D-DOC-073')]
+    #[DataProvider('sentencesAndWhatTheRulesReplace')]
+    #[Test]
+    public function aSentenceIsFlaggedForWhatTheRulesReplace(string $sentence, array $flags): void
+    {
+        self::assertSame($flags, Prose::flags($sentence));
+    }
+
+    /**
+     * The report reads what a checkout adds, so a sentence `main` already has
+     * is not new, whatever its form.
+     */
+    #[Decision('D-DOC-073')]
+    #[Test]
+    public function onlyASentenceMainDoesNotHaveIsReportedAsNew(): void
+    {
+        $agents = (string) file_get_contents(Paths::root() . '/AGENTS.md');
+
+        $this->gitThatShowsMainAs($agents);
+        self::assertSame([], Prose::newlyFlagged());
+
+        $this->gitThatShowsMainAs('');
+        $new = Prose::newlyFlagged();
+        self::assertNotSame([], $new);
+        self::assertSame(['AGENTS.md'], array_values(array_unique(array_column($new, 'file'))));
+    }
+
+    /** git that reports AGENTS.md as changed and shows it at `main` as given. */
+    private function gitThatShowsMainAs(string $atMain): void
+    {
+        $git = self::createStub(CommandRunner::class);
+        $git->method('run')->willReturnCallback(
+            /**
+             * @param array<int, string> $command
+             *
+             * @return array{ok: bool, exitCode: int, output: string, error: string}
+             */
+            static function (array $command) use ($atMain): array {
+                $line = implode(' ', $command);
+                $said = match (true) {
+                    str_contains($line, 'diff --name-only') => "AGENTS.md\n",
+                    str_contains($line, 'show main:AGENTS.md') => $atMain,
+                    default => '',
+                };
+
+                return ['ok' => true, 'exitCode' => 0, 'output' => $said, 'error' => ''];
+            },
+        );
+        Checkouts::useRunner($git);
+    }
 }

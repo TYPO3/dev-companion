@@ -3,7 +3,9 @@ id: D-DOC-073
 title: A page opens on what it covers
 date: 2026-11-27
 status: open
-coveredBy: []
+coveredBy:
+  - ProseTest::aSentenceIsFlaggedForWhatTheRulesReplace
+  - ProseTest::onlyASentenceMainDoesNotHaveIsReportedAsNew
 ---
 
 # D-DOC-073 — A page opens on what it covers
@@ -39,8 +41,13 @@ the skills had. The pilot rewrote `usage/installing.rst`.
   "has", "is responsible for" or "must".
 - A page keeps its labels, its links and its facts. A rewrite changes the form
   and nothing a reader or another page relies on.
-- `coveredBy` is empty. Whether a sentence is clear is a read, not a property a
-  test can find.
+- `bin/cli prose:check` opens on every sentence a checkout adds against `main`
+  that has a passive, an -ing form or a replaced word. The maintainer asked on
+  2026-11-27 that new text meet the rules more strongly. It is a report, because
+  the two forms are upper bounds a regex cannot settle. AGENTS.md asks a writer
+  to clear it before a commit.
+- Whether a sentence is clear is a read, not a property a test can find. The
+  tests hold the report, not the pages.
 
 ## Wrong if
 

@@ -8,7 +8,6 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\DevCompanion\Paths;
-use TYPO3\DevCompanion\Upkeep\Checkouts;
 use TYPO3\DevCompanion\Upkeep\Prose;
 use TYPO3\DevCompanion\Upkeep\Todo;
 use TYPO3\DevCompanion\Upkeep\Voice;
@@ -133,12 +132,12 @@ final class ProseFormat
                 $branch === '' ? 'what is in hand here' : $branch . "'s own files",
             ));
 
-            return array_values(array_intersect($corpus, self::changed($root)));
+            return array_values(array_intersect($corpus, Prose::changed($root)));
         }
 
         $held = [];
         foreach (array_keys(Todo::worktrees($root)) as $name) {
-            $held = [...$held, ...self::changed($root . '/.worktrees/' . $name)];
+            $held = [...$held, ...Prose::changed($root . '/.worktrees/' . $name)];
         }
 
         $files = array_values(array_diff($corpus, $held));
@@ -150,33 +149,6 @@ final class ProseFormat
         }
 
         return $files;
-    }
-
-    /**
-     * What a checkout has changed against `main`, committed or not.
-     *
-     * The uncommitted half is what makes this the answer while a session still
-     * works. A decision file it has written and not added is one nobody else
-     * may rewrap either, and it arrives with the porcelain.
-     *
-     * @return list<string>
-     */
-    private static function changed(string $path): array
-    {
-        $files = [];
-        [$read, $said] = Checkouts::run(['git', '-C', $path, 'diff', '--name-only', 'main...HEAD']);
-        if ($read === 0) {
-            $files = preg_split('/\R/', trim($said)) ?: [];
-        }
-
-        [$read, $said] = Checkouts::run(['git', '-C', $path, 'status', '--porcelain']);
-        foreach ($read === 0 ? preg_split('/\R/', trim($said)) ?: [] : [] as $line) {
-            $file = trim(substr($line, 2));
-            // A rename says `old -> new`, and the file that is there is the second.
-            $files[] = str_contains($file, ' -> ') ? substr($file, (int) strpos($file, ' -> ') + 4) : $file;
-        }
-
-        return array_values(array_unique(array_filter($files, static fn(string $file): bool => $file !== '')));
     }
 
     /**

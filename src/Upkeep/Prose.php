@@ -65,6 +65,12 @@ final class Prose
     private const ING = '/\b(?!(?:nothing|something|anything|everything|thing|things|during|string|strings|bring|ring|sing|king|wing|sibling|siblings|ceiling|meaning|morning|evening|building|heading|headings|setting|settings|listing|listings|mapping|mappings|according|regarding|following)\b)[a-z]+ing\b/';
 
     /**
+     * A word the prose rules replace with a plain verb — `D-DOC-073`. "own"
+     * as an adjective stays, so only the verb form "owns" is here.
+     */
+    private const VAGUE = '/\b(?:carr(?:y|ies|ied)|ow(?:e|es|ed)|owns|hands? over|stands? in)\b/i';
+
+    /**
      * Where a comment has stopped to name its reason and started to retell it.
      *
      * AGENTS.md asks a comment that rests on a decision to name its id instead
@@ -618,6 +624,85 @@ final class Prose
         usort($retold, static fn(array $a, array $b): int => $b['prose'] <=> $a['prose']);
 
         return $retold;
+    }
+
+    /**
+     * What a sentence has that the prose rules replace: a passive, an -ing
+     * form, or a word `VAGUE` names, outside its quotations. The first two are
+     * upper bounds, as in the counts.
+     *
+     * @return list<string>
+     */
+    public static function flags(string $sentence): array
+    {
+        // A quotation is its source's words, as in `words()`.
+        $sentence = (string) preg_replace(['/"[^"]*"/', self::ITALIC], '""', $sentence);
+        $flags = [];
+        if (preg_match(self::PASSIVE, $sentence) === 1) {
+            $flags[] = 'passive';
+        }
+        if (preg_match(self::ING, $sentence) === 1) {
+            $flags[] = '-ing';
+        }
+        if (preg_match_all(self::VAGUE, $sentence, $found) > 0) {
+            $flags = [...$flags, ...array_map(strtolower(...), array_values(array_unique($found[0])))];
+        }
+
+        return $flags;
+    }
+
+    /**
+     * Every sentence a checkout adds against `main` that has a flag, so a
+     * writer sees the new prose and not the corpus — `D-DOC-073`.
+     *
+     * A sentence is new where the file at `main` does not have it. A file
+     * `main` does not have is new whole.
+     *
+     * @return list<array{file: string, flags: list<string>, text: string}>
+     */
+    public static function newlyFlagged(): array
+    {
+        $root = Paths::root();
+        $flagged = [];
+        foreach (array_intersect(self::documents(), self::changed($root)) as $file) {
+            [$read, $before] = Checkouts::run(['git', '-C', $root, 'show', 'main:' . $file]);
+            $old = $read === 0 ? self::sentences($before) : [];
+            foreach (self::sentences((string) file_get_contents($root . '/' . $file)) as $sentence) {
+                $flags = self::flags($sentence);
+                if ($flags !== [] && !in_array($sentence, $old, true)) {
+                    $flagged[] = ['file' => $file, 'flags' => $flags, 'text' => $sentence];
+                }
+            }
+        }
+
+        return $flagged;
+    }
+
+    /**
+     * What a checkout has changed against `main`, committed or not.
+     *
+     * The uncommitted half is what makes this the answer while a session still
+     * works. A file it has written and not added arrives with the porcelain,
+     * one path per file.
+     *
+     * @return list<string>
+     */
+    public static function changed(string $path): array
+    {
+        $files = [];
+        [$read, $said] = Checkouts::run(['git', '-C', $path, 'diff', '--name-only', 'main...HEAD']);
+        if ($read === 0) {
+            $files = preg_split('/\R/', trim($said)) ?: [];
+        }
+
+        [$read, $said] = Checkouts::run(['git', '-C', $path, 'status', '--porcelain', '--untracked-files=all']);
+        foreach ($read === 0 ? preg_split('/\R/', trim($said)) ?: [] : [] as $line) {
+            $file = trim(substr($line, 2));
+            // A rename says `old -> new`, and the file that is there is the second.
+            $files[] = str_contains($file, ' -> ') ? substr($file, (int) strpos($file, ' -> ') + 4) : $file;
+        }
+
+        return array_values(array_unique(array_filter($files, static fn(string $file): bool => $file !== '')));
     }
 
     /**

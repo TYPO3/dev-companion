@@ -40,6 +40,20 @@ final class ProseCheck
      */
     public function __invoke(OutputInterface $output): int
     {
+        // What this checkout adds comes first, sentence by sentence, because
+        // the writer of a new text reads this before the corpus — `D-DOC-073`.
+        $new = Prose::newlyFlagged();
+        Voice::heading($output, sprintf(
+            '%d new sentences have a form the prose rules in AGENTS.md replace',
+            count($new),
+        ));
+        foreach ($new as $sentence) {
+            Voice::row($output, sprintf('%s  %s  %s', Voice::key(implode(', ', $sentence['flags']), 18), $sentence['file'], $sentence['text']));
+        }
+        if ($new !== []) {
+            Voice::note($output, 'Rewrite each one before the commit, or keep it where the form is right: "is read" can be an adjective.');
+        }
+
         $measured = array_map(Prose::measure(...), Prose::documents());
         usort($measured, static fn(array $a, array $b): int => count($b['over']) <=> count($a['over']));
 

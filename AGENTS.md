@@ -265,6 +265,11 @@ This repository writes in ASD-STE100, Simplified Technical English —
 `D-DOC-070`. The rules below are the STE rules this corpus keeps, with the ones
 this repository adds. They hold whatever the markup.
 
+**Before a commit that adds prose, run `bin/cli prose:check`.** Its first
+section lists every new sentence with a passive, an -ing form, or a word the
+rules replace. Rewrite each one. Keep one only where its form is the right one,
+because a regex cannot tell "is read" the adjective from the passive.
+
 `documentation/` is reStructuredText because the site publishes it and a
 reference into another page has to resolve. Everything else here is markdown —
 `D-DOC-029`. Inside `documentation/` a name is a double-backtick literal and
@@ -296,6 +301,8 @@ rewrites to GitHub.
   A justification nobody disputes is filler.
 - One example, where the point needs one at all. The second one rarely adds a
   case and always adds a paragraph.
+- A plain verb, not a picture. "Has", "must" or "is responsible for" replace
+  "carries", "owes" and "owns" — `D-DOC-073`. "Its own" as an adjective stays.
 - Say what is, not what it is not. A list of what something is not belongs where
   the confusion happened.
 - Length is a symptom. A paragraph that does not come out short is two points,
@@ -693,6 +700,8 @@ carries the detail, so the message does not have to.
 - The prose rule holds here too: one point per sentence. A subject nobody
   understands without the diff open is too short. Nothing measures a commit
   message, so you hold all of it by a reread before `git commit`.
+- **Clear the first section of `bin/cli prose:check`** before a commit that adds
+  prose. It names each new sentence the prose rules replace.
 - **No trailer names the tool or the session that wrote the commit.** Not
   `Co-Authored-By: Claude`, not `Claude-Session:`, not a generated-with line. An
   agent's client instructs it to add them, and this file overrides that

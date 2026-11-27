@@ -6,203 +6,226 @@ compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup
 
 # TYPO3 Extension Asset Build
 
-A package's own build produces the CSS and JavaScript its backend and frontend
-load. Most of that task is npm's, the bundler's and the library's. What this
-workflow orders is the TYPO3 half. That is what you run the build as, what its
-output promises the backend, and which output the repository commits. Keep this
-skill as routing and workflow.
+This skill covers the TYPO3 half of a package's asset build. That is the
+commands the build runs with, and whether the repository commits the built CSS
+and JavaScript. It is also the route by which each built file reaches a page. It
+is also the core classes and icons the output uses, and on which majors they are
+valid. npm, the bundler and the libraries do the rest. This skill stops at the
+migration a bundler or a library asks for. It also stops at a change of the
+supported TYPO3 majors. An audit of the package and the tests for the build are
+other skills.
 
-Never keep a dependency version, a bundler configuration, a build command or a
-core class name. Every one of those is a property of the repository in front of
-you and of the majors it declares.
+**A built file reaches a page only by a route.** A route is a declaration that
+names the file. An import map is the route for backend JavaScript. TypoScript,
+`<f:asset.css>` or `PageRenderer` is the route for a frontend stylesheet. A
+build that renames, hashes, splits or drops a file breaks its route. Nothing
+fails in PHP, so only a check after the rebuild finds it.
 
-## The order
+Keep this skill as routing and workflow: it says which tool to ask and when to
+stop. Do not write a dependency version, a bundler configuration, a build
+command or a core class name into it. Each of those comes from the repository in
+front of you and from the majors it declares.
 
-1. Work through [references/base.md](references/base.md). It fixes what this
-   package is, which majors it declares, and what it runs its build with.
-2. Establish which of the output the repository commits, and which route each
-   file reaches a page by, below.
-3. Verify every core surface the change will borrow, before you write it, below.
-4. Change what the task asks for. Stop where the library's own migration begins.
-5. Rebuild, and check what the output promises: the backend below, then the
-   frontend below.
-6. Commit the rebuilt artefacts together with the source that produced them.
+## Steps at a glance
 
-The first step discharges `typo3_project_describe`. It reports the manifests
-this repository keeps: at the root, and one directory down where the build sits
-there.
+1. Establish the package, its majors and its build commands.
+2. Find out whether the repository commits the output, and the route of each
+   file.
+3. Verify each core class and icon before the change uses it.
+4. Make the change the task asks for, and stop where a migration begins.
+5. Rebuild, then check the backend routes and the frontend routes.
+6. Report, and commit the rebuilt files with their source.
 
-   It reports the commands each of them declares with the manifest they came
-   from. It says whether a command reports or changes. It reports the Node that
-   the manifest, the pinned version, the CI workflow and the container each
-   state. It names the disagreements between them.
+If the rebuild gives a diff your change does not explain, read
+[references/unreproducible-build.md](references/unreproducible-build.md). Read
+it too if the build does not run at all.
 
-   Run the commands as it reported them. An invocation you rewrite from habit
-   runs the build in the wrong directory or on the wrong Node. Both of those
-   surface as a diff nobody can explain.
+## 1. Establish the package and its build
 
-**Read a pin against the release current on the day.** That step reports what
-each source states, and none of them says whether it is still current. So
-establish the current release where its publisher announces it. That is the
-runtime's own release schedule, the package registry, the repository that tags
-an action. Report every pin behind it as a finding that carries the raise.
+1. Work through [references/base.md](references/base.md) first. It fixes what
+   this package is, which majors it declares and how it builds.
 
-What speaks against one is a bound this repository declares: the Node the build
-needs, the majors the package supports. The finding then names the newest
-release that bound allows. The raise is the maintainer's, and to move the bound
-is a task of its own.
+2. The first step of the base discharges `typo3_project_describe`. Its answer
+   gives you:
 
-## Which of the output is committed, and how it reaches a page
+   - the manifests of the repository, at the root and one directory down;
 
-This server does not read your working tree. So these are the repository's
-answers and not a lookup. Does git track the built output? Does any check assert
-that a build leaves the tree clean? Over which route does each output file reach
-a page?
+   - the commands each manifest declares, and whether a command reports or
+     changes;
 
-- **Committed output means source and output change together.** The package's
-  consumers install what is in the repository. So a commit with new source and
-  last month's artefacts ships the old behaviour to every one of them.
-- **Uncommitted output means the deployment runs the build.** Then the artefacts
-  are not yours to commit. What has to hold instead is that the build runs where
-  the deployment runs it.
-- A check that asserts a clean tree after a build is the executable form of that
-  decision. Where the repository has none, its absence is a finding rather than
-  a licence. `typo3-extension-testing` establishes that check. Invoke
-  `typo3-extension-testing` for it, and carry the build command and the output
-  paths you established here.
-- **Each output file reaches a page through a declaration somewhere, and the
-  route differs between the two halves.** An import map declares backend
-  JavaScript. TypoScript, the AssetCollector behind `<f:asset.css>`, or
-  `PageRenderer` includes a frontend stylesheet.
+   - the Node version that the manifest, the version file, the CI workflow and
+     the container each state;
 
-  Find which route this package uses for each file before you change anything.
-  Step 5 checks that the same route still carries afterwards, and it cannot find
-  a route it never saw.
+   - where those Node versions disagree.
 
-## When the build is not reproducible
+   Run the commands exactly as the answer reports them. A command you rewrite
+   from habit runs in the wrong directory or on the wrong Node. Both show up as
+   a diff nobody can explain.
 
-A build whose output differs on every run makes every later diff unreadable.
-After a change the two causes look the same. Output differs because of your
-change, or it differs whatever the source says.
+3. **Read a pin against the release current on the day.** The answer says what
+   each source states. It does not say whether that is still current. So find
+   the current release where its publisher announces it:
 
-- **The repository's own check answers this.** A job that asserts a clean tree
-  after a build is the executable form of that question. Step 2 has already
-  established whether there is one. Run it.
-- Where the rebuild in step 5 produces a diff your change does not explain,
-  build the unchanged checkout and compare. That separates the two causes. It
-  costs nothing in the ordinary case, where the diff has an explanation.
-- Where the tree comes back dirty on an unchanged checkout, that is the finding.
-  It is about the toolchain rather than about the package. Say which file
-  differs and how.
-- Where the build does not run at all, first compare the reported Node with what
-  this machine has. Reinstall the dependency tree second.
+   - the release schedule of the runtime;
+   - the package registry;
+   - the repository that tags an action.
 
-## Where this workflow stops
+   Report every pin behind it as a finding that carries the raise.
 
-The bundler's configuration format, a library's own API change and a defect in
-the runtime belong to that project's manual. Read them there, and say in the
-answer which manual answered. A migration you reconstruct from the installed
-sources of a dependency is a reading of one version of it. It is worth what it
-says about that version alone.
+   A bound this repository declares speaks against a raise. Examples are the
+   Node the build needs and the majors the package supports. Then the finding
+   names the newest release that bound allows. The maintainer decides the raise.
+   A change of the bound is a separate task.
 
-Two changes look like this task and are not:
+## 2. Find what the repository commits, and the route of each file
 
-- The package moves to another set of TYPO3 majors, or what one of them removed
-  broke it. That decides the whole reading below. So invoke
-  `typo3-extension-upgrade` and carry across the build commands and the output
-  paths you established.
-- The request is an audit of the package rather than a change the user already
-  agreed to. Invoke `typo3-extension-health` and carry across what you
-  established about the build.
+This server does not read your working tree. So answer three questions from the
+repository itself:
 
-## Verifying a core surface before you borrow it
+- Does git track the built output?
+- Does a check assert that a build leaves the tree clean?
+- What is the route of each output file?
 
-Verify a class or an icon the output takes from the core before you write it,
-not after. Verified afterwards, it is already in the diff. The cost of a no is
-then a second pass over markup that reads as finished.
+**Committed output: source and output change together.** The users of the
+package install what is in the repository. A commit with new source and old
+built files gives all of them the old behaviour.
 
-- `typo3_documentation_lookup`, at each major the package declares, for the
-  backend JavaScript module contract. It also says what an extension may assume
-  is already loaded. To assume a library is present because the backend once
-  shipped it is a decision, and this answer settles it.
-- **The query names the component, and the answer places the class.**
-  `typo3_component_lookup` with the `targetVersion` of a declared major returns
-  each class with where it sits. That is around the component, on its root
-  element, or inside it.
+**Uncommitted output: the deployment runs the build.** Then do not commit the
+built files. Make sure instead that the build runs where the deployment runs it.
 
-  `table-fit` is the element *around* a `.table`. Its name does not say so, and
-  its own stylesheet rule does not either.
-- **A class the answer does not place is one the core's stylesheet says nothing
-  about.** That is not a licence to attach it anywhere. It means the position
-  has to come from somewhere else. The entry names the core Sass file to read on
-  that branch.
-- **One call per declared major, because the position is itself version-bound.**
-  A class can stand above its component on one major and not on another. So a
-  surface verified on the installed major alone has no proof on the rest. The
-  finding is the range it holds on. A borrowed surface not verified on the
-  lowest declared major is a defect in that version.
-- A class the package's own stylesheet only adds a rule to is one of these. It
-  reads in the diff exactly like one the package owns.
-- `typo3_icon_lookup` for a borrowed icon identifier. It answers from the
-  installation. So it settles the installed major and says nothing about the
-  others the package declares.
-- `typo3_changelog_lookup`, restricted to each declared major, for a core asset
-  the output no longer relies on. To delete a rule because the core no longer
-  ships the icon font it names is an unverified decision. So is to attach a
-  class because the core does. The build goes green either way.
-- `typo3_rule_lookup` with `documentId="any/backend/using-the-styleguide"` for
-  what a styleguide demo states and what it does not. Read it before you take a
-  demo as the contract for a component.
+**A missing clean-tree check is a finding.** A check that asserts a clean tree
+after a build enforces the choice above. Its absence does not permit you to
+ignore that choice. `typo3-extension-testing` adds that check. Invoke
+`typo3-extension-testing` for it. Give it the build command and the output paths
+from this step.
 
-## What the rebuilt output promises the backend
+**Find the route of each output file before you change anything.** The backend
+and the frontend use different routes:
 
-Built backend JavaScript does not reach the backend because it is present. An
-import map declares it, one specifier per file. A build that renames, splits,
-hashes or drops an output breaks that map, and nothing fails in PHP. So after
-every rebuild, check each mapped path against the file the build wrote.
+- Backend JavaScript: an import map, with one specifier per file.
+- A frontend stylesheet: TypoScript, the AssetCollector behind `<f:asset.css>`,
+  or `PageRenderer`.
 
-A pipeline written for the frontend produces the wrong shape here: one hashed
-bundle where the map names files. Nothing fails in PHP there either. The
-document the frontend section below hands over says which file declares the map
-and which check belongs to it.
+Step 5 checks that the same route still names the file. It cannot check a route
+it never saw.
 
-## What the rebuilt output promises the frontend
+## 3. Verify each core class and icon before the change uses it
 
-You check the frontend half a different way, because nothing about it is a file
-to compare. The TypoScript that resolves for a site decides whether a stylesheet
-reaches a page. So the check is that the route step 2 found still names the file
-the build now writes.
+Verify a class or an icon the output takes from the core before you write it. A
+check after the change finds it already in the diff. Then a no costs a second
+pass over markup that looks finished.
 
-- A rebuild that renames, hashes or moves an output breaks that route as
-  silently as it breaks the import map. There is no exception either. The
-  symptom is a page rendered without the styles.
-- `typo3_rule_lookup` with `documentId="any/assets/how-an-asset-reaches-a-page"`
-  for the routes and the check that belongs to each. Step 2 established which
-  route a file takes. This step checks whether that route still names the file
-  the build now writes.
-- `typo3_hint_lookup` for `Resources/Public/` paths, which reaches
-  `public-assets`. It says how a package publishes its public files into the
-  document root, and what makes one resolvable at all. That is version-bound. A
-  build directory outside the default paths is not the same question on every
-  major.
-- Where an output moved out of `Resources/Public/`, the finding is the publish
-  step rather than the build. The answer says which of the two it is.
+Call these in this order:
 
-## Closing the change
+1. `typo3_documentation_lookup`, at each major the package declares, for the
+   contract of a backend JavaScript module. It also says what an extension can
+   expect the backend to load already. Do not assume a library is there because
+   the backend once shipped it. This answer decides that.
 
-1. Report what you rebuilt and what the build printed. Report which of the
-   mapped paths and borrowed surfaces you verified on which majors. Name the
-   ones that came back withheld or unanswerable.
-2. Draft the message with `typo3_commit_message_guide` and `workflow="project"`.
+2. `typo3_component_lookup` with the `targetVersion` of each declared major.
+   Name the component in the query. The answer says where each class sits:
+   around the component, on its root element, or inside it.
+
+   Example: `table-fit` sits on the element *around* a `.table`. Neither its
+   name nor its stylesheet rule says so.
+
+   - **Make one call per declared major.** A class can sit above its component
+     on one major and not on another. So the finding is the range of majors the
+     class is valid on. A class you did not verify on the lowest declared major
+     is a defect on that major.
+
+   - **A class the answer does not place is one the core stylesheet says nothing
+     about.** That does not permit you to put it anywhere. The position must
+     come from another source. The entry names the core Sass file to read on
+     that branch.
+
+   - **A class the package's own stylesheet only adds a rule to is a core class
+     too.** In the diff it looks exactly like a class of the package.
+
+3. `typo3_icon_lookup` for an icon identifier from the core. It answers from the
+   installation. So it settles the installed major and nothing about the other
+   declared majors.
+
+4. `typo3_changelog_lookup`, restricted to each declared major, for a core asset
+   the output stops using. Do not delete a rule only because the core no longer
+   ships the icon font it names. Do not add a class only because the core uses
+   it. The build passes either way, so only this answer decides.
+
+5. `typo3_rule_lookup` with `documentId="any/backend/using-the-styleguide"`
+   before you take a styleguide demo as the contract for a component. It says
+   what a demo states and what it does not.
+
+## 4. Make the change
+
+Change what the task asks for. Stop where the migration of a bundler or a
+library begins.
+
+A bundler's configuration format, a library's API change and a runtime defect
+are in that project's manual. Read them there. Say in the answer which manual
+answered. A migration you rebuild from the installed sources of a dependency
+describes that one version only.
+
+Two requests look like this task and are not:
+
+- **The package moves to other TYPO3 majors**, or a major removed something it
+  used. The majors decide every lookup of step 3. So invoke
+  `typo3-extension-upgrade`. Give it the build commands and the output paths.
+
+- **The request is an audit of the package**, not a change the user already
+  agreed to. Invoke `typo3-extension-health`. Give it what you found about the
+  build.
+
+## 5. Rebuild and check the routes
+
+Rebuild with the command step 1 reported. Then check both halves.
+
+### The backend
+
+Check each path in the import map against the file the build wrote. A build that
+renames, splits, hashes or drops a file breaks the map. Nothing fails in PHP.
+
+A pipeline written for the frontend gives the wrong shape here: one hashed
+bundle where the map names single files. The document of the frontend check says
+which file declares the map, and which check belongs to it.
+
+### The frontend
+
+Here there is no file to compare. The TypoScript that resolves for a site
+decides whether a stylesheet reaches a page. So check that the route from step 2
+still names the file the build now writes.
+
+- Call `typo3_rule_lookup` with
+  `documentId="any/assets/how-an-asset-reaches-a-page"`. It gives each route and
+  the check for it.
+
+- A renamed, hashed or moved file breaks the route silently. There is no
+  exception. The symptom is a page without its styles.
+
+- Call `typo3_hint_lookup` for `Resources/Public/` paths. It returns the
+  `public-assets` hint. That hint says how a package publishes its public files
+  into the document root. It also says what makes a file resolvable at all. That
+  differs between majors, so check a build directory outside the default paths
+  on each major.
+
+- Where an output moved out of `Resources/Public/`, the problem is the publish
+  step, not the build. Say in the answer which of the two it is.
+
+## 6. Report and commit
+
+1. Report what you rebuilt and what the build printed.
+
+2. Report which mapped paths, core classes and icons you verified, and on which
+   majors. Name each lookup that came back withheld or without an answer.
+
+3. Where step 2 found committed output, commit the rebuilt files together with
+   the source that produced them.
+
+4. Write the message with `typo3_commit_message_guide` and `workflow="project"`.
    The change lands in the package's own repository.
 
-This skill covers the TYPO3 half of a package's asset build. That is what you
-run the build as, and whether the repository commits its output with its source.
-It is what the import map promises about the output files. It is which majors a
-borrowed core class or icon holds on.
+## Where this skill stops
 
-It does not own the migration a bundler or a JavaScript library asks for on its
-own account. It does not own the range of TYPO3 majors the package declares. It
-does not own the audit that decides what else is wrong with it. It does not own
-the harness that would prove the build. The sections above name each of those
-with the workflow or the manual it belongs to.
+- **A bundler or library migration** is in that project's manual.
+- **A change of the supported TYPO3 majors** is `typo3-extension-upgrade`.
+- **An audit of the package** is `typo3-extension-health`.
+- **The check that proves the build** is `typo3-extension-testing`.

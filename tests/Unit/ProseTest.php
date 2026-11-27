@@ -253,6 +253,9 @@ final class ProseTest extends TestCase
             self::assertDoesNotMatchRegularExpression('/^#+\s/', $sentence);
             self::assertStringStartsNotWith('>', $sentence);
             self::assertStringNotContainsString('```', $sentence);
+            // A field ends where the next bold label opens. A scenario's head
+            // read as one sentence was most of what `scenarios/` ran over by.
+            self::assertDoesNotMatchRegularExpression('/\*\*[^*]+:\*\*.*\*\*[^*]+:\*\*/', $sentence);
         }
     }
 

@@ -643,7 +643,9 @@ final class Prose
             if (preg_match('/^ {4}/', $paragraph) === 1) {
                 continue;
             }
-            foreach (preg_split('/\R(?=\s*(?:[-*]\s|\d+\.\s))/', $paragraph) ?: [] as $block) {
+            // A field opens with its bold label, on a line of its own or after
+            // a `·`. A scenario's head is three of them and no sentence.
+            foreach (preg_split('/\R(?=\s*(?:[-*]\s|\d+\.\s))|(?:\R|\s·\s+)(?=\*\*[^*\n]+:\*\*)/', $paragraph) ?: [] as $block) {
                 $line = trim((string) preg_replace('/\s+/', ' ', $block));
                 $line = trim((string) preg_replace('/^[-*]\s|^\d+\.\s/', '', $line));
                 // A heading, a table row in either markup, quoted material,
@@ -653,9 +655,10 @@ final class Prose
                 }
                 // A bold, a struck or a quoted sentence ends inside its
                 // markers, so `read.** A` and `read." A` are two sentences and
-                // not one of 33 words. A quotation is one span, whatever
-                // sentences its source wrote inside it.
-                foreach (preg_split('/"[^"]*"(*SKIP)(*FAIL)|(?<=[.!?]|[.!?]\*\*|[.!?]"|[.!?]~~)\s+/', $line) ?: [] as $sentence) {
+                // not one of 33 words. A typographic quote closes one the same
+                // way. A quotation is one span, whatever sentences its source
+                // wrote inside it.
+                foreach (preg_split('/"[^"]*"(*SKIP)(*FAIL)|(?<=[.!?]|[.!?]\*\*|[.!?]"|[.!?]”|[.!?]~~)\s+/', $line) ?: [] as $sentence) {
                     $sentence = trim($sentence);
                     // Four words is a heading in disguise, a label line, or the
                     // remains of one split on an abbreviation.

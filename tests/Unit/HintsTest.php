@@ -9819,5 +9819,13 @@ final class HintsTest extends TestCase
         self::assertStringContainsString('other than admin', $checklist);
         self::assertStringContainsString('Commit config/system/settings.php', $checklist);
         self::assertStringContainsString('id=install-tool-password', $checklist);
+
+        // The brief of a sitepackage task never reached that checklist on
+        // 2026-11-27, so the skill says it where the command is written.
+        $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
+            Paths::root() . '/skills/typo3-development-installation/SKILL.md',
+        ));
+        self::assertStringContainsString('**Choose the account name, and do not copy `admin`.**', $skill);
+        self::assertStringContainsString('`id=installation-setup`', $skill);
     }
 }

@@ -152,6 +152,8 @@ Do this before you write the files. Leave out the ids the brief of
 - `page-content-areas`: the areas a page template can address.
 - `page-variables-and-processors`: the data a page template gets. That is the
   settings of the set, the site, the page and the menu.
+- `translation-domain`: how a template and a page layout name a label of the
+  package.
 
 A page layout and its page template use one name in three places. Write all
 three in one step.

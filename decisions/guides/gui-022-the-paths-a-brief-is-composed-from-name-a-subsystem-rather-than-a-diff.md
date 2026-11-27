@@ -112,7 +112,6 @@ Build/git-hooks/commit-msg and
 typo3/sysext/backend/Resources/Private/tsref.xml." The promise is
 [`R-ANS-036`](../../requirements/answers/ans-036-a-suite-list-names-the-paths-no-suite-covers.md).
 
-The second half is where it was. `bin/cli feedback:list` on this branch that day
-reports 15 open in 4 directories. None is a second report of a brief whose items
-did not bear on a mechanical change. So `changeType` stays in the queue, and the
-feedback shrinks to that half.
+The second half stays open. On 2026-08-27 `bin/cli feedback:list` held no second
+report of it. The `SITE-11` pairs of November say nothing about a mechanical
+sweep either, so `T-260825-d38d` keeps the change type.

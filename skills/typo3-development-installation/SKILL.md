@@ -192,6 +192,14 @@ environment does not provide, read
      runs the install twice needs a guard against what the previous run left.
      Forced settings do not remove a schema.
 
+   Before you write the command line, call `typo3_hint_lookup` with
+   `id=installation-setup`. It says what the command accepts and what it
+   refuses.
+
+   **Choose the account name, and do not copy `admin`.** A scanner tries `admin`
+   first. Generate the password. Write neither into a file the project commits.
+   Give both to the user in the report.
+
 4. **Seed the content the package's development runs against**, where the task
    needs content. First find out how this package fills a new installation.
    There is more than one way. `typo3_hint_lookup` with

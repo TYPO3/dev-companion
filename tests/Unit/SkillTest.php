@@ -1233,6 +1233,21 @@ final class SkillTest extends TestCase
      * The maintainer wants a sitepackage built to the site's design, and a run
      * that only takes defaults builds it to none (`D-SKL-101`).
      */
+    /**
+     * The brief of a sitepackage task names no label hint, and on 2026-11-27 a
+     * run wrote every label in the long EXT: form. The layout step names it.
+     */
+    #[Decision('D-SKL-101')]
+    #[Test]
+    public function theSitepackageLayoutStepNamesTheLabelHint(): void
+    {
+        $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'));
+        $layout = (string) strstr((string) strstr($skill, '## 4. Lay out the package'), '## 5.', true);
+
+        self::assertNotNull(Hints::byId('translation-domain'));
+        self::assertStringContainsString('`translation-domain`', $layout);
+    }
+
     #[Decision('D-SKL-101')]
     #[Test]
     public function theSitepackageSkillAsksForTheDesignOnceBeforeTheFirstTemplate(): void

@@ -4,6 +4,7 @@ title: A sitepackage has a task skill of its own
 date: 2026-10-26
 status: open
 coveredBy:
+  - SkillTest::theSitepackageLayoutStepNamesTheLabelHint
   - SkillTest::theSitepackageSkillAsksForTheDesignOnceBeforeTheFirstTemplate
   - SkillTest::theSitepackageSkillEndsOnEveryLayoutRendered
 ---
@@ -131,3 +132,9 @@ project's data. So step 5 now writes the field through DataHandler and routes to
 `datahandler-seeding` for the script. DataHandler checks a select without a
 foreign table against no item list, on 13.4 and 14.3. So it stores
 `pagets__<identifier>` as written.
+
+The Opus run of `SITE-11` on 2026-11-27 never received `translation-domain`. The
+brief reached the `sitepackage` intent alone, and that intent names no label
+hint. The run wrote every label in the long `EXT:` form. Step 4 of the skill now
+lists `translation-domain` beside the other layout ids.
+`SkillTest::theSitepackageLayoutStepNamesTheLabelHint` holds it.

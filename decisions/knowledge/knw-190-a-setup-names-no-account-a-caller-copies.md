@@ -46,7 +46,9 @@ session choose one and commit `settings.php` without its secrets.**
 
 ## Since then
 
-The second pair ran by 2026-11-27, and `T-261029-bb2b` holds both rows. Fable
-named the account `clinic_admin`, and Opus named it `admin`. Neither committed a
-password. So the **Wrong if** holds for the name on one model of two, and the
-password moved on both.
+On 2026-11-27 the second pair had run, and `SITE-11` records it. Fable named the
+account `clinic_admin`, Opus named it `admin`, and neither committed a password.
+So the **Wrong if** holds for the name on one model of two. The Opus brief
+reached the `sitepackage` intent alone, so the checklist item "other than admin"
+never reached it. Step 3 of `typo3-development-installation` now states the rule
+where the session writes the setup command, and `HintsTest` holds it.

@@ -17,7 +17,7 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  * sources. Not against whatever checkout happens to be on the machine.
  *
  * The versions come from knowledge/versions.json and from nowhere else. One
- * treeless clone carries the history; each covered branch is a worktree of it,
+ * blobless clone carries the history; each covered branch is a worktree of it,
  * so four lines cost one object store.
  *
  * The packages the core pins rather than contains stand here too. A statement
@@ -118,13 +118,13 @@ final class CheckoutUpdate
     }
 
     /**
-     * One treeless bare clone, created where it is absent and fetched to its
+     * One blobless bare clone, created where it is absent and fetched to its
      * refs.
      */
     private static function mirror(OutputInterface $output, string $path, string $repository, bool $tags): bool
     {
         if (!is_dir($path)) {
-            Voice::row($output, sprintf('cloning %s, treeless: the blobs are fetched as they are read', $repository));
+            Voice::row($output, sprintf('cloning %s, blobless: the blobs are fetched as they are read', $repository));
             // --filter=blob:none keeps the history and the trees and leaves the file
             // contents on the server until something asks for them. A full clone of the
             // core is several gigabytes; this is a fraction of it, and the worktrees

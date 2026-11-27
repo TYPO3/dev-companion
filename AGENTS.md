@@ -633,9 +633,9 @@ what a decision carries that a commit message cannot, and what `open`,
 gives its sections, and what a later session adds to the foot.
 
 [documentation/records/forward-runs.rst](documentation/records/forward-runs.rst)
-says how a session runs a forward review, judges it, and reads one that stopped
-without an error. [scenarios/readme.md](scenarios/readme.md) says what each kind
-of scenario is for.
+says how a session runs a forward review, judges it, and handles a run that
+hangs. [scenarios/readme.md](scenarios/readme.md) says what each kind of
+scenario is for.
 
 ## What describes this server to someone else
 

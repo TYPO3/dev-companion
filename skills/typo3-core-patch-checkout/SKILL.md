@@ -65,6 +65,10 @@ a rule stops the work, follow "When a rule stops the work".
    - the command for a rebase onto current code;
    - what the author must get from you when you upload to their change.
 
+4. Call `typo3_task_guide` with the paths the change touches. Step 3 of the base
+   order asks for it in every task. Only the answer of step 2 names those paths,
+   so make this call after it and before the fetch.
+
 A change can be part of a chain: several changes that build on each other. If
 the answer of step 2 has a `chain` with more than one open link, read
 [references/chain.md](references/chain.md) before the fetch.

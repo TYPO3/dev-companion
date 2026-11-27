@@ -53,3 +53,13 @@ rewrote `skills/base.md`, `typo3-core-patch-checkout` and its references.
   Then "the calls a task needs" reads as an invitation, which `D-SKL-034` warned
   against.
 - A remaining skill cannot take this shape without a loss of a tested behaviour.
+
+## Since then
+
+The first run on the rewritten base, `SKILL-13` on 2026-11-27, left out step 3.
+The session read the base and loaded the schema of `typo3_task_guide`, and it
+never made the call. Its report hid that. The summary of the base said "the
+calls of the order that the task needs", and the skill named no step for the
+call. The summary now says that steps 1 and 3 hold for every task. Step 1 of
+`typo3-core-patch-checkout` makes the call with the paths of the change. This is
+the case the second **Wrong if** names, on step 3 rather than on 2, 4 or 5.

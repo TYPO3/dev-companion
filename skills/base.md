@@ -13,7 +13,8 @@ Two words have a fixed meaning here:
 In short:
 
 1. Check that the server answers.
-2. Make the calls of the order that the task needs, in sequence.
+2. Make steps 1 and 3 of the order in every task. Make the other calls where the
+   task needs them, in sequence.
 3. Write down what they established.
 4. Then read the checkout.
 5. Before the first edit, name the files you will create, change or delete.

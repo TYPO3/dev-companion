@@ -62,6 +62,12 @@
         -->
         <favicon href="images/signet-s.svg" sizes="16x16"/>
         <favicon href="images/signet-l.svg" sizes="32x32"/>
+        <!--
+            The picture a link to any page shows on another site: the hero of
+            the front page. The finish step makes its path absolute with the
+            address the workflow hands it.
+        -->
+        <image href="images/dev-companion-robot-server-hero.webp" alt="A robot hands a memory module to an open server rack"/>
         <brand>TYPO3</brand>
         <product>Dev Companion</product>
         <cdn>jsdelivr</cdn>

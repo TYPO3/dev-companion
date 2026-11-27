@@ -63,7 +63,7 @@ jobs:
           composer init --working-dir="$RENDERER" --no-interaction --name=typo3/dev-companion-render
           composer require --working-dir="$RENDERER" --no-interaction --no-progress typo3/soul-guides-theme
           "$RENDERER"/vendor/bin/guides --no-progress -c documentation
-          node "$RENDERER"/vendor/typo3/soul-guides-theme/resources/dist/soul-finish.js .site/html
+          node "$RENDERER"/vendor/typo3/soul-guides-theme/resources/dist/soul-finish.js --url=https://typo3.github.io/dev-companion/ .site/html
 
       - uses: actions/upload-pages-artifact@v5
         with:

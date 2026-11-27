@@ -3,95 +3,113 @@
 What a client gets at initialize
 ================================
 
-A client launches this server as a subprocess and sends ``initialize`` before
+This page covers the answer this server sends to ``initialize``, as the server
+sends it. It also covers the three lists a client fetches right after it.
+
+A client starts this server as a subprocess and sends ``initialize`` before
 anything else. The answer is the first text the model reads from this server.
 For most sessions it is also the only text that arrives without a call. A client
-that defers its tools sends the model their names alone,
+that defers its tools sends the model only their names —
 `D-AUD-003 <../../decisions/audience/aud-003-the-instructions-carry-the-entry-point-because-the-tool-descriptions-never-arrive.md>`_.
-This page shows that answer as the server sends it, and the three lists a client
-fetches right after it.
 
 The four members
 ----------------
 
 * **``protocolVersion``** — the newest revision the handshake reaches. A client
-  that offers a newer one gets this one back rather than a refusal, and
-  ``StdioServerTest`` holds that. A client that opens with ``server/discover``
-  instead gets ``2026-07-28`` and the same capabilities and instructions,
+  that offers a newer one gets this one back, not a refusal, and
+  ``StdioServerTest`` checks that.
+
+  A client that opens with ``server/discover`` instead gets ``2026-07-28``, and
+  the same capabilities and instructions —
   `D-ANS-175 <../../decisions/answers/ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md>`_.
+
 * **``capabilities``** — what `Factory <../../src/Server/Factory.php>`_
   declares, which is what the server does. That is tools, resources, prompts,
   and the completion of the two closed arguments of the ``commit_message``
-  prompt,
+  prompt —
   `D-ANS-166 <../../decisions/answers/ans-166-initialize-declares-the-capabilities-the-server-honours.md>`_.
-  Under ``extensions`` stands the Skills extension, and
-  :doc:`resources/ <resources/index>` says what it adds. No list carries
-  ``listChanged``, because nothing here changes a list while a session runs.
-  Nothing carries ``logging`` or ``subscribe``, because no log message and no
-  resource update ever leaves this server.
+
+  ``extensions`` has the Skills extension, and
+  :doc:`resources/ <resources/index>` says what it adds. No list has
+  ``listChanged``, because nothing here changes a list during a session. No
+  capability has ``logging`` or ``subscribe``, because this server sends no log
+  message and no resource update.
+
 * **``serverInfo``** — the name, the version, the title, the description and the
-  site ``Factory`` declares, and the mark at two optical sizes. The mark comes
-  as ``data:`` URIs, because a stdio server has no origin a client could fetch
-  one from.
-* **``instructions``** — the statement
-  `Coverage <../../src/Knowledge/Coverage.php>`_ assembles from
-  ``knowledge/server-scope.json``. The four parts of it are the opening, the
-  index of which tool answers what, the note under the index and the close.
+  site that ``Factory`` declares, and the mark at two optical sizes. The mark
+  comes as ``data:`` URIs, because a stdio server has no origin a client could
+  fetch it from.
 
-What the instructions carry
----------------------------
+* **``instructions``** — the statement that
+  `Coverage <../../src/Knowledge/Coverage.php>`_ builds from
+  ``knowledge/server-scope.json``. It has four parts: the opening, the index of
+  which tool answers what, the note under the index, and the close.
 
-The instructions open with the first call of any task, because the tool
-descriptions are not a channel a deferred session reads. Then they route the
-questions a session asks most, name the skills, and say that the server answers
-in English. The whole of it fits the 2048 characters the recorded client keeps,
+What the instructions say
+-------------------------
+
+The instructions open with the first call of any task, because a deferred
+session does not read the tool descriptions. Then they route the questions a
+session asks most, name the skills, and say that the server answers in English.
+
+The whole text fits the 2048 characters the recorded client keeps —
 `R-ANS-013 <../../requirements/answers/ans-013-the-instructions-fit-what-a-client-keeps.md>`_.
-A client cuts past that without a word to either side, so the budget covers
-everything assembled, prefix and suffix included.
+A client cuts the text past that limit and tells neither side. So the budget
+covers everything the server builds, prefix and suffix included.
 
 Three things change the text from one start to the next:
 
-* **A notice in front.** Where the task skills published into the project are
-  stale, ``Installer`` puts them back. The instructions then open with one
-  sentence that says so,
+* **A notice at the start.** Where the task skills published into the project
+  are stale, ``Installer`` puts them back. The instructions then open with one
+  sentence that says so —
   `D-DIS-021 <../../decisions/discovery/dis-021-a-stale-publication-is-put-back-where-the-server-starts.md>`_.
+
   Where ``install`` never ran in the project, the sentence says that no task
   skills are installed. It names the ``typo3://skill`` resource that serves each
-  one,
+  one —
   `D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
-* **The exclusion in front of the routing.** Where
+
+* **The exclusion before the routing.** Where
   ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` names tools, the instructions say which
-  are left out and drop every index entry that routed to one,
+  tools are left out. They drop every index entry that routed to one —
   `R-SCO-009 <../../requirements/scope/sco-009-individual-tools-can-be-excluded.md>`_.
-  Past what the budget holds, the count stands in for the names.
+  Where the names do not fit the budget, the instructions give their count
+  instead.
+
 * **The write sentence at the end.** A standalone checkout offers
-  ``typo3_feedback_record``, and the instructions say so in their last sentence.
+  ``typo3_feedback_record``, and the last sentence of the instructions says so.
   A project that installed the server as a dependency gets neither the tool nor
-  the sentence. The page below shows the checkout's form.
+  the sentence. The section "The initialize result" shows the form of the
+  checkout.
 
 What arrives after
 ------------------
 
 * **``tools/list``** — every tool with its description, its two schemas and its
-  annotations, which is the whole of :doc:`tools/ <tools/index>`. A client that
-  follows the API's guidance defers a list this size. It then searches the list
-  by name and description when the model names a subject,
+  annotations. That is all of :doc:`tools/ <tools/index>`.
+
+  A client that follows the guidance of the API defers a list of this size. It
+  then searches the list by name and description when the model names a subject
+  —
   `D-AUD-019 <../../decisions/audience/aud-019-a-lookups-description-names-the-subjects-it-covers.md>`_.
+
 * **``prompts/list``** — the prompts a user picks by name. ``debrief`` is there
-  where the feedback channel is, and nowhere else,
+  where the feedback channel is, and nowhere else —
   `D-FBK-048 <../../decisions/feedback/fbk-048-the-debrief-is-offered-as-a-prompt-where-the-channel-is.md>`_.
+
 * **``resources/list``** and **``resources/templates/list``** — the surface a
-  user picks from rather than the model calls, which
-  :doc:`resources/ <resources/index>` describes whole.
+  user picks from, where the model does not call.
+  :doc:`resources/ <resources/index>` describes it whole.
 
 What holds it
 -------------
 
-``bin/cli tools:index`` writes everything below the marker, from a session it
-runs against ``Factory::create()`` in its own process. ``bin/cli tools:check``
-and ``ToolSurfaceTest`` fail where the page says something else than the server
-answers. ``StdioServerTest`` reads the same answer over stdio. So a count on
-this page is what the server answered at the commit that wrote it.
+``bin/cli tools:index`` writes everything after the marker. It reads it from a
+session it runs against ``Factory::create()`` in its own process.
+``bin/cli tools:check`` and ``ToolSurfaceTest`` fail where the page says
+something other than what the server answers. ``StdioServerTest`` reads the same
+answer over stdio. So a count on this page is what the server answered at the
+commit that wrote it.
 
 .. What follows is written by ``bin/cli tools:index``.
 

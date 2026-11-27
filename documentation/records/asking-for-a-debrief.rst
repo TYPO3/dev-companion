@@ -18,9 +18,9 @@ Ask in a message of its own, **after** the work ends. A debrief sent before the
 task or with it becomes part of the task. An agent that knows a question about
 helpful tools is on its way calls tools to have an answer.
 
-The prompt is generic on purpose. It names no scenario, no skill and no tool. So
-the same text works after a review, an implementation, or a question the server
-could not answer at all.
+The prompt is generic on purpose. It names no scenario, no skill and no tool but
+the one that records the feedback. So the same text works after a review, an
+implementation, or a question the server could not answer at all.
 
 The prompt
 ----------
@@ -50,11 +50,11 @@ The report, not the shape
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The prompt asks for the report, never for the shape of the feedback.
-``typo3_feedback_record`` states what each field wants in its parameters, the
-only documentation a client reads. That covers one feedback per subject, the
-task named in the first line, and where to read the model identifier rather than
-remember it. A prompt that restates it is a second copy that ages. It would also
-reach only the sessions somebody gave it to.
+``typo3_feedback_record`` states what each field wants in its description and
+its parameters, the only documentation a client reads. That covers one feedback
+per subject, the task named in the first line, and where to read the model
+identifier rather than remember it. A prompt that restates it is a second copy
+that ages. It would also reach only the sessions somebody gave it to.
 
 What did not happen
 ~~~~~~~~~~~~~~~~~~~
@@ -65,8 +65,9 @@ question it never asked leave nothing behind. A list that asks only what
 happened confirms the surface the server already has.
 
 `D-AUD-003 <../../decisions/audience/aud-003-the-instructions-carry-the-entry-point-because-the-tool-descriptions-never-arrive.md>`_
-is a session the body of the published skill would have guided. That session
-never loaded the skill and went through Bash instead.
+records a ``REVIEW-01`` session that never activated the skill. The body of that
+skill would have met both criteria the run failed. The session made every call
+through Bash instead.
 
 The knowledge
 ~~~~~~~~~~~~~
@@ -107,10 +108,10 @@ can read. What comes back is one session's own figure, worth what the client
 behind it reports.
 
 That is why the session reads the figure rather than estimates it. It is also
-why the session names a client that reports none of it. The cost comes last for
-the reason the tools do. An agent that knows a count of its calls is on its way
-makes fewer of them. What it reports is then not the run that would have
-happened.
+why the session names what its client does not report. The prompt asks for the
+cost only after the work, for the reason it asks about the tools only then. An
+agent that knows a count of its calls is on its way makes fewer of them. What it
+reports is then not the run that would have happened.
 
 A transcript that starts late
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

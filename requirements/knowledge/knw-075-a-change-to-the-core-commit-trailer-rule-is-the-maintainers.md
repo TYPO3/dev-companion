@@ -12,10 +12,10 @@ judged: 2026-08-28
 **This repository settles which trailers a core commit message carries, and a
 session that would change it asks the maintainer first.**
 
-No checkout derives the rule. It rested for four weeks on the opposite of what
-the core's own `AGENTS.md` says, then agreed with that file, and now leaves the
-sign-off open. No state was readable off the files, because each move was the
-maintainer's (`D-KNW-167`).
+No checkout derives the rule. For four weeks it rested on the opposite of what
+the core's own `AGENTS.md` says. Then it agreed with that file, and now it
+leaves the sign-off open. No state was readable off the files, because each move
+was the maintainer's (`D-KNW-167`).
 
 What follows is that nothing derives the trailer list. It comes out of
 `core/contribution/commit-messages` and out of `typo3_commit_message_guide`,

@@ -15,8 +15,8 @@ suite, and that run is what a review reports.**
 
 `4d2b838490` on `main` and `a740212999` on `14.3`, both of 2026-09-23, hand the
 positional arguments to Playwright as `PLAYWRIGHT_TEST_ARGS`. `13.4` does not.
-So the suite entry names the variable a reader finds in the script, and a hint
-bound to the majors that have it gives the targeted form.
+So the suite entry names the variable a reader finds in the script. A hint bound
+to the majors that have it gives the targeted form.
 
 Before those commits every e2e case built its Playwright command from the
 project alone and reached no `"$@"`. `-s unit`, `-s functional`, `-s npm`,

@@ -1356,6 +1356,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### documentation
 
+- [`D-DOC-073`][D-DOC-073] — A page opens on what it covers · 2026-11-27
 - [`D-DOC-072`][D-DOC-072] — The initialize page names the report that weighs the tool list · 2026-09-17
 - [`D-DOC-070`][D-DOC-070] — This repository writes in ASD-STE100 · 2026-09-14
 - [`D-DOC-069`][D-DOC-069] — AGENTS.md states the three patch rules this corpus breaks · 2026-09-10
@@ -1420,6 +1421,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-DOC-008`][D-DOC-008] — The calls that reach outside stay in the shared table · 2026-08-02 · confirmed
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
 
+[D-DOC-073]: documentation/doc-073-a-page-opens-on-what-it-covers.md
 [D-DOC-072]: documentation/doc-072-the-initialize-page-names-the-report-that-weighs-the-tool-list.md
 [D-DOC-070]: documentation/doc-070-this-repository-writes-in-asd-ste100.md
 [D-DOC-069]: documentation/doc-069-agents-md-states-the-three-patch-rules-this-corpus-breaks.md

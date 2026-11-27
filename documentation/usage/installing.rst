@@ -3,16 +3,28 @@
 Installing the server
 =====================
 
-Requirements: **PHP 8.2+** with the extensions ``composer.json`` requires, and
-Composer. ``composer check-platform-reqs`` names one that is missing. A PHP that
-lacks one still starts, names it on stderr, and answers every call with that
-sentence,
-`D-ANS-176 <../../decisions/answers/ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md>`_.
-A standalone checkout is the ordinary way in: one clone serves every project on
-the machine and stays out of each project's dependencies. A project can require
-the package instead, which is the second section. The
+This page covers how the server gets into a project and into your agent's
+client. It also covers how you keep it current and how you remove it. The
 `readme <../../readme.md>`_ has the short version; this page has the cases it
 leaves out.
+
+The steps at a glance:
+
+1. Check the requirements.
+2. Choose a standalone checkout or a Composer dependency.
+3. Run ``install`` in the project, and name your client.
+4. Finish the setup in the client: approve the server, then start a new session.
+5. Run ``update`` when the package moves.
+
+Requirements
+------------
+
+You need **PHP 8.2+** with the extensions ``composer.json`` requires, and
+Composer. ``composer check-platform-reqs`` names an extension that is missing.
+
+A PHP without such an extension still starts the server. The server names the
+extension on stderr and answers every call with that sentence —
+`D-ANS-176 <../../decisions/answers/ans-176-a-php-that-lacks-a-required-extension-is-refused-by-every-call.md>`_.
 
 .. diagram::
     :zoomable:
@@ -61,9 +73,21 @@ leaves out.
     files -> activate
     activate -> ready
 
-``install`` and ``update`` write into the directory they run in, which is the
-project under setup. Every command below is therefore run from the root of the
-project the agent works in, and never from inside the server's own checkout.
+Choose a way in
+---------------
+
+There are two ways, and the first is the usual one:
+
+* **A standalone checkout.** One clone serves every project on the machine. It
+  stays out of the dependencies of each project.
+
+* **A Composer dependency.** The project requires the package. Use it where
+  every checkout of the project needs the same client entry, as in a team or a
+  DDEV project.
+
+``install`` and ``update`` write into the directory you run them in. So run
+every command below from the root of the project your agent works in. Never run
+them from inside the server's own checkout.
 
 Standalone
 ----------
@@ -77,11 +101,10 @@ Clone the repository and install its dependencies once:
     composer install
 
 
-The clone takes its name from the binary rather than from the repository. So the
-absolute path in every command below is the directory ``git clone`` just made.
+The clone takes its name from the binary, not from the repository. In every
+command below, the absolute path is the directory ``git clone`` just made.
 
-Then change into the project the agent works in and install the entrypoint into
-its ``.mcp.json``:
+Then change into your project and install the entrypoint into its ``.mcp.json``:
 
 .. code-block:: bash
 
@@ -89,7 +112,7 @@ its ``.mcp.json``:
     /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
 
 
-It writes the following shape with the actual absolute path:
+``install`` writes this entry, with the real absolute path:
 
 .. code-block:: json
 
@@ -104,71 +127,75 @@ It writes the following shape with the actual absolute path:
     }
 
 
-This is the setup to use when working on the knowledge base itself, since the
-``feedback/`` tools only exist in a checkout.
+Use this setup to work on the knowledge base itself. The ``feedback/`` tools
+exist only in a checkout.
 
 One entry for every project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Everything above is per project, and a machine with a dozen of them can carry
-one entry instead. Nothing here writes it. The client documents its own command
-and what ``install`` writes stays inside the project it pointed at, see
+``install`` writes one entry per project. A machine with many projects can use
+one entry for all of them instead. This package does not write that entry: what
+``install`` writes stays inside the project —
 `D-DIS-018 <../../decisions/discovery/dis-018-what-install-writes-stays-inside-the-project.md>`_.
-In Claude Code that entry is the user scope. Its documentation describes it as
-the place for the development tools somebody uses across projects:
+Your client documents the command for it.
+
+In Claude Code, that entry is the user scope. Its documentation names the user
+scope as the place for tools somebody uses across projects:
 
 .. code-block:: bash
 
     claude mcp add --scope user typo3-dev-companion -- php /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion
 
 
-The entry names the checkout by its absolute path. Each machine has its own user
-scope, so each machine writes its own path. A bare command name would rest on
-the ``PATH`` the client starts with. A client started from a desktop does not
-always have the one a shell has.
+Name the checkout by its absolute path. Each machine has its own user scope, so
+each machine writes its own path. Do not use a bare command name. It depends on
+the ``PATH`` the client starts with, and a client started from a desktop often
+has another ``PATH`` than your shell.
 
-The server then starts in every session, in a project without TYPO3 as much as
-in one with it. Its tool list costs context in each of them. That is the price
-of the entry, and the reason ``install`` per project stays the default.
+With that entry, the server starts in every session, also in a project without
+TYPO3. Its tool list then costs context in every session. That is why
+``install`` per project stays the default.
 
-The client starts the server in the session's directory, and that is where the
-server finds the project. Claude Code does not document that directory, so it
-was measured: a session in a project got that project, on 2026-10-27.
+The client starts the server in the directory of the session, and the server
+finds the project there. Claude Code does not document that directory. A
+measurement on 2026-10-27 showed that a session in a project gets that project.
 
-Three things follow from the client's own rules:
+Three points follow from the rules of the client:
 
-* A project entry wins. The scopes rank local, project, user, and the whole
-  entry from the first of those wins rather than merges. ``install`` writes a
+* **A project entry wins.** The scopes rank local, project, user. The first
+  entry found wins whole, and the client merges nothing. ``install`` writes a
   project entry, so a project where it ran starts the server from that entry.
-* The task skills do not come with the entry, so ``install`` still puts them
-  into each project. A client lists them at session start, also where it
-  connects this server later. A project without them gets instructions that name
-  the ``typo3://skill`` resources instead, which a session reads only once the
-  server is connected,
+
+* **The task skills do not come with the user entry.** So ``install`` still
+  publishes them into each project. A client lists the skills when the session
+  starts, also where it connects this server later.
+
+  A project without the skills gets instructions that name the ``typo3://skill``
+  resources instead. A session reads them only after the server is connected —
   `D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
-* A Codex session without skill files called no tool of this server at all, in
-  runs on 2026-10-27. So ``install`` stays the way in there.
+
+* **Codex needs the skill files.** In runs on 2026-10-27, a Codex session
+  without them called no tool of this server at all. So for Codex, use
+  ``install``.
 
 As a dependency
 ---------------
 
-The package is on Packagist as ``typo3/dev-companion``, so the project that uses
-it requires it and nothing else:
+The package is on Packagist as ``typo3/dev-companion``. The project that uses it
+requires it, and needs nothing else:
 
 .. code-block:: bash
 
     composer require "typo3/dev-companion:@dev"
 
 
-The constraint names a stability because no release has a tag. ``dev-main`` is
-the only version there is, and the default minimum stability refuses a plain
-require. The experimental note in the `readme <../../readme.md>`_ is why — pin a
-commit where the project depends on it.
+The constraint names a stability, because no release has a tag yet. ``dev-main``
+is the only version, and the default minimum stability refuses a plain require.
+The experimental note in the `readme <../../readme.md>`_ says why. Pin a commit
+where the project depends on the server.
 
-That is the way in where the entry has to be shareable. A DDEV project, or a
-team where each checkout should carry the same one. The entry then names a path
-inside the project. Composer exposes the stdio entrypoint as
-``vendor/bin/typo3-dev-companion``. Install it from that project's root:
+Composer installs the entrypoint as ``vendor/bin/typo3-dev-companion``, so the
+entry names a path inside the project. Install it from the root of the project:
 
 .. code-block:: bash
 
@@ -176,13 +203,15 @@ inside the project. Composer exposes the stdio entrypoint as
 
 
 ``vendor/bin/typo3-dev-companion help`` lists both commands and every client
-they accept. Anything else fails with that same text. ``install --help`` prints
-it too, and so does ``update --help``. Neither writes anything on an option it
-does not take. Without an argument the entrypoint is the MCP transport itself
-and waits on stdin, which at a terminal looks exactly like a hang.
+they accept. Any other argument prints the same text and fails.
+``install --help`` and ``update --help`` print it too. Neither command writes
+anything when it gets an option it does not know.
 
-The entry names the entrypoint inside the project where the client can resolve
-that, and this server's absolute path everywhere else:
+Without an argument, the entrypoint is the MCP transport itself and waits on
+stdin. At a terminal, that looks exactly like a hang.
+
+Where the client can resolve a path inside the project, the entry names the
+entrypoint there. Everywhere else it names the absolute path of this server:
 
 .. code-block:: json
 
@@ -197,13 +226,13 @@ that, and this server's absolute path everywhere else:
     }
 
 
-Which clients resolve a path inside the project, and why the others get an
-absolute one, is :ref:`installing-which-path-is-written`. The knowledge base
-ships inside the package, so nothing else needs a deployment or a configuration.
+:ref:`installing-which-path-is-written` says which clients resolve a path inside
+the project, and why the others get an absolute one. The knowledge base is part
+of the package, so nothing else needs a deployment or a configuration.
 
-To work against a checkout instead, clone it and name it as a path repository.
-That changes the server and the project that uses it in one go. Composer
-symlinks that into ``vendor/`` so an edit is live in the project:
+To work against a checkout instead, clone it and add it as a path repository.
+Composer then links the checkout into ``vendor/``. So an edit to the server is
+live in the project at once:
 
 .. code-block:: bash
 
@@ -219,7 +248,7 @@ symlinks that into ``vendor/`` so an edit is live in the project:
     }
 
 
-The require is the same one and resolves against the checkout instead.
+The require stays the same. Composer resolves it against the checkout instead.
 
 In a DDEV project
 ~~~~~~~~~~~~~~~~~
@@ -232,11 +261,11 @@ Run the installer inside DDEV:
 
 
 The project directory is a mount, so the host sees the skills at
-``.agents/skills``. The generated MCP entry starts the server with the project's
-container PHP, at the entrypoint inside the project. That is below
-``vendor/bin``, or below the ``bin-dir`` the project's ``composer.json``
-declares instead, which is ``.build/bin`` in the layout most extension
-repositories use:
+``.agents/skills``. The entry starts the server with the PHP of the project's
+container. It names the entrypoint inside the project, below ``vendor/bin``.
+
+Where the project's ``composer.json`` declares another ``bin-dir``, the entry
+uses that. Most extension repositories declare ``.build/bin``:
 
 .. code-block:: json
 
@@ -251,24 +280,24 @@ repositories use:
     }
 
 
-This server's own checkout is a DDEV project too where it carries a
-``.ddev/config.yaml``, and ``install`` run in it names
-``bin/typo3-dev-companion`` the same way. A DDEV project that neither required
-the package nor is its checkout gets the absolute path of the checkout instead.
-The container cannot see a checkout outside the project.
+This server's own checkout is a DDEV project too, where it has a
+``.ddev/config.yaml``. ``install`` in it names ``bin/typo3-dev-companion`` the
+same way. A DDEV project that did not require the package gets the absolute path
+of the checkout instead. The container cannot see a checkout outside the
+project.
 
 .. _installing-clients:
 
 Naming the client
 -----------------
 
-No client name at all is a setup of its own, recorded as ``generic``.
-``install`` then writes the ``.mcp.json`` entry and publishes the skills to
-``.agents/skills``, the two locations a client finds without configuration for
-it. ``--agent=`` names a client that reads elsewhere. Each one receives the
-skills at its native project path and, where it supports one, its native MCP
-configuration. ``--agent=`` does not take ``generic``, because it is nobody's
-name.
+``install`` without a client name sets the project up as ``generic``. It writes
+the ``.mcp.json`` entry and publishes the skills to ``.agents/skills``. Many
+clients find those two locations without any configuration.
+
+``--agent=`` names a client that reads from other places. That client gets the
+skills at its own project path, and its own MCP configuration where it has one.
+``--agent=`` does not accept ``generic``, because no client has that name.
 
 ===========  ===============  ===========================  ===================
 Client       ``--agent=``     MCP entry                    Skills
@@ -290,220 +319,269 @@ Pi           ``pi``           none                         ``.pi/skills``
 ===========  ===============  ===========================  ===================
 
 
-Antigravity reads no ``.mcp.json``. Its entry goes into a workspace plugin,
-``.agents/plugins/typo3-dev-companion/``, with ``plugin.json`` and
-``mcp_config.json``. The plugin directory ignores itself in git, like a
-published skill. Pi receives skills only, so for Pi there is no entry and
-nothing to finish. ``typo3-dev-companion help`` prints the same identifiers.
+``typo3-dev-companion help`` prints the same identifiers. Two clients differ
+from the rest:
+
+* **Antigravity** reads no ``.mcp.json``. Its entry goes into a workspace
+  plugin, ``.agents/plugins/typo3-dev-companion/``, with ``plugin.json`` and
+  ``mcp_config.json``. Git ignores the plugin directory, the same way as a
+  published skill.
+
+* **Pi** gets skills only. So for Pi there is no entry and nothing to finish in
+  the client.
 
 The VS Code switch
 ~~~~~~~~~~~~~~~~~~
 
-``--agent=copilot`` writes the skills to ``.github/skills``, which is one of the
-two locations VS Code searches by default. That holds only if
-``chat.useAgentSkills`` is on, and it is not:
+Turn on ``chat.useAgentSkills`` in VS Code. It is off by default:
 
 .. code-block:: json
 
     "chat.useAgentSkills": true
 
 
-Without it the client assembles no search paths at all, so nothing reports that
-the skills sit in the repository unread. A session there answers from the
-checkout as if none existed (measured on VS Code 1.131.0, 2026-07-31).
-``chat.agentSkillsLocations`` is the list itself and needs no change: it already
-covers ``.github/skills`` and ``.claude/skills`` per workspace.
-``github.copilot.chat.skillTool.enabled`` is a different, experimental switch
-and not the one that makes them visible.
+``--agent=copilot`` writes the skills to ``.github/skills``. VS Code searches
+that location by default, but only with this switch on. Without it, VS Code
+searches no skill location, and nothing reports that the skills stay unread. A
+session then answers from the checkout as if there were no skills. That was
+measured on VS Code 1.131.0, on 2026-07-31.
+
+Two other settings look related:
+
+* ``chat.agentSkillsLocations`` is the list of locations. It already contains
+  ``.github/skills`` and ``.claude/skills`` per workspace, so leave it as it is.
+
+* ``github.copilot.chat.skillTool.enabled`` is another, experimental switch. It
+  does not make the skills visible.
 
 .. _installing-finishing-in-the-client:
 
 Finishing in the client
 -----------------------
 
-The entry on disk registers the server with nothing. A client that scopes
-project servers behind an approval has not seen the question yet. A session that
-was already open when the file landed runs against the configuration it started
-with. Both end with an entry that is entirely correct, a published skill that
-names the tools beside it, and no tool in the session. That is where two
-sessions in one project went, on 2026-07-29 and 2026-07-31.
+The entry in the file does not yet give a session the tools. Two things stop it:
 
-``install`` and ``update`` print what follows under the line that reports the
-entry, so you read it at the terminal rather than here. What each client needs
-is the client's own property, so each line below is that client's own
-documentation, read on 2026-08-02. A client whose documentation does not answer
-stays open rather than gets a fill:
+* A client that asks for approval of project servers has not asked yet.
 
-* **Claude Code** — a restart and an approval. "Claude Code reads ``.mcp.json``
-  at session start. Exit and restart the session after editing the file", and
-  "the first time Claude Code sees a project-scoped server, it asks you to
-  approve it". Approve at the prompt or in ``/mcp``; a server once refused is
-  reset with ``claude mcp reset-project-choices``.
+* A session that was already open when ``install`` ran still uses its old
+  configuration.
+
+In both cases the entry is correct, the skills name the tools, and the session
+has no tool. Two sessions in one project ended like that, on 2026-07-29 and on
+2026-07-31.
+
+``install`` and ``update`` print the step for your client below the line that
+reports the entry. So you read it at the terminal. The list below quotes each
+client's own documentation, read on 2026-08-02. Where that documentation does
+not answer, the list says so and guesses nothing.
+
+* **Claude Code** — restart the session and approve the server. "Claude Code
+  reads ``.mcp.json`` at session start. Exit and restart the session after
+  editing the file". And "the first time Claude Code sees a project-scoped
+  server, it asks you to approve it".
+
+  Approve at the prompt or in ``/mcp``. To reset a server you refused, run
+  ``claude mcp reset-project-choices``.
   (`quickstart <https://code.claude.com/docs/en/mcp-quickstart>`_,
   `reference <https://code.claude.com/docs/en/mcp>`_)
-* **Amp** — an approval. "MCP servers in workspace settings
+
+* **Amp** — approve the server. "MCP servers in workspace settings
   (``.amp/settings.json``) require explicit approval before they can run." And
   "in the CLI, you'll be prompted to approve workspace servers when they're
-  first detected". ``amp mcp approve typo3-dev-companion`` does it without the
-  prompt, and ``amp mcp doctor`` shows one ``awaiting approval``.
+  first detected".
+
+  ``amp mcp approve typo3-dev-companion`` approves it without the prompt.
+  ``amp mcp doctor`` shows a server that is ``awaiting approval``.
   (`manual <https://ampcode.com/manual>`_)
-* **VS Code** — a trust confirmation. "When you add an MCP server to your
-  workspace or change its configuration, you need to confirm that you trust the
-  server and its capabilities before starting it." The experimental
-  ``chat.mcp.autoStart`` restarts the server when the configuration changes.
+
+* **VS Code** — confirm that you trust the server. "When you add an MCP server
+  to your workspace or change its configuration, you need to confirm that you
+  trust the server and its capabilities before starting it."
+
+  The experimental ``chat.mcp.autoStart`` restarts the server when the
+  configuration changes.
   (`MCP servers <https://code.visualstudio.com/docs/copilot/customization/mcp-servers>`_)
-* **Codex** — a trusted project. Codex scopes MCP servers "to a project with
-  ``.codex/config.toml`` (trusted projects only)", so the trust prompt for the
-  directory is what admits them. Whether a live session reads the file again has
-  no documentation; ``codex mcp list`` reports what it has.
+
+* **Codex** — trust the project. Codex scopes MCP servers "to a project with
+  ``.codex/config.toml`` (trusted projects only)". So the trust prompt for the
+  directory admits them.
+
+  No documentation says whether a running session reads the file again.
+  ``codex mcp list`` shows what the session has.
   (`MCP <https://learn.chatgpt.com/docs/extend/mcp>`_)
-* **Zed** — a trusted worktree. The MCP page describes ``context_servers`` only
-  in the file opened with ``zed: open settings file``. But the rest of the
-  documentation puts it in the project file, "every worktree opened may contain
-  a ``.zed/settings.json`` file with extra configuration options that may
-  require installing and spawning language servers or MCP servers". Zed's own
-  advisory for the vulnerability the trust model answers agrees. It says "the
-  Zed IDE loads Model Context Protocol (MCP) configurations from the
-  ``settings.json`` file located within a project's ``.zed`` subdirectory". So
-  the client reads the written entry, behind a gate the other clients do not
-  have. Every worktree starts in Restricted Mode. That prevents "project
-  settings (``.zed/settings.json``) from being parsed and applied" and "MCP
-  servers from being installed and spawned". The title bar carries an
-  exclamation mark until the user trusts the directory there or with
-  ``workspace::ToggleWorktreeSecurity``. Whether a window that was already open
-  reads a new file has no documentation. Read 2026-08-02, when the current
-  release was v1.13.1; the trust model arrived in v0.218.2-pre.
-  (`MCP <https://zed.dev/docs/ai/mcp>`_,
+
+* **Zed** — trust the worktree. Every worktree starts in Restricted Mode. That
+  mode prevents "project settings (``.zed/settings.json``) from being parsed and
+  applied" and "MCP servers from being installed and spawned".
+
+  Trust the directory at the exclamation mark in the title bar, or with
+  ``workspace::ToggleWorktreeSecurity``. No documentation says whether a window
+  that was already open reads a new file.
+
+  The MCP page of Zed describes ``context_servers`` only in the user settings
+  file. The rest of the documentation puts it in the project file too: "every
+  worktree opened may contain a ``.zed/settings.json`` file with extra
+  configuration options that may require installing and spawning language
+  servers or MCP servers". Zed's own security advisory agrees: "the Zed IDE
+  loads Model Context Protocol (MCP) configurations from the ``settings.json``
+  file located within a project's ``.zed`` subdirectory".
+
+  Read on 2026-08-02, when the current release was v1.13.1. The trust model came
+  with v0.218.2-pre. (`MCP <https://zed.dev/docs/ai/mcp>`_,
   `trusted worktrees <https://zed.dev/docs/worktree-trust>`_,
   `GHSA-cv6g-cmxc-vw8j <https://github.com/zed-industries/zed/security/advisories/GHSA-cv6g-cmxc-vw8j>`_)
-* **Kiro** — nothing. "Changes to MCP configuration apply automatically when you
-  save the file" and "servers will reconnect". A tool ``autoApprove`` does not
-  name is still asked about on the call.
+
+* **Kiro** — nothing to do. "Changes to MCP configuration apply automatically
+  when you save the file" and "servers will reconnect". Kiro still asks at the
+  call for each tool that ``autoApprove`` does not name.
   (`MCP configuration <https://kiro.dev/docs/mcp/configuration/>`_)
-* **Droid** — nothing. "Droid reloads automatically when an ``mcp.json`` file
-  changes, so new servers are available immediately." Each tool gets its
-  approval on first use, and ``droid mcp permissions`` keeps that approval.
+
+* **Droid** — nothing to do. "Droid reloads automatically when an ``mcp.json``
+  file changes, so new servers are available immediately." Droid asks for each
+  tool at its first use, and ``droid mcp permissions`` keeps the answer.
   (`MCP <https://docs.factory.ai/cli/configuration/mcp>`_)
-* **Junie** — no approval: servers "imported from the ``mcp.json`` file are
-  enabled by default". Whether an IDE that was already open reads a new one is
-  not documented; the list is *Settings | Tools | Junie | MCP Settings*.
+
+* **Junie** — no approval. Servers "imported from the ``mcp.json`` file are
+  enabled by default". No documentation says whether an IDE that was already
+  open reads a new file. The list is at *Settings | Tools | Junie | MCP
+  Settings*.
   (`MCP configuration <https://junie.jetbrains.com/docs/junie-cli-mcp-configuration.html>`_)
-* **Cursor** — unestablished. Servers stand under *Customize*, where a toggle
-  switches one off, and "Cursor asks for approval before using MCP tools by
-  default". That is the tool call, not the server. Whether a window that was
-  already open reads a new file is not documented. In the CLI,
-  ``--approve-mcps`` approves the server and not its tools. So a first task asks
-  once per tool. ``install`` writes no permission. A project that wants fewer
-  questions lists the read-only tools under ``permissions.allow`` in
+
+* **Cursor** — not established. The servers are under *Customize*, where a
+  toggle switches one off. "Cursor asks for approval before using MCP tools by
+  default" means each tool call, not the server. No documentation says whether a
+  window that was already open reads a new file.
+
+  In the CLI, ``--approve-mcps`` approves the server and not its tools. So a
+  first task asks once per tool. ``install`` writes no permission. To get fewer
+  questions, list the read-only tools under ``permissions.allow`` in
   ``.cursor/cli.json``, one ``Mcp(typo3-dev-companion:typo3_hint_lookup)`` per
-  tool. ``Mcp(typo3-dev-companion:*)`` also allows ``typo3_feedback_record``,
-  the tool that writes. (`MCP <https://cursor.com/docs/mcp>`_,
+  tool.
+
+  Do not use ``Mcp(typo3-dev-companion:*)``. It also allows
+  ``typo3_feedback_record``, the one tool that writes.
+  (`MCP <https://cursor.com/docs/mcp>`_,
   `Permissions <https://cursor.com/docs/cli/reference/permissions>`_)
-* **opencode** — unestablished. ``enabled: false`` switches a server off, which
-  the written entry does not. Whether a session that was already open reads the
-  file again has no documentation.
+
+* **opencode** — not established. ``enabled: false`` switches a server off, and
+  the written entry does not set it. No documentation says whether a session
+  that was already open reads the file again.
   (`MCP servers <https://opencode.ai/docs/mcp-servers/>`_)
-* **Antigravity** — unestablished. A plugin in ``.agents/plugins/`` "activates
-  only when working in that project". Neither page says whether a session that
-  was already open reads a new plugin, or whether anything gates it. ``/mcp``
-  lists the servers a session has. Read 2026-10-06.
+
+* **Antigravity** — not established. A plugin in ``.agents/plugins/`` "activates
+  only when working in that project". Neither page says whether an open session
+  reads a new plugin, or whether anything gates it. ``/mcp`` lists the servers a
+  session has. Read on 2026-10-06.
   (`plugins <https://antigravity.google/docs/plugins/>`_,
   `MCP <https://antigravity.google/docs/mcp/>`_)
-* **Grok** — unestablished. A project ``.grok/config.toml`` does contribute
-  ``[mcp_servers]``, up to the git root. Whether a session that runs reads it
-  again, and whether anything gates it, has no documentation.
-  ``grok mcp doctor`` reports what it has.
+
+* **Grok** — not established. A project ``.grok/config.toml`` adds its
+  ``[mcp_servers]``, up to the git root. No documentation says whether a running
+  session reads it again, or whether anything gates it. ``grok mcp doctor``
+  shows what it has.
   (`MCP servers <https://docs.x.ai/build/features/mcp-servers>`_)
 
-Where a session has the entry and still offers no ``typo3_`` tool,
-:doc:`checking-it-answers` is the rest of the ladder.
+A session can have the entry and still offer no ``typo3_`` tool.
+:doc:`checking-it-answers` gives the next checks.
 
 .. _installing-keeping-it-current:
 
 Keeping it current
 ------------------
 
-A running server is a copy too. The client started it with the code of that
-moment, and a pull or a ``composer update`` does not reach it. Every answer then
-opens with a sentence that says so, and a restart of the MCP server is the fix,
+Restart the MCP server after a pull or a ``composer update``. The client started
+the server with the code of that moment, and the new code does not reach the
+running process. Until the restart, every answer opens with a sentence that says
+so —
 `D-DIS-030 <../../decisions/discovery/dis-030-a-process-older-than-its-code-says-so-in-every-answer.md>`_.
 
-A checkout learns of nothing upstream by itself, and this package moves every
-day. So a server started from a git checkout asks GitHub once at the start
-whether its commit is behind ``main``. Every session of the checkout shares the
-answer for an hour. While it is behind, every answer opens with how far behind
-it is and the pull that ends it. ``typo3_server_scope`` reports the state under
-``upstream``, and ``TYPO3_DEV_COMPANION_UPSTREAM_CHECK=off`` turns the read off,
+A checkout does not learn by itself that ``main`` moved, and this package moves
+every day. So a server started from a git checkout asks GitHub once at the start
+whether its commit is behind ``main``. All sessions of the checkout share that
+answer for an hour.
+
+While the checkout is behind, every answer opens with how far behind it is and
+the pull that fixes it. ``typo3_server_scope`` reports the state under
+``upstream``. ``TYPO3_DEV_COMPANION_UPSTREAM_CHECK=off`` turns the check off —
 `D-DIS-031 <../../decisions/discovery/dis-031-a-checkout-behind-its-upstream-says-so-in-every-answer.md>`_.
 
-A read that fails leaves the state ``unavailable``, and the start writes why to
-stderr. ``typo3_server_scope`` carries the same sentence as ``reason``. The next
-start asks again.
+Where the check fails, the state is ``unavailable``, and the server writes why
+to stderr. ``typo3_server_scope`` gives the same sentence as ``reason``. The
+next start asks again.
 
-A published skill is a copy, so it goes stale the moment this package moves.
-``update`` is what refreshes it, along with the client entry:
+Run ``update`` when the package moved. A published skill is a copy, so it is out
+of date as soon as the package changes. ``update`` refreshes the skills and the
+client entry:
 
 .. code-block:: bash
 
     vendor/bin/typo3-dev-companion update
 
 
-``update`` takes ``--agent=<client>`` as well, but rarely needs to. ``install``
-records every client it set up in ``.typo3-dev-companion/state.json``, and
-without an agent ``update`` refreshes all of them. A project is usually worked
-on by more than one, and which ones is knowledge only the project has.
+``update`` takes ``--agent=<client>`` too, but rarely needs it. ``install``
+writes every client it set up into ``.typo3-dev-companion/state.json``. This
+page calls that file the record. Without ``--agent=``, ``update`` refreshes
+every client the record names. More than one client often works on a project,
+and only the project knows which.
 
-Both commands write the client entry, because what belongs in it is a property
-of the project rather than of the run. A project that required this package
-after its first install needs a different entry than the one that is there. So
-does one that gained a DDEV configuration since. ``update`` is what moves it. An
-entry that starts something other than this server is somebody else's and gets a
-refusal instead. The two commands then say so and change nothing.
+Both commands write the client entry, because the right entry depends on the
+project and not on the run. Two examples: a project that required this package
+after its first install, and a project that got a DDEV configuration since. Each
+needs another entry than the one it has, and ``update`` writes it.
 
-They own the command in that entry and nothing else. Whatever the caller put
-beside it stays — ``env`` above all, which is where the entry carries the
-:ref:`variables below <installing-what-the-entry-may-carry>`. In a
-``.codex/config.toml`` or a ``.grok/config.toml`` that means every line of the
-section this package does not write. So a value that continues on the next line
-gets a refusal with the line number rather than a rewrite around it. A kept line
-means a known end of it.
+An entry that starts something other than this server belongs to somebody else.
+Then both commands refuse, say so and change nothing.
+
+The two commands change the command in that entry and nothing else. They keep
+everything you put beside it. That is mostly ``env``, which holds the
+:ref:`variables below <installing-what-the-entry-may-carry>`.
+
+In a ``.codex/config.toml`` or a ``.grok/config.toml``, they keep every line of
+the section that this package does not write. So where a value continues on the
+next line, the commands refuse and name the line number. They rewrite a line
+only where they know where it ends.
 
 .. _installing-when-they-go-stale:
 
 When they go stale
 ~~~~~~~~~~~~~~~~~~
 
-The record carries a digest of the publication, and a server started in that
-project compares it before the first call, see
+The record holds a digest of the published skills. A server started in the
+project compares that digest before the first call —
 `R-DIS-025 <../../requirements/discovery/dis-025-a-publication-that-went-stale-says-so-before-the-first-call.md>`_.
-Where they no longer match, the server republishes what the record names, for
-the clients it names, and writes no client configuration. Then it says so twice.
-The long line goes to stderr and names what differed and what went out again.
-One short sentence goes into the instructions a client gets at initialize. A
-skill the client loaded when the session opened is the copy that was there
-before.
 
-A project with no record stays as it is. Its instructions open with one sentence
-that no task skills are installed there, and it names the ``typo3://skill``
-resource that serves each one,
+Where the digest no longer matches, the server publishes the skills again. It
+does that for the clients the record names, and it writes no client
+configuration. Then it says so twice:
+
+* A long line on stderr names what differed and what it published again.
+
+* One short sentence goes into the instructions the client gets at initialize.
+
+A skill that the client loaded at the start of the session stays the old copy.
+
+A project without a record stays as it is. Its instructions open with one
+sentence: no task skills are installed there. That sentence names the
+``typo3://skill`` resource that serves each one —
 `D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
-A refresh that fails leaves the notice as it was and the server starts anyway.
-Why the server does it rather than a command somebody runs is
-`D-DIS-021 <../../decisions/discovery/dis-021-a-stale-publication-is-put-back-where-the-server-starts.md>`_.
-On the machine that prompted it, twelve projects had heard the notice at every
-session start for weeks.
 
-Set ``TYPO3_DEV_COMPANION_SKILL_REFRESH=off`` to keep the notice and nothing
-else. That is for a reader who wants the copies in their project to move when
-they say so. A review of what a release changed, or a project where the skills
+Where the refresh fails, the notice stays, and the server starts anyway.
+`D-DIS-021 <../../decisions/discovery/dis-021-a-stale-publication-is-put-back-where-the-server-starts.md>`_
+says why the server refreshes the skills itself rather than leave it to a
+command. On the machine that led to it, twelve projects had shown the notice at
+every session start for weeks.
+
+Set ``TYPO3_DEV_COMPANION_SKILL_REFRESH=off`` to get the notice and no refresh.
+Use it where you want the copies in your project to change only when you say so.
+Examples are a review of what a release changed, or a project where the skills
 are part of a diff.
 
 Refreshing on update
 ~~~~~~~~~~~~~~~~~~~~
 
-A project can have the thing that moved the package run the refresh. Composer
-fires ``post-update-cmd`` after ``composer update``, and the project's own
-``composer.json`` is where that lives:
+A project can run the refresh whenever Composer updates the package. Composer
+runs ``post-update-cmd`` after ``composer update``. Add it to the project's own
+``composer.json``:
 
 .. code-block:: json
 
@@ -516,93 +594,101 @@ fires ``post-update-cmd`` after ``composer update``, and the project's own
     }
 
 
-Nothing here writes that line. ``install`` and ``update`` write client
-configuration, the skills and the record, and a file that decides what the
-project consists of is not among them.
+This package does not write that line. ``install`` and ``update`` write the
+client configuration, the skills and the record. A file that decides what the
+project consists of is not theirs to change.
 
-The command needs no path. Composer pushes the project's declared ``bin-dir``
-onto ``PATH`` before it runs a script. So the bare name resolves whether the
-project puts its binaries in ``vendor/bin`` or in ``.build/bin``. It runs in the
-project root, which is where the record is.
+The command needs no path. Composer puts the project's declared ``bin-dir`` on
+the ``PATH`` before it runs a script. So the bare name works with ``vendor/bin``
+and with ``.build/bin``. It runs in the project root, where the record is.
 
-A project with no install hears so and the run succeeds. That is the ordinary
-case for everybody but the person who set it up. The record sits below a
-directory that ignores itself, so it is in no checkout but theirs. A script that
-exits non-zero fails the whole Composer run.
+In a checkout without an install, the command says so and succeeds. That is the
+usual case for everybody but the person who set the project up. Git ignores the
+directory of the record, so it exists only in that person's checkout. A script
+that fails would fail the whole Composer run.
 
-What the hook does not cover is the fresh clone. ``post-update-cmd`` fires on
-``composer update`` and on an ``install`` with no lock file, so a colleague who
-installs from the lock runs nothing. There the notice at the next server start
-is what says the copies are behind.
+The hook does not cover a fresh clone. ``post-update-cmd`` runs on
+``composer update``, and on ``composer install`` without a lock file. A
+colleague who installs from the lock file runs nothing. There, the notice at the
+next server start says that the copies are out of date.
 
 .. _installing-what-the-entry-may-carry:
 
-What the entry may carry
-------------------------
+Variables in the entry
+----------------------
 
-Four environment variables, all set in the ``env`` block of the client entry,
-which is the one part of it ``install`` and ``update`` leave alone:
+The entry takes four environment variables. Set them in the ``env`` block of the
+client entry. ``install`` and ``update`` leave that block as it is.
 
-* ``TYPO3_DEV_COMPANION_ROOT`` — the installation to read, where the one found
-  from the working directory is the wrong one — :doc:`checking-it-answers`.
-* ``TYPO3_DEV_COMPANION_CONSOLE`` — the command that runs that installation's
-  console, such as ``ddev exec .build/bin/typo3`` — :doc:`checking-it-answers`.
-* ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` — tool names, comma-separated, the
-  client does not get, see
+* ``TYPO3_DEV_COMPANION_ROOT`` — the installation to read, where the server
+  finds the wrong one from the working directory. See
+  :doc:`checking-it-answers`.
+
+* ``TYPO3_DEV_COMPANION_CONSOLE`` — the command that runs the console of that
+  installation, such as ``ddev exec .build/bin/typo3``. See
+  :doc:`checking-it-answers`.
+
+* ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` — the names of the tools the client does
+  not get, separated by commas. See
   :ref:`which tools the client gets <installing-which-tools-are-offered>`.
-* ``TYPO3_DEV_COMPANION_SKILL_REFRESH`` — ``off`` reports stale skills instead
-  of a repair — :ref:`when they go stale <installing-when-they-go-stale>`.
+
+* ``TYPO3_DEV_COMPANION_SKILL_REFRESH`` — ``off`` reports skills that are out of
+  date and does not refresh them. See
+  :ref:`when they go stale <installing-when-they-go-stale>`.
 
 .. _installing-which-tools-are-offered:
 
 Which tools the client gets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Every one of them, wherever the server started. Some of what it knows is the
-core's own contribution process, the review rules, the Gerrit workflow, the core
-testing suites. None of that transfers to a project. The answer says what it is
-worth, per topic and per path. Whether a task is core work is a property of the
-task and not of the directory the ask comes from.
+The client gets every tool, wherever the server started. Some of what the server
+knows is about the core's contribution process: the review rules, the Gerrit
+workflow and the core test suites. None of that applies to a project. Each
+answer says what it is worth for the topic and the path. Whether a task is core
+work depends on the task, not on the directory you ask from.
 
-The server used to leave those three tools out of a Composer project. That read
-the repository where the task was meant. A core patch written from a site
-installation got a core work answer and then a route to a tool the client did
-not have.
+Earlier builds left the core contribution tools out of a Composer project. That
+mistook the repository for the task. A core patch written from a site
+installation got a core answer and then a route to a tool the client did not
+have.
 
-* ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` removes tools by their comma-separated
-  names, and is the only thing that shortens the list. Three names never shorten
-  it. ``typo3_server_scope``, because it is what explains a shorter list.
-  ``typo3_feedback_record`` and ``typo3_feedback_list``, because the feedback
-  channel is a development tool for the build of this server rather than part of
-  its use. See
+To take tools away, use ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS``. It is the only
+setting that shortens the list. It never removes three tools:
+
+* ``typo3_server_scope``, because it explains a shorter list.
+
+* ``typo3_feedback_record`` and ``typo3_feedback_list``, because the feedback
+  channel is a tool for the development of this server, not part of its use. See
   `R-SCO-009 <../../requirements/scope/sco-009-individual-tools-can-be-excluded.md>`_.
-* The server reports a name in it that takes no tool away rather than absorbs
-  it. It does so on stderr before the transport starts and again under
-  ``excludedTools.ignored`` in ``typo3_server_scope``. That covers both reasons
-  a name takes nothing away. No tool of this server answers to it, a rename, or
-  a typo, or it is one of the three above.
 
-``typo3_server_scope`` names what was really excluded, and nothing routes to a
-tool that is not there. What the server says is gone is what is gone. It never
-reports a name that changed nothing as an absent capability. A client cannot
-check the claim and pays for it out of the instructions it gets.
+A name in the variable can remove nothing: a tool that does not exist, a renamed
+tool, a typo, or one of the three above. The server then reports that name. It
+writes it to stderr before the transport starts. ``typo3_server_scope`` lists it
+again under ``excludedTools.ignored``.
+
+``typo3_server_scope`` names what the variable really removed, and no answer
+sends a session to a removed tool. The server reports as gone only what is gone.
+A client cannot check such a claim, and pays for a wrong one in its
+instructions.
 
 What comes with it
 ~~~~~~~~~~~~~~~~~~
 
-Clients that expose MCP prompts also list ``commit_message``. It turns a summary
+Clients that show MCP prompts also list ``commit_message``. It turns a summary
 into the same checked draft as ``typo3_commit_message_guide``. The rules stay in
-the guide rather than in a second copy in the prompt.
+that tool, and the prompt has no copy of them.
 
-``debrief`` stands beside it in a standalone checkout of this repository, where
-the feedback channel exists. It takes no arguments and asks the session that has
-just finished what this server did for it and what it lacked. The same gate
-holds the two feedback tools, so a project that installed the server as a
-dependency lists none of the three. How a client runs one, and what Claude Code
-makes of a summary with a space in it: :ref:`working-with-it-the-prompts`.
+In a standalone checkout of this repository, the ``debrief`` prompt is there
+too. It takes no arguments. It asks the session that just finished what this
+server did for it and what was missing. The two feedback tools have the same
+condition. So a project that installed the server as a dependency lists none of
+the three.
 
-Task skills have one source, below ``skills/``. They contain routing and order,
-not a second copy of tool answers; client installation publishes them from that
+:ref:`working-with-it-the-prompts` says how a client runs a prompt. It also says
+what Claude Code does with a summary that has a space in it.
+
+The task skills have one source, the directory ``skills/``. They hold routing
+and order, not a copy of tool answers. ``install`` publishes them from that
 source.
 
 .. _installing-removing-it:
@@ -610,58 +696,74 @@ source.
 Removing it
 -----------
 
-Three things landed in the project, and no command takes them out again, so to
-remove the server is to delete them by hand:
+No command removes the server. Delete these three things by hand:
 
-* the ``typo3-dev-companion`` entry in the client file the table under
-  :ref:`naming the client <installing-clients>` names, and only that entry. The
-  file may carry other servers;
-* one directory per published skill in the skills directory the table names;
-* ``.typo3-dev-companion/``, where the record sits.
+* the ``typo3-dev-companion`` entry in the client file that the table under
+  :ref:`naming the client <installing-clients>` names. Delete only that entry,
+  because the file can hold other servers;
 
-Neither command touches the project's ``.gitignore``. Every directory this
-package writes, each published skill, and ``.typo3-dev-companion/``, carries a
-``.gitignore`` of its own that says ``*``. That covers the directory and that
-file with it. Git reports nothing there, and a skill the project wrote itself,
-in the same skills directory, stays visible. No ignore rule covers merged agent
-or MCP configuration such as ``.codex/config.toml`` or ``.mcp.json``, because
-the project may share it.
+* one directory per published skill, in the skills directory the table names;
 
-Development builds before this wrote a ``typo3-dev-companion.json`` at the
-project root. They wrote a block between ``# BEGIN typo3-dev-companion`` and
-``# END typo3-dev-companion`` into the project's ``.gitignore``. Nothing here
-reads or removes either. A project that has them got its setup by hand and takes
-them out the same way, and the next ``install`` records the clients again.
+* ``.typo3-dev-companion/``, where the record is.
 
-Builds from 2026-09-19 to 2026-10-02 wrote a block into the project's
-``AGENTS.md``, ``CLAUDE.md`` or ``.junie/AGENTS.md``. It stands between
-``<!-- typo3-dev-companion: start -->`` and
-``<!-- typo3-dev-companion: end -->``. Builds since then write nothing into a
-file the project's agents read as instructions, and they leave a block there
-alone —
-`D-DIS-026 <../../decisions/discovery/dis-026-the-projects-instruction-files-belong-to-the-project.md>`_.
-To take it out, delete from the start mark to the end mark. Antigravity got
-``.agents/rules/typo3-dev-companion.md`` the same way, and it goes whole.
+Neither command changes the project's ``.gitignore``. Every directory this
+package writes has a ``.gitignore`` of its own that says ``*``. That is each
+published skill and ``.typo3-dev-companion/``. The rule covers the directory and
+that file too.
+
+So git reports nothing there. A skill the project wrote itself, in the same
+skills directory, stays visible. No ignore rule covers a shared configuration
+file such as ``.codex/config.toml`` or ``.mcp.json``, because the project may
+share it.
+
+Files from older builds
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Nothing here reads or removes these. Take them out by hand.
+
+* **Development builds before the record** wrote a ``typo3-dev-companion.json``
+  at the project root. They also wrote a block into the project's
+  ``.gitignore``, between ``# BEGIN typo3-dev-companion`` and
+  ``# END typo3-dev-companion``. The next ``install`` records the clients again.
+
+* **Builds from 2026-09-19 to 2026-10-02** wrote a block into the project's
+  ``AGENTS.md``, ``CLAUDE.md`` or ``.junie/AGENTS.md``. It is between
+  ``<!-- typo3-dev-companion: start -->`` and
+  ``<!-- typo3-dev-companion: end -->``. Delete from the start mark to the end
+  mark.
+
+  For Antigravity, those builds wrote ``.agents/rules/typo3-dev-companion.md``.
+  Delete the whole file. Later builds write nothing into a file the agents of
+  the project read as instructions, and leave an old block alone —
+  `D-DIS-026 <../../decisions/discovery/dis-026-the-projects-instruction-files-belong-to-the-project.md>`_.
 
 .. _installing-which-path-is-written:
 
 Which path the entry names
 --------------------------
 
-Three shapes, and which one a client gets is a property of that client. Where
-the project has this server as a Composer dependency, or is its checkout, the
-entry names the path inside the project. That goes through ``ddev exec`` where
-there is a DDEV configuration, and through ``${workspaceFolder}`` in VS Code and
-Cursor. Everywhere else it is this server's absolute path on the machine the
-install ran on. That is a value one machine is right about, in a file its own
-client documents as the shared, committed one. There the install says so; the
-read below is why there is nothing better to write.
+Where the project has this server as a Composer dependency or is its checkout,
+the entry names the entrypoint inside the project. It does that in one of three
+ways:
 
-A relative path would have to resolve against the working directory the client
-launches the process in. The MCP specification does not define one: the stdio
-transport is "the client launches the MCP server as a subprocess" and nothing
-about a directory. So it is each client's property, read on 2026-08-09 from the
-same pages as :ref:`installing-finishing-in-the-client`.
+* through ``ddev exec``, where the project has a DDEV configuration;
+
+* with ``${workspaceFolder}``, in VS Code and Cursor;
+
+* by its absolute path, in every other client.
+
+In every other project, the entry names the absolute path of this server, on the
+machine where ``install`` ran.
+
+The absolute path is right on one machine only. It stands in a file that the
+client documents as shared and committed. ``install`` says so at the terminal.
+The rest of this section says why nothing better exists.
+
+A relative path resolves against the working directory the client starts the
+process in. The MCP specification does not define that directory. The stdio
+transport says only "the client launches the MCP server as a subprocess". So
+each client decides. The table below was read on 2026-08-09, from the same pages
+as :ref:`installing-finishing-in-the-client`.
 
 ===========  =====================================================  ===============================================================
 Client       Working directory                                      Project root in ``command``/``args``
@@ -681,18 +783,20 @@ Antigravity  ``cwd``, else the plugin's own directory               not document
 ===========  =====================================================  ===============================================================
 
 
-One client documents the workspace as the default, and four offer a ``cwd`` to
-set. Two resolve a variable that names the project root, and one refuses
-expansion in those fields outright. Claude Code is the sharpest of them. It sets
-``CLAUDE_PROJECT_DIR`` in the spawned server's environment "so your server can
-resolve project-relative paths **without depending on the working directory**".
-The same variable in a project-scoped ``.mcp.json`` "requires a default such as
-``${CLAUDE_PROJECT_DIR:-.}``", which is the work directory again.
+One client documents the workspace as the default, and four let you set a
+``cwd``. Two resolve a variable for the project root. One refuses expansion in
+those fields.
 
-The variable is what the two who have one get, rather than the plain relative
-path VS Code's default working directory would also carry. It says the same
-thing without a rest on where the process started. That is the property the
-client most sessions use asks for by name:
+Claude Code says the most. It sets ``CLAUDE_PROJECT_DIR`` in the environment of
+the server it starts, "so your server can resolve project-relative paths
+**without depending on the working directory**". But the same variable in a
+project ``.mcp.json`` "requires a default such as ``${CLAUDE_PROJECT_DIR:-.}``".
+That default is the working directory again.
+
+The two clients with a variable get it, not the plain relative path. VS Code's
+default working directory would also make a relative path work. The variable
+says the same and does not depend on where the process started. The client most
+sessions use asks for exactly that:
 
 .. code-block:: json
 
@@ -707,22 +811,25 @@ client most sessions use asks for by name:
     }
 
 
-For the other nine a relative entry would be wrong on the machine that wrote it
-too. An absolute one is at least right there. So the install says it, per client
-and at the terminal, beside the line that reports the entry —
+For the other nine, a relative entry would be wrong even on the machine that
+wrote it. An absolute one is at least right there. So ``install`` says so, per
+client, at the terminal, beside the line that reports the entry —
 `D-DIS-016 <../../decisions/discovery/dis-016-how-an-entrypoint-may-be-named-is-a-per-client-question.md>`_.
 
-Antigravity gets the absolute path as ``cwd`` too. It stands in a plugin
-directory that ignores itself, so the install has nothing to add —
+Antigravity gets the absolute path as ``cwd`` too. The path is in a plugin
+directory that git ignores, so ``install`` has nothing to add —
 `D-DIS-032 <../../decisions/discovery/dis-032-antigravity-gets-a-workspace-plugin-that-starts-the-server-in-the-project.md>`_.
 
-None of this reaches a standalone checkout. ``${workspaceFolder}`` names a path
-inside the project, and a server that runs from somewhere else has none. There
-the absolute path is the only one that exists, whatever the client resolves.
+A standalone checkout gets none of this. ``${workspaceFolder}`` names a path
+inside the project, and a server outside the project has none. There the
+absolute path is the only one, whatever the client resolves.
 
-The sources are the same as
-:ref:`finishing in the client <installing-finishing-in-the-client>`, plus three
-more.
-`The MCP transports specification <https://modelcontextprotocol.io/specification/2025-06-18/basic/transports>`_,
-`VS Code's configuration reference <https://code.visualstudio.com/docs/agents/reference/mcp-configuration>`_
-and `Cursor's MCP page <https://cursor.com/docs/context/mcp>`_.
+The sources are the pages of
+:ref:`finishing in the client <installing-finishing-in-the-client>`, and three
+more:
+
+* `the MCP transports specification <https://modelcontextprotocol.io/specification/2025-06-18/basic/transports>`_;
+
+* `VS Code's configuration reference <https://code.visualstudio.com/docs/agents/reference/mcp-configuration>`_;
+
+* `Cursor's MCP page <https://cursor.com/docs/context/mcp>`_.

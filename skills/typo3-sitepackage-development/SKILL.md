@@ -199,6 +199,6 @@ Leave them as they are.
 `typo3_commit_message_guide` with `workflow="project"` drafts the message for
 the commit in the project repository.
 
-This skill owns the sitepackage extension, its set, its page templates, its page
-layouts and their wiring into the site. Stop before you edit another owner's
-files.
+This skill covers the sitepackage extension, its set, its page templates, its
+page layouts and their wiring into the site. Stop before you edit another
+owner's files.

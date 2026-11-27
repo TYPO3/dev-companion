@@ -4,7 +4,7 @@
 a second installation of the same version that has never had the package ·
 **Contract:** `held` — `D-SKL-050`, `D-SKL-035`, `D-SKL-064`
 **Held by:** `SkillTest::everySkillRoutesThroughTheOwnersOfItsOwnFactsInOrder`
-and `SkillTest::everySkillStatesWhatItOwns`, which read back the order the
+and `SkillTest::everySkillSaysWhatItCovers`, which read back the order the
 workflow asks its three lookups in and that it says where it stops, and
 `SkillTest::theCommitStepIsNamedWhereASkillsWorkflowEndsInAChange`, because the
 artifact and the site configuration are that repository's own files. That the

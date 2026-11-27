@@ -108,8 +108,8 @@ extension, not to the project around it.
 checks it. A module in an extension, a sitepackage or a site project commits in
 that repository. That is the workflow the argument names.
 
-This skill owns backend module registration, controllers, routes, and backend UI
-implementation, up to the moment you open the module. Test infrastructure is
+This skill covers backend module registration, controllers, routes, and backend
+UI implementation, up to the moment you open the module. Test infrastructure is
 `typo3-extension-testing`'s. A broader audit is `typo3-extension-health`'s. The
 element in the page module is `typo3-content-element-development`'s. Stop before
 you implement a content element or its backend preview. Stop before you edit any

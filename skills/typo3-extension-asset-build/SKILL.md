@@ -196,9 +196,9 @@ the build now writes.
 2. Draft the message with `typo3_commit_message_guide` and `workflow="project"`.
    The change lands in the package's own repository.
 
-This skill owns the TYPO3 half of a package's asset build. That is what you run
-the build as, and whether the repository commits its output with its source. It
-is what the import map promises about the output files. It is which majors a
+This skill covers the TYPO3 half of a package's asset build. That is what you
+run the build as, and whether the repository commits its output with its source.
+It is what the import map promises about the output files. It is which majors a
 borrowed core class or icon holds on.
 
 It does not own the migration a bundler or a JavaScript library asks for on its

@@ -3779,16 +3779,16 @@ final class SkillTest extends TestCase
     }
 
     /**
-     * And it says what it owns. That is what ends a workflow at the outcome it
+     * And it says what it covers. That is what ends a workflow at the outcome it
      * is responsible for instead of in the middle of somebody else's —
      * `D-SKL-021`.
      */
     #[Decision('D-SKL-021')]
     #[Test]
-    public function everySkillStatesWhatItOwns(): void
+    public function everySkillSaysWhatItCovers(): void
     {
         foreach (self::skills() as $name => $skill) {
-            self::assertStringContainsString('This skill owns ', $skill, $name . ' does not say what it owns');
+            self::assertStringContainsString('This skill covers ', $skill, $name . ' does not say what it covers');
         }
     }
 
@@ -4308,7 +4308,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('as unrun', self::flat($skill));
 
         // What it does not own, and the skill that hands it the sweep whole.
-        self::assertStringContainsString('This skill owns what a package owes the TYPO3 majors', $skill);
+        self::assertStringContainsString('This skill covers what a package owes the TYPO3 majors', $skill);
         foreach ([
             'typo3-extension-health',
             'typo3-extension-testing',

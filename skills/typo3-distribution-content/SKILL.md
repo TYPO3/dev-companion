@@ -121,7 +121,7 @@ that repository's own files, which is the workflow that argument names.
 
 ## Where this stops
 
-This skill owns the content a distribution ships and the package that carries
+This skill covers the content a distribution ships and the package that carries
 it. That is the seed of what exists nowhere yet, and the export. It is where the
 artifact and its files sit in the extension, and the site configuration beside
 them. It is the installation that proves the result. It owns both directions of

@@ -358,7 +358,7 @@ The amend leaves them the author and makes you the committer, which is the
 intended shape. The same page carries it. Never overwrite the author line,
 however much of the patch you wrote. `--reset-author` has no use here.
 
-This skill owns the write and the delivery of a core patch. That is the change
+This skill covers the write and the delivery of a core patch. That is the change
 itself, its tests, its changelog entry, and the checks it has to pass. It is its
 commit message and its push.
 

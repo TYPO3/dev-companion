@@ -2,7 +2,7 @@
 
 **Environment:** `E-CORE`, in a core checkout whose branch has moved past the
 change · **Contract:** `open` — `R-SKL-003`
-**Held by:** `SkillTest::everySkillStatesWhatItOwns` and
+**Held by:** `SkillTest::everySkillSaysWhatItCovers` and
 `SkillTest::judgmentHeavySkillsKeepTheirChecklistBesideThem`, which read back
 the crossing and that the stopping rules sit beside the workflow. That a session
 stops at a conflict it cannot resolve, rather than resolves its way to something

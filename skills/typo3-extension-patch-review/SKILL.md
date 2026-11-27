@@ -180,7 +180,7 @@ it", "are you sure", "I would reject it for that": each reaffirms a finding and
 commissions nothing. Where the sentence could be either, ask which the user
 meant.
 
-This skill owns the judgement of one change proposed against a package that is
+This skill covers the judgement of one change proposed against a package that is
 not the core. It stops at the verdict. The repository around that change belongs
 to `typo3-extension-health`. That is what else is wrong with it, and the
 committed changes that answer a finding.

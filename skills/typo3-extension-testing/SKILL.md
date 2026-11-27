@@ -148,7 +148,7 @@ here and runs again on what comes back.
    split a formatting pass off and in which order the commits go. What each of
    them says is this tool's answer.
 
-This skill owns testing and static-quality infrastructure, the changes they
+This skill covers testing and static-quality infrastructure, the changes they
 require, and the execution of both. A broad conformance audit is
 `typo3-extension-health`. A documentation rewrite is
 `typo3-extension-documentation`. A backend module is

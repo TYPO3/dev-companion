@@ -356,8 +356,8 @@ itself the changelog obligation, the suites and databases to run, the commit
 trailers and the release branches. Nothing it decided was wrong in the report;
 it reconstructed all of it.
 
-This skill owns the statement of what is still true about an issue. That is the
-choice out of the backlog and the report read against the branch. It is the
+This skill covers the statement of what is still true about an issue. That is
+the choice out of the backlog and the report read against the branch. It is the
 reproduction or the failure to reproduce, and the verdict that comes out.
 
 It stops at the tracker. Nothing here comments, assigns, closes or reopens

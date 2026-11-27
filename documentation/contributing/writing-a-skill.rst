@@ -119,7 +119,7 @@ The rules
   ``SkillTest::aParagraphThreeSkillsShareStopsBeingCopied``
 * A skill that judges keeps its checklist beside it —
   ``SkillTest::judgmentHeavySkillsKeepTheirChecklistBesideThem``
-* It says what it owns — ``SkillTest::everySkillStatesWhatItOwns``
+* It says what it covers — ``SkillTest::everySkillSaysWhatItCovers``
 * A crossing into another skill is an instruction at the moment it happens, and
   never only in the paragraph where the workflow ends —
   ``SkillTest::aSkillThatHandsOverSaysToInvokeTheSuccessor``
@@ -191,7 +191,7 @@ sighting, one task later, and
 ``SkillTest::aBackendPreviewTaskMatchesTheSkillThatOwnsTheElement`` holds the
 measured pair. Which sides a skill owns is not readable off the file, so nothing
 holds this over the directory. It is a question the author answers against
-``This skill owns …`` and the crossings in the body. A crossing that names one
+``This skill covers …`` and the crossings in the body. A crossing that names one
 side while the description names both is the file at odds with itself in
 somebody else's project.
 
@@ -309,11 +309,11 @@ is a body whose size the skill no longer decides.
 something needs a rubric and surfaces beside it. A skill that builds something
 needs registries, and registries are tools.
 
-**What it owns, and where it stops.** Every skill says ``This skill owns …``,
-and where its work runs into another skill's, the crossing is explicit. Name the
-verified stop point and stop before the first edit to the other owner's files.
-Activate that owner and carry across only the scope and verified behaviour it
-needs
+**What it covers, and where it stops.** Every skill says ``This skill covers …``
+at its start. Where its work runs into another skill's, the crossing is
+explicit. Name the verified stop point, and stop before the first edit to the
+files the other skill covers. Invoke that skill and hand over only the scope and
+the verified behaviour it needs
 (`R-SKL-003 <../../requirements/task-skills/skl-003-crossing-into-another-skills-work-is-an-explicit-transition.md>`_).
 
 **And it stands where it happens.** That paragraph is where a reader learns the

@@ -360,7 +360,7 @@ rather than the result.
 End the answer with each step of the base order you did not reach. Give each one
 a line: `Not reached: <step> — <what stood in for it>`.
 
-This skill owns how a change under review gets into a checkout and back out of
+This skill covers how a change under review gets into a checkout and back out of
 it. What that covers, in order:
 
 - Find it, and fetch the patch set.

@@ -5,7 +5,7 @@ date: 2026-08-05
 status: open
 coveredBy:
   - SkillTest::everySkillRoutesThroughTheOwnersOfItsOwnFactsInOrder
-  - SkillTest::everySkillStatesWhatItOwns
+  - SkillTest::everySkillSaysWhatItCovers
   - SkillTest::judgmentHeavySkillsKeepTheirChecklistBesideThem
 ---
 

@@ -3,7 +3,7 @@
 **Environment:** `E-SITE`, in the project's site package · **Contract:** `held`
 **Held by:**
 `SkillTest::everySkillRoutesThroughTheOwnersOfItsOwnFactsInOrder`,
-`SkillTest::everySkillStatesWhatItOwns`,
+`SkillTest::everySkillSaysWhatItCovers`,
 `SkillTest::noSkillKeepsASecondCopyOfWhatAToolOwns`,
 `ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout`
 

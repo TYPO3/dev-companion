@@ -89,7 +89,7 @@ If you write the page anyway, the manual outruns the package it ships with. What
 crosses over is the surface, the behaviour the page would claim, and its source
 files. You write the page from what comes back verified.
 
-This skill owns documentation and user-facing wording changes. Test
+This skill covers documentation and user-facing wording changes. Test
 implementation is `typo3-extension-testing`. Conformance assessment is
 `typo3-extension-health`. Backend-module code is
 `typo3-backend-module-development`, and a content element is

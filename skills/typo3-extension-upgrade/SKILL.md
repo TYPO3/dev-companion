@@ -146,10 +146,10 @@ ownership. Load the skill by name and work from it.
    The crossing lands in the package's own repository, and the range it now
    declares is what the message is about.
 
-This skill owns what a package owes the TYPO3 majors it declares and the ones it
-is meant to declare. That is the sweep that says what breaks and the constraints
-that say what it may declare. It is the changes those two justify, and the proof
-per declared combination.
+This skill covers what a package owes the TYPO3 majors it declares and the ones
+it is meant to declare. That is the sweep that says what breaks and the
+constraints that say what it may declare. It is the changes those two justify,
+and the proof per declared combination.
 
 It does not own the decision whether the package is otherwise sound. It owns
 neither a missing harness nor a rewrite of the documentation. The sections above

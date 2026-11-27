@@ -223,7 +223,7 @@ render", "is the inline relation right", "why is the order wrong": each is this
 skill's own work. An answer is not an audit. Where the sentence could be either,
 ask which the user meant.
 
-This skill owns content-element architecture and implementation. A backend
+This skill covers content-element architecture and implementation. A backend
 module of its own is `typo3-backend-module-development`'s. Test infrastructure
 is `typo3-extension-testing`'s. Manuals are `typo3-extension-documentation`'s,
 and a broader extension audit is `typo3-extension-health`'s. Stop before you

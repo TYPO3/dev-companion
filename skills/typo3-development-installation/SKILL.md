@@ -334,9 +334,9 @@ this workflow's. A read of a log is not a suite.
 
 ## Where this stops
 
-This skill owns the installation a developer works on a package in, from before
-it exists until it answers. That is the Composer root package that installs
-TYPO3 beneath it, and the container the repository declares. It is the
+This skill covers the installation a developer works on a package in, from
+before it exists until it answers. That is the Composer root package that
+installs TYPO3 beneath it, and the container the repository declares. It is the
 non-interactive install, and the content that seeds it. It is what the install
 writes into the repository, and what it answers once it runs. That is which site
 a request reached, what it wrote down, and the site configuration behind both.

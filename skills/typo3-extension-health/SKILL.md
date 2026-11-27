@@ -302,7 +302,7 @@ report from an earlier session is evidence about the checkout as it stood then.
 
 ## Where this stops
 
-This skill owns the state of a whole package. That is what is wrong with it,
+This skill covers the state of a whole package. That is what is wrong with it,
 what each finding is worth, and who takes it onward. It is the agreed list until
 it is empty. It owns both halves of that one thing, and a request for either
 arrives at the same door.

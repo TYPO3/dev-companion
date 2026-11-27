@@ -76,7 +76,7 @@ read left open. Only the first case is work. A read has two outcomes:
 
 Either one tells an entry somebody has been back to from one nobody has opened.
 So the listing counts the two cases apart, and names the oldest entry nobody has
-opened.
+opened and no test holds.
 
 A revoked entry
 ~~~~~~~~~~~~~~~

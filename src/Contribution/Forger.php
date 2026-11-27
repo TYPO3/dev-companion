@@ -17,10 +17,16 @@ use TYPO3\DevCompanion\Http\Fetch;
  * its relations and its changes in one read, so no answer here asks the review
  * server. Read only, no login. forger.typo3.org redirects to the host below.
  *
+ * It answers for the changes too, over `/api/v1/changes` — `D-ANS-198`. A
+ * change it lists carries no commit and no address of its owner, so a change
+ * read by name stays with the review server.
+ *
  * @phpstan-import-type Row from IssueProvider
  * @phpstan-import-type Page from IssueProvider
+ * @phpstan-import-type Answer from ChangeProvider
+ * @phpstan-import-type Waiting from ChangeProvider
  */
-final class Forger implements IssueProvider
+final class Forger implements IssueProvider, ChangeProvider
 {
     public const HOST = 'https://forger.typo3.com';
 
@@ -43,6 +49,15 @@ final class Forger implements IssueProvider
      * is what every answer here speaks.
      */
     private const STATES = ['ready' => 'NEW', 'wip' => 'NEW', 'merged' => 'MERGED', 'abandoned' => 'ABANDONED'];
+
+    /**
+     * The labels of a change as Forger keys them, in the review server's
+     * spelling, which is what every answer here speaks.
+     */
+    private const LABELS = ['codeReview' => 'Code-Review', 'verified' => 'Verified'];
+
+    /** The most changes one search or one issue answers with, the review server's own. */
+    private const MOST = 25;
 
     /** @var (\Closure(string): ?string)|null */
     private static ?\Closure $transport = null;
@@ -267,6 +282,239 @@ final class Forger implements IssueProvider
     }
 
     /**
+     * The changes the issue names, as Forger reads them off the commit
+     * messages.
+     *
+     * The read of the issue lists them, so no number in a message is taken for
+     * a change of the same number. One read per change fills its votes and its
+     * `Releases:` branches. An issue without a change asks the review server
+     * too, because Forger can be minutes behind a push.
+     */
+    public function changesForIssue(int $issue, int $limit = 10): array
+    {
+        $url = self::API . '/issues/' . $issue;
+        $answer = $this->api($url, 'id', Gerrit::CACHE_DURATION);
+        if ($answer['status'] === 404) {
+            return self::changeAnswer('empty', $url, [], false, null);
+        }
+        if ($answer['body'] === null) {
+            return self::changeAnswer('unavailable', $url, [], false, $answer['cause']);
+        }
+
+        $numbers = [];
+        foreach (is_array($answer['body']['changes'] ?? null) ? $answer['body']['changes'] : [] as $change) {
+            if (is_array($change) && is_int($change['number'] ?? null)) {
+                $numbers[] = $change['number'];
+            }
+        }
+        $take = max(1, min(self::MOST, $limit));
+
+        $changes = [];
+        foreach (array_slice($numbers, 0, $take) as $number) {
+            $read = $this->api(self::API . '/changes/' . $number, 'number', Gerrit::CACHE_DURATION);
+            if ($read['body'] !== null) {
+                $changes[] = self::change($read['body']);
+            }
+        }
+
+        return self::changeAnswer($changes === [] ? 'empty' : 'answered', $url, $changes, count($numbers) > $take, null);
+    }
+
+    /**
+     * The changes the words or the path find.
+     *
+     * Forger finds any of the words, with stems, and ranks by relevance. The
+     * review server needs every word. The answer names the host, so a caller
+     * reads which of the two answered.
+     */
+    public function changesMatching(string $words, string $path, bool $open = false, int $limit = 10): array
+    {
+        if (trim($words) === '' && trim($path) === '') {
+            return self::changeAnswer('empty', '', [], false, null);
+        }
+
+        $url = self::API . '/changes?' . http_build_query(array_filter([
+            'q' => trim($words),
+            'path' => trim(trim($path), '/'),
+            'status' => $open ? 'open' : 'all',
+            'limit' => max(1, min(self::MOST, $limit)),
+        ], static fn(string|int $value): bool => $value !== ''));
+        $answer = $this->api($url, 'items', Gerrit::CACHE_DURATION);
+        if ($answer['body'] === null) {
+            return self::changeAnswer('unavailable', $url, [], false, $answer['cause']);
+        }
+
+        $changes = array_map(self::change(...), self::items($answer['body'], 'number'));
+
+        return self::changeAnswer($changes === [] ? 'empty' : 'answered', $url, $changes, self::total($answer['body']) > count($changes), null);
+    }
+
+    /**
+     * The backlog, where Forger knows every filter the caller set.
+     *
+     * Forger filters by size, branch and date, and sorts by created and by last
+     * update. It names no voter and no reviewer, so a filter on a person or on
+     * a vote is the review server's. Its open changes include those in
+     * progress, which the backlog leaves out, so the set is read whole and
+     * those drop here.
+     */
+    public function changesWaiting(array $filter, int $limit): array
+    {
+        $served = $filter['minCodeReview'] === 0 && $filter['negativeVotes'] && !$filter['mergeable']
+            && $filter['owner'] === '' && $filter['reviewedBy'] === '' && $filter['involving'] === '' && $filter['reviewableBy'] === '';
+        $read = self::API . '/changes?' . http_build_query(array_filter([
+            'status' => 'open',
+            'sort' => $filter['order'] === 'stale' ? 'least-updated' : 'oldest',
+            'maxLines' => $filter['maxSize'],
+            'branch' => $filter['branch'],
+            'updatedBefore' => $filter['updatedBefore'],
+        ], static fn(string|int $value): bool => $value !== '' && $value !== 0));
+        if (!$served) {
+            return [...self::changeAnswer('unavailable', $read, [], false, self::NOT_SERVED), 'read' => 0, 'complete' => false];
+        }
+
+        $changes = [];
+        $offset = 0;
+        do {
+            $answer = $this->api($read . '&' . http_build_query(['limit' => self::PAGE, 'offset' => $offset]), 'items', Gerrit::CACHE_DURATION);
+            if ($answer['body'] === null) {
+                return [...self::changeAnswer('unavailable', $read, [], false, $answer['cause']), 'read' => count($changes), 'complete' => false];
+            }
+            foreach (self::items($answer['body'], 'number') as $item) {
+                if (($item['state'] ?? '') !== 'wip') {
+                    $changes[] = self::change($item);
+                }
+            }
+            $offset += self::PAGE;
+            $total = self::total($answer['body']);
+        } while ($offset < $total && $offset < self::PAGE * self::PAGES);
+        $take = max(1, $limit);
+
+        return [
+            ...self::changeAnswer($changes === [] ? 'empty' : 'answered', $read, array_slice($changes, 0, $take), count($changes) > $take, null),
+            'read' => count($changes),
+            'complete' => $offset >= $total,
+        ];
+    }
+
+    /**
+     * @param 'answered'|'empty'|'unavailable' $status
+     * @param list<array<string, mixed>> $changes
+     * @return Answer
+     */
+    private static function changeAnswer(string $status, string $query, array $changes, bool $more, ?string $cause): array
+    {
+        return ['status' => $status, 'query' => $query, 'changes' => $changes, 'dropped' => 0, 'more' => $more, 'cause' => $cause];
+    }
+
+    /**
+     * One change as Forger sends it, in the shape `Gerrit` answers in.
+     *
+     * A list item carries the fields alone, and the read of one change carries
+     * its `Releases:` branches and where it was cherry-picked from. Forger
+     * names no commit and no address, so both stay empty. A vote is on the
+     * row already, which the review server sends only for a change read by
+     * name.
+     *
+     * @param array<string, mixed> $item
+     * @return array<string, mixed>
+     */
+    private static function change(array $item): array
+    {
+        $number = is_int($item['number'] ?? null) ? $item['number'] : 0;
+        $patchSet = is_int($item['patchSets'] ?? null) ? $item['patchSets'] : 0;
+        $project = preg_match('~/c/(.+)/\+/\d+~', self::text($item, 'url'), $found) === 1 ? $found[1] : Gerrit::PROJECT;
+        $owner = is_array($item['owner'] ?? null) ? $item['owner'] : [];
+        $whole = array_key_exists('commitMessage', $item);
+        $picked = is_int($item['cherryPickOf'] ?? null) ? $item['cherryPickOf'] : 0;
+
+        return [
+            'number' => $number,
+            'message' => null,
+            'files' => null,
+            'changeId' => self::text($item, 'changeId'),
+            'subject' => self::text($item, 'subject'),
+            'status' => self::STATES[self::text($item, 'state')] ?? '',
+            'branch' => self::text($item, 'branch'),
+            'patchSet' => $patchSet,
+            'commit' => '',
+            'project' => $project,
+            'owner' => [
+                'name' => self::text($owner, 'name'),
+                'username' => self::text($owner, 'username'),
+                'email' => '',
+                'accountId' => is_int($owner['id'] ?? null) ? $owner['id'] : 0,
+            ],
+            'updated' => self::reviewTime(self::text($item, 'updatedOn')),
+            'created' => self::reviewTime(self::text($item, 'createdOn')),
+            'insertions' => is_int($item['insertions'] ?? null) ? $item['insertions'] : null,
+            'deletions' => is_int($item['deletions'] ?? null) ? $item['deletions'] : null,
+            'mergeable' => is_bool($item['mergeable'] ?? null) ? $item['mergeable'] : null,
+            'url' => Gerrit::url($number, $project),
+            'fetch' => $patchSet > 0 && $number > 0 ? ['ref' => Gerrit::ref($number, $patchSet), 'remote' => Gerrit::HOST . '/' . $project] : null,
+            'labels' => self::labels($item['votes'] ?? null),
+            'commentCount' => is_int($item['commentCount'] ?? null) ? $item['commentCount'] : 0,
+            'unresolvedCommentCount' => is_int($item['unresolvedCommentCount'] ?? null) ? $item['unresolvedCommentCount'] : 0,
+            'comments' => null,
+            'chain' => null,
+            'namedInMessages' => null,
+            'issues' => null,
+            'releases' => $whole && is_array($item['releases'] ?? null) ? array_values(array_filter($item['releases'], is_string(...))) : null,
+            'messages' => null,
+            'botMessageCount' => null,
+            'ci' => null,
+            'conflicts' => null,
+            'cherryPickOf' => $picked > 0 ? ['change' => $picked, 'patchSet' => 0, 'url' => Gerrit::url($picked, $project)] : null,
+        ];
+    }
+
+    /**
+     * The two labels with their state and every vote on them.
+     *
+     * @return list<array<string, mixed>>|null
+     */
+    private static function labels(mixed $votes): ?array
+    {
+        if (!is_array($votes)) {
+            return null;
+        }
+
+        $labels = [];
+        foreach (self::LABELS as $key => $name) {
+            $label = is_array($votes[$key] ?? null) ? $votes[$key] : null;
+            if ($label === null) {
+                continue;
+            }
+            $state = self::text($label, 'state');
+            $cast = [];
+            foreach (is_array($label['votes'] ?? null) ? $label['votes'] : [] as $vote) {
+                if (is_array($vote)) {
+                    $cast[] = [
+                        'voter' => self::name($vote['account'] ?? null),
+                        'value' => is_int($vote['value'] ?? null) ? $vote['value'] : 0,
+                        'on' => self::reviewTime(self::text($vote, 'createdOn')),
+                    ];
+                }
+            }
+            $labels[] = ['label' => $name, 'state' => $state, 'satisfied' => $state === '' ? null : $state === 'OK', 'votes' => $cast];
+        }
+
+        return $labels;
+    }
+
+    /**
+     * A time in the review server's own form, so the two providers sort and
+     * read alike. Forger writes ISO 8601 in UTC, the review server a space and
+     * nanoseconds.
+     */
+    private static function reviewTime(string $time): string
+    {
+        $parsed = \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s\Z', $time, new \DateTimeZone('UTC'));
+
+        return $parsed === false ? $time : $parsed->format('Y-m-d H:i:s') . '.000000000';
+    }
+
+    /**
      * One page of one read.
      *
      * @return array{rows: list<Row>, total: int, complete: bool}|null
@@ -323,7 +571,7 @@ final class Forger implements IssueProvider
     {
         /** @var array{status: int, body: ?array<mixed>, cause: ?string}|null $cached */
         $cached = Cache::get($url, $cacheDuration);
-        if ($cacheDuration === self::CACHE_DURATION) {
+        if ($cacheDuration !== Forge::LIST_CACHE_DURATION) {
             $this->readAt = min($this->readAt ?? PHP_INT_MAX, Cache::storedAt($url));
         }
         if ($cached !== null) {
@@ -347,13 +595,14 @@ final class Forger implements IssueProvider
 
     /**
      * @param array<mixed>|null $body
+     * @param string $key the field an issue or a change is numbered by
      * @return list<array<string, mixed>>
      */
-    private static function items(?array $body): array
+    private static function items(?array $body, string $key = 'id'): array
     {
         $items = [];
         foreach (is_array($body['items'] ?? null) ? $body['items'] : [] as $item) {
-            if (is_array($item) && is_int($item['id'] ?? null)) {
+            if (is_array($item) && is_int($item[$key] ?? null)) {
                 $items[] = $item;
             }
         }

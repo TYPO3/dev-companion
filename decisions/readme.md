@@ -121,6 +121,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 ### answers
 
 - [`D-ANS-197`][D-ANS-197] — An issue answer is built from the first provider that answers · 2026-11-27
+- [`D-ANS-198`][D-ANS-198] — A change answer is built from the first provider that answers · 2026-11-27
 - [`D-ANS-196`][D-ANS-196] — An empty registry answer for a system extension names the core package · 2026-11-24
 - [`D-ANS-195`][D-ANS-195] — A changelog lookup takes the word the other tools take · 2026-11-06
 - [`D-ANS-194`][D-ANS-194] — The whole orientation stays under what Claude Code keeps in context · 2026-10-30
@@ -309,6 +310,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
 [D-ANS-197]: answers/ans-197-an-issue-answer-is-built-from-the-first-provider-that-answers.md
+[D-ANS-198]: answers/ans-198-a-change-answer-is-built-from-the-first-provider-that-answers.md
 [D-ANS-196]: answers/ans-196-an-empty-registry-answer-for-a-system-extension-names-the-core-package.md
 [D-ANS-195]: answers/ans-195-a-changelog-lookup-takes-the-word-the-other-tools-take.md
 [D-ANS-194]: answers/ans-194-the-whole-orientation-stays-under-what-claude-code-keeps-in-context.md

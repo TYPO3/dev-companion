@@ -69,3 +69,9 @@ can rebuild the answer from the data of any provider.
 - A caller acts on a Forger relation name such as `blocked` or `copied_from`
   where the tracker said `blocks` or `copied_to`. Then the provider maps them to
   the tracker's words.
+
+## Since then
+
+The change provider came on 2026-11-27 as `D-ANS-198`. `typo3_gerrit_lookup`
+reads Forger first for an issue's changes, a search and a plain backlog.
+`Gerrit` reads the issue fields of a commit message through `IssueTracker`.

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tool;
 
+use TYPO3\DevCompanion\Contribution\ChangeTracker;
+use TYPO3\DevCompanion\Contribution\Forger;
 use TYPO3\DevCompanion\Contribution\Gerrit;
 use TYPO3\DevCompanion\Contribution\IssueTracker;
 use TYPO3\DevCompanion\Knowledge\ReleaseLines;
@@ -68,7 +70,7 @@ final class GerritLookup extends ReadOnlyTool
 
     public static function description(): string
     {
-        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. A clone carries what landed and says nothing about what is open. So this tool asks the review server rather than a checkout. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its owner, message and paths, votes, comments, relation chain and its Change-Id siblings. Each link of the chain carries its owner and its label state. Where Verified rejects a patch set, the answer names the core-ci jobs that failed it, each with its public log. It adds the Forge issues its trailers name, the other changes its review log names, and whether it carries conflict markers. Four of those decide what a session does and no checkout has them. chain, with chainedAt for the patch set each link sits on. mergeable, which predicts the conflict before the fetch. fetch.ref, which git fetch takes as it stands. And the commit message body. path is the way in for "does somebody already work on this file" and for "has anybody attempted this before". The earlier attempt comes back whatever its name was. You read the diff itself in a checkout: fetch.ref gets you there, and files says how much of the file list to carry. An empty answer says whether it means an absence, since a private change is invisible to an anonymous read. The issue itself is typo3_forge_lookup. This tool reads only: you review, vote and upload yourself.';
+        return 'Whether a TYPO3 core patch already exists and what state its review is in, read from review.typo3.org. A clone carries what landed and says nothing about what is open. So this tool asks the review server rather than a checkout. Six ways in, one per call. issue with a Forge number searches every commit message for it. change with a Change-Id or a change number, or commit with a hash out of a checkout, reads that one change. query and path search by words in the commit message and by repository path, and open narrows both to what is still under review. backlog enumerates the open changes, oldest pushed or longest untouched, narrowed by size, vote state, whether they still merge, branch, date and person. Every change carries its identity, status, current patch set, size, age and label state. One read by name adds its owner, message and paths, votes, comments, relation chain and its Change-Id siblings. Each link of the chain carries its owner and its label state. Where Verified rejects a patch set, the answer names the core-ci jobs that failed it, each with its public log. It adds the Forge issues its trailers name, the other changes its review log names, and whether it carries conflict markers. Four of those decide what a session does and no checkout has them. chain, with chainedAt for the patch set each link sits on. mergeable, which predicts the conflict before the fetch. fetch.ref, which git fetch takes as it stands. And the commit message body. path is the way in for "does somebody already work on this file" and for "has anybody attempted this before". The earlier attempt comes back whatever its name was. You read the diff itself in a checkout: fetch.ref gets you there, and files says how much of the file list to carry. An empty answer says whether it means an absence, since a private change is invisible to an anonymous read. issue, query, path and a backlog without a person or a vote filter read Forger first, the index of review.typo3.org, and the review server where Forger does not answer. A change read by name always comes from the review server. source names the host that answered. Forger finds any of the query words, the review server every one. The issue itself is typo3_forge_lookup. This tool reads only: you review, vote and upload yourself.';
     }
 
     public static function inputSchema(): array
@@ -195,7 +197,7 @@ final class GerritLookup extends ReadOnlyTool
     {
         return Schema::object([
             'status' => Schema::answerStatus(),
-            'source' => Schema::string('The review server the answer came from.'),
+            'source' => Schema::string('The host the answer came from: ' . Forger::HOST . ', the index of the review server, or ' . Gerrit::HOST . ' itself. A change from Forger carries no commit and no address of its owner. Read it by name for both.'),
             'query' => Schema::string('The Gerrit query that answered this, so you can ask the same question again by hand.'),
             'changes' => Schema::listOf(Schema::object([
                 'number' => Schema::integer('Change number, the digits its review URL ends with.'),
@@ -212,7 +214,7 @@ final class GerritLookup extends ReadOnlyTool
                 'status' => Schema::string('NEW while it is open, MERGED once it landed, ABANDONED once somebody gave it up.'),
                 'branch' => Schema::string('The branch the change targets.'),
                 'patchSet' => Schema::integer('The patch set that is current on the server, counted from 1. Zero where the server named none.'),
-                'commit' => Schema::string('The commit the current patch set is. A checkout whose HEAD is another commit is not the revision under review.'),
+                'commit' => Schema::string('The commit the current patch set is. A checkout whose HEAD is another commit is not the revision under review. Empty where Forger answered, which names no commit; read the change by name for it.'),
                 'project' => Schema::string('The Gerrit project the push went to.'),
                 'owner' => self::owner(),
                 'updated' => Schema::string('When the change last moved.'),
@@ -827,27 +829,27 @@ final class GerritLookup extends ReadOnlyTool
             default => 'path',
         };
 
-        $gerrit = new Gerrit();
+        $tracker = new ChangeTracker();
         $answer = match ($direction) {
-            'issue' => $gerrit->changesForIssue($issue, $limit),
-            'change' => $gerrit->change($change, $limit, $messages),
-            'commit' => $gerrit->commit($commit, $limit, $messages),
-            'backlog' => $gerrit->backlog(
-                order: $backlog,
-                maxSize: is_int($args['maxSize'] ?? null) ? $args['maxSize'] : 0,
-                minCodeReview: is_int($args['minCodeReview'] ?? null) ? $args['minCodeReview'] : 0,
-                negativeVotes: ($args['negativeVotes'] ?? true) !== false,
-                mergeable: ($args['mergeable'] ?? false) === true,
-                branch: is_string($args['branch'] ?? null) ? trim($args['branch']) : '',
-                updatedBefore: is_string($args['updatedBefore'] ?? null) ? trim($args['updatedBefore']) : '',
-                owner: $owner,
-                reviewedBy: $reviewedBy,
-                involving: $involving,
-                reviewableBy: $reviewableBy,
-                limit: $limit,
-            ),
-            default => $gerrit->changesMatching($query, $path, $open, $limit),
+            'issue' => $tracker->changesForIssue($issue, $limit),
+            'change' => $tracker->change($change, $limit, $messages),
+            'commit' => $tracker->commit($commit, $limit, $messages),
+            'backlog' => $tracker->changesWaiting([
+                'order' => $backlog,
+                'maxSize' => is_int($args['maxSize'] ?? null) ? $args['maxSize'] : 0,
+                'minCodeReview' => is_int($args['minCodeReview'] ?? null) ? $args['minCodeReview'] : 0,
+                'negativeVotes' => ($args['negativeVotes'] ?? true) !== false,
+                'mergeable' => ($args['mergeable'] ?? false) === true,
+                'branch' => is_string($args['branch'] ?? null) ? trim($args['branch']) : '',
+                'updatedBefore' => is_string($args['updatedBefore'] ?? null) ? trim($args['updatedBefore']) : '',
+                'owner' => $owner,
+                'reviewedBy' => $reviewedBy,
+                'involving' => $involving,
+                'reviewableBy' => $reviewableBy,
+            ], $limit),
+            default => $tracker->changesMatching($query, $path, $open, $limit),
         };
+        $source = $tracker->source();
 
         // The tracker answers only where the review server answered nothing for
         // an issue. That is the one path where a second host buys an answer
@@ -866,7 +868,7 @@ final class GerritLookup extends ReadOnlyTool
 
         $data = [
             'status' => $answer['status'],
-            'source' => Gerrit::HOST,
+            'source' => $source,
             'query' => $answer['query'],
             'changes' => array_map(
                 static fn(array $entry): array => [...$entry, ...self::carried($entry, $files)],
@@ -879,11 +881,16 @@ final class GerritLookup extends ReadOnlyTool
             ] : null,
             'releaseLines' => $releaseLines['record'],
             'indistinguishable' => $indistinguishable,
-            'readAt' => $gerrit->readAt(),
+            'readAt' => $tracker->readAt(),
             'unavailable' => Unreachable::of($answer['cause'], self::UNREACHABLE),
         ];
 
-        $lines = ['TYPO3 core review server: ' . Gerrit::HOST, 'Query: ' . $answer['query']];
+        $lines = ['TYPO3 core review server: ' . Gerrit::HOST, 'Answered by: ' . $source, 'Query: ' . $answer['query']];
+        // Two semantics under one argument, so the caller reads which one
+        // answered rather than a ranking it did not ask for — `D-ANS-198`.
+        if ($source === Forger::HOST && $direction === 'query') {
+            $lines[] = 'Forger finds any of the words, with stems, and ranks by relevance. The review server finds every word.';
+        }
         $owed = [];
         if ($answer['status'] === 'unavailable') {
             $lines[] = 'Could not answer: ' . $data['unavailable']['reason'];

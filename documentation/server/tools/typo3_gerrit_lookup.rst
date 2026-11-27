@@ -28,9 +28,13 @@ for "does somebody already work on this file" and for "has anybody attempted
 this before". The earlier attempt comes back whatever its name was. You read the
 diff itself in a checkout: fetch.ref gets you there, and files says how much of
 the file list to carry. An empty answer says whether it means an absence, since
-a private change is invisible to an anonymous read. The issue itself is
-typo3_forge_lookup. This tool reads only: you review, vote and upload yourself.
-Answers from: network.
+a private change is invisible to an anonymous read. issue, query, path and a
+backlog without a person or a vote filter read Forger first, the index of
+review.typo3.org, and the review server where Forger does not answer. A change
+read by name always comes from the review server. source names the host that
+answered. Forger finds any of the query words, the review server every one. The
+issue itself is typo3_forge_lookup. This tool reads only: you review, vote and
+upload yourself. Answers from: network.
 
 .. facts::
 
@@ -198,7 +202,9 @@ Answers with
 
     # One of: answered, empty, unavailable.
     status: string
-    # The review server the answer came from.
+    # The host the answer came from: https://forger.typo3.com, the index of the
+    # review server, or https://review.typo3.org itself. A change from Forger
+    # carries no commit and no address of its owner. Read it by name for both.
     source: string
     # The Gerrit query that answered this, so you can ask the same question again by
     # hand.
@@ -233,7 +239,8 @@ Answers with
         # the server named none.
         patchSet: integer  # optional
         # The commit the current patch set is. A checkout whose HEAD is another
-        # commit is not the revision under review.
+        # commit is not the revision under review. Empty where Forger answered,
+        # which names no commit; read the change by name for it.
         commit: string  # optional
         # The Gerrit project the push went to.
         project: string  # optional

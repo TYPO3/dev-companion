@@ -158,8 +158,8 @@ final class CacheTest extends TestCase
         $fresh = new Gerrit($transport);
         $fresh->changesForIssue(105403);
 
-        self::assertSame($read, $cached->readAt());
-        self::assertSame(Cache::timestamp($this->now), $fresh->readAt());
+        self::assertSame($read, Cache::timestamp($cached->readAt()));
+        self::assertSame(Cache::timestamp($this->now), Cache::timestamp($fresh->readAt()));
     }
 
     /**

@@ -18,7 +18,7 @@ use TYPO3\DevCompanion\Http\Fetch;
  *
  * @phpstan-type Answer array{status: 'answered'|'empty'|'unavailable', query: string, changes: list<array<string, mixed>>, dropped: int, more: bool, cause: ?string}
  */
-final class Gerrit
+final class Gerrit implements ChangeProvider
 {
     public const HOST = 'https://review.typo3.org';
 
@@ -46,7 +46,7 @@ final class Gerrit
      * in the constructor. `Forge` builds a `Gerrit` of its own, and two
      * constructors that call each other never return.
      */
-    private ?Forge $tracker = null;
+    private ?IssueTracker $tracker = null;
 
     private readonly CoreCi $ci;
 
@@ -61,14 +61,19 @@ final class Gerrit
         $this->ci = new CoreCi($transport);
     }
 
+    public function host(): string
+    {
+        return self::HOST;
+    }
+
     /**
      * When the answer this instance gave was read from the review server. A
      * tool builds one instance per call, so that is the call's answer —
      * `D-ANS-049`.
      */
-    public function readAt(): string
+    public function readAt(): ?int
     {
-        return Cache::timestamp($this->readAt);
+        return $this->readAt;
     }
 
     /** Ages the answer by one read, the cached one or the fetch about to happen. */
@@ -271,6 +276,12 @@ final class Gerrit
             'read' => count($changes),
             'complete' => !$answer['more'],
         ];
+    }
+
+    /** The backlog through the shape every provider answers in. */
+    public function changesWaiting(array $filter, int $limit): array
+    {
+        return $this->backlog(...$filter, limit: $limit);
     }
 
     /**
@@ -809,10 +820,14 @@ final class Gerrit
         return $named;
     }
 
-    /** The tracker, built where an answer needs it and not before. */
-    private function tracker(): Forge
+    /**
+     * The tracker, built where an answer needs it and not before. A transport
+     * a test handed in reaches the tracker's own host the way it reached it
+     * before the providers, so nothing such a test drives goes out.
+     */
+    private function tracker(): IssueTracker
     {
-        return $this->tracker ??= new Forge($this->transport);
+        return $this->tracker ??= new IssueTracker($this->transport !== null ? [new Forge($this->transport)] : null);
     }
 
     /**
@@ -1360,7 +1375,7 @@ final class Gerrit
      * renders a page about nothing. A claim of one this side does not know is
      * the same answer in a fact's clothes, `D-ANS-103`.
      */
-    private static function url(int $number, string $project): string
+    public static function url(int $number, string $project): string
     {
         if ($number < 1) {
             return self::HOST;
@@ -1610,7 +1625,7 @@ final class Gerrit
      * resolves and `refs/changes/0/2000/2` does not, and no change there has a
      * number under ten at all.
      */
-    private static function ref(int $number, int $patchSet): string
+    public static function ref(int $number, int $patchSet): string
     {
         return sprintf('refs/changes/%02d/%d/%d', $number % 100, $number, $patchSet);
     }

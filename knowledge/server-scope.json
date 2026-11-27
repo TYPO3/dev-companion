@@ -88,11 +88,11 @@
     },
     {
       "topic": "Gerrit changes: whether a patch already exists, what state its review is in, which changes touch a path or name a wording, and what stands open in the core's review backlog",
-      "depth": "The anonymous Gerrit REST API, read live. By change number, Change-Id or commit: the change, its siblings, patch set, paths, votes, comments, chain and trailers, and on request the review log and the CI jobs that failed. By words and path: the matching changes. As a backlog: open changes by age or neglect, with filters. A private change is invisible.",
+      "depth": "Forger's index of the review server, read live, for an issue's changes, a search and a backlog without a person or vote filter. The anonymous Gerrit REST API for the rest and where Forger does not answer. By change number, Change-Id or commit: the change, its siblings, patch set, paths, votes, comments, chain and trailers, and on request the review log and the CI jobs that failed. By words and path: the matching changes. As a backlog: open changes by age or neglect, with filters. A private change is invisible.",
       "tools": [
         "typo3_gerrit_lookup"
       ],
-      "source": "https://review.typo3.org and https://git.typo3.org (network)",
+      "source": "https://forger.typo3.com, then https://review.typo3.org, and https://git.typo3.org (network)",
       "scope": "core"
     },
     {

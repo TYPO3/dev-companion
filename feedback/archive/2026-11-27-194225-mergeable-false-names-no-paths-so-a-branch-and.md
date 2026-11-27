@@ -1,7 +1,8 @@
 ---
 date: 2026-11-27T19:42:25+00:00
 category: tool-gap
-status: open
+status: closed
+closed: 2026-11-27
 model: claude-opus-5-5
 tool: typo3_gerrit_lookup, typo3-core-patch-checkout
 directory: /home/benji/skill13-core

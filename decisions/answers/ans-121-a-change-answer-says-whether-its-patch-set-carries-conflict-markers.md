@@ -138,3 +138,13 @@ a healthy new change.
 - The core no longer cherry-picks and rebases through the web UI, and the field
   is null across a whole release. Then the answer grew a field for a practice
   that ended.
+
+## Since then
+
+A session on 2026-11-27 read `conflicts: []` beside `mergeable: false` as "no
+conflicting paths", on change 87873. It then cherry-picked onto a branch to see
+the paths, and aborted. That cherry-pick was the work the user asked for, so the
+answer cost the session no call. The `mergeable` description now says that a
+merge in the checkout names the paths, and that `conflicts` is the other fact. A
+`git merge-tree` step before the branch stays out of the checkout skill. It
+saves one branch, which step 7 deletes anyway.

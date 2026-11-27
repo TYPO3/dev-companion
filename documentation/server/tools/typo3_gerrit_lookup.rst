@@ -317,7 +317,9 @@ Answers with
         # Whether the current patch set still merges into its target branch. It is
         # the review server's own last computation and not a merge run now. So false
         # says to expect a rebase and proves nothing. Null where it computed none,
-        # which is not "it does not merge".
+        # which is not "it does not merge". The paths that conflict are not in this
+        # answer: a merge in the checkout names them, and conflicts names the
+        # markers inside the patch set.
         mergeable: boolean or null  # optional
         # The files Gerrit reported git conflicts in at the creation of the current
         # patch set, so the markers sit in committed lines there. The patch is

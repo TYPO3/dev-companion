@@ -4035,7 +4035,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-content-element-development/SKILL.md',
         ));
 
-        self::assertStringContainsString('A symptom triggers a lookup, and not only a task does.', $skill);
+        self::assertStringContainsString('A symptom is a reason for a lookup, just like a task.', $skill);
         self::assertStringContainsString('`typo3_hint_lookup` takes the observation as its `task`', $skill);
         // Before the installed source, which is the order the session inverted:
         // the base fixes that reading as the step after the lookups.

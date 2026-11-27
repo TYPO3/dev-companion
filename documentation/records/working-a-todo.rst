@@ -102,7 +102,7 @@ source depends on what the answer is about:
   has its answer and needs no statement at all.
 
 * **A tool from outside this repository**, such as Composer, DDEV, the SDK, a CI
-  runner or a registry. Read its own documentation and its own release feedback.
+  runner or a registry. Read its own documentation and its own release notes.
   What a tool does by default is exactly the fact that changes after somebody
   writes it down here. The version in ``composer.lock`` says which behaviour is
   in play.
@@ -148,7 +148,7 @@ sentence. Ask too for a step that turns out to be two, and for an option the
 todo did not consider. Ask for a conflict between what the todo says and what
 the code shows.
 
-The ask puts the decision to the person, not the work:
+The ask leaves only the decision to the person:
 
 1. Say what you read and what it showed.
 2. Name the two or three options, with what each one costs.
@@ -214,7 +214,7 @@ answer came from:
 That is the one part no file behind the commit can supply again.
 
 The same commit leaves `todo/ <../../todo/readme.md>`_ true. There are four
-cases, and ``bin/cli todo:next`` prints the one that applies:
+cases, and ``bin/cli todo:next`` prints those that apply to its todo:
 
 * **Delete** a finished **queued** todo. By then, what it established is in
   ``requirements/``, and the commit is the record that it happened.

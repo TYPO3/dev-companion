@@ -1,186 +1,211 @@
 ---
 name: typo3-extension-patch-review
-description: 'Judge one incoming change against a TYPO3 extension, sitepackage or project package — a GitHub pull request, a patch, a branch somebody proposes — and say what stops it being merged, from its versions to its commit message and its checks. It stops at the verdict; the whole repository is typo3-extension-health''s.'
+description: 'Review one incoming change against a TYPO3 extension, sitepackage or project package — a GitHub pull request, a patch, a branch somebody proposes — and say what stops the merge, from its versions to its commit message and its checks. It stops at the verdict. A review of the whole repository, and every change to the package, is typo3-extension-health.'
 compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Extension Patch Review
 
-Judge one change proposed against a package that is not the core. Report what
-stops the merge. Keep this skill as routing and review method. The conventions,
-the version boundaries and the commit rules are lookups. A copy of them here is
-one nobody can correct.
+This skill covers the review of one change proposed against a TYPO3 extension, a
+sitepackage or a project package. The change is a pull request, a patch or a
+branch somebody proposes. The review reports what stops the merge, and it stops
+at that verdict. A change to the package, and a review of the whole repository,
+are `typo3-extension-health`.
 
-## Establish the change, then the range you judge it in
+Keep this skill as routing and review method. It says which tool to ask, in
+which order, and how to judge the answer. The conventions, the version limits
+and the commit rules come from the lookups. A copy of them here would go out of
+date in somebody else's project, where nobody can correct it.
 
-1. Work through [references/base.md](references/base.md). It fixes the order
-   every task here starts in, and a review is where that order decides the
-   result. A rule you fetch after you read the diff confirms a reading instead
-   of a test of it.
-2. Read [references/checklist.md](references/checklist.md) for the review
-   surfaces, what a finding owes, what a dropped candidate owes, and the
-   severity rubric.
+## Steps at a glance
+
+1. Establish the change and the versions you judge it against.
+2. Check whether the change is right where it lands.
+3. Check whether it holds on every TYPO3 major the package declares.
+4. Check whether a core API already does what the change builds by hand.
+5. Check the commit message against the convention of the repository.
+6. Read the merge state and the pipeline, and run the declared checks.
+7. Write the report.
+
+When the user asks you to change the package, follow "Where the review ends".
+
+## 1. Establish the change
+
+1. Work through [references/base.md](references/base.md) first. It fixes the
+   order every task starts in. In a review that order decides the result. A rule
+   you fetch after you read the diff confirms your reading instead of testing
+   it.
+
+2. Read [references/checklist.md](references/checklist.md). It lists the
+   surfaces you review, what a finding needs, what a dropped candidate needs,
+   and the severity levels.
+
 3. Establish the change itself. This server reads neither your git state nor the
-   forge the change arrived on. What it needs from you is exactly what the
-   change is. That is **the changed paths**, **the diff**, **the branch it
-   targets** and **the commit messages**. It is also **whether it merges and
-   what the repository's own pipeline said**.
+   forge the change came from. So you supply these five:
 
-   One reading produces all of them. `git fetch <remote> <ref>` and
-   `git diff <base>...<head>` give the first four. The forge's own client or its
-   web page gives the last. Every lookup below takes one of them as its
-   argument.
+   - the changed paths;
+   - the diff;
+   - the branch it targets;
+   - the commit messages;
+   - whether it merges, and what the repository's own pipeline reported.
 
-The constraint the package declares for the core is the axis every answer below
-turns on. The installation the review runs against supplies one point in it. A
-finding you establish there holds for that point. The base's first step
-discharges `typo3_project_describe`, because its answer already carries that
-constraint and the commands this repository declares.
+   `git fetch <remote> <ref>` and `git diff <base>...<head>` give the first
+   four. The forge's own client or its web page gives the last. Every lookup
+   below takes one of them as its argument.
 
-## Whether the change is right where it lands
+The package declares a constraint on the TYPO3 version, and every answer in this
+review depends on it. The base's first step discharges `typo3_project_describe`.
+Its answer already gives that constraint and the commands the repository
+declares. The installation you run against is one version inside that
+constraint. A finding you establish there holds for that version.
 
-The changed paths are the argument, not the subject. Pass them to
-`typo3_hint_lookup`, one call per subsystem the diff touches. Do that before you
-form a view of whether the code is right. A query that describes the review
-reaches nothing.
+## 2. Whether the change is right where it lands
 
-The hints match by path and by subsystem. A sentence about how you judge a
-change comes back as the index of ids it did not return.
+Call `typo3_hint_lookup` with the changed paths, once per subsystem the diff
+touches. Do that before you decide whether the code is right. The hints match by
+path and by subsystem. A query that describes the review matches no hint. Its
+answer is only the list of ids it did not return.
 
-Enumerate what the diff **removes or renames** before you ask. A package has its
-own public surface, and it is not only PHP. It is a TCA field, a TypoScript
-path, a Fluid partial or section, a ViewHelper argument, a label key. It is a
-signature somebody else's template or override calls.
+Before the call, list what the diff **removes or renames**. A package has its
+own public surface, and not only in PHP:
 
-That is the class of finding this review exists for. A read of the new code does
-not surface it. The evidence is in what is gone.
+- a TCA field;
+- a TypoScript path;
+- a Fluid partial or section;
+- a ViewHelper argument;
+- a label key;
+- a signature that another package's template or override calls.
 
-Whether a member that stays is public API, and what its signature is, is the
-checkout's answer, not a lookup's. That reading belongs in the base's step after
-the lookups. A finding built on it names the version you read it at.
+This kind of finding is the reason for the review. A read of the new code does
+not show it, because the evidence is in what is gone.
 
-## Whether it holds on every version the package declares
+Whether a member that stays is public API, and what its signature is, comes from
+the checkout. No lookup answers it. Read it in the base's step after the
+lookups. A finding built on that read names the version you read it at.
 
-A change you confirm against the installation holds on one of the declared
-majors. You settle the others by reading. The procedure exists whole rather than
-as sections a search would cut it into:
+## 3. Whether it holds on every declared major
+
+The installation confirms a change on one of the majors the package declares.
+You settle the others by reading. Two procedures say how. Read each one whole,
+with its `documentId`, because a search returns only parts of it:
 
 - `typo3_rule_lookup` with
-  `documentId="extension/compatibility/a-declared-major-that-is-not-installed"`.
-  It says which majors the question is about, what the changelog settles and
-  where it stops. It gives the invocations that read one symbol off the branch
-  that carries the other major. The question is per symbol rather than per
-  package.
+  `documentId="extension/compatibility/a-declared-major-that-is-not-installed"`
+  for a claim you can read. It says which majors the question is about, what the
+  changelog settles and where it stops. It gives the commands that read one
+  symbol from the branch of the other major. Ask the question per symbol, not
+  per package.
+
 - `typo3_rule_lookup` with
-  `documentId="extension/compatibility/running-on-a-declared-major-that-is-not-installed"`.
-  That is for a claim you have to run rather than read. It says what the
-  repository's own pipeline already covers. It says how a Composer root of its
-  own stands the other major up beside the installation.
+  `documentId="extension/compatibility/running-on-a-declared-major-that-is-not-installed"`
+  for a claim you have to run. It says what the repository's own pipeline
+  already covers. It says how a separate Composer root sets up the other major
+  beside the installation.
 
-`typo3_changelog_lookup` narrows that question and does not close it. It answers
-change events. So a member added later to a class that was already there leaves
-no entry. Neither does a widened signature.
+`typo3_changelog_lookup` narrows the question but does not close it:
 
-It also reads the changelog off the installed core. So a bare clone of the
-package under review has none to read. The answer then says it could not answer
-there, which is not the same as an empty one. Say which of the two you got.
+- It reports changes. A member added later to a class that was already there has
+  no entry. A wider signature has none either.
 
-`typo3_documentation_lookup` with `targetVersion` per declared major answers
-"does this still work there" for a documented surface. The silence of a
-changelog does not.
+- It reads the changelog of the installed core. A bare clone of the package has
+  no core, so there is nothing to read. The answer then says that it could not
+  answer, which is not an empty answer. Say which of the two you got.
 
-## Whether a core API already does what the change hand-rolls
+`typo3_documentation_lookup` with `targetVersion`, once per declared major, says
+whether a documented surface still works there. A changelog with no entry does
+not say that.
 
-The conventions lookup above answers most of this by itself. Where the core has
-an API for the construct, the hints for that subsystem carry it and its majors.
-A change that reaches past it is the finding.
+## 4. Whether a core API already does what the change builds by hand
 
-Two things settle the rest, and neither is a recollection:
+The hint lookup of step 2 answers most of this. Where the core has an API for
+the construct, the hints for that subsystem name it and its majors. A change
+that goes around that API is the finding.
 
-- **Sweep the package and the installed core for the call sites before you
-  propose an alternative.** Whether an idiom has a foothold is a count, not a
-  taste, and no lookup here holds it. The answer is the call sites at their
-  paths and lines, and one of them is a coincidence.
-- `typo3_system_extension_lookup` before you recommend an API that lives in
-  another extension. It says whether that extension is part of the core on the
+Two things settle the rest. Neither is something you remember:
+
+- **Search the package and the installed core for call sites before you propose
+  an alternative.** Whether an idiom is established is a count, not a taste, and
+  no lookup holds that count. Give the call sites with their paths and lines.
+  One call site alone is a coincidence.
+
+- **Call `typo3_system_extension_lookup` before you recommend an API from
+  another extension.** It says whether that extension is part of the core on the
   majors the package declares. Where it is not, the recommendation adds a
-  dependency, and the finding has to say that.
+  dependency, and the finding must say so.
 
-## The commit message, against the convention this repository writes
+## 5. The commit message
 
-Which convention that is comes out of the repository's own log, which this
-server does not read. Establish it before you check anything.
+First find which convention the repository writes. Its own log shows that, and
+this server does not read the log. Then:
 
-Where the repository writes TYPO3 keywords, call `typo3_commit_message_guide`
-with `workflow="project"` and the message under review. It says whether the
-subject, its length and the body wrap hold. Where the repository writes another
-convention, that guide answers about TYPO3's instead. It reports a subject
-without a keyword as an error. To pass that on is a finding about a repository
-nobody reviews. Say which convention you judged the message against.
+- **TYPO3 keywords**, such as `[TASK]`: call `typo3_commit_message_guide` with
+  `workflow="project"` and the message under review. It says whether the
+  subject, its length and the body wrap are correct.
 
-## What is green, and what that is worth
+- **Another convention**: do not pass on what that guide says. It answers for
+  the TYPO3 convention and reports a subject without a keyword as an error. That
+  error is about a convention the repository does not use.
 
-Whether the branch merges and whether the pipeline passed are the forge's
-answers. Read them there and report them as read. Then run what this repository
-declares as checks. The base's first step marked each declared command a check,
-a change or unknown.
+Say which convention you judged the message against.
 
-A check hands the code back as it was, so a review told to change nothing runs
-it. A green pipeline covers the entries its own commands cover and says nothing
-about the ones it has none for. **Write out, by name, the checks you did not
-run.**
+## 6. The merge state and the checks
 
-## Report
+Whether the branch merges and whether the pipeline passed come from the forge.
+Read them there and report them as you read them.
+
+Then run the checks this repository declares. The base's first step marked each
+declared command as check, change or unknown. A check leaves the code as it was,
+so run it even in a review told to change nothing.
+
+A green pipeline covers what its own commands check, and nothing else. **List by
+name the checks you did not run.**
+
+## 7. Report
 
 **Write the report in the skeleton of
 [references/report.md](references/report.md), every heading in its order and
-every entry in its line form.** The three review skills share that skeleton, so
-two reports compare section by section. Order the findings by what stops the
-merge, and say why each one stops it. Beside them stands what you checked and
-found correct. Beside them also stand the points you raised while you read and
-then dropped, each with what dropped it.
+every entry in its line form.** The three review skills use that skeleton, so
+two reports compare section by section.
 
-Every finding names the changed path it is about. A statement about the package
-that ties to no line in this diff belongs in an issue. Close on the checklist's
-surfaces with each one marked assessed, unassessed or not applicable to this
-diff. A reader cannot tell a review that reports only findings from one that
-looked at less.
+- Order the findings by what stops the merge, and say why each one stops it.
+
+- List what you checked and found correct.
+
+- List the points you raised while you read and then dropped, each with what
+  dropped it.
+
+- Name the changed path each finding is about. A statement about the package
+  that ties to no line of this diff belongs in an issue.
+
+- Close on the surfaces of the checklist. Mark each one assessed, unassessed or
+  not applicable to this diff. Without that, a reader cannot tell a review with
+  few findings from a review that looked at less.
 
 **The report is markdown the reader can copy, and the answer is where it goes.**
-Everything this section asks for makes it long, and length makes the form
-matter. Somebody carries a review into a thread, an issue or a chat, and
-rendered output does not survive the move. Put the whole report in one fenced
-`markdown` block, with a fence of four backticks. A client that renders the
-answer hands a copy over as rendered text, and the fence keeps the source. Write
-it to a file only where the caller asks for one, at a path outside the checkout
-under review. A modified or untracked file beside the change is a surface this
-review reports on.
+Somebody copies a review into a thread, an issue or a chat, and rendered output
+does not survive the move. So put the whole report in one fenced `markdown`
+block, with a fence of four backticks. A client that renders the answer copies
+it as rendered text, and the fence keeps the source. Write it to a file only
+where the caller asks for one, at a path outside the checkout under review. A
+new or changed file beside the change is a surface this review reports on.
 
 **A document the caller asks for is this report, in this order and with every
 part above.** A summary in a shape of its own drops the ranks, the paths, the
-dropped candidates and the surfaces. Those are what a reader checks a review by.
+dropped candidates and the surfaces. A reader checks a review by those.
 
 ## Where the review ends
 
 **When the user asks you to make the change, invoke `typo3-extension-health` and
-work from it.** That includes the commit. An instruction to change the package
-asks for it: "fix it", "do the first three", "push that".
+work from it.** That includes the commit. Every instruction to change the
+package is that request, such as "fix it", "do the first three" or "push that".
+It comes in the middle of a session that goes well. So it is easy to keep the
+review rules while you rewrite what you reviewed.
 
-It arrives in the middle of a session that goes well. That makes it easy to
-carry on under review rules while you rewrite what the review was about. The
-same skill takes the request when it widens past this change. That is "audit the
-package", "what else is wrong in here".
+Invoke the same skill when the request goes past this change, such as "audit the
+package" or "what else is wrong in here". That skill has the list of surfaces
+for a whole repository. This skill does not run that list on one diff. Hand over
+the paths and what you already established about them.
 
-It owns the surface list you read a whole repository against. To run that list
-on one diff is what this workflow exists not to do. What crosses over either way
-is the paths and what you already established about them.
-
-**A remark about a finding's weight is not that instruction.** "That one blocks
-it", "are you sure", "I would reject it for that": each reaffirms a finding and
-commissions nothing. Where the sentence could be either, ask which the user
-meant.
-
-This skill covers the judgement of one change proposed against a package that is
-not the core. It stops at the verdict. The repository around that change belongs
-to `typo3-extension-health`. That is what else is wrong with it, and the
-committed changes that answer a finding.
+**A remark about how serious a finding is asks for no change.** "That one blocks
+it", "are you sure" and "I would reject it for that" each confirm a finding.
+Where a sentence could be either, ask the user which one they meant.

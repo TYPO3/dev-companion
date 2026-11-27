@@ -1,88 +1,112 @@
 # Incoming change review checklist
 
-The surfaces below are the work list. The coverage the report closes on is this
-same list with every entry answered. You write it from the diff. An entry the
-diff does not touch is not applicable and costs the line it costs here. One it
-touches and nobody read has no assessment, which is not clean.
+The surfaces below are the work list of the review. The report closes on the
+same list, with every entry answered. Answer each entry from the diff:
+
+- An entry the diff does not touch is not applicable. Its line says so.
+- An entry the diff touches and nobody read is unassessed. Unassessed is not the
+  same as clean.
 
 ## Review surfaces
 
-- **The change itself.** What it claims to do, what it does, and whether the two
-  are the same thing. Where it changes what the frontend or the backend form
-  renders, the diff says what it sets. It says nothing about what comes out.
+- **The change itself.** What it says it does, what it does, and whether the two
+  agree. Where it changes what the frontend or a backend form renders, the diff
+  shows what it sets. It does not show what then comes out.
+
 - **What it removes or renames.** The package's own public surface: PHP members,
   TCA fields and types, TypoScript paths, Fluid templates, partials and
-  sections. It is also ViewHelper arguments, label keys, site set settings,
+  sections. Also ViewHelper arguments, label keys, site set settings and
   database columns. Whoever installed the package calls them.
+
 - **The declared range.** Every TYPO3 and PHP version the package's manifest
-  claims, not the one the installation happens to be. A change you verify on one
-  point of the range holds there.
+  declares, not only the installed one. A change you verify on one version holds
+  on that version.
+
 - **The API it reaches for.** Whether the core already offers the construct, on
-  every declared major. Whether the form the change uses survives the next one.
+  every declared major. Whether the form the change uses still works on the next
+  major.
+
 - **Persisted data and editors.** Where the diff touches TCA, the schema or a
-  migration. What happens to rows that already exist, and what the editor sees.
+  migration: what happens to existing rows, and what the editor sees.
+
 - **Labels and icons.** A user-facing string or an identifier the diff adds.
-  Whether it resolves in the installation rather than only in the file.
-- **Security.** A user-controlled value the diff moves, and the sink it reaches.
+  Whether it resolves in the installation, not only in the file.
+
+- **Security.** A user-controlled value the diff moves, and the sink it reaches,
+  such as a query or the HTML output.
+
 - **Coverage.** A test that fails before the change and passes after it. Where
-  the package's suite has no layer that could carry one, that absence.
+  the package's suite has no layer for such a test, report that.
+
 - **The commit message**, against the convention this repository writes.
+
 - **Merge state and checks.** Whether the branch merges, what the pipeline ran,
-  and which of the repository's own checks you ran here.
+  and which of the repository's own checks you ran.
 
 ## Severity
 
-The bands are the merge decision, because that is what the review is for:
+The levels are the merge decision, because the review exists for that decision:
 
 - **Blocks the merge** — the change is wrong, breaks a version the package
   declares, or loses data. It opens a security boundary, or removes a public
   surface without a migration path.
-- **Send it back** — the change works and is not ready. That is a defect in a
-  case it covers, or no test for risky behaviour. It is a hand-rolled construct
-  where a core API exists, or a message that does not meet the convention.
+
+- **Send it back** — the change works but is not ready. It has a defect in a
+  case it covers, or no test for risky behaviour. It builds by hand what a core
+  API does, or its message breaks the convention.
+
 - **Worth a change** — a concrete cost that does not stop the merge.
-- **Recommendation** — a beneficial improvement with no verified violation.
 
-Severity follows the demonstrated consequence and not the size of the diff. A
-one-line change that breaks a declared major blocks. A large change that only
-moves code does not.
+- **Recommendation** — an improvement with no verified violation.
 
-## What a finding owes
+Severity follows the consequence you showed, not the size of the diff. A
+one-line change that breaks a declared major blocks the merge. A large change
+that only moves code does not.
 
-A concrete location in the diff, and what the code there does. The rule,
-documentation or reading that says it is wrong. The consequence, and what would
-remediate it. Short of those it is a question rather than a violation. A
-question reported as a violation costs the author exactly the reading the review
-skipped.
+## What a finding needs
 
-Say what the finding rests on. That is a line you read, a command and its
-output, or a mechanism you traced into an installed package. A finding from a
-pipeline configuration and one with a verified line are not worth the same. A
-report that does not separate them says they are.
+A finding needs four things:
 
-Say also whether **this change** introduced it. Report a defect the diff only
-stands next to as pre-existing, with that word. To ask an author to fix what
-they did not break is a different request. It is theirs to decline.
+- a concrete location in the diff, and what the code there does;
+- the rule, documentation or reading that says it is wrong;
+- the consequence;
+- what would fix it.
 
-Where nobody here can settle a claim on a version nobody can run, the finding
-says so. It names the reading or the run that would settle it. Unverified is a
-result. A confident sentence in its place is not.
+Without them it is a question, not a violation. A question reported as a
+violation makes the author do the reading the review skipped.
 
-## What a dropped candidate owes
+Say what the finding rests on: a line you read, a command and its output, or a
+mechanism you traced. A finding from a pipeline configuration is worth less than
+one with a verified line. A report that does not separate the two makes them
+look equal.
 
-A review drops more than it reports, and nothing records the drop. Name each
-candidate you raised while you read and then let go, with what let it go. That
-is the guard that was there after all, the default that was the core's, the
-class you read. One sentence each, beside the findings.
+Say whether **this change** introduced it. A defect the diff did not cause is
+pre-existing: report it with that word. A request to fix what the author did not
+break is a different request, and the author may decline it.
 
-The two directions do not meet the same bar. To raise a candidate costs a
-reading. To drop one costs the maintainer a finding, silently. So drop a
-candidate only where something concretely disproves it. Report one you can
-neither establish nor disprove as open, with the reading that would settle it
-named beside it.
+Where nobody here can run a version, and so nobody can settle a claim about it,
+the finding says so. It names the reading or the run that would settle it.
+Unverified is a result. A confident sentence in its place is not.
 
-Two dismissals go wrong reliably. One drops a candidate because a comment or a
-docblock says the code behaves that way. That is a sentence somebody wrote
-rather than the behaviour. The other drops it because the case looks unlikely,
-which is not disproved. What disproves a path is what makes it impossible. That
-is a guard nobody can pass or a caller that cannot exist, at a line.
+## What a dropped candidate needs
+
+A review drops more candidates than it reports, and nothing records a drop. So
+name each candidate you raised while you read and then dropped, with what
+dropped it. Examples are a guard that was there after all, a default of the
+core, or a class you read. Give one sentence each, beside the findings.
+
+The two directions have different costs. To raise a candidate costs one reading.
+To drop one costs the maintainer a finding, and nobody sees the loss. So drop a
+candidate only where something concretely disproves it. Report a candidate you
+can neither establish nor disprove as open, and name the reading that would
+settle it.
+
+Two reasons to drop a candidate are often wrong:
+
+- **A comment or a docblock says the code behaves that way.** That is a sentence
+  somebody wrote, not the behaviour.
+
+- **The case looks unlikely.** Unlikely is not disproved.
+
+What disproves a path makes it impossible: a guard nobody can pass, or a caller
+that cannot exist. Name its line.

@@ -5,9 +5,8 @@ write `None.` under a heading that has nothing. Two reviews in one skeleton are
 two reviews a reader can compare. A heading you leave out reads as a section the
 review never reached.
 
-Every entry keeps the line form the skeleton gives it. Reviews kept every
-heading and broke the form below it. As a result, no line compared with the same
-line of another review. The form is six rules:
+Every entry keeps the line form the skeleton gives it. Then each line compares
+with the same line of another review. The form has six rules:
 
 - A head field holds its value alone. An explanation beside it goes into a
   finding or under **Open**.
@@ -108,9 +107,8 @@ Number the findings across the severity headings, so `3` names one finding in
 the whole report. A finding about a declared version nobody ran says so in its
 **Evidence** line. The line names the reading that would settle it.
 
-The answer stands as the example below stands, cut here to one finding. The
-**Rule** line ends on its call, and the last line after the fence is the work
-order:
+The answer looks like the example below, cut here to one finding. The **Rule**
+line ends on its call, and the last line after the fence is the work order:
 
 ```markdown
 # Review: Keep the sort order of a copied record

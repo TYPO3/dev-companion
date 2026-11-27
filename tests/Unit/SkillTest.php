@@ -5284,9 +5284,12 @@ final class SkillTest extends TestCase
     private static function reportSection(string $name): string
     {
         $skill = (string) file_get_contents(Paths::root() . '/skills/' . $name . '/SKILL.md');
-        $section = (string) strstr($skill, "\n## Report\n");
+        $section = (string) preg_replace('/^.*?\n## (?:\d+\. )?Report\n/s', '', $skill, 1, $found);
+        if ($found === 0) {
+            return '';
+        }
 
-        return self::flat((string) strstr(substr($section, 1), "\n## ", true));
+        return self::flat((string) strstr($section, "\n## ", true));
     }
 
 

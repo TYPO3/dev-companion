@@ -91,7 +91,7 @@ and the core checkouts. Run it with no arguments and it lists what it supports:
     bin/cli                   # every command it has, grouped by subject
     bin/cli todo:next         # the one todo that is due now, and nothing else
     bin/cli entries:lookup <path>  # what is written about the code you are about to change
-    bin/cli repository:check  # requirements, decisions, scenarios and the todos against their formats
+    bin/cli repository:check  # requirements, decisions, scenarios, the todos, tools, links and prose
     bin/cli help <command>    # what one command takes, and what each argument is
 
 
@@ -123,7 +123,7 @@ own:
 
 
 The checkouts land below ``.checkouts/``, which git ignores. They are one
-treeless clone plus a worktree per version, so four lines share one object store
+blobless clone plus a worktree per version, so four lines share one object store
 (under a gigabyte in total). Nothing at runtime reads them. A writer verifies
 the knowledge against them, and no answer comes from them.
 
@@ -138,9 +138,10 @@ anything in it that ``checkouts:update`` did not put there, a
 Those recorded pages are also the only corpus that says what an answer costs its
 caller. ``bin/cli tools:measure`` reads them and prints the text bytes and the
 data bytes per tool, worst first. The data counts as the compact JSON a client
-gives the model. Above them the command prints each definition as ``tools/list``
-sends it, with the output schema apart, largest schema first. So a trim starts
-at the top of a list rather than at whichever tool somebody noticed.
+gives the model. Above them the command prints the bytes of each definition as
+``tools/list`` sends it. It counts the output schema on its own and lists the
+largest schema first. So a trim starts at the top of a list rather than at
+whichever tool somebody noticed.
 
 ``tools:measure`` calls nothing and fails on nothing. A long answer can be the
 right one, and a split of a tool in two would answer a counter that failed.
@@ -150,10 +151,11 @@ two clients. Claude Code gives the model the data and drops the text. opencode
 gives it the text. Neither gives it the output schema.
 
 ``bin/cli tools:tokens`` measures this again in Claude Code. It runs
-``claude -p`` three times through ``bin/cli tools:proxy``. The proxy relays the
-server with ``structuredContent`` or ``outputSchema`` taken away. The command
-then reads from the trace what the ``tool_result`` contained and what it cost.
-It costs money and half a minute, and it needs ``claude`` on the machine.
+``claude -p`` through ``bin/cli tools:proxy`` in three modes, three times each
+by default (``--runs``). The proxy relays the server as it answers, or with
+``structuredContent`` or ``outputSchema`` taken away. The command then reads
+from the trace what the ``tool_result`` contained and what it cost. It costs
+money and a few minutes, and it needs ``claude`` on the machine.
 
 The packages the core pins
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -230,8 +232,8 @@ the site renders from the copy rather than from these files.
 **This repository writes the copy and stops there** — ``D-DOC-028``. The
 renderer is a build tool, and no part of it sits in this repository. So a
 deployment prepares the copy and installs its own renderer. Locally that is one
-command. It fetches the renderer into ``.site/renderer`` the first time and
-reuses it after:
+command. It fetches the renderer into ``.site/renderer`` the first time. Each
+later preview updates it to the newest release of the theme:
 
 .. code-block:: bash
 
@@ -262,8 +264,8 @@ element on them ahead of the browser and writes the index the search bar
 fetches. The workflow spells out the same three steps, the one thing here
 written down twice.
 
-Delete ``.site/`` to render against the theme as it is now. The preview keeps
-the renderer it fetched, and a deployment resolves it fresh on every run.
+A deployment also takes the newest release of the theme on every run. Only the
+renders of one ``--watch`` keep the renderer they started with.
 
 Read the site over a server, not from ``.site/html/index.html`` on disk. The
 search fetches its index as a file beside the pages, and a browser refuses that
@@ -279,9 +281,8 @@ and leaves the rest as they are. So these pages keep the paths a reader of the
 checkout follows.
 
 The copy also publishes every ``readme.rst`` as the ``index.rst`` that a
-generator serves as the directory itself. It removes the heading from a link
-that names one in another page, because this renderer drops such a link whole.
-``D-DOC-017`` says what that costs.
+generator serves as the directory itself. A link into a section of another page
+is a ``:ref:``, and the renderer resolves it. So the copy leaves it as it is.
 
 The renderer and the theme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -310,8 +311,8 @@ the same system in by hand.
 
 The front page is the one page in the ``marketing`` layout of that theme —
 ``D-DOC-030``. ``:layout: marketing`` stands above the title, because the parser
-takes a field list as metadata only while it has found no title. A run of
-``band`` directives with the claims of the page follows.
+takes a field list as metadata only while it has found no title. A hero image, a
+notice and a run of ``band`` directives with the claims of the page follow.
 `The theme's own manual <https://typo3.github.io/soul-design-system/guides-theme/directives.html>`_
 says what a band, a grid, a card and a surface take. Nothing here renders any of
 them.
@@ -388,9 +389,10 @@ The guidelines are those of php-cs-fixer, in ``.php-cs-fixer.dist.php`` and
 nowhere else. They are PER-CS 3.0 plus the few rules this repository writes by:
 
 * strict types declared,
-* imports sorted, with global classes left unimported,
+* imports sorted, unused ones removed, and global classes left unimported,
 * single quotes,
-* a comma after the last item of a multiline array.
+* a comma after the last item of a multiline array,
+* no empty docblock, no blank line at either end of one, and none after it.
 
 ``cgl`` rewrites the files, and ``cgl:ci`` reports what it would rewrite. ``ci``
 runs ``cgl:ci``, because a check may not change the code it judges.

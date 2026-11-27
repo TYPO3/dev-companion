@@ -4,6 +4,8 @@ title: A worktree precondition is a check against the directory
 date: 2026-09-09
 status: open
 coveredBy: []
+readings:
+  - 2026-11-27
 ---
 
 # D-ANS-154 — A worktree precondition is a check against the directory

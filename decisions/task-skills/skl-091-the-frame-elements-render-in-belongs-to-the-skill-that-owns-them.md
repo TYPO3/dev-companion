@@ -3,6 +3,8 @@ id: D-SKL-091
 title: 'The frame elements render in belongs to the skill that owns them'
 date: 2026-09-04
 status: open
+readings:
+  - 2026-11-27
 ---
 
 # D-SKL-091 — The frame elements render in belongs to the skill that owns them

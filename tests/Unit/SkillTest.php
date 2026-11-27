@@ -1176,7 +1176,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('The work ends on a frontend that renders, one page for each page layout', $skill);
         self::assertStringContainsString('with `tags` set to `TypoScript`, `TSConfig`, `Fluid`, `YAML` and `Frontend`', $skill);
         self::assertStringContainsString('`excludeTags` set to `PHP-API`', $skill);
-        self::assertStringContainsString('Leave out the ones the brief of `typo3_task_guide` already carries', $skill);
+        self::assertStringContainsString('Leave out the ids the brief of `typo3_task_guide` already lists in its hints', $skill);
         self::assertStringContainsString('the vendor from the company and the key from the title', $skill);
         self::assertStringContainsString('check that each layout shows its title and columns', $skill);
         self::assertStringContainsString('Send a placeholder unless the user agreed', $skill);
@@ -1188,7 +1188,7 @@ final class SkillTest extends TestCase
             self::assertStringContainsString('`' . $id . '`', $skill);
         }
         self::assertStringContainsString('Where no shell runs Composer and the console, stop after the files.', $skill);
-        self::assertStringContainsString('Read each generated file against the hints in *Lay it out*', $skill);
+        self::assertStringContainsString('Read each generated file against the hints of step 4', $skill);
     }
 
     /**
@@ -1200,9 +1200,9 @@ final class SkillTest extends TestCase
     public function theSitepackageSkillReadsWhatTheFinishedSiteServes(): void
     {
         $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'));
-        $pass = (string) strstr((string) strstr($skill, '## Read what the finished site serves'), '## Where this stops', true);
+        $pass = (string) strstr((string) strstr($skill, '## 7. Read what the finished site serves'), '## 8.', true);
 
-        self::assertStringContainsString('Run this pass after step 5', $pass);
+        self::assertStringContainsString('Run this pass after step 6', $pass);
         foreach (['page-head-seo', 'page-heading-levels', 'xml-sitemap', 'sitepackage-focus-contrast'] as $id) {
             self::assertNotNull(Hints::byId($id), $id . ' is not a hint');
             self::assertStringContainsString('`' . $id . '`', $pass);
@@ -1238,7 +1238,7 @@ final class SkillTest extends TestCase
     public function theSitepackageSkillAsksForTheDesignOnceBeforeTheFirstTemplate(): void
     {
         $skill = self::flat((string) file_get_contents(Paths::root() . '/skills/typo3-sitepackage-development/SKILL.md'));
-        $design = (string) strstr((string) strstr($skill, '## Ask for the design once'), '## Choose where', true);
+        $design = (string) strstr((string) strstr($skill, '## 2. Settle the design'), '## 3.', true);
 
         self::assertStringContainsString('ask one question before the first template', $design);
         foreach (['Colours and fonts', 'A logo and a favicon', 'A website, a mockup or a styleguide', 'A CSS framework'] as $point) {

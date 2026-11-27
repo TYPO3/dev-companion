@@ -93,16 +93,17 @@ costs more than any other read needs. The whole of ``TYPO3_CONF_VARS`` is around
 file read and the TCA preparation behind it.
 
 The server puts the arguments of the caller into the payload as one array, the
-same way it puts in the autoloader. The server discards a read from before the
-ask and takes a new one, so no caller has to ask for its topic first.
+same way it puts in the autoloader. Where the arguments differ from those of the
+earlier read, the server discards that read and takes a new one. So no caller
+has to ask for its topic first.
 
 The probe
 ---------
 
 `src/Installation/probe.php <../../src/Installation/probe.php>`_ goes in as
-text, never as an include. ``Typo3Runtime`` removes its opening tag and writes
-the declared autoloader path of the installation into it. Then it gives the text
-to ``Typo3Cli::php()``, which runs it as:
+text, never as an include. ``Typo3Runtime`` removes its opening tag. It writes
+the declared autoloader path of the installation into the text. Then it gives
+the text to ``Typo3Cli::php()``, which runs it as:
 
 .. code-block:: text
 
@@ -196,7 +197,7 @@ So ``Typo3RuntimeTest`` tests everything around the boot:
 
 * Every state other than ``full`` arrives as a reason.
 
-Check the boot itself by hand against an installation that is set up:
+Check the boot itself by hand against a complete installation:
 
 .. code-block:: bash
 

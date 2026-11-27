@@ -15,7 +15,7 @@ nothing here waits on it.
 The draft is a reference, and that is its whole role here. This repository
 measured its own names against it. The judgement is
 `D-SCO-010 <../../decisions/scope/sco-010-all-three-typo3-namespaces-are-kept.md>`_,
-and this page is the reading behind that judgement.
+and this page gives the reasons for that judgement.
 
 A session read the draft whole on 2026-08-04 at
 `RFC-XXXX, An Official MCP Interface Contract for TYPO3 <https://gist.github.com/dkd-dobberkau/1f87ba4051fc85efbb9475d96babf1d5>`_,
@@ -67,7 +67,7 @@ This server cannot change the scheme quietly, because callers depend on it:
 * Every prose answer gives the ``typo3://guides/{id}`` of the document it
   matched, and the shared record shape declares that field.
 
-* Two tool descriptions send the calling model to the resource.
+* Two tool descriptions send the model that calls them to the resource.
 
 * A skill body sits at a URI that ends in its own file name. So its relative
   links resolve onto the reference URIs this server answers, see
@@ -87,9 +87,9 @@ as ``typo3://tca/…`` for the mandatory part.
 
 The tool prefix is the cheaper half. ``typo3.`` reads as a reservation of names
 that begin with ``typo3.``, with the dot. So it does not reach a tool named
-``typo3_rule_lookup``, and the 26 tools here stay as they are. That is a reading
-of one sentence. The draft states the prefix once and gives no rule for the
-separator.
+``typo3_rule_lookup``, and the 26 tools here stay as they are. This
+interpretation rests on one sentence. The draft states the prefix once and gives
+no rule for the separator.
 
 The draft is also the first document to define what may present itself as the
 MCP surface of TYPO3. The package name meets the draft there. This package
@@ -126,5 +126,5 @@ Afterwards they are not cheap. That is why ``D-SCO-010`` changes nothing yet.
 There is nothing to rename against until somebody allocates a scheme, and a
 rename on a guess needs a second rename.
 
-The fourth stopped being free on the day the package went to Packagist. Other
-lock files record a Packagist name.
+The fourth cost something from the day the package went to Packagist. Other lock
+files record a Packagist name.

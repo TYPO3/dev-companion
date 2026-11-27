@@ -5,7 +5,7 @@ The bundled knowledge
 
 This page covers the knowledge the package ships in
 `knowledge/ <../../knowledge/>`_. It says what is there, how the server reads
-it, and how a statement in it is worded.
+it, and how a writer words a statement in it.
 
 The tools and resources answer from files in the package. They need nothing
 else: no installation, no network, no database.
@@ -47,9 +47,9 @@ what the reader can check:
   by its use, and a condition only by its result.
 
   "The focus indicator reaches the contrast WCAG sets against the surface it
-  sits on" is a check. "Focus is visible with ``:focus-visible``" is satisfied
-  by a ring nobody can see. Where the mechanism is the fact, the statement keeps
-  it and adds the condition it must meet.
+  sits on" is a check. "Focus is visible with ``:focus-visible``" is true of a
+  ring nobody can see. Where the mechanism is the fact, the statement keeps it
+  and adds the condition it must meet.
 
 * **Whether a list is the whole list.** A reader takes a list of stale idioms as
   every stale idiom and stops the check. "The four types below are the whole

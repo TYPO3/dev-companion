@@ -5,7 +5,7 @@ The resource surface
 
 This page covers the resources this server offers a client to pick from, and the
 fields a picker chooses by. It also says why the skill URI ends in a file name,
-what is generated, and which tests guard the surface.
+what a generator writes, and which tests guard the surface.
 
 `Factory::resources() <../../../src/Server/Factory.php>`_ declares the list, and
 ``Factory::skillReferences()`` declares the one template behind it.
@@ -59,8 +59,8 @@ The four shapes
   directory of the client. This resource is the route for a client that never
   ran it.
 
-  A skill is published when its own front matter does not declare it a draft. A
-  draft is a directory in ``skills/`` and appears nowhere.
+  The server publishes a skill when its own front matter does not declare it a
+  draft. A draft is a directory in ``skills/`` and appears nowhere.
 
 * **``typo3://skill/{skillId}/references/{file}``** — what a workflow gives the
   reader at a step. This is a resource template, not one list entry per file. A
@@ -88,7 +88,7 @@ The skill URI
 -------------
 
 **A skill is a directory, and a pick must deliver all of what the picker
-chose.** The body is short routing. Every body starts by sending the reader to
+chose.** The body is short routing. Every body first sends the reader to
 ``references/base.md``.
 
 The server serves the body at ``typo3://skill/{id}/SKILL.md``. So the relative

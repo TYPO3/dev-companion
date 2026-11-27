@@ -42,8 +42,9 @@ The four members
 
 * **``instructions``** — the statement that
   `Coverage <../../src/Knowledge/Coverage.php>`_ builds from
-  ``knowledge/server-scope.json``. It has four parts: the opening, the index of
-  which tool answers what, the note under the index, and the close.
+  ``knowledge/server-scope.json``. It has four parts: the first paragraph, the
+  index of which tool answers what, the note under the index, and the last
+  paragraph.
 
 What the instructions say
 -------------------------
@@ -70,8 +71,8 @@ Three things change the text from one start to the next:
   `D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
 
 * **The exclusion before the routing.** Where
-  ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` names tools, the instructions say which
-  tools are left out. They drop every index entry that routed to one —
+  ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` names tools, the instructions name the
+  tools the server leaves out. They drop every index entry that routed to one —
   `R-SCO-009 <../../requirements/scope/sco-009-individual-tools-can-be-excluded.md>`_.
   Where the names do not fit the budget, the instructions give their count
   instead.

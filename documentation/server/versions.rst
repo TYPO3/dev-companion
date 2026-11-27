@@ -162,10 +162,11 @@ The catalogs
   each entry whose recorded range no longer matches, so a core update makes the
   entry fail loudly.
 
-  The bound derives from names, so a demo rewritten around the same classes
-  reads as unchanged. So the entry records a digest of what each covered demo
-  said. The same command fails on a rewrite that no name would show
-  (``D-CAT-001``).
+  The command derives the bound from the names the entry gives: Sass files,
+  classes, custom properties, tag names and attributes. It does not read the
+  structure of the markup, so a demo rewritten around the same classes reads as
+  unchanged. So the entry records a digest of what each covered demo said. The
+  same command fails on a rewrite that no name would show (``D-CAT-001``).
 
 * **A class the query names is a second question, with its own range.** Usually
   a custom property that arrived after the classes beside it withholds an entry.

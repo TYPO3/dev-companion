@@ -105,13 +105,13 @@ hands ``Rename`` as the summary, ``the`` as the keyword, ``scope`` as the
 workflow and ``enum`` as the issue. A summary with a space in it does not fit
 through that command. Ask your agent for the draft instead. Every task skill
 routes it to ``typo3_commit_message_guide``, which takes the summary as one
-string. A client that asks for each argument in a field of its own, Claude
-Desktop and the MCP Inspector among them, takes the summary as it is.
+string. Some clients ask for each argument in a field of its own, Claude Desktop
+and the MCP Inspector among them. Those take the summary as it is.
 
 ``debrief`` has no argument, so every client runs it the same. Run it after the
 work, in a message of its own. A session that knows the questions are coming
-makes calls to have an answer for them, and the debrief then reports a run that
-did not happen.
+makes calls to have an answer for them. The debrief then reports a run that did
+not happen.
 
 Nothing in this repository runs either prompt as part of its own work. A forward
 run pastes ``documentation/records/debrief.txt`` into the session by hand,

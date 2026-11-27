@@ -185,5 +185,5 @@ What holds it
   and
   ``StdioServerTest::theSkillsExtensionListsEachWorkflowWithTheManifestAHostVerifiesAReadBy``
   — that the manifest names every file of a skill once, with the digest and the
-  size of what a read returns, and that the declaration and the error code reach
-  the wire.
+  size of what a read returns. They also hold that the declaration and the error
+  code reach the wire.

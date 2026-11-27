@@ -76,6 +76,8 @@ final class ProseTest extends TestCase
     public function everySentenceInACheckedDirectoryIsWithinItsMeasure(): void
     {
         $over = Prose::checkedOverTheMeasure();
+        self::assertTrue(Prose::isChecked('documentation/readme.rst'));
+        self::assertFalse(Prose::isChecked('documentation/server/tools/typo3_hint_lookup.rst'));
 
         foreach (Prose::CHECKED as $directory) {
             self::assertNotEmpty(array_filter(Prose::documents(), static fn(string $file): bool => str_starts_with($file, $directory)), $directory);

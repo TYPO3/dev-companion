@@ -20,8 +20,9 @@ The four members
   instead gets ``2026-07-28`` and the same capabilities and instructions,
   `D-ANS-175 <../../decisions/answers/ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md>`_.
 * **``capabilities``** — what `Factory <../../src/Server/Factory.php>`_
-  declares, which is what the server does: tools, resources, prompts, and the
-  completion of the two closed arguments of the ``commit_message`` prompt,
+  declares, which is what the server does. That is tools, resources, prompts,
+  and the completion of the two closed arguments of the ``commit_message``
+  prompt,
   `D-ANS-166 <../../decisions/answers/ans-166-initialize-declares-the-capabilities-the-server-honours.md>`_.
   Under ``extensions`` stands the Skills extension, and
   :doc:`resources/ <resources/index>` says what it adds. No list carries
@@ -29,8 +30,9 @@ The four members
   Nothing carries ``logging`` or ``subscribe``, because no log message and no
   resource update ever leaves this server.
 * **``serverInfo``** — the name, the version, the title, the description and the
-  site ``Factory`` declares, and the mark at two optical sizes as ``data:``
-  URIs, because a stdio server has no origin a client could fetch one from.
+  site ``Factory`` declares, and the mark at two optical sizes. The mark comes
+  as ``data:`` URIs, because a stdio server has no origin a client could fetch
+  one from.
 * **``instructions``** — the statement
   `Coverage <../../src/Knowledge/Coverage.php>`_ assembles from
   ``knowledge/server-scope.json``. The four parts of it are the opening, the
@@ -50,11 +52,11 @@ everything assembled, prefix and suffix included.
 Three things change the text from one start to the next:
 
 * **A notice in front.** Where the task skills published into the project are
-  stale, ``Installer`` puts them back and opens the instructions with one
+  stale, ``Installer`` puts them back. The instructions then open with one
   sentence that says so,
   `D-DIS-021 <../../decisions/discovery/dis-021-a-stale-publication-is-put-back-where-the-server-starts.md>`_.
   Where ``install`` never ran in the project, the sentence says that no task
-  skills are installed and names the ``typo3://skill`` resource that serves each
+  skills are installed. It names the ``typo3://skill`` resource that serves each
   one,
   `D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
 * **The exclusion in front of the routing.** Where

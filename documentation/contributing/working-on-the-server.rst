@@ -139,10 +139,10 @@ Which half a client hands the model is the client's, and ``D-EVI-011`` measured
 two. Claude Code hands over the data and drops the text. opencode hands over the
 text. Neither hands over the output schema. ``bin/cli tools:tokens`` measures it
 again in Claude Code: it runs ``claude -p`` three times through
-``bin/cli tools:proxy``, which relays the server with ``structuredContent`` or
-``outputSchema`` taken away, and reads what the ``tool_result`` carried and what
-it cost off the trace. It costs money and half a minute, and it needs ``claude``
-on the machine.
+``bin/cli tools:proxy``. The proxy relays the server with ``structuredContent``
+or ``outputSchema`` taken away. The command then reads what the ``tool_result``
+carried and what it cost off the trace. It costs money and half a minute, and it
+needs ``claude`` on the machine.
 
 The same command keeps the packages the core pins rather than contains.
 ``typo3/testing-framework``, the harness a project extension tests in

@@ -124,8 +124,8 @@ the place for the development tools somebody uses across projects:
 
 The entry names the checkout by its absolute path. Each machine has its own user
 scope, so each machine writes its own path. A bare command name would rest on
-the ``PATH`` the client starts with, and a client started from a desktop does
-not always have the one a shell has.
+the ``PATH`` the client starts with. A client started from a desktop does not
+always have the one a shell has.
 
 The server then starts in every session, in a project without TYPO3 as much as
 in one with it. Its tool list costs context in each of them. That is the price
@@ -396,9 +396,8 @@ stays open rather than gets a fill:
   once per tool. ``install`` writes no permission. A project that wants fewer
   questions lists the read-only tools under ``permissions.allow`` in
   ``.cursor/cli.json``, one ``Mcp(typo3-dev-companion:typo3_hint_lookup)`` per
-  tool. ``Mcp(typo3-dev-companion:*)`` also allows ``typo3_feedback_record``, the
-  tool that writes.
-  (`MCP <https://cursor.com/docs/mcp>`_,
+  tool. ``Mcp(typo3-dev-companion:*)`` also allows ``typo3_feedback_record``,
+  the tool that writes. (`MCP <https://cursor.com/docs/mcp>`_,
   `Permissions <https://cursor.com/docs/cli/reference/permissions>`_)
 * **opencode** — unestablished. ``enabled: false`` switches a server off, which
   the written entry does not. Whether a session that was already open reads the

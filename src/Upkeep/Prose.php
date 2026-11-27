@@ -43,7 +43,7 @@ final class Prose
      *
      * @var list<string>
      */
-    public const CHECKED = ['skills/', 'knowledge/documents/', 'requirements/', 'todo/'];
+    public const CHECKED = ['skills/', 'knowledge/documents/', 'requirements/', 'todo/', 'documentation/'];
 
     /**
      * A passive form, as an upper bound. "is read" can be the passive or the
@@ -175,12 +175,17 @@ final class Prose
         return count(explode(' ', (string) preg_replace('/"[^"]*"/', '""', $sentence)));
     }
 
-    /** Whether `bin/cli prose:check` fails on a long sentence in this file. */
+    /**
+     * Whether `bin/cli prose:check` fails on a long sentence in this file.
+     *
+     * A tool page stays out. The registry writes its prose, and
+     * `payloadOverTheMeasure()` reads that prose at its source.
+     */
     public static function isChecked(string $file): bool
     {
         foreach (self::CHECKED as $directory) {
             if (str_starts_with($file, $directory)) {
-                return true;
+                return !str_starts_with($file, 'documentation/server/tools/');
             }
         }
 

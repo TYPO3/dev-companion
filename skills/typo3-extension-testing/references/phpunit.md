@@ -64,7 +64,7 @@ it out.
 - Resolve services from the functional test container when the wiring is part of
   the contract.
 - Reset or isolate state that survives between tests. A test that passes alone
-  but fails in its containing suite is not finished.
+  but fails in the suite that contains it is not finished.
 - Add the smallest real assertion that proves the behavior. Never use a vacuous
   assertion to certify the harness.
 

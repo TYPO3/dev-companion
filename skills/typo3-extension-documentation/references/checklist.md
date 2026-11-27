@@ -12,8 +12,8 @@ finish.
   material.
 - Separate installation and administration from editor workflows and developer
   extension points.
-- Extend the repository's existing structure and markup. Do not create a second
-  canonical manual.
+- Extend the repository's structure and markup. Do not create a second canonical
+  manual.
 
 ## Evidence and conflicts
 
@@ -34,8 +34,8 @@ finish.
   hosts, or machine-specific paths into examples.
 - Replace required credentials with named placeholders. Explain how the reader
   supplies them securely.
-- When existing documentation contains plausible credentials or personal data,
-  flag it explicitly and do not reproduce it.
+- When the documentation contains plausible credentials or personal data, flag
+  it explicitly and do not reproduce it.
 
 ## Completion gate
 

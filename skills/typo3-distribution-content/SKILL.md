@@ -52,7 +52,7 @@ command puts the file, which is not where the argument said.
 
 `typo3_documentation_lookup` at the version you ship is the other half. Ask for
 the page on how you create a distribution. That page has already decided which
-records belong in the artifact and which are the receiving installation's own.
+records belong in the artifact and which are the target installation's own.
 
 What this workflow adds is that **a command that reports success is not evidence
 that the export worked**. It reports the same success for an artifact without
@@ -72,7 +72,7 @@ in place is a step of this workflow and not an argument to the command.
 ## Ship the site configuration beside the export, not inside it
 
 A site configuration can travel two ways, and they are not equivalent. One of
-them loses the address the site answers on, because the receiving installation
+them loses the address the site answers on, because the target installation
 cannot know it. `typo3_hint_lookup` with `id=initial-content-references` owns
 which route does what, and what survives an import at all.
 
@@ -80,7 +80,7 @@ What this workflow adds is what the intact route copies: **the whole directory
 the site keeps its configuration in**. It does not copy only the one file in it
 that is obviously configuration. Whatever else the installation put beside it is
 part of the site and has to travel with it. The rendering that defines the site
-is among that. Left behind, the receiving installation resolves the site, finds
+is among that. Left behind, the target installation resolves the site, finds
 every page, and renders nothing. That reads as a broken import and is not one.
 
 Only the root page gets rewritten to the record the import created. Anything
@@ -92,8 +92,8 @@ somebody reads it.
 ## Prove it on an installation that has never seen this package
 
 The artifact is write-only on the installation it came from. The import runs
-once and the installation remembers it. So a second import there proves nothing,
-and a read of the document back is reasoning rather than verification.
+once and the installation remembers it. So a second import there proves nothing.
+A read of the document back is an argument rather than a verification.
 `typo3_hint_lookup` with `id=initial-content-import-once` owns why, and names
 the cheap form of the same proof.
 
@@ -110,8 +110,8 @@ stops at the first one alone.
    shipped invisible and a reference that points at a stranger both survive an
    import that reports nothing wrong.
 
-Read what the receiving installation got with `typo3_configuration_lookup`
-rather than off the files you gave it. The merged result is what it runs on.
+Read what the target installation got with `typo3_configuration_lookup` rather
+than off the files you gave it. The merged result is what it runs on.
 
 Then report what the package is: which records it ships, which files, and which
 site it configures. Name the installation you ran the three checks above on.

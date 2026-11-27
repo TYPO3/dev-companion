@@ -26,9 +26,8 @@ Then, for this workflow:
 - `typo3_label_lookup` before you add or reword a label, and
   `typo3_translation_domain_lookup` for the extension's own XLF path.
 - Read its public configuration, registration files, templates, examples,
-  existing manual and tests. Code is the source for what this package
-  implements. Documentation that outruns it is the defect this workflow exists
-  to avoid.
+  current manual and tests. Code is the source for what this package implements.
+  Documentation that outruns it is the defect this workflow exists to avoid.
 
 For backend documentation, verify modules through `typo3_backend_module_lookup`,
 icons through `typo3_icon_lookup`, and undeclared Fluid prefixes through
@@ -39,11 +38,11 @@ icons through `typo3_icon_lookup`, and undeclared Fluid prefixes through
 Read [references/checklist.md](references/checklist.md) for the audience and
 surface selection, secret hygiene, evidence conflicts, and the completion gate.
 
-- Extend the existing `Documentation/` structure. Do not create a competing
-  manual layout. Where step 2 reported no manual, or one older than
-  `guides.xml`, call `typo3_rule_lookup` with
-  `documentId="extension/documentation/manual"`. It holds the files that make a
-  directory a manual, whole, and the command that renders it before you publish.
+- Extend the existing `Documentation/` structure. Do not create a second manual
+  layout. Where step 2 reported no manual, or one older than `guides.xml`, call
+  `typo3_rule_lookup` with `documentId="extension/documentation/manual"`. It
+  holds the files that make a directory a manual, whole, and the command that
+  renders it before you publish.
 - Keep README content concise: the purpose, the essential setup, and the
   canonical documentation link where one exists.
 - Separate the administrator and developer setup from the editor workflows.
@@ -59,9 +58,9 @@ detail as stable public API.
 
 ## Write and verify
 
-- Preserve the repository's existing markup format, heading hierarchy, link
-  style, terminology, and line-wrap conventions.
-- Reuse canonical TYPO3 terminology and existing project labels.
+- Preserve the repository's markup format, heading hierarchy, link style,
+  terminology, and line-wrap conventions.
+- Reuse canonical TYPO3 terminology and the project's own labels.
 - Make prerequisites, commands, expected outcomes, and failure conditions
   explicit.
 - Validate internal links, referenced paths, configuration examples, and code
@@ -87,8 +86,8 @@ name and work from it. The finding at that moment is that the behaviour is
 missing, not the manual.
 
 If you write the page anyway, the manual outruns the package it ships with. What
-crosses over is the surface, the behaviour the page was going to claim, and its
-source files. You write the page from what comes back verified.
+crosses over is the surface, the behaviour the page would claim, and its source
+files. You write the page from what comes back verified.
 
 This skill owns documentation and user-facing wording changes. Test
 implementation is `typo3-extension-testing`. Conformance assessment is

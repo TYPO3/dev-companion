@@ -147,9 +147,9 @@ then a second pass over markup that reads as finished.
   installation. So it settles the installed major and says nothing about the
   others the package declares.
 - `typo3_changelog_lookup`, restricted to each declared major, for a core asset
-  the output stops relying on. To delete a rule because the core no longer ships
-  the icon font it names is an unverified decision. So is to attach a class
-  because the core does. The build goes green either way.
+  the output no longer relies on. To delete a rule because the core no longer
+  ships the icon font it names is an unverified decision. So is to attach a
+  class because the core does. The build goes green either way.
 - `typo3_rule_lookup` with `documentId="any/backend/using-the-styleguide"` for
   what a styleguide demo states and what it does not. Read it before you take a
   demo as the contract for a component.

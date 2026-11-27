@@ -118,11 +118,11 @@ skill does not repeat:
   beside the installation.
 
 A declared major above the installed one owes its breaking changes before the
-reading, and the sweep's exemption does not cover them. The review brief names
-that call in `owed`, with the package's PHP as its paths. Hold each entry it
-returns against the files that entry names. A check that runs on the installed
-major clears none of these entries, because its analysis reads the installed
-core. Read each file an entry names, or report the entry under **Open**.
+reading. The sweep's exemption does not cover them. The review brief names that
+call in `owed`, with the package's PHP as its paths. Hold each entry it returns
+against the files that entry names. A check that runs on the installed major
+clears none of these entries, because its analysis reads the installed core.
+Read each file an entry names, or report the entry under **Open**.
 
 An audit that runs neither procedure reports the gap rather than the range. The
 finding holds where you established it, and you name the majors you did not
@@ -145,12 +145,12 @@ bar each one has to meet. That includes the one you could neither establish nor
 disprove, which you report as open rather than dropped.
 
 Close on coverage rather than on a summary. That is the surface list written in
-step 3, every entry marked assessed, unassessed, not requested or not
-applicable, clean ones briefly. It is that list and not a recollection at the
-end. A summary from memory reports what the session noticed it skipped, never
-what it never reached. **An assessed row cites the lookup its entry carries.** A
-surface you read and never asked is unassessed, because the reading alone cannot
-say whether it is right.
+step 3. Every entry in it carries a mark: assessed, unassessed, not requested or
+not applicable. A clean one stays brief. It is that list and not a recollection
+at the end. A summary from memory reports what the session noticed it skipped,
+never what it never reached. **An assessed row cites the lookup its entry
+carries.** A surface you read and never asked is unassessed, because the reading
+alone cannot say whether it is right.
 
 Without the list a thorough report and a narrow one look alike. The cheapest way
 to look thorough is to examine less. Unassessed and not requested both mean that
@@ -175,8 +175,8 @@ that nothing changed, which belongs under **Verification**.
 part above.** A summary in a shape of its own drops the ranks, the paths, the
 dropped candidates and the coverage. Those are what a reader checks an audit by.
 
-**A request that asked for a review ends here.** Report, name the owning
-workflow per finding as step 10 says, and stop. An instruction to change the
+**A request that asked for a review ends here.** Report, name the workflow that
+owns each finding as step 10 says, and stop. An instruction to change the
 package asks for the rest: "fix it", "put that right", "do the first three". It
 arrives after the report, which is where you leave a review.
 
@@ -268,10 +268,10 @@ report from an earlier session is evidence about the checkout as it stood then.
     transition itself, not a detail of the item. Name that workflow in the
     report whether or not the user requested fixes. A reader who decides what to
     do next needs it as much as a session told to do it.
-11. Where an item has no owning workflow, work it here only where the project's
-    own checks prove the change. That is the change, the check that covers it,
-    and nothing wider than the finding. An item nothing here can prove goes back
-    unassigned in the closing report instead. A finding no workflow owns and no
+11. Where no workflow owns an item, work it here only where the project's own
+    checks prove the change. That is the change, the check that covers it, and
+    nothing wider than the finding. An item nothing here can prove goes back
+    unassigned in the final report instead. A finding no workflow owns and no
     check covers is a hole in the map. A change on judgement is what hides the
     hole.
 12. Settle where the change lands before the first commit. That is which branch

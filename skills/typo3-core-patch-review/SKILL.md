@@ -34,10 +34,10 @@ The changed paths are the argument, not the subject. Pass them to
 call per subsystem. Do that before you form a view of whether the code is right.
 
 `typo3_task_guide` names the hints its brief left out, in `omittedHints` and in
-the line above the brief. **An omitted id that names a subsystem the diff
-changes is a call you owe before any finding about that subsystem.** Fetch it
-with `typo3_hint_lookup` by id, the `lookup` its entry names. An id left out of
-a batch is still owed. `datahandler-testing` on a patch that adds DataHandler
+the line above the brief. **An omitted id for a subsystem the diff changes is a
+call you owe before any finding about that subsystem.** Fetch it with
+`typo3_hint_lookup` by id, the `lookup` its entry names. An id left out of a
+batch is still owed. `datahandler-testing` on a patch that adds DataHandler
 tests is that case. The hints the brief carried do not stand in for it. One
 review said they did, and stated the subsystem's TCA defaults wrongly.
 
@@ -143,12 +143,12 @@ Ask the owner of each obligation rather than recall it:
   removal has a title after what it removed *about*: the subsystem, the kind of
   API. It carries the identifiers in a list inside the file.
 
-  So a query naming one of them and coming back empty has established nothing.
-  Neither has one narrowed to the branch this patch targets. A precedent sits
-  under the version it landed in, which is an earlier one by definition. Where
-  the listing and the words both miss, the precedent is still there, and the
-  checkout holds it. That is `Documentation/Changelog`, which this server does
-  not read and you do. Say which of the two answered.
+  So a query that names one of them and comes back empty has established
+  nothing. Neither has one narrowed to the branch this patch targets. A
+  precedent sits under the version it landed in, which is an earlier one by
+  definition. Where the listing and the words both miss, the precedent is still
+  there, and the checkout holds it. That is `Documentation/Changelog`, which
+  this server does not read and you do. Say which of the two answered.
 
   **What kind of change an entry came out of is two readings rather than one.**
   `typo3_forge_lookup` with its issue number says what the reporter filed the
@@ -169,7 +169,7 @@ Ask the owner of each obligation rather than recall it:
   `stdWrap.override` false. Whether the patch owes a manual anything at all is
   `typo3_rule_lookup` asked for `documentation`. A system extension's own
   `Documentation/` is in the checkout, and it changes in the patch itself.
-- **Sweep the checkout for the call sites before proposing an alternative.** A
+- **Sweep the checkout for the call sites before you propose an alternative.** A
   recommendation to a core reviewer needs precedent rather than taste. Whether
   an idiom has a foothold in the core is precedent this server does not hold.
   The base's step after the lookups starts at the class that implements a
@@ -214,7 +214,7 @@ still pass" is not a review sentence. And an unnamed suite is the same sentence
 with the words taken out.
 
 The list is the guide's `verifying`: every entry it marks `verifies`, by name.
-Every name on it stands on a `Ran:` line or a `Not run:` line, so the `Not run:`
+Every name on it stands on a `Ran:` line or a `Not run:` line. So the `Not run:`
 line is that list minus what ran. An install, a dispatcher or a server for a
 browser checks nothing and is not on it. One review built the list from the
 marks and left five suites off both lines.
@@ -224,7 +224,7 @@ line names the reason.** The suite writes into the checkout and has no
 report-only form. The user, asked before the skip, answered no. No worktree
 holds the patch, and nobody was there to ask. The review skipped it to finish
 faster. A narrower suite that passed and a scope the session chose are the
-fourth reason, and the line names it so.
+fourth reason. The line names it so.
 
 **Where a worktree holds the patch, the third reason is false.** A suite left
 unrun there takes the fourth.
@@ -324,15 +324,15 @@ second, by a call made for another reason.
 every entry in its line form.** The three review skills share that skeleton, so
 two reports compare section by section. Order the findings by what stops the
 patch, and say why each one stops it. Beside them stands what you checked and
-found correct, and what you raised while you read and dropped, with what dropped
-it.
+found correct. Beside them also stand the points you raised while you read and
+then dropped, each with what dropped it.
 
 Close on the checklist's surfaces with each one marked assessed, unassessed or
 not applicable to this diff. A reader cannot tell a review that reports only
 findings from one that looked at less.
 
-End the report with the steps of the base order you did not reach, one line
-each: `Not reached: <step> — <what stood in for it>`.
+End the report with each step of the base order you did not reach. Give each one
+a line: `Not reached: <step> — <what stood in for it>`.
 
 **The report is markdown the reader can copy, and the answer is where it goes.**
 Everything this section asks for makes it long, and length makes the form
@@ -374,7 +374,7 @@ the change type you are about to write, and `typo3_hint_lookup` with the paths
 you will edit. The third is the deprecation sweep. That sweep is
 `typo3_changelog_lookup` with `type: deprecation`, which a review is exempt from
 and a change is not. You walked the base once at the start of this review,
-against files nobody was going to write.
+against files nobody would write.
 
 **A remark about a finding's weight is not that instruction.** "That is a reason
 to reject it", "I think the tests should show that", "that one blocks it". Each

@@ -33,9 +33,9 @@ Then, for this workflow:
   `id="sitepackage-fluid-styled-content"` says what the other choice costs. Put
   that in the report.
 - Run the base's deprecation sweep with `tags` set to `TypoScript`, `TSConfig`,
-  `Fluid`, `YAML` and `Frontend`, the kinds of file a sitepackage ships, and
-  `excludeTags` set to `PHP-API`. Add the entries about a file the package
-  ships, such as `ext_localconf.php`.
+  `Fluid`, `YAML` and `Frontend`. These are the kinds of file a sitepackage
+  ships. Send `excludeTags` set to `PHP-API`. Add the entries about a file the
+  package ships, such as `ext_localconf.php`.
 - Take the vendor from the project's own packages, and the author from the root
   `composer.json` or the git configuration. Name the first page layout
   `Default`, so a page with no layout selected renders through it too.
@@ -85,8 +85,8 @@ the builder, and name the other start in the report.
    decision. The TYPO3 version is the line the installation runs. The request
    carries an author email to a service outside the project. Send a placeholder
    unless the user agreed, and write the real author into the local files. The
-   builder takes the vendor from the company and the key from the title, so send
-   the ones the package is meant to carry.
+   builder takes the vendor from the company and the key from the title. So send
+   the ones the package must carry.
 2. **A tree written by hand.** `typo3_hint_lookup` with
    `id="sitepackage-layout"` gives the tree and what each directory is for. Take
    this start where the builder does not offer the installed line, or does not
@@ -95,8 +95,8 @@ the builder, and name the other start in the report.
 `typo3_hint_lookup` with `id="sitepackage-start"` says what else creates a
 sitepackage, and what each tool writes on the installed major.
 
-**A generated package is a starting point.** Read each generated file against
-the hints in *Lay it out* and the sweep before you keep it. Remove the empty
+**A generated package is where you start.** Read each generated file against the
+hints in *Lay it out* and the sweep before you keep it. Remove the empty
 directories and the files this site does not use, and say which ones you
 removed. Move each part that stands outside the tree of `sitepackage-layout`
 into that tree. Where `sitepackage-start` names the place of a builder part,
@@ -129,10 +129,10 @@ The package is not done when its files exist. Work these steps in order:
 3. Add its set to the dependencies of the site configuration. Remove the sets it
    replaces.
 4. Find the installer's welcome page. `typo3_hint_lookup` with
-   `id="installation-setup"` says where the installed major puts it: the site's
-   own `setup.typoscript`, or a root `sys_template` row that clears. Replace the
-   file's content with a comment, or hide the row. Delete neither, and report
-   what it held.
+   `id="installation-setup"` says where the installed major puts it. That is the
+   site's own `setup.typoscript`, or a root `sys_template` row that clears.
+   Replace the file's content with a comment, or hide the row. Delete neither,
+   and report what it held.
 5. Flush the caches, then render one page for each page layout. Where the
    installation has no page with a layout, set one page's layout in its page
    properties. Without a backend at hand, write its `backend_layout` field as
@@ -140,22 +140,22 @@ The package is not done when its files exist. Work these steps in order:
    skips the caches, the history and the reference index. `typo3_hint_lookup`
    with `ids` set to `datahandler-seeding` and `datahandler-writing` gives the
    script and its datamap. Read the old value first with `typo3_record_lookup`.
-   Put it back the same way after the request, and report both writes. A
-   layout whose template addresses an area other than `main` also proves that
-   the set's page TSconfig loaded. Place a content element in that area the
-   same way, and delete it the same way afterwards.
-6. Count the tags in each response of step 5. Each page holds one `<html>`,
-   one `<head>` and one `<body>`. A second set passes every other check. Take
-   it out of the templates, and keep the page object. Never meet the count with
-   `config.disableAllHeaderCode`, because that drops every asset the page
-   object includes.
+   Put it back the same way after the request, and report both writes. A layout
+   whose template addresses an area other than `main` also proves that the set's
+   page TSconfig loaded. Place a content element in that area the same way, and
+   delete it the same way afterwards.
+6. Count the tags in each response of step 5. Each page holds one `<html>`, one
+   `<head>` and one `<body>`. A second set passes every other check. Take it out
+   of the templates, and keep the page object. Never meet the count with
+   `config.disableAllHeaderCode`, because that drops every asset the page object
+   includes.
 
-A request to the page proves the render. Where the site's base names a host the
-environment does not serve, `typo3_project_describe` says so and names the Host
-header to send instead. For a look in a browser, ask `typo3_rule_lookup` with
-`documentId="any/testing/browser-check"` at step 5, not earlier. Then open the
-page module once, and check that each layout shows its title and columns. Where
-you could not render a layout, report it as unproven and name it.
+A request to the page proves the render. The site's base can name a host the
+environment does not serve. Then `typo3_project_describe` says so and names the
+Host header to send instead. For a look in a browser, ask `typo3_rule_lookup`
+with `documentId="any/testing/browser-check"` at step 5, not earlier. Then open
+the page module once, and check that each layout shows its title and columns.
+Where you could not render a layout, report it as unproven and name it.
 
 **Where no shell runs Composer and the console, stop after the files.** Leave
 the site's dependencies as they are, because a set nothing installed breaks
@@ -164,13 +164,13 @@ untested.
 
 ## Read what the finished site serves
 
-**A page that renders is not yet a page a search engine can index or a
-keyboard user can work.** Run this pass after step 5, on the responses of that
-step. Read the home page and one subpage in each language.
+**A page that renders is not yet a page a search engine can index or a keyboard
+user can work.** Run this pass after step 5, on the responses of that step. Read
+the home page and one subpage in each language.
 
 Ask `typo3_hint_lookup` once, with `ids` set to `page-head-seo`,
-`page-heading-levels`, `xml-sitemap` and `sitepackage-focus-contrast`. Then
-read each point off a response, not off a file:
+`page-heading-levels`, `xml-sitemap` and `sitepackage-focus-contrast`. Then read
+each point off a response, not off a file:
 
 - One h1 per page, and no heading before it.
 - The meta description and the canonical in the head. Where the page has a
@@ -190,8 +190,8 @@ the hints name.
 `typo3-content-element-development`.** Carry across the extension key, the set
 and the template root. **When the package needs an asset build, invoke
 `typo3-extension-asset-build`** with the same three. Where the site has no
-running installation to render in, **invoke `typo3-development-installation`**
-at the point the package is written and wired.
+installation to render in, **invoke `typo3-development-installation`** once you
+have written and wired the package.
 
 The site configuration's languages, base and error handling are the user's.
 Leave them as they are.

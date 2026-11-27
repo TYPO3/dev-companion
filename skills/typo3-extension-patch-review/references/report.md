@@ -6,8 +6,8 @@ two reviews a reader can compare. A heading you leave out reads as a section the
 review never reached.
 
 Every entry keeps the line form the skeleton gives it. Reviews kept every
-heading and broke the form below it, so no line compared with the same line of
-another review. The form is six rules:
+heading and broke the form below it. As a result, no line compared with the same
+line of another review. The form is six rules:
 
 - A head field holds its value alone. An explanation beside it goes into a
   finding or under **Open**.
@@ -18,17 +18,18 @@ another review. The form is six rules:
 - A **Status** cell holds one of its words alone. A surface you read in part
   takes two rows, the part you read and the rest as `unassessed`.
 - A **Rule** line ends on the call that returned the rule, as the trace holds
-  it: the tool and the id or query it took. A rule the brief carried names
-  `typo3_task_guide`, and a rule you read in the code names its `<path>:<line>`.
-  An id the brief or the skill names without its text is no source yet. Fetch it
-  with `typo3_hint_lookup` or `typo3_rule_lookup` and cite that call.
+  it. That is the tool and the id or query it took. A rule the brief carried
+  names `typo3_task_guide`, and a rule you read in the code names its
+  `<path>:<line>`. An id the brief or the skill names without its text is no
+  source yet. Fetch it with `typo3_hint_lookup` or `typo3_rule_lookup` and cite
+  that call.
 - A `<path>:<line>` comes from a read of that one file. Output that prints
   several files numbers its own lines, and those are no file's lines.
 
 The answer opens with the fence, and nothing follows **Not reached** inside it.
-After the fence stands at most what happens next: the finding numbers in the
-order to work them, and the skill that takes each. A summary before the fence or
-a recap after it repeats the report in a shape of its own.
+After the fence stands at most what happens next. These are the finding numbers
+in the order to work them, and the skill that takes each. A summary before the
+fence or a recap after it repeats the report in a shape of its own.
 
 The skeleton is the same in the three review skills. The fields of the head, the
 severity headings and one field of a finding are this skill's own.
@@ -105,7 +106,7 @@ severity headings and one field of a finding are this skill's own.
 
 Number the findings across the severity headings, so `3` names one finding in
 the whole report. A finding about a declared version nobody ran says so in its
-**Evidence** line, with the reading that would settle it.
+**Evidence** line. The line names the reading that would settle it.
 
 The answer stands as the example below stands, cut here to one finding. The
 **Rule** line ends on its call, and the last line after the fence is the work

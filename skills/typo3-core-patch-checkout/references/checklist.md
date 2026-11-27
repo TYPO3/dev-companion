@@ -27,7 +27,7 @@ happened in the first.
 ## Stop
 
 - **Both sides changed the same lines with different intent.** This is the case
-  the rule exists for. Any resolution is an authoring decision.
+  the rule exists for. Any resolution is a decision for the author.
 - **The branch already fixed what the patch fixes, differently.** The patch may
   now be unnecessary, partly unnecessary, or a better approach that should
   replace the other. All three are the author's and a reviewer's call.
@@ -68,8 +68,8 @@ and the diff between two patch sets does not carry it.
 
 - The change, its patch set, its target branch, and the commit you put the
   checkout back on.
-- Which files and which hunks conflicted, and for each one which stopping rule
-  it hit.
+- Which files and which hunks conflicted, and for each one which stop rule it
+  hit.
 - What the two sides wanted, in one sentence each. That makes the report usable
   by whoever rebases it properly, and it is the part a diff does not say.
 - Whether you resolved anything before the stop, and what. A partly resolved

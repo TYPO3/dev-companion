@@ -1694,7 +1694,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
         ));
         self::assertStringContainsString(
-            'what you raised while you read and dropped, with what dropped it',
+            'you raised while you read and then dropped, each with what dropped it',
             $skill,
         );
 
@@ -1986,7 +1986,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('carries the identifiers in a list inside the file', $skill);
         // The empty answer is the trap: it reads as "no precedent exists" from
         // both the identifier and the version filter, and it is neither.
-        self::assertStringContainsString('coming back empty has established nothing', $skill);
+        self::assertStringContainsString('comes back empty has established nothing', $skill);
         self::assertStringContainsString(
             'A precedent sits under the version it landed in',
             $skill,
@@ -2043,7 +2043,7 @@ final class SkillTest extends TestCase
         // An act with an object, because the same position has already cost a
         // rule that was present and read past (`D-SKL-009`).
         self::assertStringContainsString(
-            '**Sweep the checkout for the call sites before proposing an alternative.**',
+            '**Sweep the checkout for the call sites before you propose an alternative.**',
             $skill,
         );
         // The bar that makes it a step of the review rather than a nicety.
@@ -3137,7 +3137,7 @@ final class SkillTest extends TestCase
 
         self::assertStringContainsString('The chain this change sits in', $checklist);
         self::assertStringContainsString('rate the patch on its own', $checklist);
-        self::assertStringContainsString('before calling one of those an oversight', $checklist);
+        self::assertStringContainsString('before you call one of those an oversight', $checklist);
         self::assertStringContainsString('as a question rather than as an oversight', $checklist);
     }
 
@@ -3186,7 +3186,7 @@ final class SkillTest extends TestCase
         // assertion is the sentence and `prose:format` decides where its lines
         // break.
         self::assertStringContainsString(
-            'before implementing a content element or its backend preview',
+            'before you implement a content element or its backend preview',
             self::flat((string) file_get_contents(
                 Paths::root() . '/skills/typo3-backend-module-development/SKILL.md',
             )),
@@ -3276,7 +3276,7 @@ final class SkillTest extends TestCase
         ));
         self::assertStringContainsString('## Carry your own work onto the patch set', $skill);
         self::assertStringContainsString('On the fourth way in it is the material instead', $skill);
-        self::assertStringContainsString('There is one ending it does not run for', $skill);
+        self::assertStringContainsString('There is one end it does not run for', $skill);
 
         self::assertStringContainsString('## Taking your own work onto the patch', $checklist);
         self::assertStringNotContainsString(
@@ -3534,7 +3534,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-issue-triage/SKILL.md',
         ));
         self::assertStringContainsString(
-            'invoke `typo3-core-patch-development` before making the change',
+            'invoke `typo3-core-patch-development` before you make the change',
             $body,
         );
     }
@@ -4108,7 +4108,7 @@ final class SkillTest extends TestCase
         self::assertNotFalse($add);
         self::assertLessThan($establish, $verify);
         self::assertLessThan($add, $establish);
-        self::assertStringContainsString('For a review-only request, report the defect without changing it', $skill);
+        self::assertStringContainsString('For a review-only request, report the defect and do not change it', self::flat($skill));
         self::assertStringContainsString('Keep unit and functional infrastructure with the extension', $skill);
         self::assertStringContainsString('Keep browser infrastructure with the runnable project', $skill);
         self::assertStringNotContainsString('Classify the work as setup', $skill);
@@ -4182,12 +4182,12 @@ final class SkillTest extends TestCase
         // makeInstance() carries the @template annotation that used to be the
         // extension's job. Checked on 12.4, 13.4, 14.3 and main.
         self::assertStringNotContainsString('saschaegerer', $guidance);
-        self::assertStringContainsString('still maintained before adding', $guidance);
+        self::assertStringContainsString('still maintained before you add', $guidance);
         // And the sentence that keeps the list from the status of a
         // requirement. It is the default where nothing covers the check, and it
         // loses to whatever the project already runs for the same one.
         self::assertStringContainsString(
-            'default per check where the checkout covers it with nothing, never as a replacement for what it already runs',
+            'the default for a check the checkout does not cover. They never replace what it already runs',
             self::flat($guidance),
         );
 
@@ -4268,7 +4268,7 @@ final class SkillTest extends TestCase
 
         // It starts from the base's sweep and states only what it adds, so the
         // two scope calls that order already fixes appear nowhere here.
-        self::assertStringContainsString('starts from the result of that sweep rather than restating it', self::flat($skill));
+        self::assertStringContainsString('starts from the result of that sweep and does not restate it', self::flat($skill));
         self::assertStringNotContainsString('typo3_project_describe', $skill);
         self::assertStringNotContainsString('typo3_extension_describe', $skill);
 
@@ -4554,7 +4554,7 @@ final class SkillTest extends TestCase
 
         // And the ownership sentence, which gave the same half away in the
         // clause `071526` quoted back at the server.
-        self::assertStringContainsString('what a running one answers', $flat);
+        self::assertStringContainsString('what it answers once it runs', $flat);
         self::assertStringNotContainsString('what runs against the installation once it answers', $flat);
     }
 
@@ -4772,7 +4772,7 @@ final class SkillTest extends TestCase
         // about it looks like a clean result. Read off the written list rather
         // than off what the session remembers it skipped.
         self::assertStringContainsString('**unassessed**, and unassessed is', $skill);
-        self::assertStringContainsString('every entry marked assessed, unassessed, not requested or not', $skill);
+        self::assertStringContainsString('Every entry in it carries a mark: assessed, unassessed, not requested or not', self::flat($skill));
         self::assertStringContainsString('not a recollection at the end', self::flat($skill));
 
         // "Do not change files" had read as "run nothing": the audit branch

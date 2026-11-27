@@ -86,13 +86,13 @@ miss as absence.
 - High: likely security boundary failure, data corruption, or a primary feature
   unusable in a supported setup.
 - Medium: concrete incompatibility, unsafe rendering pattern, broken secondary
-  behavior, missing regression coverage for risky code, or misleading operator
-  documentation.
+  behavior, no regression coverage for risky code, or operator documentation
+  that misleads.
 - Low: limited maintainability or convention issue with a concrete future cost.
 - Recommendation: beneficial improvement without a verified violation.
 
 Severity follows the demonstrated consequence, not the number of files involved.
-State missing evidence instead of inflated severity.
+State the missing evidence instead of an inflated severity.
 
 ## Finding gate
 

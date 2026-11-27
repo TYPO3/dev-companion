@@ -7,9 +7,9 @@ compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup
 # TYPO3 Core Patch Development
 
 Carry one change from an issue to a patch somebody can review. Keep this skill
-as routing and working order. The suites, the scripts, the contribution rules
-and the Gerrit commands are lookups. A copy of them here goes stale in somebody
-else's checkout, and nothing reports it.
+as routing and the order of the work. The suites, the scripts, the contribution
+rules and the Gerrit commands are lookups. A copy of them here goes stale in
+somebody else's checkout, and nothing reports it.
 
 ## Establish the issue before you believe it
 
@@ -49,7 +49,7 @@ else's checkout, and nothing reports it.
      drops against what the reported code did.** Name the arguments and the
      behaviour the reported code had and the replacement does not. An
      alternative closes an issue only if it does the same work. What it drops is
-     usually the capability the reporter was reaching for.
+     usually the capability the reporter wanted.
    - **Enumerate the points the issue requires, the ones only a comment names
      included.** A subject that names two things over comments that name three
      is the ordinary case. The comment is the list. One patch covers all of
@@ -72,7 +72,7 @@ else's checkout, and nothing reports it.
    them and say which of the three carries the rule.
 
    Enforced in code, warned about as fragile and advised in prose are three
-   different claims. Two neighbouring APIs regularly make different ones. Carry
+   different claims. Two APIs side by side regularly make different ones. Carry
    it at the strength its own source puts on it. An assessment that hardens "may
    change in a future version" into "must not" argues the patch away on nothing.
 
@@ -94,8 +94,8 @@ repeats. An unreproducible claim sends a patch back whether or not it is right.
 A reason not to do something has a date, and the API it rested on does not. The
 issue may carry a decision to defer. It needs an event that does not exist, or
 there is no API for this yet. Check that blocker against what the branch has
-today before you treat it as standing. An expired objection uses the same words
-as one that still holds, and nothing in the notes separates them.
+today before you treat it as valid. An expired objection uses the same words as
+one that still holds, and nothing in the notes separates them.
 
 The argument that carries a bugfix is the same inconsistency inside one version.
 "The branch handles the same input one way here and another there" is a defect a
@@ -152,7 +152,7 @@ rather than repair it.
 Ask `typo3_hint_lookup` for the conventions of each subsystem you touch, before
 you write rather than after. A convention you fetch afterwards confirms what you
 already wrote. Ask by id for the hints the brief left out, which `omittedHints`
-names, and with the concrete paths only for a path the brief did not see. The
+names. Ask with the concrete paths only for a path the brief did not see. The
 same paths queried again answer the same hints.
 
 Where the change touches a source below `Build/Sources/`, the generated file
@@ -243,8 +243,8 @@ trailers, the release targets and the changelog entry the change type owes. One
 read of it here is cheaper than the checks that teach it one call at a time.
 
 `git commit` runs the core's pre-commit hook on the host. It walks the whole
-working directory, ignored folders included, and it aborts on nothing. So a
-checkout that holds worktrees or caches makes it slow and makes it report paths
+working directory, ignored folders included, and it aborts on nothing. So
+worktrees or caches in the checkout make it slow. They also make it report paths
 the commit does not carry. Read what it prints against `typo3_rule_lookup` with
 `documentId="core/testing/scripts"`, section "The Pre-Commit Hook", before you
 amend on the strength of it.
@@ -268,10 +268,10 @@ part of the push rather than a thing of its own. Two parts of that are not
 obvious. A session with no skill that told it either worked both out from
 scratch:
 
-- **Stop a running `runTests.sh` suite first.** The script mounts the tree and
-  reads it as it goes. So a rebase underneath a run invalidates it without a
-  failure. The run then reports about a tree that no longer exists. Clear the
-  suite's leftover containers before you start.
+- **First stop any `runTests.sh` suite that still runs.** The script mounts the
+  tree and reads it as it goes. So a rebase underneath a run invalidates it
+  without a failure. The run then reports about a tree that no longer exists.
+  Clear the suite's leftover containers before you start.
 - **Confirm that the `Change-Id` survived the rebase.** It makes the push a new
   patch set on the change you already have. Without it you open a second change
   instead, and another push does not undo that.
@@ -292,19 +292,19 @@ you fetched. It is also whether you had to carry the patch onto current code to
 apply.
 
 Your own change that this checkout still holds needs no handover. That is the
-case where `git cat-file -e <commit>` finds the commit `typo3_gerrit_lookup`
-gives for the current patch set, and the tree is clean. Then
+case when the tree is clean and `git cat-file -e <commit>` finds the commit. The
+commit is the one `typo3_gerrit_lookup` gives for the current patch set. Then
 `git switch -c review/<change number> <commit>` is the whole step, and the work
 stays here.
 
 The push is a step of its own, and you take it when the user asks for it.
 Everything above is local and reversible. The push is neither.
 
-**Before you ask for the push, end your answer with the steps of the base order
-this change did not reach**, one line each:
+**Before you ask for the push, end your answer with each step of the base order
+you did not reach.** Give each one a line:
 `Not reached: <step> — <what stood in for it>`. The user decides the push on
-that list. A walk of the base during an earlier review is not what stood in for
-a step, because it ran against files nobody was going to write.
+that list. A walk of the base in an earlier review did not stand in for a step.
+It ran against files nobody would write.
 
 **Ask whether the change goes up visible to everyone or unlisted, every time.**
 The two are different refspecs, and the difference is not a preference. One

@@ -8,8 +8,9 @@ compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup
 
 Take one open issue and say what is still true about it. Or take an area of the
 backlog and hand back the candidates worth work. Keep this skill as routing and
-working order. The tracker, the review server and the checkout's own commands
-are lookups. A copy of what they answer goes stale here, and nothing reports it.
+the order of the work. The tracker, the review server and the checkout's own
+commands are lookups. A copy of what they answer goes stale here, and nothing
+reports it.
 
 Triage is not a smaller version of the patch. What it produces is a statement
 somebody can act on. This still happens, this is gone, this was never a defect,
@@ -97,9 +98,9 @@ Read in this order and stop at the first that decides:
 Say which of those decided. Say of the rows you passed over that you passed over
 them. A skip is not a triage, and the list is still what the user asked for.
 
-**End the list with the steps of the base order you did not reach**, one line
-each: `Not reached: <step> — <what stood in for it>`. A list of the backlog
-changes nothing, so the deprecation sweep is one of them.
+**End the list with each step of the base order you did not reach.** Give each
+one a line: `Not reached: <step> — <what stood in for it>`. A list of the
+backlog changes nothing, so the deprecation sweep is one of them.
 
 ## Establish what the issue claims
 
@@ -170,10 +171,10 @@ filesystem. A test skipped for the environment says nothing about the report.
 
 `typo3_test_run_guide` with the paths you have just read says which suites can
 fail on them. It says whether a test can pin the behaviour at all. Where it can,
-a failing test is the strongest thing a triage produces. It survives a handover
-to somebody else, and it is the patch's first half already written. Where no
-layer can hold it — backend markup, a build step, shipped JavaScript — say so.
-Reproduce by hand instead, and write down the steps and what you saw.
+a test that fails is the strongest thing a triage produces. It survives a
+handover to somebody else, and it is the patch's first half already written.
+Where no layer can hold it — backend markup, a build step, shipped JavaScript —
+say so. Reproduce by hand instead, and write down the steps and what you saw.
 
 That test is a throwaway until a patch adopts it, and it has three rules of its
 own. It goes where the suite already looks. It mirrors the path of the class it
@@ -213,9 +214,9 @@ opens with already answered both:
   from what worked in another repository.
 - **A green that ran over no files is not a green.** Where a suite reports
   success, confirm it inspected something — the count of tests or files it
-  names. Do that before you read it as the behaviour being gone. That is the
-  failure mode a triage is most exposed to. "The suite passes" is the evidence
-  it is about to write a verdict on.
+  names. Do that before you read it as proof that the behaviour is gone. That is
+  the failure mode a triage is most exposed to. "The suite passes" is the
+  evidence it is about to write a verdict on.
 - **Once you commit the change, `git stash` measures nothing.** The same failure
   in a second costume. The stash finds nothing to save on a clean tree. The run
   that follows is the patched code, and the result reads as a without-patch
@@ -246,7 +247,7 @@ meant to report the finding would disclose it.
 
 The stopping point is the verified reproduction. It stands, and you take no
 public step. Nothing about the finding goes into the issue, onto the review
-server or into a chat. Not the reproduction, not the failing test, not the
+server or into a chat. Not the reproduction, not the test that fails, not the
 verdict.
 
 Where it goes instead is `typo3_rule_lookup` with
@@ -273,7 +274,7 @@ Report what you did not establish beside what you did. A triage whose reading
 stopped at the code path says so. The next person's work is exactly the part you
 left.
 
-End the verdict with the steps of the base order you did not reach, in the same
+End the verdict with each step of the base order you did not reach. Use the same
 form: `Not reached: <step> — <what stood in for it>`.
 
 **The verdict is markdown the reader can copy, and the answer is where it
@@ -343,10 +344,10 @@ respects it is the next workflow's.
 ## Where the triage ends and the patch begins
 
 **When it still happens and the user asks for the fix, invoke
-`typo3-core-patch-development` before making the change.** That is a step, not a
-note about ownership. Load the skill by name and work from it. What crosses over
-is the issue number, the verdict, the established code path and any failing
-test.
+`typo3-core-patch-development` before you make the change.** That is a step, not
+a note about ownership. Load the skill by name and work from it. What crosses
+over is the issue number, the verdict, the established code path and any test
+that fails.
 
 It stands as a step because it did not fire as anything else. A session read
 this paragraph and held exactly that handoff. The user asked for the patch, and

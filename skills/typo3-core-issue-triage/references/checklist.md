@@ -13,7 +13,7 @@ is what you established a security defect?
 The behaviour the report describes is what the branch does today.
 
 Owes: the code path, at its file and line, or the steps that reproduced it and
-what you saw. A failing test where a layer can hold it. The branch the
+what you saw. A test that fails, where a layer can hold it. The branch the
 reproduction ran on.
 
 Not enough on its own: that the code looks like it would still do this. A read
@@ -53,7 +53,7 @@ change, a duplicate, a rework that made the request moot.
 
 Owes: the change or issue number, its state, and whether it does the same work.
 An alternative closes an issue only where what it drops is nothing the reporter
-was reaching for. Name the arguments and the behaviour the original had and the
+wanted. Name the arguments and the behaviour the original had and the
 replacement does not.
 
 It ends the issue, so it also owes the comment that closes it, below.
@@ -136,8 +136,8 @@ has stopped one step short of what it established.
 The other three hand over nothing. **Not reproducible as written** and **Cannot
 be settled here** ask the reporter a question instead. To write either up as a
 closure is the trap the Gone verdict already names. **A security defect** owes
-the tracker nothing. A closing comment is the public step that verdict exists to
-prevent.
+the tracker nothing. A comment that closes the issue is the public step that
+verdict exists to prevent.
 
 Forge carries no resolution field. The status is the whole of it, and the
 comment is where the reason lives. So the comment says what the status cannot:

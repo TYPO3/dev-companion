@@ -34,8 +34,8 @@ Then, for this workflow:
   tests. Treat missing or broken infrastructure as a prerequisite of the
   requested work. It is not a separate kind of task, and it is no reason to
   force the behavior into another layer.
-- Read the target code, existing tests and fixtures, test configuration,
-  dependency manifests, CI, and the development environment.
+- Read the target code, its tests and fixtures, test configuration, dependency
+  manifests, CI, and the development environment.
 
 If a lookup is unavailable, state the gap apart from a lookup that found no
 match. Do not replace current project evidence with a TYPO3 setup you recall.
@@ -72,7 +72,7 @@ select a layer, read only its implementation guide:
 
 Before you add or extend coverage, fix any missing or broken prerequisite for
 the selected layer. For an explicit setup request, this is the requested work.
-For a review-only request, report the defect without changing it.
+For a review-only request, report the defect and do not change it.
 
 1. Determine compatible development dependencies from the project's constraints,
    the installed packages, the Composer resolution, and the versioned
@@ -119,14 +119,14 @@ For a review-only request, report the defect without changing it.
 - Put reusable setup at the narrowest scope that removes meaningful duplication.
 - Test observable behavior and public contracts. Avoid assertions tied only to
   implementation details.
-- Tell a broken runner, a missing environment prerequisite, and a failing
-  assertion apart before you change production code.
+- Tell a broken runner, a missing environment prerequisite, and an assertion
+  that fails apart before you change production code.
 
-**Where the failing assertion is a defect in another workflow's code, invoke the
+**Where the failed assertion is a defect in another workflow's code, invoke the
 skill that owns it before the fix.** That is a step, not a note about ownership.
-Load the skill by name and work from it. What crosses over is the failing test,
-what it establishes and the paths it runs over. The test itself stays here and
-runs again on what comes back.
+Load the skill by name and work from it. What crosses over is the test that
+fails, what it establishes and the paths it runs over. The test itself stays
+here and runs again on what comes back.
 
 ## Prove the result
 
@@ -134,7 +134,7 @@ runs again on what comes back.
    Do not add `assertTrue(true)` or production code whose only purpose is to
    give the harness something to test. If no unit-testable behavior exists,
    prove discovery and report the unit suite as empty.
-2. Run the narrowest relevant test first, then its containing local suite.
+2. Run the narrowest relevant test first, then the local suite that contains it.
 3. Run the declared CI-equivalent commands after the local commands pass.
 4. For browser work, execute at least one real spec. Confirm that it produces
    its expected artifact or report.

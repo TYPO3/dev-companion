@@ -7,7 +7,7 @@ compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup
 # TYPO3 Core Patch Checkout
 
 Put one change under review into the checkout, in the state it is in. Keep this
-skill as routing and stopping rules. The refs, the remotes and the commands are
+skill as routing and stop rules. The refs, the remotes and the commands are
 lookups. A copy of them here goes stale in somebody else's checkout, and nothing
 reports it.
 
@@ -112,34 +112,35 @@ Read the chain before the fetch and take five things off it.
 - **Every later amend is two steps.** You cannot amend a conflict resolution or
   a fixer finding that belongs to the lower commit from the tip. Detach to it,
   amend, apply again what sat on top, and move the branch. Budget for it rather
-  than discover it at the end. A rebuild of the output in every link is one
-  step instead: `typo3_rule_lookup` with
-  `documentId="core/contribution/committed-build-output"`, section "Rebuilding
-  Every Commit of a Chain".
+  than discover it at the end. A rebuild of the output in every link is one step
+  instead. `typo3_rule_lookup` with
+  `documentId="core/contribution/committed-build-output"` gives it, section
+  "Rebuilding Every Commit of a Chain".
 
-- **Which links are red.** Every link carries its labels, and a link Verified
+- **Which links are red.** Every link carries its labels. A link that Verified
   rejects names the jobs core-ci failed it on, each with its log. A rebase that
   rebuilds output has to know whether the build is the failure.
 
-The stopping rules below are for somebody else's patch, and a chain is regularly
-the requester's own. The answer's owner field settles whether the change owner
-is the person who asks. Hold its `email` against `git config user.email`. Every
-link carries an owner of its own, so the rule applies per link. Where they are, the rule that stops you from an absent
-author's decisions has nothing left to protect. To resolve past a handful of
-hunks is the right call. Say in the result that you did, and on whose change.
+The stop rules below are for somebody else's patch, and a chain is regularly the
+requester's own. The answer's owner field settles whether the change owner is
+the person who asks. Hold its `email` against `git config user.email`. Every
+link carries an owner of its own, so the rule applies per link. Where they are,
+the rule that stops you from an absent author's decisions has nothing left to
+protect. To resolve past a handful of hunks is the right call. Say in the result
+that you did, and on whose change.
 
 ## Your own chain, with its content unchanged
 
 A rebase of the requester's own chain is the third way in on every link. Most of
-this workflow guards somebody else's patch. Where every link's owner is the
-person who asks, three steps fall away: the ask, the comment on the change, and
-the stop at a conflict the change does not decide.
+this workflow guards somebody else's patch. If the requester owns every link,
+three steps fall away: the ask, the comment on the change, and the stop. That
+stop is the one at a conflict the change does not decide.
 
 The rest stays, in this order:
 
 - **The target branch**, established before anything moves.
-- **The build in every link**, where the chain commits build output. The
-  section on the rebuild is the one the chain bullets above name.
+- **The build in every link**, where the chain commits build output. The section
+  on the rebuild is the one the chain bullets above name.
 - **`git range-diff`** from the old range to the new one. `=` on every link is
   the proof that neither the content nor the message moved.
 - **The deprecation sweep** of the base order. The code under the chain moved,
@@ -260,7 +261,7 @@ the patch set the branch started at, and the result's branch. It is every
 decision you took on the author's behalf. That last one is what the comment on
 the change has to carry.
 
-## Stopping is the normal ending
+## A stop is the normal end
 
 When a rule above ends the work, undo what you started rather than leave the
 checkout half-way. The section below is that undo, and it is the same one that
@@ -294,12 +295,12 @@ state to start the next piece of work from either. To restore it is a step of
 its own, whether the patch applied or stopped. On the branch path it is these
 six, in this order, because each part makes the next one possible.
 
-There is one ending it does not run for, and it is the handover above. The work
+There is one end it does not run for, and it is the handover above. The work
 continues on the review branch. So steps 2, 3, 5 and 6 would move the checkout
 off the result or delete it.
 
-What that ending owes is steps 1 and 4 and then the answer. That is the branch,
-the commit, and what on it is not the author's. It is that you left the checkout
+What that end owes is steps 1 and 4 and then the answer. That is the branch, the
+commit, and what on it is not the author's. It is that you left the checkout
 there on purpose. Neither "restored" nor silence is what such a session reports.
 
 1. **End whatever is in progress first.** A carry that is half applied, or one
@@ -345,10 +346,10 @@ moved the branch, so steps 2, 5 and 6 have nothing to put back. They are about a
 checkout that went somewhere.
 
 What remains is to end whatever is in progress and then remove the worktree. Git
-refuses that while anything in it has a modification or no tracking. That
-refusal is step 4 one layer out. To force past it throws away the only copy of
-whatever you resolved in there. Step 3 stands there too, because a removed
-worktree leaves the branch you created it on behind.
+refuses that while anything in it is modified or untracked. That refusal is step
+4 one layer out. To force past it throws away the only copy of whatever you
+resolved in there. Step 3 stands there too, because a removed worktree leaves
+the branch you created it on behind.
 
 Say the end state in the answer: which branch, which commit, and that the tree
 is clean. On the worktree path, say that the worktree is gone. Or say where it
@@ -356,8 +357,8 @@ still is and why you kept it on purpose. Where you carried the patch, say that
 you deleted the branch you carried it on. "Restored" without those is the claim
 rather than the result.
 
-End the answer with the steps of the base order you did not reach, one line
-each: `Not reached: <step> — <what stood in for it>`.
+End the answer with each step of the base order you did not reach. Give each one
+a line: `Not reached: <step> — <what stood in for it>`.
 
 This skill owns how a change under review gets into a checkout and back out of
 it. What that covers, in order:

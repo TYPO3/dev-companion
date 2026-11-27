@@ -84,7 +84,7 @@ adds the environment they read the site from, and what you do not commit.
 
 1. Run the new spec alone against the real served site.
 2. Confirm that the expected report, trace, screenshot, or snapshot path works.
-3. Run the containing browser project or suite.
+3. Run the browser project or suite that contains it.
 4. Run the same script CI will call.
 5. Report untested browsers, unavailable URLs, and environment prerequisites as
    unverified rather than passed.

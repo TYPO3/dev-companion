@@ -98,7 +98,7 @@ ones that matter too.
    here calls is not a finding.
 
    Carry the `FullyScanned` / `PartiallyScanned` tag into the answer. It says
-   whether the Extension Scanner can find the remaining call sites or whether
+   whether the Extension Scanner can find the call sites that remain or whether
    that reading is yours. Bounded this way, you can write the sweep before you
    open a file. That is why it is a step of the order rather than something the
    reading stumbles into.
@@ -137,8 +137,8 @@ ones that matter too.
    **Where you do not owe the sweep.** A task that produces no change does not
    reach this step at all. The property is what the task produces. A triage, a
    reproduction and a review illustrate it; they are not the list you read it
-   off. The sweep asks what a package will have to stop calling. A task that
-   writes nothing is not going to call anything.
+   off. The sweep asks which calls a package will have to stop. A task that
+   writes nothing will call nothing.
 
    The exemption ends where the workflow produces a change. A review asked to
    make the change is that other workflow. It starts this order again with the

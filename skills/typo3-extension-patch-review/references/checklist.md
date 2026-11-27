@@ -38,9 +38,8 @@ The bands are the merge decision, because that is what the review is for:
   declares, or loses data. It opens a security boundary, or removes a public
   surface without a migration path.
 - **Send it back** — the change works and is not ready. That is a defect in a
-  case it covers, or a missing test for risky behaviour. It is a hand-rolled
-  construct where a core API exists, or a message that does not meet the
-  convention.
+  case it covers, or no test for risky behaviour. It is a hand-rolled construct
+  where a core API exists, or a message that does not meet the convention.
 - **Worth a change** — a concrete cost that does not stop the merge.
 - **Recommendation** — a beneficial improvement with no verified violation.
 

@@ -6,8 +6,8 @@ two audits a reader can compare. A heading you leave out reads as a section the
 audit never reached.
 
 Every entry keeps the line form the skeleton gives it. Audits kept every heading
-and broke the form below it, so no line compared with the same line of another
-audit. The form is seven rules:
+and broke the form below it. As a result, no line compared with the same line of
+another audit. The form is seven rules:
 
 - A head field holds its value alone. An explanation beside it goes into a
   finding or under **Open**.
@@ -21,17 +21,18 @@ audit. The form is seven rules:
   as the trace holds it. A surface whose lookup the trace lacks is `unassessed`,
   whatever you read.
 - A **Rule** line ends on the call that returned the rule, as the trace holds
-  it: the tool and the id or query it took. A rule the brief carried names
-  `typo3_task_guide`, and a rule you read in the code names its `<path>:<line>`.
-  An id the brief or the skill names without its text is no source yet. Fetch it
-  with `typo3_hint_lookup` or `typo3_rule_lookup` and cite that call.
+  it. That is the tool and the id or query it took. A rule the brief carried
+  names `typo3_task_guide`, and a rule you read in the code names its
+  `<path>:<line>`. An id the brief or the skill names without its text is no
+  source yet. Fetch it with `typo3_hint_lookup` or `typo3_rule_lookup` and cite
+  that call.
 - A `<path>:<line>` comes from a read of that one file. Output that prints
   several files numbers its own lines, and those are no file's lines.
 
 The answer opens with the fence, and nothing follows **Not reached** inside it.
-After the fence stands at most what happens next: the finding numbers in the
-order to work them, and the skill that takes each. A summary before the fence or
-a recap after it repeats the report in a shape of its own.
+After the fence stands at most what happens next. These are the finding numbers
+in the order to work them, and the skill that takes each. A summary before the
+fence or a recap after it repeats the report in a shape of its own.
 
 The skeleton is the same in the three review skills. The fields of the head, the
 severity headings and one field of a finding are this skill's own.

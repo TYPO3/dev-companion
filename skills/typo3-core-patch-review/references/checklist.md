@@ -83,7 +83,7 @@ a reader cannot check. So where the reading did not happen, write unassessed.
   own file list says what a one-class namespace, a non-final class or a service
   without a caller is for.
 
-  Read it before calling one of those an oversight. Report what it explains as
+  Read it before you call one of those an oversight. Report what it explains as
   the question it is.
 - **Security.** Where the diff touches authorization, user input, output
   escaping, or file paths. Or a boundary between what a role may and may not do.
@@ -160,7 +160,7 @@ evidence written down.
 - **Sent back in review** — a reviewer would ask for it. That is missing
   coverage, a missing changelog entry, an unhandled case, a public API
   obligation not met.
-- **Worth a change** — real and not blocking. Say so, and do not spend the
+- **Worth a change** — real, and it does not block. Say so, and do not spend the
   reader's first paragraphs on it.
 - **Checked and correct** — short, and kept in. It is the only thing that
   separates a surface you read from one you skipped. It names what you read, for

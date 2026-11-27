@@ -4,12 +4,12 @@ Read this when you choose test layers, set up or repair their harnesses, review
 coverage, or select commands. Use only the rows the task and the checkout
 support.
 
-## Verify the starting point
+## Verify where you start
 
 - Identify the layers the requested behavior needs.
 - Run or inspect each layer's discovery command before you rely on it.
 - Establish or repair missing prerequisites before you add coverage.
-- Preserve a review-only boundary: report setup defects without changing them.
+- Preserve a review-only boundary: report setup defects and do not change them.
 - Do not force behavior into an existing lower layer merely because the correct
   layer has no harness yet.
 
@@ -45,7 +45,7 @@ reported defect. Record why a higher layer is necessary.
 
 - Resolve development dependencies against the package's declared TYPO3 and PHP
   constraints. Do not copy a version from another project.
-- Reuse installed template configuration and existing project conventions.
+- Reuse installed template configuration and the project's conventions.
 - Keep extension-owned unit and functional tests in the extension. Keep
   browser-owned configuration in the project that serves the tested site.
 - Establish a stable local command before CI, then make CI call that command.
@@ -66,15 +66,16 @@ reported defect. Record why a higher layer is necessary.
    before you wire CI.
 3. Use a direct PHPUnit or browser-runner invocation only when its executable,
    configuration, and target path exist in the checkout.
-4. Then run the containing command `typo3_project_describe` declares, or the
-   repository's documented test setup.
+4. Then run the wider command that contains it, which `typo3_project_describe`
+   declares, or the repository's documented test setup.
 5. Never translate TYPO3 core commands into extension commands by analogy.
-6. Separate missing infrastructure or environment prerequisites from a failing
-   test.
+6. Separate missing infrastructure or environment prerequisites from a test that
+   fails.
 
 ## Coverage review
 
-- Trace every claimed behavior to an existing test or a concrete missing case.
+- Trace every claimed behavior to an existing test or to a concrete missing
+  case.
 - Include success, boundary, failure, authorization, and persistence behavior
   only where the production code exposes those branches.
 - Check that fixtures are minimal, deterministic, and independent of local site

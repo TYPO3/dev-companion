@@ -18,7 +18,7 @@ you read and of the target you aim at.
 1. Work through [references/base.md](references/base.md). It fixes what this
    package is and what it ships. Its last step before the checkout is the sweep
    of the installed core's deprecations over that surface. This workflow starts
-   from the result of that sweep rather than restating it.
+   from the result of that sweep and does not restate it.
 2. Widen the sweep, below, into the work list.
 3. Settle the range the package has to serve, below. Not before: what breaks
    decides whether you can reach a range at all. Where you cross nothing, that
@@ -34,7 +34,7 @@ sites the others cannot:
 
 - **The changelog**, as the base sweeps it, and `typo3_changelog_lookup` again
   with `type: breaking`. Same majors, still no query and no tag. A review asks
-  what will stop working. An upgrade also asks what already has.
+  what will break. An upgrade also asks what already broke.
 - **The Extension Scanner**, in the installation's own Upgrade module. It needs
   a reachable backend and an administrator, and it reads the extension's
   installed files. It finds the call sites of what its matchers cover. The
@@ -83,7 +83,7 @@ decide a constraint that does not move.
   It is never the PHP the current machine happens to run.
 - Where the package requires a system extension, establish that the target still
   ships it. `typo3_system_extension_lookup` answers by key and package name and
-  does not need it installed. One that stopped being part of the core is a
+  does not need it installed. One that is no longer part of the core is a
   requirement that cannot resolve. The replacement is a decision, not a rename.
 - Let the dependency solver answer, and quote what it printed. A constraint that
   should work and one the solver accepts are different claims. The solver
@@ -107,7 +107,7 @@ conventions before you write it. That is `typo3_hint_lookup` with the concrete
 paths, and `typo3_documentation_lookup` with the target version where the
 official API decides the shape. Where nothing in the declared range replaces a
 removal, that is the answer. One package version cannot serve both. A silent
-choice is how a supported version stops working without anyone's notice.
+choice is how a supported version breaks and nobody notices.
 
 Change what the work list justifies. An upgrade is not a modernization, a
 cleanup or a rewrite.

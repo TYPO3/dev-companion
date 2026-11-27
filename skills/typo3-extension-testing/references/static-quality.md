@@ -10,18 +10,18 @@ configuration contents, and commands.
 
 1. Inspect what is there before you change any of it. That is the package
    manifests, the lock file, the installed analysers and fixers, and their
-   configuration and rule sets. It is the existing baselines, the Composer
-   scripts, the development environment, and CI. Half an infrastructure is the
-   ordinary case. That is a fixer without an analyser, a lint step without
-   either, a configuration nothing calls.
+   configuration and rule sets. It is the baselines, the Composer scripts, the
+   development environment, and CI. Half an infrastructure is the ordinary case.
+   That is a fixer without an analyser, a lint step without either, a
+   configuration nothing calls.
 2. Run every check that already exists, unchanged, and record its output. You
    measure every later claim against that run. A first analyser report on a
    project that never ran one is a list of findings rather than a regression.
 3. Separate a missing executable, an unreadable configuration, and a real
    finding. Only the third says anything about the code.
-4. Read what the existing configuration excludes on purpose before you widen it.
-   A generated directory, a vendored library, or a fixture tree of broken code
-   is a decision, not an oversight.
+4. Read what the configuration excludes on purpose before you widen it. A
+   generated directory, a vendored library, or a fixture tree of broken code is
+   a decision, not an oversight.
 5. For a review-only request this is the whole workflow. Report what is missing
    or unenforced and change nothing.
 
@@ -45,7 +45,7 @@ is absent for a reason rather than missing.
   project installed. `phpstan/phpstan-phpunit` belongs beside a PHPUnit suite.
   `bnf/phpstan-psr-container` types the container's `get()` calls, and
   `phpstan/phpstan-deprecation-rules` reports use of deprecated API. Establish
-  that a TYPO3-specific analyser extension is still maintained before adding
+  that a TYPO3-specific analyser extension is still maintained before you add
   one. Several are not, and an abandoned extension on a current core produces
   false findings instead of types. `vimeo/psalm` is the alternative where a
   project already runs it.
@@ -101,12 +101,11 @@ is absent for a reason rather than missing.
   coverage. That is the standard this page already applies to a matrix whose
   cells run only version-independent steps.
 
-Read the names as the default per check where the checkout covers it with
-nothing, never as a replacement for what it already runs. A project with another
-analyser, another lint runner or its own wrapper around one has answered that
-question already. A second tool for the same check is a second answer to
-maintain. Versions come from the solver and from what the package's range
-allows, never from this list.
+Read the names as the default for a check the checkout does not cover. They
+never replace what it already runs. A project with another analyser, another
+lint runner or its own wrapper around one has answered that question already. A
+second tool for the same check is a second answer to maintain. Versions come
+from the solver and from what the package's range allows, never from this list.
 
 `rector/rector` with `ssch/typo3-rector` reads like a check in its dry-run mode
 and is not one. It proposes migrations, which belong to an upgrade task rather
@@ -128,7 +127,7 @@ with what it costs and what it does not buy.
    until the solver has accepted it.
 3. Take a rule set from a package the project already requires before you add
    another one. Every added package is a further thing that has to stay current
-   across the whole declared range. An abandoned one stops doing that.
+   across the whole declared range. An abandoned one no longer does that.
 4. Keep every one of them in the development requirements.
 5. Where the solver refuses one, read what it refused rather than which TYPO3
    version the project runs. A check tool has to meet what this project

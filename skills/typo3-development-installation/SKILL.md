@@ -269,8 +269,8 @@ is a path the router never resolved. It says which is a page it resolved and
 then withheld.
 
 It says how far up a tree a hidden or a deleted root page reaches. It says where
-that line stops being readable at all. Read it before you touch the site
-configuration. A page this site holds and refuses is not a base that is wrong.
+that line becomes unreadable. Read it before you touch the site configuration. A
+page this site holds and refuses is not a base that is wrong.
 
 Where the answer says the request reached the wrong site or none, the subject is
 the installation's own site configuration. It is not the code in front of it.
@@ -290,10 +290,10 @@ Five lookups own what it can be, each a `typo3_hint_lookup` by id:
   the last two left a site, not off the symptom. The two produce the same
   not-found.
 
-  Correct it where TYPO3 reads it. Verify by asking the installation again
-  rather than by another read of the file. `typo3_configuration_lookup` says
-  which hosts the installation accepts at all and whether a page discloses its
-  message. TYPO3 merges those at runtime, and the merged value is what answers.
+  Correct it where TYPO3 reads it. To verify, ask the installation again rather
+  than read the file again. `typo3_configuration_lookup` says which hosts the
+  installation accepts at all and whether a page discloses its message. TYPO3
+  merges those at runtime, and the merged value is what answers.
 
 To take over an installation somebody else built is the same reading with one
 step in front of it. Establish what it runs on before what it answers means
@@ -338,8 +338,8 @@ This skill owns the installation a developer works on a package in, from before
 it exists until it answers. That is the Composer root package that installs
 TYPO3 beneath it, and the container the repository declares. It is the
 non-interactive install, and the content that seeds it. It is what the install
-writes into the repository, and what a running one answers. That is which site a
-request reached, what it wrote down, and the site configuration behind both.
+writes into the repository, and what it answers once it runs. That is which site
+a request reached, what it wrote down, and the site configuration behind both.
 
 It does not own hosting, deployment or backups. Nor the major upgrade of an
 installation. That is a project of its own rather than a verb of the one

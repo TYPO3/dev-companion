@@ -25,9 +25,9 @@ Then, for this workflow:
   position, route, or registration shape.
 - `typo3_icon_lookup` for every proposed module or action icon. Do not invent an
   identifier.
-- `typo3_label_lookup` with words from recurring backend wording before you add
-  a label, and `typo3_translation_domain_lookup` for the extension's own XLF
-  path.
+- `typo3_label_lookup` with words from backend wording that recurs, before you
+  add a label. Then `typo3_translation_domain_lookup` for the extension's own
+  XLF path.
 - `typo3_component_lookup` with the target TYPO3 version before you write
   buttons, status markers, cards, tables, or other backend markup.
 - `typo3_documentation_lookup` with several short English queries and the target
@@ -53,7 +53,7 @@ afterwards rather than undoes it.
 
 ## Implement and verify
 
-- Read the existing extension and nearby modules that work before you edit. Tool
+- Read the extension and the nearby modules that work before you edit. Tool
   answers describe conventions and registrations. They do not inspect the
   caller's changed files.
 - Reuse the module API, backend components, labels, and registered icons. Avoid
@@ -112,6 +112,6 @@ This skill owns backend module registration, controllers, routes, and backend UI
 implementation, up to the moment you open the module. Test infrastructure is
 `typo3-extension-testing`'s. A broader audit is `typo3-extension-health`'s. The
 element in the page module is `typo3-content-element-development`'s. Stop before
-implementing a content element or its backend preview. Stop before you edit any
+you implement a content element or its backend preview. Stop before you edit any
 of those owners' files. Carry across the extension key, the target version and
 the behaviour you already verified.

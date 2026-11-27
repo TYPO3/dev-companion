@@ -137,8 +137,8 @@ run.**
 every entry in its line form.** The three review skills share that skeleton, so
 two reports compare section by section. Order the findings by what stops the
 merge, and say why each one stops it. Beside them stands what you checked and
-found correct, and what you raised while you read and dropped, with what dropped
-it.
+found correct. Beside them also stand the points you raised while you read and
+then dropped, each with what dropped it.
 
 Every finding names the changed path it is about. A statement about the package
 that ties to no line in this diff belongs in an issue. Close on the checklist's

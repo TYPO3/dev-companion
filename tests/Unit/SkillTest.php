@@ -1448,7 +1448,7 @@ final class SkillTest extends TestCase
         // that closes the exemption is in the paragraph that grants it
         // (`D-SKL-085`).
         self::assertStringContainsString(
-            'was exempt while you wrote nothing. You owe it now',
+            'was exempt while you wrote nothing. Run it now',
             self::flat($skill),
         );
         self::assertStringNotContainsString('A changelog records change events', $skill);
@@ -1616,7 +1616,7 @@ final class SkillTest extends TestCase
                 'the audit names ' . $tool . ' beside a surface the base already pairs it with',
             );
         }
-        self::assertStringContainsString('The runtime lookup that owns the surface, where one exists', $skill);
+        self::assertStringContainsString('The runtime lookup for the surface, where one exists', $skill);
         self::assertStringContainsString('per surface in scope', $skill);
     }
 
@@ -1706,7 +1706,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-extension-health/references/checklist.md',
         ));
 
-        self::assertStringContainsString('## What a dropped candidate owes', $audit);
+        self::assertStringContainsString('## When a candidate may be dropped', $audit);
         self::assertStringContainsString('nothing records the drop', $audit);
         self::assertStringContainsString('only where something concretely disproves it', $audit);
         self::assertStringContainsString('neither establish nor disprove as open', $audit);
@@ -1722,7 +1722,7 @@ final class SkillTest extends TestCase
         );
         // The bar came into the checklist for a security verdict alone, and what
         // makes it a bar is who pays for a wrong dismissal.
-        self::assertStringContainsString('The bar is not that subject\'s', $audit);
+        self::assertStringContainsString('But the bar holds on every surface here', $audit);
 
         $auditSkill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
             Paths::root() . '/skills/typo3-extension-health/SKILL.md',
@@ -3070,7 +3070,7 @@ final class SkillTest extends TestCase
             );
             // The raise is an offer rather than an act, and the project's own
             // bound is what can refuse it.
-            self::assertStringContainsString('a finding that carries the raise', $body, $skill . ' raises rather than reports');
+            self::assertMatchesRegularExpression('/a finding that (carries|proposes) the raise/', $body, $skill . ' raises rather than reports');
             self::assertStringContainsString('speaks against', $body, $skill . ' names nothing that can refuse the raise');
         }
     }
@@ -4708,9 +4708,9 @@ final class SkillTest extends TestCase
         );
         // A field the session reads is not a step it takes, so the report holds
         // the lookup: a run judged three surfaces it never asked.
-        self::assertStringContainsString('**An assessed row cites the lookup its entry carries.**', self::flat($skill));
+        self::assertStringContainsString('**An assessed row cites the lookup its entry names.**', self::flat($skill));
         self::assertStringContainsString(
-            'An `assessed` row cites in **Backed by** the lookup its surface entry carries, as the trace holds it. A surface whose lookup the trace lacks is `unassessed`, whatever you read.',
+            'An `assessed` row cites in **Backed by** the lookup its surface entry names, as the trace holds it. A surface whose lookup the trace lacks is `unassessed`, whatever you read.',
             self::flat((string) file_get_contents(
                 Paths::root() . '/skills/typo3-extension-health/references/report.md',
             )),
@@ -4741,11 +4741,11 @@ final class SkillTest extends TestCase
         // never asked what governs them. So the rule that calls a non-English
         // source file a defect was in the corpus, one query away, unread —
         // `D-SKL-002`.
-        $skill = (string) file_get_contents(
+        $skill = self::flat((string) file_get_contents(
             Paths::root() . '/skills/typo3-extension-health/SKILL.md',
-        );
+        ));
 
-        $ask = strpos($skill, 'Ask for it **before** you form a view of the subsystem');
+        $ask = strpos($skill, 'Ask for them **before** you form a view of the subsystem');
         $lookup = strpos($skill, 'typo3_hint_lookup');
         self::assertNotFalse($ask, 'the conformance skill does not say when the conventions are asked for');
         self::assertNotFalse($lookup);
@@ -4754,7 +4754,7 @@ final class SkillTest extends TestCase
         // Read in both directions: the rule judges the checkout that exists,
         // not only the code about to come.
         self::assertMatchesRegularExpression(
-            '/settled into\s+the opposite of a rule is a finding, not a local style/',
+            '/follows\s+the\s+opposite\s+of\s+a\s+rule\s+is\s+a\s+finding,\s+not\s+a\s+local\s+style/',
             $skill,
         );
 
@@ -4764,15 +4764,15 @@ final class SkillTest extends TestCase
         // five adds is the base's since `D-SKL-069`. So what this skill states
         // is the call an audit makes on top of it.
         self::assertStringContainsString(
-            'The runtime lookup that owns the surface, where one exists',
+            'The runtime lookup for the surface, where one exists',
             self::flat($skill),
         );
 
         // And the report names a surface nobody asked about, because silence
         // about it looks like a clean result. Read off the written list rather
         // than off what the session remembers it skipped.
-        self::assertStringContainsString('**unassessed**, and unassessed is', $skill);
-        self::assertStringContainsString('Every entry in it carries a mark: assessed, unassessed, not requested or not', self::flat($skill));
+        self::assertStringContainsString('**unassessed**, and unassessed is', self::flat($skill));
+        self::assertStringContainsString('Every entry in it has a mark: assessed, unassessed, not requested or not', self::flat($skill));
         self::assertStringContainsString('not a recollection at the end', self::flat($skill));
 
         // "Do not change files" had read as "run nothing": the audit branch
@@ -4782,7 +4782,7 @@ final class SkillTest extends TestCase
             $skill,
         );
         self::assertStringContainsString(
-            'marks as checks hand the code back as it was. So an audit told not to change files runs them',
+            'marks as checks leave the code as it was. So an audit told not to change files runs them',
             self::flat($skill),
         );
     }
@@ -4798,9 +4798,9 @@ final class SkillTest extends TestCase
         // whole list and answer every entry on it anyway. The scope now stands
         // where the list takes shape, and it reaches the read only —
         // `D-SKL-002`.
-        $skill = (string) file_get_contents(
+        $skill = self::flat((string) file_get_contents(
             Paths::root() . '/skills/typo3-extension-health/SKILL.md',
-        );
+        ));
 
         $list = strpos($skill, 'Write the surface list down before you open a single file');
         self::assertNotFalse($list, 'the conformance skill does not say when the surface list is written');
@@ -4872,7 +4872,7 @@ final class SkillTest extends TestCase
         $flat = self::flat($skill);
 
         $write = strpos($skill, 'Write one item per finding');
-        $flight = strpos($skill, 'Establish what the repository already carries against each item');
+        $flight = strpos($skill, 'Establish what the repository already holds for each item');
         $show = strpos($skill, 'Show that list whole');
         self::assertNotFalse($flight, 'the conformance skill never asks what is already in flight');
         self::assertGreaterThan((int) $write, $flight, 'the question is asked before the list it annotates exists');
@@ -4884,7 +4884,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('branches pushed without one, and the maintained release lines', $flat);
 
         // One answer per item, beside the state step 5 already gives it.
-        foreach (['**untouched**', '**carried**', '**colliding**'] as $state) {
+        foreach (['**untouched**', '**addressed**', '**colliding**'] as $state) {
             self::assertStringContainsString($state, $skill, 'the item cannot come back ' . $state);
         }
 
@@ -4911,7 +4911,7 @@ final class SkillTest extends TestCase
 
         // And an item a branch claims is not thereby off the list.
         self::assertStringContainsString('An unmerged branch holds a claim about the finding rather than the fix', $flat);
-        self::assertStringContainsString('*What a dropped candidate owes* is', $flat);
+        self::assertStringContainsString('section *When a candidate may be dropped*', $flat);
     }
 
     #[Requirement('R-SKL-004')]
@@ -4931,7 +4931,7 @@ final class SkillTest extends TestCase
         self::assertStringNotContainsString('declared validation commands', $checklist);
         self::assertStringContainsString('## The check layer', $checklist);
         self::assertStringContainsString(
-            'commands a repository declares are where you read this surface, never what it is',
+            'You find this surface in the commands a repository declares',
             self::flat($checklist),
         );
 
@@ -4958,10 +4958,10 @@ final class SkillTest extends TestCase
         // it was, and the absent one reads as an optional subsystem the first
         // line already excuses.
         self::assertStringContainsString(
-            'no command covers is a gap in the layer rather than an optional subsystem. That absence is the finding',
+            'no command covers is a gap. It is not an optional subsystem, and its absence is the finding',
             self::flat($checklist),
         );
-        self::assertStringContainsString('the ceiling of what', $checklist);
+        self::assertStringContainsString('the most this surface can show', self::flat($checklist));
 
         // The routing b0eded4 established stays: the review names the gap and
         // hands it on. The tool per check stays out of here. It is one package
@@ -5095,7 +5095,7 @@ final class SkillTest extends TestCase
             'typo3-extension-upgrade',
         ] as $name) {
             self::assertMatchesRegularExpression(
-                '/[Ii]nvoke the (skill|workflow) that owns/',
+                '/[Ii]nvoke the (skill|workflow) that (owns|covers)/',
                 self::flat((string) file_get_contents(Paths::root() . '/skills/' . $name . '/SKILL.md')),
                 $name . ' hands over to an owner it decides per case and does not say to invoke it',
             );

@@ -18,7 +18,7 @@ of an optional subsystem is not a defect.
   templates, translations, and public assets.
 - Shipped content: what `Initialisation/` imports into every installation that
   sets the package up. That is the page tree, the site configuration and the
-  files. `typo3-distribution-content` owns it.
+  files. `typo3-distribution-content` covers it.
 - Security: authorization boundaries, state-changing requests, output-context
   escaping, raw rendering, query construction, user-controlled attributes, URLs
   and paths, and secret exposure. Every one of them is a value and a sink. The
@@ -29,15 +29,16 @@ of an optional subsystem is not a defect.
   consists of and that it ships with the package.
 - Pinned versions: the Node, the actions under `.github/workflows/`, the
   container configuration and the declared dependencies. Read each against the
-  release current on the day rather than against the file. One behind it is a
-  finding that carries the raise. What speaks against the raise is a bound the
-  package declares. The finding then names the newest release that bound allows.
+  release current on the day rather than against the file. A pin behind it is a
+  finding that proposes the raise. Only a bound the package declares speaks
+  against the raise. The finding then names the newest release that bound
+  allows.
 
 ## The check layer
 
-The commands a repository declares are where you read this surface, never what
-it is. Measure them against what a complete layer covers. Name each entry by
-what the check establishes rather than by the tool behind it:
+You find this surface in the commands a repository declares. Measure those
+commands against what a complete layer covers, not against themselves. Name each
+entry by what the check establishes, not by the tool behind it:
 
 - **Syntax** — every shipped PHP file parses on every PHP version the package
   declares.
@@ -50,34 +51,38 @@ what the check establishes rather than by the tool behind it:
   advisory. It agrees with what the package declares about itself elsewhere.
 - **Shipped configuration and data** — the XLIFF, YAML and TypoScript the
   package ships are well-formed. Fluid templates have no established linter.
-
   The tests that render them prove them.
 - **Shipped frontend assets** — the JavaScript, TypeScript and CSS sources the
   repository maintains. Never the bundle a build step produced from them.
 
-What the package ships decides which of them apply. A check whose subject it
-does not ship is absent for a reason. One whose subject it ships and no command
-covers is a gap in the layer rather than an optional subsystem. That absence is
-the finding. Ask the same of where each one runs. Syntax and analysis depend on
-the PHP and TYPO3 combination and belong in a matrix.
+What the package ships decides which of them apply:
 
-A standards, manifest or format check is version-independent, and one run of it
-proves as much as sixteen. So a matrix whose every cell runs only
-version-independent steps establishes that the files parse and nothing more.
+- A check whose subject the package does not ship is absent for a reason.
+- A check whose subject the package ships and no command covers is a gap. It is
+  not an optional subsystem, and its absence is the finding.
 
-Run the checks that exist. What they printed is the ceiling of what this surface
-is worth rather than its verdict. A green net proves the entries it covers and
-nothing about the ones it has none for.
+Ask the same of where each check runs. Syntax and analysis depend on the PHP and
+TYPO3 combination and belong in a matrix. A standards, manifest or format check
+does not depend on the version. One run of it proves as much as sixteen. So a
+matrix that runs only such checks in every cell shows that the files parse, and
+nothing more.
 
-So say which of the entries above it leaves untouched. To establish a missing
-one is `typo3-extension-testing`'s workflow, and it names the default tool per
-check. A review names the gap, routes it there, and changes nothing.
+Run the checks that exist. What they print is the most this surface can show,
+not its verdict. A passing run proves the entries it covers, and nothing about
+the others. So say which of the entries above no check covers.
+`typo3-extension-testing` covers how to add a missing check, and it names the
+default tool for each. A review names the gap, routes it there, and changes
+nothing.
 
-For each surface, compare four sources. Those are the checkout declarations, the
-runtime evidence when available, the architecture guidance, and the versioned
-official documentation. When an installation parser misses a dynamic PHP
-registration, report that limitation and inspect the checkout. Do not treat the
-miss as absence.
+For each surface, compare four sources:
+
+- the declarations in the checkout;
+- the runtime evidence, where an installation answers;
+- the architecture guidance;
+- the official documentation for the version.
+
+An installation parser can miss a registration that PHP makes at runtime. Report
+that limit and read the checkout. Do not treat the miss as an absence.
 
 ## Severity
 
@@ -117,11 +122,11 @@ into the installed package that emits or executes it. Where you can render or
 run the path, let the repository's own test settle it. Otherwise report the
 finding as unverified and say which class you did not read.
 
-A security verdict is the expensive kind to get wrong. Disprove it before you
-dismiss it. A wrong dismissal costs the maintainer exactly the reading the
-review skipped.
+A security verdict is expensive to get wrong. Disprove it before you dismiss
+it. A wrong dismissal costs the maintainer exactly the reading the review
+skipped.
 
-## What a dropped candidate owes
+## When a candidate may be dropped
 
 An audit drops more than it reports, and nothing records the drop. Name each
 candidate you raised while you read and then let go, with what let it go. That
@@ -150,7 +155,6 @@ Two dismissals go wrong reliably:
   disproves a path is what makes it impossible. That is a guard nobody can pass
   or a caller that cannot exist, at a line.
 
-The gate above states this bar for a security verdict, which is where it is
-steepest. The bar is not that subject's. What makes a dismissal expensive is
-that its cost falls on the maintainer rather than on the audit. It does that on
-every surface here.
+The finding gate states this bar for a security verdict, where it is steepest.
+But the bar holds on every surface here. A wrong dismissal costs the
+maintainer, not the audit, whatever the subject.

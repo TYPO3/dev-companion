@@ -5,9 +5,8 @@ write `None.` under a heading that has nothing. Two audits in one skeleton are
 two audits a reader can compare. A heading you leave out reads as a section the
 audit never reached.
 
-Every entry keeps the line form the skeleton gives it. Audits kept every heading
-and broke the form below it. As a result, no line compared with the same line of
-another audit. The form is seven rules:
+Every entry keeps the line form the skeleton gives it. Then each line compares
+with the same line of another audit. The form has these rules:
 
 - A head field holds its value alone. An explanation beside it goes into a
   finding or under **Open**.
@@ -17,7 +16,7 @@ another audit. The form is seven rules:
   sentence breaks the line.
 - A **Status** cell holds one of its words alone. A surface you read in part
   takes two rows, the part you read and the rest as `unassessed`.
-- An `assessed` row cites in **Backed by** the lookup its surface entry carries,
+- An `assessed` row cites in **Backed by** the lookup its surface entry names,
   as the trace holds it. A surface whose lookup the trace lacks is `unassessed`,
   whatever you read.
 - A **Rule** line ends on the call that returned the rule, as the trace holds
@@ -61,7 +60,7 @@ severity headings and one field of a finding are this skill's own.
 - **Rule:** <the rule or documentation it collides with> — <the lookup that answered>
 - **Consequence:** <what breaks, for whom, and when somebody would notice>
 - **Remediation:** <the scoped change>; check: `<the project check that proves it>`
-- **Owner:** <the skill that owns the change, or `unassigned`>
+- **Owner:** <the skill that covers the change, or `unassigned`>
 - **Evidence:** <verified: the command, the sink read or the test run> or <reasoned: the reading>
 
 ## High

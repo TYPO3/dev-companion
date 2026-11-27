@@ -6,6 +6,7 @@ status: open
 coveredBy:
   - ProseTest::aSentenceIsFlaggedForWhatTheRulesReplace
   - ProseTest::onlyASentenceMainDoesNotHaveIsReportedAsNew
+  - SiteTest::noBoldTextHoldsALiteral
 ---
 
 # D-DOC-073 — A page opens on what it covers

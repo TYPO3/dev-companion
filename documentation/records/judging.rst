@@ -309,7 +309,7 @@ lands in the same run, and the commit that makes it archives the feedback.
 
 Either of two things puts a feedback on the other side of that line:
 
-* **The change touches ``src/``, a tool's declared schema, or a skill's
+* **The change touches** ``src/``, **a tool's declared schema, or a skill's
   contract.** Those get a review, not an improvisation.
 
 * **Something about TYPO3 still needs a lookup.** Then it is a todo, however
@@ -409,14 +409,14 @@ shape.
 
 Then the answer is a document, and the reader who was lost decides which one:
 
-* **``knowledge/documents/``** where the caller was lost. That corpus is what
-  this server hands out. A document in it declares what it is and when to reach
-  for it —
+* ``knowledge/documents/`` where the caller was lost. That corpus is what this
+  server hands out. A document in it declares what it is and when to reach for
+  it —
   `D-KNW-057 <../../decisions/knowledge/knw-057-a-document-declares-what-it-is-and-when-to-reach-for-it.md>`_.
   This is step 1a, landed as prose rather than as a hint. A hint states one
   thing, and what was absent is a procedure.
 
-* **``documentation/``** where a session at work in this repository was lost. It
+* ``documentation/`` where a session at work in this repository was lost. It
   says how to do a procedure here, grouped by subject.
 
 The line this page already draws decides which of the two the judgement run may

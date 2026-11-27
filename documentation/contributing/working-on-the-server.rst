@@ -323,7 +323,7 @@ in the manual of the theme says how to write one.
 ``theme="soul"`` in ``guides.xml`` selects a theme that must exist first, and
 the extension element below it makes the theme exist. The rail and the trail are
 the ``toctree`` that each directory's own page has. So **every directory of this
-documentation needs its own ``readme.rst``**. A page whose directory has none
+documentation needs its own** ``readme.rst``. A page whose directory has none
 attaches to nothing and lands in no menu at all.
 ``SiteTest::everyDirectoryOfTheDocumentationHasItsOwnPage`` stops that.
 

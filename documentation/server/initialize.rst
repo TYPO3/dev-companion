@@ -15,18 +15,17 @@ that defers its tools sends the model only their names —
 The four members
 ----------------
 
-* **``protocolVersion``** — the newest revision the handshake reaches. A client
-  that offers a newer one gets this one back, not a refusal, and
-  ``StdioServerTest`` checks that.
+* ``protocolVersion`` — the newest revision the handshake reaches. A client that
+  offers a newer one gets this one back, not a refusal, and ``StdioServerTest``
+  checks that.
 
   A client that opens with ``server/discover`` instead gets ``2026-07-28``, and
   the same capabilities and instructions —
   `D-ANS-175 <../../decisions/answers/ans-175-stdio-serves-the-modern-revision-through-the-sdks-dispatcher.md>`_.
 
-* **``capabilities``** — what `Factory <../../src/Server/Factory.php>`_
-  declares, which is what the server does. That is tools, resources, prompts,
-  and the completion of the two closed arguments of the ``commit_message``
-  prompt —
+* ``capabilities`` — what `Factory <../../src/Server/Factory.php>`_ declares,
+  which is what the server does. That is tools, resources, prompts, and the
+  completion of the two closed arguments of the ``commit_message`` prompt —
   `D-ANS-166 <../../decisions/answers/ans-166-initialize-declares-the-capabilities-the-server-honours.md>`_.
 
   ``extensions`` has the Skills extension, and
@@ -35,12 +34,12 @@ The four members
   capability has ``logging`` or ``subscribe``, because this server sends no log
   message and no resource update.
 
-* **``serverInfo``** — the name, the version, the title, the description and the
+* ``serverInfo`` — the name, the version, the title, the description and the
   site that ``Factory`` declares, and the mark at two optical sizes. The mark
   comes as ``data:`` URIs, because a stdio server has no origin a client could
   fetch it from.
 
-* **``instructions``** — the statement that
+* ``instructions`` — the statement that
   `Coverage <../../src/Knowledge/Coverage.php>`_ builds from
   ``knowledge/server-scope.json``. It has four parts: the first paragraph, the
   index of which tool answers what, the note under the index, and the last
@@ -86,7 +85,7 @@ Three things change the text from one start to the next:
 What arrives after
 ------------------
 
-* **``tools/list``** — every tool with its description, its two schemas and its
+* ``tools/list`` — every tool with its description, its two schemas and its
   annotations. That is all of :doc:`tools/ <tools/index>`.
 
   A client that follows the guidance of the API defers a list of this size. It
@@ -94,13 +93,13 @@ What arrives after
   —
   `D-AUD-019 <../../decisions/audience/aud-019-a-lookups-description-names-the-subjects-it-covers.md>`_.
 
-* **``prompts/list``** — the prompts a user picks by name. ``debrief`` is there
+* ``prompts/list`` — the prompts a user picks by name. ``debrief`` is there
   where the feedback channel is, and nowhere else —
   `D-FBK-048 <../../decisions/feedback/fbk-048-the-debrief-is-offered-as-a-prompt-where-the-channel-is.md>`_.
 
-* **``resources/list``** and **``resources/templates/list``** — the surface a
-  user picks from, where the model does not call.
-  :doc:`resources/ <resources/index>` describes it whole.
+* ``resources/list`` and ``resources/templates/list`` — the surface a user picks
+  from, where the model does not call. :doc:`resources/ <resources/index>`
+  describes it whole.
 
 What holds it
 -------------

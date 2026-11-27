@@ -101,7 +101,7 @@ already has the name, not to a request for it.
 What adoption would cost
 ------------------------
 
-* **``typo3://`` reserved as a whole.** Both trees move to a scheme of this
+* ``typo3://`` **reserved as a whole.** Both trees move to a scheme of this
   server's own. That is a rename in ``ResourceHandler``, ``Factory``,
   ``Result\Prose``, ``Result\Schema``, and the two tool descriptions that name
   the URI.
@@ -113,11 +113,11 @@ What adoption would cost
   ``typo3://guides`` and ``typo3://skill/`` stay as they are, and the cost is
   nothing.
 
-* **A reservation that catches ``typo3_``**, a rule about the string ``typo3``
+* **A reservation that catches** ``typo3_``, a rule about the string ``typo3``
   under any separator. Or a conformance suite that rejects a non-contract tool
   whose name begins with it. Then all 26 tool names go.
 
-* **A policy on the ``typo3`` Packagist vendor for MCP packages.** Then
+* **A policy on the** ``typo3`` **Packagist vendor for MCP packages.** Then
   ``composer.json`` has a name this package may not use. The published package
   then needs a rename, not a different declaration.
 

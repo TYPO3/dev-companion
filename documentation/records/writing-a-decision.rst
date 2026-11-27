@@ -218,8 +218,8 @@ The dated sections
 
 The foot of an entry holds dated sections and nothing else:
 
-* **Confirmed on ``<date>``** where somebody went back and the decision held.
-* **Revoked on ``<date>``** where it did not.
+* **Confirmed on** ``<date>`` where somebody went back and the decision held.
+* **Revoked on** ``<date>`` where it did not.
 * **Since then** for what followed without a date of its own.
 
 **A dated section says what the read changed**, in twelve lines or fewer. That

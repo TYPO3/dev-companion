@@ -331,6 +331,31 @@ final class SiteTest extends TestCase
     }
 
     /**
+     * reStructuredText nests no inline markup, so a literal inside bold text
+     * renders with its backticks — `D-DOC-073`. The bold stops before the
+     * literal, and the literal stands beside it.
+     */
+    #[Decision('D-DOC-073')]
+    #[Test]
+    public function noBoldTextHoldsALiteral(): void
+    {
+        $source = Paths::root() . '/' . Site::SOURCE;
+        $pages = Finder::create()->files()->in($source)->notPath('server/tools')->name('*.rst')->sortByName();
+
+        $nested = [];
+        foreach ($pages as $page) {
+            preg_match_all('/(?<![*\w])\*\*([^*]+?)\*\*(?![*\w])/', (string) file_get_contents($page->getPathname()), $bold);
+            foreach ($bold[1] as $text) {
+                if (str_contains($text, '``')) {
+                    $nested[] = $page->getRelativePathname() . ': **' . preg_replace('/\s+/', ' ', $text) . '**';
+                }
+            }
+        }
+
+        self::assertSame([], $nested);
+    }
+
+    /**
      * `D-DOC-032`: what a contents list shows for a section is the heading
      * itself, since a section carries no second name. So the heading is a
      * label.

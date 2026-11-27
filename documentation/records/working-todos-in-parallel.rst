@@ -161,7 +161,7 @@ the claim, has its own ``composer install``, and has ``.checkouts/`` symlinked
 in. This section says what the command does, because a worktree made some other
 way has to do the same.
 
-**Run ``composer install`` in the worktree. Never symlink ``vendor/``.**
+**Run** ``composer install`` **in the worktree. Never symlink** ``vendor/``.
 
 That mistake costs an afternoon to find. ``Paths::root()`` is the directory
 above ``src/``. The autoload map of Composer resolves ``src/`` from wherever the
@@ -256,7 +256,7 @@ what the step turns on, and leaves the file true. That is all of
 Five rules are different, and all of them follow because ``main`` is elsewhere.
 The claim comes with them attached. Each rule gives its reason:
 
-* **Commit on the branch, never on ``main``.** That includes the todo file
+* **Commit on the branch, never on** ``main``. That includes the todo file
   itself. A finished claim is a deletion in the branch, and the merge brings it
   to ``main``.
 
@@ -348,7 +348,8 @@ went on without them, and the wait bought only a tidier moment. There is no
 batch here. There are ten sequences of the same steps, each started when its
 session ends.
 
-**One at a time, rebased onto ``main`` and fast-forwarded — no merge commits.**
+**One at a time, rebased onto** ``main`` **and fast-forwarded — no merge
+commits.**
 
 .. code-block:: bash
 
@@ -390,7 +391,7 @@ it is behind again. The run of 2026-08-02 made two merges from one rebase.
 rebase and the suite can run in, and its return costs a fresh
 ``composer install``.
 
-**``composer ci`` runs in the worktree, after the rebase.** That is the first
+``composer ci`` **runs in the worktree, after the rebase.** That is the first
 moment the work of the session rests on what ``main`` has become. It is the only
 run that says anything. A run from before the rebase checked a tree that no
 longer exists. One branch at a time, for the same reason: a suite that fails

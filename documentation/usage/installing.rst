@@ -250,7 +250,7 @@ clients find those two locations without any configuration.
 
 ``--agent=`` names a client that reads from other places. That client gets the
 skills at its own project path, and its own MCP configuration where it has one.
-``--agent=`` does not accept ``generic``, because no client has that name.
+``help`` does not list ``generic``, because no client has that name.
 
 ===========  ===============  ===========================  ===================
 Client       ``--agent=``     MCP entry                    Skills
@@ -615,7 +615,7 @@ next server start says that the copies are out of date.
 Variables in the entry
 ----------------------
 
-The entry takes four environment variables. Set them in the ``env`` block of the
+The entry takes five environment variables. Set them in the ``env`` block of the
 client entry. ``install`` and ``update`` leave that block as it is.
 
 .. facts::
@@ -624,17 +624,19 @@ client entry. ``install`` and ``update`` leave that block as it is.
    :TYPO3_DEV_COMPANION_CONSOLE: The command that runs the console of that installation, such as ``ddev exec .build/bin/typo3``. See :doc:`checking-it-answers`.
    :TYPO3_DEV_COMPANION_EXCLUDE_TOOLS: The names of the tools the client does not get, separated by commas. See :ref:`which tools the client gets <installing-which-tools-are-offered>`.
    :TYPO3_DEV_COMPANION_SKILL_REFRESH: ``off`` reports skills that are out of date and does not refresh them. See :ref:`when they go stale <installing-when-they-go-stale>`.
+   :TYPO3_DEV_COMPANION_UPSTREAM_CHECK: ``off`` turns off the check whether the checkout is behind ``main``. See :ref:`keeping it current <installing-keeping-it-current>`.
 
 .. _installing-which-tools-are-offered:
 
 Which tools the client gets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The client gets every tool, wherever the server started. Some of what the server
-knows is about the core's contribution process: the review rules, the Gerrit
-workflow and the core test suites. None of that applies to a project. Each
-answer says what it is worth for the topic and the path. Whether a task is core
-work depends on the task, not on the directory you ask from.
+The client gets every tool, wherever the server started. The exception is the
+two feedback tools, which only a standalone checkout offers. Some of what the
+server knows is about the core's contribution process: the review rules, the
+Gerrit workflow and the core test suites. None of that applies to a project.
+Each answer says what it is worth for the topic and the path. Whether a task is
+core work depends on the task, not on the directory you ask from.
 
 Earlier builds left the core contribution tools out of a Composer project. That
 mistook the repository for the task. A core patch written from a site

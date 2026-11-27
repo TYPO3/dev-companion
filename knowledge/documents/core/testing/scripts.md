@@ -281,8 +281,8 @@ A listed path is about the commit only where git tracks it.
 `git commit --no-verify` skips this hook and the `commit-msg` hook as well. The
 second one writes the `Change-Id`. So take it only on an amend of a commit that
 already carries one. Then run the checks the hook stands for in the container.
-That is `-s cglGit` and `-s cglHeaderGit` from a normal checkout, and
-`-s cgl -n` and `-s cglHeader -n` from a worktree.
+From a normal checkout, that is `-s cglGit` and `-s cglHeaderGit`. From a
+worktree, it is `-s cgl -n` and `-s cglHeader -n`.
 
 `-s cgl` settles the coding-guideline message the hook prints for the other
 script. Both suites run in the container on the PHP the branch asks for, and

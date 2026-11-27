@@ -14,8 +14,8 @@ than on the change.
 
 Most of these rules come from one core patch. The reviewer accepted its code
 after one round and rejected its comments twice. The rules on terms and on the
-text as a whole come from a second patch, where the review found the gap late.
-Each rule carries a rejected sentence and the sentence that replaced it.
+whole text come from a second patch. Its review found the gap late. Each rule
+carries a rejected sentence and the sentence that replaced it.
 
 Nothing here says whether you owe a comment. That is the codebase's own rule.
 The TYPO3 core asks for a comment only where it adds meaning. This page is about

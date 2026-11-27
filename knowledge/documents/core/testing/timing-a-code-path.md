@@ -78,7 +78,7 @@ expensive call the patch makes less often. Check the cause before the clock,
 because a time is one machine's view of it.
 
 - **Count the expensive call on both sides.** The count is the claim. Count from
-  the probe rather than with a counter in the class under review, which would be
+  the probe, not with a counter in the class under review. That counter would be
   a second change in the diff you review. A side effect the call leaves counts
   as well: distinct salted hashes in the database are hash calls. A probe that
   counts rows takes the query restrictions off first, as the `core-tests` hint
@@ -91,11 +91,11 @@ because a time is one machine's view of it.
 
 ## A Command the Test Setup Runs
 
-A change to a console command that an installation runs once, such as setup or
-generated demo data, has a harness the probe cannot give. The `core-tests` hint
-names it where the branch has it: the instance a browser suite installs, with a
-time on every line the setup prints. The gap between two lines is what the
-command between them cost.
+Some console commands run once per installation, such as setup or generated demo
+data. A change to one of them has a harness the probe cannot give. The
+`core-tests` hint names it where the branch has it. It is the instance a browser
+suite installs, with a time on every line the setup prints. The gap between two
+lines is what the command between them cost.
 
 ## What the Number Leaves Out
 

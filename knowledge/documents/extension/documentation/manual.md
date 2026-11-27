@@ -124,8 +124,8 @@ docker run --rm --pull always -v $(pwd):/project -it \
 `--config` names the directory that holds `guides.xml`. The rendered HTML lands
 below `Documentation-GENERATED-temp/`, which belongs in `.gitignore`.
 
-A run without a flag logs a problem and exits 0. When `Index.rst` includes a
-file that is not there, the run logs the failed directive and its last line
+A run without a flag logs a problem and exits 0. `Index.rst` can include a file
+that is not there. Then the run logs the failed directive, and its last line
 still reads "Successfully placed". `--fail-on-log` makes the same run exit 1 and
 end in "Rendering failed", and a check calls it with that flag.
 `--fail-on-error` is the narrower flag and lets a warning pass. In CI the

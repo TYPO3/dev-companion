@@ -53,20 +53,19 @@ Guide.
 ## Body
 
 - Separate the summary and the body with a blank line.
-- Every commit message has a body, and the body is short: one or two
-  sentences.
+- Every commit message has a body, and the body is short: one or two sentences.
 - The body states the decision behind the change. It also states what matters
-  and the code does not show, which is what a reviewer has to look out for.
+  and the code does not show. A reviewer has to look out for exactly that.
 - Leave out what the diff shows. "The button now carries the class
   `btn-primary`" is in the diff. The decision that put it there belongs in the
   body.
-- Leave out what is incidental: how somebody found the problem, the steps
-  before the solution, the files the change touched.
+- Leave out what is incidental: how somebody found the problem, the steps before
+  the solution, the files the change touched.
 - Do not repeat reproduction instructions from the Forge issue.
 - Wrap body lines by hand at 72 characters.
 - Write the body as short, precise prose rather than as a list. One list item
-  that is a sentence makes the body a list. A list of class or rule names
-  beside a paragraph is an enumeration and stays.
+  that is a sentence makes the body a list. A list of class or rule names beside
+  a paragraph is an enumeration and stays.
 - Name no count of what the change touched. "In 68 files", "in four spellings",
   "12 occurrences": the number is in the diff. A reviewer asks you to take a
   count out of the body.
@@ -76,8 +75,8 @@ Guide.
   and tests the change adds is in the diff. A vague sentence such as "Improve
   the handling of sites" says nothing a reader can check.
 - Every sentence carries something the reader needs. Delete a sentence that
-  restates the one before it, and a chain of "Thus" sentences that only
-  connects the others.
+  restates the one before it, and a chain of "Thus" sentences that only connects
+  the others.
 
 The four rules above go further than the official appendix. They are this
 server's rules for every core body, and `typo3_commit_message_guide` reports a
@@ -190,9 +189,10 @@ no trailer beyond those five.
 - The TYPO3 Association board's statement on GPL and AI-generated code of
   2026-07-20 recommends the certificate. The board put it as a recommendation to
   consider, and this project does not require it.
-- A core patch carries no `Co-Authored-By:`, `Assisted-by:` or `Generated-by:`,
-  and no trailer that names the agent or the session it came from. Who held the
-  keyboard is the author field and the review, not a line in the message.
+- A core patch carries no `Co-Authored-By:`, `Assisted-by:` or `Generated-by:`.
+  It carries no trailer that names the agent or the session it came from. Who
+  held the keyboard is the author field and the review, not a line in the
+  message.
 - Not every contributor works by this rule. Merged commits on `main` carry
   `Co-authored-by:` now and then. That is no precedent for a patch you write. In
   a review of somebody else's patch, name the trailer as a finding.

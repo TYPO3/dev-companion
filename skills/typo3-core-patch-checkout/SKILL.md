@@ -243,8 +243,8 @@ the worktree path, say that the worktree is gone, or where it is and why you
 kept it. Where you rebased, say that you deleted the branch. "Restored" without
 these details is a claim, not a result.
 
-End the answer with each step of the base order you did not reach. Give each one
-a line: `Not reached: <step> — <why>`.
+Close the answer with the steps of the base order you skipped. Write one line
+each: `Not reached: <step> — <why>`.
 
 ## Option 4: add your own work to the patch set
 

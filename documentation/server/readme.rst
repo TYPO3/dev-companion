@@ -12,7 +12,7 @@ comes from.
 
         What a client gets at ``initialize`` and in the lists it fetches right
         after. It shows the result as the server sends it, the exact
-        instructions, the prompts, and what the tool list weighs.
+        instructions, the prompts, and what the tool list holds.
 
     .. card:: :doc:`Tools <tools/index>`
 

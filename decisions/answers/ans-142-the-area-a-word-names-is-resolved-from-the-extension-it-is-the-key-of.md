@@ -24,7 +24,7 @@ a call each time.
 - Measured on 2026-09-04 over the 38 entries of
   `knowledge/catalog/system-extension/` and the 55 areas the recorded answer in
   `documentation/server/tools/typo3_forge_lookup.rst` lists. The key resolves to
-  exactly one area for 19 of them through `Forge::named()`. The other 19 include
+  exactly one area for 19 of them through `IssueTracker::named()`. The other 19 include
   `impexp`, `beuser`, `belog`, `lowlevel`, `redirects` and `filelist`.
 - The composer title of the entry — the part before the dash in its
   `description` — resolves 23, and it is a different 23. Taken only where the

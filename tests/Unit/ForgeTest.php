@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Contribution\Forge;
+use TYPO3\DevCompanion\Contribution\IssueTracker;
 use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Tests\Support\Decision;
@@ -26,10 +28,18 @@ final class ForgeTest extends TestCase
 {
     use TemporaryInstallation;
 
+    /** The tracker alone, so what a test hands `Forge` is what the tool reads. */
+    #[Before]
+    public function askTheTrackerAlone(): void
+    {
+        IssueTracker::useProviders([Forge::class]);
+    }
+
     #[After]
     public function emptyTheCache(): void
     {
         Cache::clear();
+        IssueTracker::useProviders(null);
         Forge::useReader(null);
         Instance::discoverFrom(null);
     }
@@ -129,7 +139,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function anIssueIsReadIntoTheFieldsAQuestionAboutItIsAsked(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
+        $forge = self::over(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
 
         $issue = $forge->issue(110348)['issue'];
 
@@ -151,7 +161,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function theCommentsComeBackAndTheFieldChangesDoNot(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
+        $forge = self::over(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
 
         $issue = $forge->issue(110348)['issue'];
 
@@ -175,7 +185,7 @@ final class ForgeTest extends TestCase
     public function theFilesHangingOffAnIssueAreNamed(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
 
             return (string) json_encode(['issue' => self::ISSUE]);
@@ -205,7 +215,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aRelationNamesTheOtherIssueAndNeverThisOne(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
+        $forge = self::over(fn(): string => (string) json_encode(['issue' => self::ISSUE]));
 
         $relations = $forge->issue(110348)['issue']['relations'];
 
@@ -224,7 +234,7 @@ final class ForgeTest extends TestCase
     public function aRelationCarriesEnoughOfTheOtherIssueToJudgeWhetherToReadIt(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
 
             return (string) json_encode(str_contains($url, 'issue_id=') ? self::RELATED : ['issue' => self::ISSUE]);
@@ -232,15 +242,15 @@ final class ForgeTest extends TestCase
 
         $relations = $forge->issue(110348)['issue']['relations'];
 
-        // Three: the issue, the one bulk read that fills every relation, and
-        // the review server. A single issue goes there since `D-ANS-125` made
-        // `reviews` mean the same on both paths.
+        // Three: the issue, the review server, and the one bulk read that
+        // fills every relation. A single issue goes to the review server since
+        // `D-ANS-125` made `reviews` mean the same on both paths.
         self::assertCount(3, $asked);
-        self::assertStringContainsString('issue_id=105403%2C105953', $asked[1]);
-        self::assertStringContainsString('review.typo3.org', $asked[2]);
+        self::assertStringContainsString('review.typo3.org', $asked[1]);
+        self::assertStringContainsString('issue_id=105403%2C105953', $asked[2]);
         // A relation is usually to something closed, and the default of that
         // endpoint is the open issues.
-        self::assertStringContainsString('status_id=%2A', $asked[1]);
+        self::assertStringContainsString('status_id=%2A', $asked[2]);
         self::assertSame('Massive Memory Leak in 4.5.8+ / 4.6', $relations[0]['subject']);
         self::assertSame('Bug', $relations[0]['tracker']);
         self::assertSame('Closed', $relations[0]['status']);
@@ -257,7 +267,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function theRelationLineCarriesTheUrlOfTheIssueItNames(): void
     {
-        $forge = new Forge(fn(string $url): string => (string) json_encode(
+        $forge = self::over(fn(string $url): string => (string) json_encode(
             str_contains($url, 'issue_id=') ? self::RELATED : ['issue' => self::ISSUE],
         ));
 
@@ -277,7 +287,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aRelationTheFillCouldNotReachIsStillTheRelationThatWasFiled(): void
     {
-        $forge = new Forge(fn(string $url): ?string => str_contains($url, 'issue_id=')
+        $forge = self::over(fn(string $url): ?string => str_contains($url, 'issue_id=')
             ? null
             : (string) json_encode(['issue' => self::ISSUE]));
 
@@ -350,7 +360,7 @@ final class ForgeTest extends TestCase
     public function theIssuesAnIssuesProseCitesAreLiftedOutOfIt(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
 
             return (string) json_encode(str_contains($url, 'issue_id=') ? self::CITED : ['issue' => self::CITING]);
@@ -383,7 +393,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aReviewChangeTheReportNamesIsAHandleTheSameWay(): void
     {
-        $forge = new Forge(static fn(string $url): string => (string) json_encode(
+        $forge = self::over(static fn(string $url): string => (string) json_encode(
             str_contains($url, 'issue_id=') ? self::CITED : ['issue' => self::CITING],
         ));
 
@@ -448,7 +458,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aReviewChangeIsLiftedOutOfTheProseThatCarriesIt(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
+        $forge = self::over(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
 
         $reviews = $forge->issue(15984)['issue']['reviews'];
 
@@ -484,7 +494,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aSingleIssueJoinsTheProseHandlesWithWhatTheReviewServerHolds(): void
     {
-        $forge = new Forge(static fn(string $url): string => str_contains($url, 'review.typo3.org')
+        $forge = self::over(static fn(string $url): string => str_contains($url, 'review.typo3.org')
             ? self::CHANGES_FOR_15984
             : (string) json_encode(['issue' => self::REVIEWED]));
 
@@ -512,7 +522,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function theJournalComesBackWholeUnlessACallerAsksForLessOfIt(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
+        $forge = self::over(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
 
         $issue = $forge->issue(15984)['issue'];
 
@@ -530,7 +540,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function thePingsAreWhatALimitedReaderDropsAndTheChangesSurviveThem(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
+        $forge = self::over(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
 
         $issue = $forge->issue(15984, 'people')['issue'];
 
@@ -551,7 +561,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aQueryUrlNamesNoChangeAndIsNotReportedAsOne(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
+        $forge = self::over(fn(): string => (string) json_encode(['issue' => self::REVIEWED]));
 
         self::assertNotContains(3129, array_column($forge->issue(15984)['issue']['reviews'], 'change'));
     }
@@ -584,7 +594,7 @@ final class ForgeTest extends TestCase
     public function aChallengePageIsNeitherAnIssueNorAnAbsence(): void
     {
         $calls = 0;
-        $forge = new Forge(function () use (&$calls): string {
+        $forge = self::over(function () use (&$calls): string {
             $calls++;
 
             return '<!doctype html><title>Making sure you are not a bot!</title>';
@@ -602,7 +612,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aTrackerThatDoesNotAnswerIsSaid(): void
     {
-        $forge = new Forge(fn(): ?string => null);
+        $forge = self::over(fn(): ?string => null);
 
         $answer = $forge->issue(110348);
 
@@ -618,7 +628,7 @@ final class ForgeTest extends TestCase
     public function theSearchAsksTheTrackerForIssuesMatchingTheWords(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
 
             return (string) json_encode(str_contains($url, '/issues.json') ? self::FIELDS : self::HITS);
@@ -644,7 +654,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aHitIsReadOutOfTheTitleTheTrackerWordsItIn(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(self::HITS));
+        $forge = self::over(fn(): string => (string) json_encode(self::HITS));
 
         $results = $forge->search('cache busting')['results'];
 
@@ -665,7 +675,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aTitleThatIsNotInThatShapeStillAnswersWithTheIssue(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode([
+        $forge = self::over(fn(): string => (string) json_encode([
             'results' => [['id' => 105403, 'title' => 'f:image and cache busting issue']],
         ]));
 
@@ -692,7 +702,7 @@ final class ForgeTest extends TestCase
     public function aSearchHitIsFilledFromTheIssuesTheHitsAre(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
 
             return (string) json_encode(str_contains($url, '/issues.json') ? self::FIELDS : self::HITS);
@@ -727,7 +737,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aPageThatCouldNotBeFilledIsStillTheHitsThatMatched(): void
     {
-        $forge = new Forge(static fn(string $url): ?string => str_contains($url, '/issues.json')
+        $forge = self::over(static fn(string $url): ?string => str_contains($url, '/issues.json')
             ? null
             : (string) json_encode(self::HITS));
 
@@ -746,7 +756,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function wordsThatMatchNothingAreEmpty(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode([
+        $forge = self::over(fn(): string => (string) json_encode([
             'results' => [],
             'total_count' => 0,
             'offset' => 0,
@@ -848,7 +858,7 @@ final class ForgeTest extends TestCase
     public function aMissOutsideTheBoundAsksTheTrackerNothingFurther(): void
     {
         $calls = 0;
-        $forge = new Forge(function () use (&$calls): string {
+        $forge = self::over(function () use (&$calls): string {
             $calls++;
 
             return (string) json_encode(['results' => [], 'total_count' => 0, 'offset' => 0, 'limit' => 15]);
@@ -869,7 +879,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aSearchThatAnsweredIsNotCountedWordByWord(): void
     {
-        $forge = new Forge(fn(): string => (string) json_encode(self::HITS));
+        $forge = self::over(fn(): string => (string) json_encode(self::HITS));
 
         self::assertSame([], $forge->search('cache busting')['terms']);
     }
@@ -882,7 +892,7 @@ final class ForgeTest extends TestCase
     public function aChallengePageIsNotASearchThatFoundNothing(): void
     {
         $calls = 0;
-        $forge = new Forge(function () use (&$calls): string {
+        $forge = self::over(function () use (&$calls): string {
             $calls++;
 
             return '<!doctype html><title>Making sure you are not a bot!</title>';
@@ -898,12 +908,18 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aTrackerThatDoesNotAnswerASearchIsSaid(): void
     {
-        $forge = new Forge(fn(): ?string => null);
+        $forge = self::over(fn(): ?string => null);
 
         $answer = $forge->search('cache busting');
 
         self::assertSame('unavailable', $answer['status']);
         self::assertSame('source-not-answering', $answer['cause']);
+    }
+
+    /** @param \Closure(string): ?string $transport */
+    private static function over(\Closure $transport): IssueTracker
+    {
+        return new IssueTracker([new Forge($transport)]);
     }
 
     /**
@@ -1038,7 +1054,7 @@ final class ForgeTest extends TestCase
     public function theEnumerationAsksForTheOpenIssuesAndReadsThemAsFields(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $answer = $forge->backlog('stale', 'Bug', createdBefore: '2015-01-01', updatedBefore: '2020-01-01', limit: 2);
 
@@ -1073,11 +1089,13 @@ final class ForgeTest extends TestCase
     public function aRowCarriesWhatTheOneCallAlreadyAnsweredAboutIt(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $results = $forge->backlog('stale', limit: 2)['results'];
 
-        self::assertStringContainsString('include=relations%2Cattachments', $asked[1]);
+        // The page is the first read, because a call that names no area reads
+        // no list of areas.
+        self::assertStringContainsString('include=relations%2Cattachments', $asked[0]);
         self::assertSame([90676], array_column($results[0]['relations'], 'issue'));
         self::assertSame(['clipboard.png'], array_column($results[0]['attachments'], 'filename'));
         self::assertSame('image/png', $results[0]['attachments'][0]['contentType']);
@@ -1097,7 +1115,7 @@ final class ForgeTest extends TestCase
     public function theRelationsOfAWholePageAreFilledInOneCall(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $relation = $forge->backlog('stale', limit: 2)['results'][0]['relations'][0];
 
@@ -1125,7 +1143,7 @@ final class ForgeTest extends TestCase
     public function aRowSaysWhetherTheReviewServerHoldsAChangeThatNamesIt(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $results = $forge->backlog('stale', limit: 2)['results'];
 
@@ -1157,7 +1175,7 @@ final class ForgeTest extends TestCase
     public function aRowSaysWhichStateEachOfItsChangesIsIn(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $reviews = $forge->backlog('stale', limit: 2)['results'][0]['reviews'];
 
@@ -1176,7 +1194,7 @@ final class ForgeTest extends TestCase
     {
         $asked = [];
         $tracker = self::tracker($asked);
-        $forge = new Forge(static fn(string $url): ?string => str_contains($url, 'review.typo3.org')
+        $forge = self::over(static fn(string $url): ?string => str_contains($url, 'review.typo3.org')
             ? null
             : $tracker($url));
 
@@ -1196,7 +1214,7 @@ final class ForgeTest extends TestCase
     public function theCountOfEverythingThatMatchedComesBackWithThePage(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $answer = $forge->backlog('oldest', limit: 2);
 
@@ -1221,7 +1239,7 @@ final class ForgeTest extends TestCase
     public function theNeglectedEndIsOrderedByTwoThingsAndNotOne(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $forge->backlog('oldest', limit: 2);
         $forge->backlog('stale', limit: 2);
@@ -1240,7 +1258,7 @@ final class ForgeTest extends TestCase
     public function theRecentEndIsOrderedByWhatWasFiledLast(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $forge->backlog('newest', limit: 2);
 
@@ -1261,7 +1279,7 @@ final class ForgeTest extends TestCase
     public function theWindowIsOneFilterHoweverManyEndsItHas(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $forge->backlog('newest', createdSince: '2026-08-01', limit: 2);
         $forge->backlog('newest', createdBefore: '2026-08-20', createdSince: '2026-08-01', limit: 2);
@@ -1459,7 +1477,7 @@ final class ForgeTest extends TestCase
     public function onlyADateReachesTheDateFilter(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $forge->backlog('oldest', createdBefore: 'last year', limit: 2);
 
@@ -1484,17 +1502,17 @@ final class ForgeTest extends TestCase
             'Performance Reporter' => 1005,
         ];
 
-        self::assertSame(['RTE (rtehtmlarea + ckeditor)'], Forge::named($categories, 'rte'));
+        self::assertSame(['RTE (rtehtmlarea + ckeditor)'], IssueTracker::named($categories, 'rte'));
         // Every word beats one word: an exact name is not widened by the
         // fallback that makes a half-remembered one work at all.
-        self::assertSame(['Backend API'], Forge::named($categories, 'backend api'));
+        self::assertSame(['Backend API'], IssueTracker::named($categories, 'backend api'));
         // And a word carried by several selects them all rather than guessing
         // which was meant.
         self::assertSame(
             ['Backend API', 'Backend User Interface'],
-            Forge::named($categories, 'backend ui'),
+            IssueTracker::named($categories, 'backend ui'),
         );
-        self::assertSame([], Forge::named($categories, 'quantumflux'));
+        self::assertSame([], IssueTracker::named($categories, 'quantumflux'));
     }
 
     /** The areas selected reach the tracker as its own alternation, in one call. */
@@ -1502,7 +1520,7 @@ final class ForgeTest extends TestCase
     public function anAreaNamingSeveralCategoriesIsOneCallAndSaysWhichItUsed(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $answer = $forge->backlog('oldest', category: 'backend', limit: 2);
 
@@ -1524,7 +1542,7 @@ final class ForgeTest extends TestCase
     public function aSystemExtensionKeyReachesTheAreaItsIssuesAreFiledUnder(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $answer = $forge->backlog('oldest', category: 'impexp', limit: 2);
 
@@ -1556,7 +1574,7 @@ final class ForgeTest extends TestCase
     public function theAreasAreEnumeratedWithoutAWordThatHasToFail(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $answer = $forge->backlog('oldest', category: '*', limit: 2);
 
@@ -1575,7 +1593,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function areasThatCouldNotBeReadAreSaidToBeUnreachable(): void
     {
-        $forge = new Forge(static fn(): ?string => null);
+        $forge = self::over(static fn(): ?string => null);
 
         $answer = $forge->backlog('oldest', category: '*', limit: 2);
 
@@ -1595,7 +1613,7 @@ final class ForgeTest extends TestCase
     public function awordThatNamesNoAreaReadsNothingAndSaysWhichAreasExist(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $answer = $forge->backlog('oldest', category: 'quantumflux', limit: 2);
 
@@ -1654,7 +1672,7 @@ final class ForgeTest extends TestCase
     public function aPersonIsResolvedAgainstTheProjectsOwnMembers(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $answer = $forge->backlog(reportedBy: 'Frank Nägler', assignedTo: 'Benni Mack', limit: 2);
 
@@ -1680,7 +1698,7 @@ final class ForgeTest extends TestCase
     public function aNameCarriedByTwoPeopleResolvesToNeitherAndAnswersWithBoth(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $answer = $forge->backlog(reportedBy: 'daniel', limit: 2);
 
@@ -1699,7 +1717,7 @@ final class ForgeTest extends TestCase
     public function aNameNoMemberCarriesIsResolvedFromTheIssuesThatNameIt(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
             if (str_contains($url, '/memberships.json')) {
                 return (string) json_encode(self::MEMBERS);
@@ -1746,7 +1764,7 @@ final class ForgeTest extends TestCase
     public function aNameNothingHereCarriesReadsNothing(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
             if (str_contains($url, '/memberships.json')) {
                 return (string) json_encode(self::MEMBERS);
@@ -1775,7 +1793,7 @@ final class ForgeTest extends TestCase
     public function theStatusIsWhatPutsWhatAPersonAlreadyFiledInReach(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $forge->backlog(status: 'all', reportedBy: 'Frank Nägler', limit: 2);
         $forge->backlog(status: 'closed', reportedBy: 'Frank Nägler', limit: 2);
@@ -1794,7 +1812,7 @@ final class ForgeTest extends TestCase
     public function aRowSaysWhoFiledIt(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $results = $forge->backlog('oldest', limit: 2)['results'];
 
@@ -1818,7 +1836,10 @@ final class ForgeTest extends TestCase
             return (string) json_encode(['memberships' => [], 'total_count' => 185]);
         });
 
-        $forge->people();
+        $forge->people('Benni Mack');
+        // A name no member carries goes on to the issues that name it, which
+        // is not what this counts.
+        $asked = array_values(array_filter($asked, static fn(string $url): bool => str_contains($url, '/memberships.json')));
 
         self::assertCount(2, $asked);
         self::assertStringContainsString('offset=0', $asked[0]);
@@ -1840,8 +1861,8 @@ final class ForgeTest extends TestCase
             return (string) json_encode(self::MEMBERS);
         });
 
-        $forge->people();
-        $forge->people();
+        self::assertSame(['Benni Mack' => 320], $forge->people('Benni Mack'));
+        $forge->people('Benni Mack');
 
         self::assertSame(1, $calls, 'the memberships were read again for a list that changes between releases');
     }
@@ -1856,7 +1877,7 @@ final class ForgeTest extends TestCase
     public function aUnionIsTwoReadsMergedAndCountedWithoutTheIssuesBothCarry(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
             if (str_contains($url, '/memberships.json')) {
                 return (string) json_encode(self::MEMBERS);
@@ -1890,7 +1911,7 @@ final class ForgeTest extends TestCase
     #[Test]
     public function aMergedUnionKeepsTheEndItWasAskedFor(): void
     {
-        $forge = new Forge(static function (string $url): string {
+        $forge = self::over(static function (string $url): string {
             if (str_contains($url, '/memberships.json')) {
                 return (string) json_encode(self::MEMBERS);
             }
@@ -1936,7 +1957,7 @@ final class ForgeTest extends TestCase
     public function aBreakdownCountsTheWholeSet(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
             if (str_contains($url, '/memberships.json')) {
                 return (string) json_encode(self::MEMBERS);
@@ -2015,7 +2036,7 @@ final class ForgeTest extends TestCase
     public function theCountedReadPagesUntilTheWholeMatchedSetIsRead(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             if (str_contains($url, '/issues.json')) {
                 $asked[] = $url;
 
@@ -2042,7 +2063,7 @@ final class ForgeTest extends TestCase
     public function wordsNarrowTheWholeSetToTheIssuesAboutThem(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
             if (str_contains($url, 'review.typo3.org')) {
                 return ")]}'\n[]";
@@ -2083,7 +2104,7 @@ final class ForgeTest extends TestCase
     public function anOffsetReadsThePageAfterTheOnesBeforeIt(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         $forge->backlog('oldest', limit: 50, offset: 50);
 
@@ -2106,7 +2127,7 @@ final class ForgeTest extends TestCase
     public function theStaleEndSaysWhenAPersonLastCommented(): void
     {
         $asked = [];
-        $forge = new Forge(function (string $url) use (&$asked): string {
+        $forge = self::over(function (string $url) use (&$asked): string {
             $asked[] = $url;
             if (str_contains($url, 'review.typo3.org')) {
                 return ")]}'\n"
@@ -2153,7 +2174,7 @@ final class ForgeTest extends TestCase
     public function aBreakdownSaysWhereTheBoundCutTheRead(): void
     {
         $reads = 0;
-        $forge = new Forge(function (string $url) use (&$reads): string {
+        $forge = self::over(function (string $url) use (&$reads): string {
             if (str_contains($url, '/memberships.json')) {
                 return (string) json_encode(self::MEMBERS);
             }
@@ -2193,7 +2214,7 @@ final class ForgeTest extends TestCase
                 'created_on' => '2015-01-01T00:00:00Z',
             ];
         }
-        $forge = new Forge(static fn(string $url): string => (string) json_encode(
+        $forge = self::over(static fn(string $url): string => (string) json_encode(
             str_contains($url, '/issues.json') ? ['issues' => $issues, 'total_count' => 20] : self::PROJECT,
         ));
 
@@ -2214,7 +2235,7 @@ final class ForgeTest extends TestCase
     public function theAreasComeBackOnlyWhereAWordOfTheCallersNeedsCorrecting(): void
     {
         $asked = [];
-        $forge = new Forge(self::tracker($asked));
+        $forge = self::over(self::tracker($asked));
 
         self::assertSame([], $forge->backlog('oldest', limit: 2)['categories']);
         self::assertSame([], $forge->backlog('oldest', category: 'rte', limit: 2)['categories'], 'a word that resolved to one area');
@@ -2245,7 +2266,7 @@ final class ForgeTest extends TestCase
             ]],
             'total_count' => 1,
         ];
-        $forge = new Forge(static fn(string $url): string => (string) json_encode(
+        $forge = self::over(static fn(string $url): string => (string) json_encode(
             str_contains($url, '/issues.json') ? $page : self::PROJECT,
         ));
 
@@ -2269,7 +2290,7 @@ final class ForgeTest extends TestCase
     public function anIssueIsReadForTheCodeItsCommentsNameAsWell(): void
     {
         Instance::discoverFrom($this->coreCheckoutShipping());
-        $forge = new Forge(fn(): string => (string) json_encode(['issue' => [
+        $forge = self::over(fn(): string => (string) json_encode(['issue' => [
             'id' => 78607,
             'subject' => 'ValidationResults for-attribute',
             'description' => 'The rendered for-attribute is wrong.',

@@ -49,7 +49,7 @@ says `relations: []`.
   whole the same day, 2 carry a review URL in a note. 6 carry a bare `#NNNN`
   somewhere in their text. 3 of those numbers are in no relation.
 - The report's premise about the review server is half wrong, and the other half
-  is a second gap. `Forge::issueOf()` builds `reviews` from the journal alone,
+  is a second gap. `IssueTracker::issueOf()` builds `reviews` from the journal alone,
   so a review URL in a description drops out. 5 of the 100 newest open bugs
   carry one, and they name 6 changes that no answer names today.
 - What it costs is nothing on most calls. `Forge::issue()` already reads the

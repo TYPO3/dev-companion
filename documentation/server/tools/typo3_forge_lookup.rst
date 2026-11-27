@@ -47,14 +47,16 @@ Takes
     issue: integer  # optional
     # Words to search the tracker for, for example "image cache busting". A
     # full-text search over subject, description and comments, which is the one way
-    # to find a duplicate nobody has linked. Every word has to be in the same issue.
-    # A term nobody would have written — a method name, a class — empties the
-    # answer whatever else is in it. Pass the two or three words that name the
-    # subject rather than every word you have. A miss counts what each word reaches
-    # on its own, in terms. Nothing ranks the hits, and one wording does not settle
-    # it: ask again in the reporter's words as well as your own. A person's name
-    # matches only where somebody wrote it, so pass it as reportedBy or assignedTo
-    # with backlog instead. Not with issue or backlog.
+    # to find a duplicate nobody has linked. Forger, which this server asks first,
+    # finds any of the words with their stems and ranks the hits by relevance;
+    # source says when the tracker itself answered instead. There every word has to
+    # be in the same issue, a term nobody would have written empties the answer, and
+    # nothing ranks the hits. Pass the two or three words that name the subject
+    # rather than every word you have. A miss counts what each word reaches on its
+    # own, in terms. One wording does not settle it: ask again in the reporter's
+    # words as well as your own. A person's name matches only where somebody wrote
+    # it, so pass it as reportedBy or assignedTo with backlog instead. Not with
+    # issue or backlog.
     query: string  # optional
     # One of: oldest, stale, newest. Enumerate the core project's unresolved issues
     # instead of a read of one or a match of words. "oldest" orders them by filing
@@ -186,7 +188,9 @@ Answers with
 
     # One of: answered, empty, unavailable.
     status: string
-    # The tracker the answer came from.
+    # The host that answered: Forger, the index of the tracker, or the tracker
+    # itself where Forger did not answer. The issue URLs point at the tracker either
+    # way.
     source: string
     # What the call read, so you can ask the same question again by hand. A union is
     # two reads, and both stand here with a space between them.

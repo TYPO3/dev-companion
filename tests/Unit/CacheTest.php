@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Contribution\Forge;
 use TYPO3\DevCompanion\Contribution\Gerrit;
+use TYPO3\DevCompanion\Contribution\IssueTracker;
 use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 
@@ -42,7 +43,7 @@ final class CacheTest extends TestCase
     #[Test]
     public function anAnsweredIssueIsReadFromTheTrackerOnce(): void
     {
-        $forge = new Forge($this->transport('{"issue": {"id": 105403, "subject": "f:image and cache busting"}}'));
+        $forge = new IssueTracker([new Forge($this->transport('{"issue": {"id": 105403, "subject": "f:image and cache busting"}}'))]);
 
         $first = $forge->issue(105403);
         $second = $forge->issue(105403);
@@ -63,7 +64,7 @@ final class CacheTest extends TestCase
     #[Test]
     public function anIssueIsReadAgainOnceTheCachedAnswerIsOld(): void
     {
-        $forge = new Forge($this->transport('{"issue": {"id": 105403, "subject": "f:image and cache busting"}}'));
+        $forge = new IssueTracker([new Forge($this->transport('{"issue": {"id": 105403, "subject": "f:image and cache busting"}}'))]);
 
         $forge->issue(105403);
         $this->now += Forge::CACHE_DURATION;
@@ -79,7 +80,7 @@ final class CacheTest extends TestCase
     {
         // The challenge page a protection answers with is a state of this
         // minute. Cached, one bad minute would be five — `D-ANS-049`.
-        $forge = new Forge($this->transport('<html>are you a robot</html>'));
+        $forge = new IssueTracker([new Forge($this->transport('<html>are you a robot</html>'))]);
 
         $forge->issue(105403);
         $second = $forge->issue(105403);
@@ -132,10 +133,10 @@ final class CacheTest extends TestCase
         $transport = $this->transport('{"issue": {"id": 105403, "subject": "f:image and cache busting"}}');
         $read = Cache::timestamp($this->now);
 
-        $first = new Forge($transport);
+        $first = new IssueTracker([new Forge($transport)]);
         $first->issue(105403);
         $this->now += 60;
-        $second = new Forge($transport);
+        $second = new IssueTracker([new Forge($transport)]);
         $second->issue(105403);
 
         self::assertSame($read, $first->readAt());

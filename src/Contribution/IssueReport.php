@@ -190,7 +190,7 @@ final class IssueReport
         }
 
         $query = trim((string) ($args['searchFor'] ?? '')) ?: $subject;
-        $search = $forge->search($query, 10);
+        $search = (new IssueTracker())->search($query, 10);
         $duplicates = [];
         foreach ($search['results'] as $hit) {
             $duplicates[] = [
@@ -198,7 +198,7 @@ final class IssueReport
                 'subject' => (string) $hit['subject'],
                 'tracker' => (string) $hit['tracker'],
                 'status' => (string) $hit['status'],
-                'url' => Forge::HOST . '/issues/' . (int) $hit['issue'],
+                'url' => (string) $hit['url'],
             ];
         }
         $checks[] = match ($search['status']) {

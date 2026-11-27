@@ -79,11 +79,11 @@
     },
     {
       "topic": "Forge issues: what one says and what was decided about it, which other issues describe the same thing, and what stands open in the core's backlog",
-      "depth": "The tracker's API, read live. By number: the report, the comments that decided it, related issues, files and review changes. By words: unranked text matches. As a backlog: the core's issues by age, neglect or recency, with filters and a breakdown. Each says whether the installed packages still ship the cited code.",
+      "depth": "Forger's index of the tracker, read live, and the tracker's own API where Forger does not answer. By number: the report, the comments that decided it, related issues, files and review changes. By words: text matches, ranked by Forger. As a backlog: the core's issues by age, neglect or recency, with filters and a breakdown. Each says whether the installed packages still ship the cited code.",
       "tools": [
         "typo3_forge_lookup"
       ],
-      "source": "https://forge.typo3.org (network)",
+      "source": "https://forger.typo3.com, then https://forge.typo3.org (network)",
       "scope": "core"
     },
     {

@@ -41,7 +41,7 @@ number whose URL the data half already holds, or holds nowhere at all.
 - The report's own account of the cost is one step out. Everything this server
   prints is reachable. What a caller composes from a bare number may not be, and
   that is a guess the answer left it to make.
-- The two forms are real. `Forge::reviews()` composes
+- The two forms are real. `IssueTracker::reviews()` composes
   `Gerrit::HOST . '/c/' . $number`; `Gerrit` composes
   `HOST . '/c/' . $project . '/+/' . $number`.
 - The two are not interchangeable, measured against review.typo3.org on
@@ -56,7 +56,7 @@ number whose URL the data half already holds, or holds nowhere at all.
   `- change 95375 · … · https://review.typo3.org/c/95375` while two of its own
   notes read
   `It is available at https://review.typo3.org/c/Packages/TYPO3.CMS/+/95375`.
-  `Forge::handles()` matches the whole URL and returns the digits out of it.
+  `IssueTracker::handles()` matches the whole URL and returns the digits out of it.
 - The chain can be exact without a further call.
   `/changes/91563/revisions/current/related` answers `project` beside
   `_change_number` on every entry, read on 2026-08-24 — the same two fields
@@ -91,7 +91,7 @@ number whose URL the data half already holds, or holds nowhere at all.
 - Where the payload names the project, the tool builds the canonical form from
   it, which the change line already does and the chain now can.
 - Where the tool has only a number, the short form stays. It is what
-  `Forge::reviews()` has from a note that predates the move. The server resolves
+  `IssueTracker::reviews()` has from a note that predates the move. The server resolves
   it to the right project, and it fails honestly on a number that names nothing.
 - Where the note spells the URL out, the tool reads it rather than composes it
   again. That is the common case on the Forge path and it removes the guess from

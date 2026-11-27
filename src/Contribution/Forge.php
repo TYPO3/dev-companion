@@ -6,34 +6,27 @@ namespace TYPO3\DevCompanion\Contribution;
 
 use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Http\Fetch;
-use TYPO3\DevCompanion\Knowledge\Catalog\SystemExtensions;
-use TYPO3\DevCompanion\Result\Unreachable;
 use TYPO3\DevCompanion\Search\Text;
 
 /**
  * The issue tracker a core patch starts from, read over its Redmine API.
  *
- * An answer is only an answer when it parses as the API. This host answers a
- * browser-shaped request with 200 and a challenge page. A read of that as "no
- * issue" would be the same mistake in the other direction. The request goes to
- * the `.json` endpoint rather than the page, because the fields that decide
- * anything would come off a scrape anywhere else. Three ways in, because only
- * one of the three questions to one tracker starts from a number, `D-ANS-038`.
+ * One of the providers `IssueTracker` asks, and the one every other provider
+ * indexes — `D-ANS-197`. An answer is only an answer when it parses as the
+ * API. This host answers a browser-shaped request with 200 and a challenge
+ * page. A read of that as "no issue" would be the same mistake in the other
+ * direction. The request goes to the `.json` endpoint rather than the page,
+ * because the fields that decide anything would come off a scrape anywhere
+ * else (`D-ANS-038`).
+ *
+ * @phpstan-import-type Row from IssueProvider
  */
-final class Forge
+final class Forge implements IssueProvider
 {
     public const HOST = 'https://forge.typo3.org';
 
     /** The core's own project on the tracker, which is the one this reads. */
     public const PROJECT = 'typo3cms-core';
-
-    /**
-     * The `category` word that asks for the areas themselves.
-     *
-     * The tracker's own wildcard, which this file already passes it as
-     * `status_id`. No area has that name, so it cannot take a subject's place.
-     */
-    public const EVERY_AREA = '*';
 
     /** Where the project answers its own areas, which is the only read `*` does. */
     private const AREAS_URL = self::HOST . '/projects/' . self::PROJECT . '.json?include=issue_categories';
@@ -64,12 +57,6 @@ final class Forge
     public const LIST_CACHE_DURATION = 86400;
 
     /**
-     * How many journal entries come back. The decision is usually in the last
-     * few, and an issue with two hundred comments is one nobody reads whole.
-     */
-    private const NOTES = 15;
-
-    /**
      * The authors whose notes are a review server's ping to the tracker.
      *
      * A list and not a rule. These are the two the core project has seen, and a
@@ -88,25 +75,6 @@ final class Forge
      */
     private const HITS = 25;
 
-    /**
-     * The most words a miss probes one at a time, and beyond it no probe at
-     * all.
-     *
-     * A read takes about two and a half seconds against forge.typo3.org,
-     * measured on 2026-08-25. So the probe is what a caller waits through on
-     * the path that answered nothing. A query longer than this is one whose
-     * answer is to pass fewer words, which the miss says without a read of
-     * anything.
-     */
-    private const TERMS = 6;
-
-    /**
-     * The most issues an enumeration answers with. Higher than a search's,
-     * because a triage picks candidates out of the set it sees. A set that has
-     * to come in pages is one nobody sees the shape of.
-     */
-    private const LISTED = 50;
-
     /** The most memberships one page of them holds, which is Redmine's own cap. */
     private const MEMBERS = 100;
 
@@ -119,14 +87,6 @@ final class Forge
      * larger than a thousand owes the caller is the bound rather than the wait.
      */
     private const COUNTED_PAGES = 10;
-
-    /**
-     * The most buckets a dimension answers with. The tail of an area count is
-     * twenty subsystems with one issue each. 38 areas over the 621 issues one
-     * person had filed on 2026-08-19, of which the largest four held two
-     * thirds.
-     */
-    private const BUCKETS = 12;
 
     /**
      * The most pages of them read, whatever the project says it has. The count
@@ -161,9 +121,8 @@ final class Forge
     /**
      * The transport every instance built without one takes.
      *
-     * `ForgeLookup` builds its own, so a test that drives the tool itself has
-     * nowhere else to hand a transport in. That is its text half, which is
-     * where a caller reads what to do about a miss. `R-COD-003`.
+     * `IssueTracker` builds its own providers, so a test that drives the tool
+     * has nowhere else to hand a transport in. `R-COD-003`.
      *
      * @var (\Closure(string): ?string)|null
      */
@@ -172,9 +131,9 @@ final class Forge
     private readonly Fetch $fetch;
 
     /**
-     * The review server, asked one question: whether a change names a row of
-     * an enumeration. The tracker cannot answer it — the journal that carries a
-     * change reference is not in the index answer at all (`D-ANS-069`).
+     * The review server, asked which changes name an issue. The tracker cannot
+     * answer it, because the journal that carries a change reference is not in
+     * the index answer at all (`D-ANS-069`).
      */
     private readonly Gerrit $review;
 
@@ -199,21 +158,17 @@ final class Forge
         self::$transport = $reader;
     }
 
-    /**
-     * When the answer this instance gave was read from the tracker. A tool
-     * builds one instance per call, so that is the call's answer — `D-ANS-049`.
-     */
-    public function readAt(): string
+    public function host(): string
     {
-        return Cache::timestamp($this->readAt);
+        return self::HOST;
     }
 
-    /**
-     * One issue, with the decision about it.
-     *
-     * @return array{status: 'answered'|'empty'|'unavailable', url: string, issue: ?array<string, mixed>, cause: ?string}
-     */
-    public function issue(int $number, string $notes = 'all'): array
+    public function readAt(): ?int
+    {
+        return $this->readAt;
+    }
+
+    public function issue(int $number): array
     {
         $url = self::HOST . '/issues/' . $number . '.json?include=journals,relations,attachments';
 
@@ -221,280 +176,27 @@ final class Forge
         // A tracker that says 404 has answered. There is no such issue, which
         // is a different thing to tell a caller than that it was out of reach.
         if ($answer['status'] === 404) {
-            return ['status' => 'empty', 'url' => $url, 'issue' => null, 'cause' => null];
+            return ['status' => 'empty', 'url' => $url, 'row' => null, 'cause' => null];
         }
         if ($answer['part'] === null) {
-            return ['status' => 'unavailable', 'url' => $url, 'issue' => null, 'cause' => $answer['cause']];
+            return ['status' => 'unavailable', 'url' => $url, 'row' => null, 'cause' => $answer['cause']];
         }
 
-        $found = $this->referenced([self::issueOf($answer['part'], $number, $notes)])[0];
-        $found['reviews'] = $this->changesOnReview($found['reviews'], (int) $found['id']);
+        $row = self::row($answer['part'] + ['id' => $number]);
+        $row['changes'] = $this->changes([$row['issue']])[$row['issue']] ?? [];
 
-        return [
-            'status' => 'answered',
-            'url' => $url,
-            'issue' => $found,
-            'cause' => null,
-        ];
+        return ['status' => 'answered', 'url' => $url, 'row' => $row, 'cause' => null];
     }
 
     /**
-     * The handles the issue's own text names and the changes the review server
-     * holds for its number, as one list.
-     *
-     * Neither half contains the other. A change under discussion in a comment
-     * whose commit message never named the issue is absent from the review
-     * server's answer. A change that names the issue only in its commit message
-     * is absent from the text. An empty list means neither has one, which is
-     * what a caller was already reading it as — `D-ANS-125`.
-     *
-     * Once per change number, since a change named in a comment and found by
-     * commit message is one change. A handle that carries a Change-Id and no
-     * number has nothing to match on and stands as it came.
-     *
-     * @param list<array<string, mixed>> $named what the notes carry
-     * @return list<array<string, mixed>>
+     * The comments of one issue, at the address a read of the issue takes too,
+     * so the next call for it comes from the cache.
      */
-    private function changesOnReview(array $named, int $number): array
+    public function comments(int $number): ?array
     {
-        $reviews = [];
-        foreach ($named as $review) {
-            $reviews[] = $review + ['status' => ''];
-        }
+        $answer = $this->api(self::HOST . '/issues/' . $number . '.json?include=journals,relations,attachments', 'issue');
 
-        $at = [];
-        foreach ($reviews as $index => $review) {
-            if ($review['change'] > 0) {
-                $at[(int) $review['change']] = $index;
-            }
-        }
-
-        foreach ($this->review->changesForIssues([$number])[$number] ?? [] as $change) {
-            $status = is_string($change['status'] ?? null) ? $change['status'] : '';
-            if (isset($at[$change['number']])) {
-                $reviews[$at[$change['number']]]['status'] = $status;
-                continue;
-            }
-            $reviews[] = [
-                'change' => $change['number'],
-                'changeId' => '',
-                'patchSet' => 0,
-                'on' => '',
-                'url' => $change['url'],
-                'status' => $status,
-            ];
-        }
-
-        return $reviews;
-    }
-
-    /**
-     * The issues these records name, filled with what decides whether to read
-     * one. The relations they stand against, and the citations an issue's prose
-     * carries.
-     *
-     * One bulk read for everything handed in rather than one per reference,
-     * `D-ANS-064`, which is why a whole page goes through here at once. Where
-     * it is out of reach the relations stand as they came back. A citation
-     * stays only where the read answered for the number. Three digits in a
-     * sentence are as often a version as an issue, `D-ANS-123`. So a tracker
-     * that did not answer drops them, which is the same answer as a number
-     * nobody filed.
-     *
-     * @param list<array<string, mixed>> $records
-     * @return list<array<string, mixed>>
-     */
-    private function referenced(array $records): array
-    {
-        $numbers = [];
-        foreach ($records as $record) {
-            $numbers = [
-                ...$numbers,
-                ...array_column($record['relations'], 'issue'),
-                ...array_column($record['mentioned'] ?? [], 'issue'),
-            ];
-        }
-
-        $fields = $this->fields($numbers);
-        foreach ($records as $at => $record) {
-            foreach ($record['relations'] as $index => $relation) {
-                $read = $fields[$relation['issue']] ?? null;
-                $records[$at]['relations'][$index]['subject'] = $read['subject'] ?? '';
-                $records[$at]['relations'][$index]['tracker'] = $read['tracker'] ?? '';
-                $records[$at]['relations'][$index]['status'] = $read['status'] ?? '';
-            }
-            if (!isset($record['mentioned'])) {
-                continue;
-            }
-            $mentioned = [];
-            foreach ($record['mentioned'] as $mention) {
-                $read = $fields[$mention['issue']] ?? null;
-                if ($read === null) {
-                    continue;
-                }
-                $mention['subject'] = $read['subject'];
-                $mention['tracker'] = $read['tracker'];
-                $mention['status'] = $read['status'];
-                $mentioned[] = $mention;
-            }
-            $records[$at]['mentioned'] = $mentioned;
-        }
-
-        return $records;
-    }
-
-    /**
-     * The changes the review server holds for these rows, one query per twelve.
-     *
-     * The state comes with the handle, because the batched query already
-     * answers it per change. Its loss made a caller pay a call for what was in
-     * the payload (`D-ANS-069`). Where the review server is out of reach the
-     * rows stand as they came back.
-     *
-     * @param list<array<string, mixed>> $results
-     * @return list<array<string, mixed>>
-     */
-    private function reviewed(array $results): array
-    {
-        $changes = $this->review->changesForIssues(array_column($results, 'issue'));
-        foreach ($results as $at => $entry) {
-            foreach ($changes[$entry['issue']] ?? [] as $change) {
-                $results[$at]['reviews'][] = [
-                    'change' => $change['number'],
-                    'status' => is_string($change['status'] ?? null) ? $change['status'] : '',
-                    'url' => $change['url'],
-                ];
-            }
-            $states = array_unique(array_column($results[$at]['reviews'], 'status'));
-            $results[$at]['reviewAbandoned'] = $entry['status'] === 'Under Review' && $states === ['ABANDONED'];
-        }
-
-        return $results;
-    }
-
-    /**
-     * The issues whose text matches these words.
-     *
-     * Nothing here ranks, and the query comes back with the answer, because one
-     * wording does not settle which issue is the duplicate (`D-ANS-038`).
-     * `issues=1` is what keeps wiki pages, forum posts and changesets out of an
-     * answer whose entries are issue numbers.
-     *
-     * @return array{status: 'answered'|'empty'|'unavailable', url: string, query: string, total: int, terms: list<array{term: string, matchCount: int}>, results: list<array<string, mixed>>, cause: ?string}
-     */
-    public function search(string $query, int $limit = 15): array
-    {
-        $words = trim($query);
-        $url = self::HOST . '/search.json?q=' . rawurlencode($words)
-            . '&issues=1&limit=' . max(1, min(self::HITS, $limit));
-
-        $answer = $this->api($url, 'results');
-        if ($answer['part'] === null) {
-            return ['status' => 'unavailable', 'url' => $url, 'query' => $words, 'total' => 0, 'terms' => [], 'results' => [], 'cause' => $answer['cause']];
-        }
-
-        $results = [];
-        foreach ($answer['part'] as $hit) {
-            if (is_array($hit)) {
-                $results[] = self::hit($hit);
-            }
-        }
-
-        return [
-            'status' => $results === [] ? 'empty' : 'answered',
-            'url' => $url,
-            'query' => $words,
-            'total' => $answer['total'],
-            'terms' => $results === [] ? $this->reach($words) : [],
-            'results' => $this->filled($results),
-            'cause' => null,
-        ];
-    }
-
-    /**
-     * What each word of an emptied query reaches on its own.
-     *
-     * This is the half of a miss nothing on this side can supply. Two class
-     * names look alike from here and the tracker knows one of them. So the
-     * advice to drop the identifiers would have dropped the word that answers,
-     * `D-ANS-038`. One read per word rather than one re-read of the query with
-     * the AND off. That re-read answers the union in issue number order at the
-     * commonest word's size. Run on the miss alone, and each stays in the cache
-     * like any other read.
-     *
-     * @return list<array{term: string, matchCount: int}>
-     */
-    private function reach(string $query): array
-    {
-        $words = [];
-        foreach (preg_split('/\s+/', $query) ?: [] as $word) {
-            if ($word !== '') {
-                $words[strtolower($word)] = $word;
-            }
-        }
-        // One word has nothing to tell apart, and its count is the zero the
-        // caller is already holding.
-        if (count($words) < 2 || count($words) > self::TERMS) {
-            return [];
-        }
-
-        $reach = [];
-        foreach ($words as $word) {
-            $answer = $this->api(self::HOST . '/search.json?q=' . rawurlencode($word) . '&issues=1&limit=1', 'results');
-            // A host that stopped answering says nothing about the words left,
-            // and a miss that already answered is not turned into an outage by
-            // it.
-            if ($answer['part'] === null) {
-                return $reach;
-            }
-            $reach[] = ['term' => $word, 'matchCount' => $answer['total']];
-        }
-
-        return $reach;
-    }
-
-    /**
-     * The fields a search hit is not made of, read for the whole page at once.
-     *
-     * `/search.json` answers with a title and a URL, so the area, the reporter,
-     * the assignee and the two dates are absent from every hit. A record with
-     * them empty is a false statement rather than an absent one. It reads as an
-     * issue nobody has categorised, nobody holds and nothing has moved on. A
-     * session took 50 of 50 rows that way on 2026-08-05
-     * (`feedback/2026-08-05-033902`), and the search path is where a triage
-     * asks about age.
-     *
-     * Where it is out of reach the hits stand as they came back. A search that
-     * answered is not turned into an outage by a second call that did not.
-     *
-     * @param list<array<string, mixed>> $results
-     * @return list<array<string, mixed>>
-     */
-    private function filled(array $results): array
-    {
-        $fields = $this->fields(array_column($results, 'issue'));
-        if ($fields === []) {
-            return $results;
-        }
-
-        foreach ($results as $at => $hit) {
-            $read = $fields[$hit['issue']] ?? null;
-            if ($read === null) {
-                continue;
-            }
-            $results[$at]['category'] = $read['category'];
-            $results[$at]['reportedBy'] = $read['reportedBy'];
-            $results[$at]['assignedTo'] = $read['assignedTo'];
-            $results[$at]['createdOn'] = $read['createdOn'];
-            $results[$at]['updatedOn'] = $read['updatedOn'];
-            // The tracker and the status come off the title, which is the
-            // tracker's own words and usually parses. Where it did not, they
-            // are fields here.
-            $results[$at]['tracker'] = $hit['tracker'] !== '' ? $hit['tracker'] : $read['tracker'];
-            $results[$at]['status'] = $hit['status'] !== '' ? $hit['status'] : $read['status'];
-        }
-
-        return $results;
+        return $answer['part'] === null ? null : self::notesOf(is_array($answer['part']['journals'] ?? null) ? $answer['part']['journals'] : []);
     }
 
     /**
@@ -502,208 +204,174 @@ final class Forge
      *
      * What makes filling a search page and an issue's relations cheaper than
      * explaining why they are bare. The review server fills the issues a commit
-     * message names from here too, which is what it is public for
-     * (`D-ANS-098`).
-     *
-     * An empty answer is what stayed out of reach, and every caller here reads
-     * it as "leave what came back alone".
-     *
-     * @param list<mixed> $numbers
-     * @return array<int, array<string, mixed>>
+     * message names from here too (`D-ANS-098`).
      */
     public function fields(array $numbers): array
     {
         $fields = [];
-        foreach ($this->issuesOf($numbers) as $entry) {
-            $read = self::entry($entry);
-            $fields[$read['issue']] = $read;
+        foreach ($this->issuesOf($numbers) as $raw) {
+            $row = self::row($raw);
+            $fields[$row['issue']] = $row;
         }
 
         return $fields;
     }
 
-    /**
-     * The rows a set of issue numbers are, as the tracker sends them.
-     *
-     * `/issues.json` filtered by an id list answers subject, tracker, status,
-     * area, author, assignee and both dates for the whole set in one request.
-     * `status_id=*` is what keeps a closed one in it. Every caller here asks
-     * about issues that are usually closed, and the default of that endpoint is
-     * open ones.
-     *
-     * @param list<mixed> $numbers
-     * @return list<array<string, mixed>>
-     */
-    private function issuesOf(array $numbers): array
+    public function rows(array $numbers): array
     {
-        $wanted = [];
-        foreach ($numbers as $number) {
-            if (is_int($number) && $number > 0) {
-                $wanted[$number] = $number;
-            }
-        }
-        if ($wanted === []) {
-            return [];
-        }
+        $raw = $this->included(array_map(static fn(int $number): array => ['id' => $number], $numbers));
 
-        $url = self::HOST . '/issues.json?' . http_build_query([
-            'issue_id' => implode(',', $wanted),
-            'status_id' => '*',
-            'limit' => count($wanted),
-        ]);
-        $answer = $this->api($url, 'issues');
+        return $this->reviewed(array_values(array_map(
+            self::row(...),
+            array_filter($raw, static fn(array $row): bool => isset($row['subject'])),
+        )));
+    }
+
+    /**
+     * The issues whose text matches these words.
+     *
+     * `issues=1` is what keeps wiki pages, forum posts and changesets out of an
+     * answer whose entries are issue numbers.
+     */
+    public function search(string $words, int $limit): array
+    {
+        $url = self::HOST . '/search.json?q=' . rawurlencode($words)
+            . '&issues=1&limit=' . max(1, min(self::HITS, $limit));
+
+        $answer = $this->api($url, 'results');
+        if ($answer['part'] === null) {
+            return ['status' => 'unavailable', 'url' => $url, 'total' => 0, 'rows' => [], 'complete' => false, 'scanned' => 0, 'cause' => $answer['cause']];
+        }
 
         $rows = [];
-        foreach ($answer['part'] ?? [] as $entry) {
-            if (is_array($entry)) {
-                $rows[] = $entry;
+        foreach ($answer['part'] as $hit) {
+            if (is_array($hit)) {
+                $rows[] = self::hit($hit);
             }
+        }
+
+        return [
+            'status' => $rows === [] ? 'empty' : 'answered',
+            'url' => $url,
+            'total' => $answer['total'],
+            'rows' => $this->filled($rows),
+            'complete' => true,
+            'scanned' => count($rows),
+            'cause' => null,
+        ];
+    }
+
+    /**
+     * One read per word rather than one re-read of the query with the AND off.
+     * That re-read answers the union in issue number order at the commonest
+     * word's size.
+     */
+    public function matchCount(string $word): ?int
+    {
+        $answer = $this->api(self::HOST . '/search.json?q=' . rawurlencode($word) . '&issues=1&limit=1', 'results');
+
+        return $answer['part'] === null ? null : $answer['total'];
+    }
+
+    /**
+     * The fields a search hit is not made of, read for the whole page at once.
+     *
+     * `/search.json` answers with a title and a URL. A record with the area,
+     * the people and the dates empty is a false statement rather than an absent
+     * one: it reads as an issue nobody has categorised, nobody holds and
+     * nothing has moved on (`feedback/2026-08-05-033902`). Where the read is out
+     * of reach the hits stand as they came back.
+     *
+     * @param list<Row> $rows
+     * @return list<Row>
+     */
+    private function filled(array $rows): array
+    {
+        $fields = $this->fields(array_column($rows, 'issue'));
+        foreach ($rows as $at => $hit) {
+            $read = $fields[$hit['issue']] ?? null;
+            if ($read === null) {
+                continue;
+            }
+            foreach (['category', 'reportedBy', 'assignedTo', 'createdOn', 'updatedOn'] as $field) {
+                $rows[$at][$field] = $read[$field];
+            }
+            // The tracker and the status come off the title, which is the
+            // tracker's own words and usually parses. Where it did not, they
+            // are fields here.
+            $rows[$at]['tracker'] = $hit['tracker'] !== '' ? $hit['tracker'] : $read['tracker'];
+            $rows[$at]['status'] = $hit['status'] !== '' ? $hit['status'] : $read['status'];
         }
 
         return $rows;
     }
 
     /**
-     * The issues of the core project, at whichever end of it the caller asked
-     * for.
+     * The backlog as the tracker filters it.
      *
-     * What this answers is the question a triage starts from and neither of the
-     * two above reaches. The issue nobody has looked at since 2015, which no
-     * number and no words find. So the filter is the way in, the tracker's own
-     * `status_id=open`. `newest` is the other end, and `createdSince` is what
-     * makes that end a set, `D-ANS-116`. `total` comes back with the page, so a
-     * caller can see whether 30 was the set or a first screenful. The person
-     * filters are the other way in, and `involving` is a union the tracker
-     * cannot answer, so it is two reads and a merge, `D-ANS-090`. `words` and
-     * `offset` reach the rest of a set larger than a page, `D-ANS-180`.
-     *
-     * @return array{status: 'answered'|'empty'|'unavailable', url: string, total: int, categories: list<string>, categoriesUsed: list<string>, people: list<array{filter: string, asked: string, name: string, id: int, candidates: list<string>}>, breakdown: ?array<string, mixed>, wordsScan: ?array{read: int, complete: bool}, results: list<array<string, mixed>>, cause: ?string}
+     * The tracker's own `status_id=open` is the way in to the issue no number
+     * and no words find. `involving` is a union the tracker cannot answer, so
+     * it is two reads and a merge, `D-ANS-090`. The whole set is read where
+     * the answer is over all of it: the counts, the words matched inside it,
+     * and a later page of a union, whose two sides the tracker cannot page as
+     * one (`D-ANS-180`).
      */
-    public function backlog(
-        string $order = 'oldest',
-        string $tracker = '',
-        string $category = '',
-        string $createdBefore = '',
-        string $createdSince = '',
-        string $updatedBefore = '',
-        int $limit = 15,
-        string $status = 'open',
-        string $reportedBy = '',
-        string $assignedTo = '',
-        string $involving = '',
-        bool $breakdown = false,
-        string $words = '',
-        int $offset = 0,
-    ): array {
-        $categories = $this->categories();
-        // The vocabulary asked for on purpose, and no issue read at all. Every
-        // other call gets the areas only where a word named none or several.
-        // That keeps 54 names off the answers nobody asked them of
-        // (`feedback/2026-08-19-134717`), and left the enumeration reachable by
-        // a wrong word alone (`D-KNW-113`).
-        if ($category === self::EVERY_AREA) {
-            return [
-                'status' => $categories === [] ? 'unavailable' : 'answered',
-                'url' => self::AREAS_URL,
-                'total' => 0,
-                'categories' => array_keys($categories),
-                'categoriesUsed' => [],
-                'people' => [],
-                'breakdown' => null,
-                'wordsScan' => null,
-                'results' => [],
-                'cause' => $categories === [] ? Unreachable::NOT_ANSWERING : null,
-            ];
-        }
-        $used = $category === '' ? [] : self::named($categories, $category);
-        // A word that names no area is regularly a system extension key. That
-        // is what a caller in a checkout holds and what half the areas do not
-        // carry in their name. The catalog carries the area for those, so
-        // "impexp" reads the issues under "Import/Export (T3D)" and
-        // categoriesUsed says which area that was (`D-ANS-142`).
-        if ($used === [] && $category !== '') {
-            $filed = SystemExtensions::forgeCategory($category);
-            $used = isset($categories[$filed]) ? [$filed] : [];
-        }
-
+    public function backlog(array $filter, int $offset, int $limit, bool $whole): array
+    {
         $filters = [
             // The tracker's own three: `open` is every status it has not marked
             // closed, and `*` is what puts a person's whole history in reach.
-            'status_id' => match ($status) {
+            'status_id' => match ($filter['status']) {
                 'closed' => 'closed',
                 'all' => '*',
                 default => 'open',
             },
-            'sort' => match ($order) {
+            'sort' => match ($filter['order']) {
                 'stale' => 'updated_on:asc',
                 'newest' => 'created_on:desc',
                 default => 'created_on:asc',
             },
         ];
-        if (isset(self::TRACKERS[$tracker])) {
-            $filters['tracker_id'] = (string) self::TRACKERS[$tracker];
+        if (isset(self::TRACKERS[$filter['tracker']])) {
+            $filters['tracker_id'] = (string) self::TRACKERS[$filter['tracker']];
         }
-        if ($used !== []) {
+        if ($filter['areas'] !== []) {
+            $categories = $this->categories();
             // The tracker's own alternation, which is what makes a word naming
             // three categories one call rather than three.
             $filters['category_id'] = implode('|', array_map(
-                static fn(string $name): int => $categories[$name],
-                $used,
+                static fn(string $name): int => $categories[$name] ?? 0,
+                $filter['areas'],
             ));
         }
-        $people = [];
-        // `involving` is the same person on either side, so it takes the place
-        // of the two that name one side each.
-        $roles = $involving !== ''
-            ? ['involving' => $involving]
-            : ['reportedBy' => $reportedBy, 'assignedTo' => $assignedTo];
         $sides = [];
-        foreach ($roles as $filter => $word) {
-            if ($word === '') {
-                continue;
-            }
-            $person = $this->person($word);
-            $people[] = ['filter' => $filter, 'asked' => $word] + $person;
-            if ($person['id'] === 0) {
-                continue;
-            }
-            if ($filter === 'involving') {
-                $sides = [['author_id' => (string) $person['id']], ['assigned_to_id' => (string) $person['id']]];
-            } else {
-                $filters[$filter === 'reportedBy' ? 'author_id' : 'assigned_to_id'] = (string) $person['id'];
-            }
+        if ($filter['involving'] > 0) {
+            $sides = [['author_id' => (string) $filter['involving']], ['assigned_to_id' => (string) $filter['involving']]];
         }
-
+        if ($filter['reportedBy'] > 0) {
+            $filters['author_id'] = (string) $filter['reportedBy'];
+        }
+        if ($filter['assignedTo'] > 0) {
+            $filters['assigned_to_id'] = (string) $filter['assignedTo'];
+        }
         // A date the tracker cannot read gets the unfiltered set, which is the
         // wrong answer in a right one's shape. Only a date reaches the query.
-        $filed = self::within($createdSince, $createdBefore);
+        $filed = self::within($filter['createdSince'], $filter['createdBefore']);
         if ($filed !== '') {
             $filters['created_on'] = $filed;
         }
-        if (self::isDate($updatedBefore)) {
-            $filters['updated_on'] = '<=' . $updatedBefore;
+        if (self::isDate($filter['updatedBefore'])) {
+            $filters['updated_on'] = '<=' . $filter['updatedBefore'];
         }
 
-        // Only where it can do the work it answers for: a correction of a word
-        // that named no area or several. On every other call it is 54 names the
-        // caller did not ask for, three times over in one session
-        // (`feedback/2026-08-19-134717`).
-        $known = $category !== '' && count($used) !== 1 ? array_keys($categories) : [];
-
-        // The whole set is read where the answer is over all of it: the counts,
-        // the words matched inside it, and a later page of a union, whose two
-        // sides the tracker cannot page as one.
-        $whole = $breakdown || $words !== '' || ($offset > 0 && count($sides) > 1);
-        $take = max(1, min(self::LISTED, $limit));
-
-        // What the index answers for nothing where the call asks for it. The
-        // journal is the one thing it will not serve however the call reads.
-        // That is why the review server is a call of its own below. A counted
-        // read wants none of it — it is reading a thousand rows for four
-        // fields. The rows it hands on are read again with them.
-        $page = $whole
+        $words = $filter['words'];
+        $scan = $whole || $words !== '' || ($offset > 0 && count($sides) > 1);
+        // A page asks for the relations and the files it hands on. A scan
+        // wants none of them, because it reads a thousand rows for four
+        // fields; the rows it hands on are read again with them.
+        $page = $scan
             ? ['limit' => (string) self::COUNTED]
-            : ['limit' => (string) $take, 'include' => 'relations,attachments']
+            : ['limit' => (string) $limit, 'include' => 'relations,attachments']
                 + ($offset > 0 ? ['offset' => (string) $offset] : []);
         $reads = array_map(
             static fn(array $side): string => self::HOST . '/projects/' . self::PROJECT . '/issues.json?'
@@ -712,79 +380,137 @@ final class Forge
         );
         $url = implode(' ', $reads);
 
-        // A word that matches no category, and a name that matches no person,
-        // would otherwise get the unfiltered backlog. That is a set about
-        // everything in the shape of a set about one thing.
-        $unresolved = array_filter($people, static fn(array $person): bool => $person['id'] === 0);
-        if (($category !== '' && $used === []) || $unresolved !== []) {
-            return ['status' => 'empty', 'url' => $url, 'total' => 0, 'categories' => $known, 'categoriesUsed' => $category !== '' ? $used : [], 'people' => $people, 'breakdown' => null, 'wordsScan' => null, 'results' => [], 'cause' => null];
-        }
-
-        $answer = $whole ? $this->shape($reads) : $this->page($reads, $take, $filters['sort']);
+        $answer = $scan ? $this->shape($reads) : $this->page($reads, $limit, $filters['sort']);
         // Two reads answer one question, and their counts overlap by the issues
-        // this person both filed and holds. The tracker ANDs its filters. So
-        // that overlap is a third read of one row and the only thing that makes
-        // the union countable at all.
+        // this person both filed and holds. That overlap is a third read of one
+        // row and the only thing that makes the union countable at all.
         if ($answer['rows'] !== null && count($reads) > 1) {
             $answer['total'] -= $this->overlap($sides, $filters);
         }
         if ($answer['rows'] === null) {
-            return ['status' => 'unavailable', 'url' => $url, 'total' => 0, 'categories' => $known, 'categoriesUsed' => $used, 'people' => $people, 'breakdown' => null, 'wordsScan' => null, 'results' => [], 'cause' => $answer['cause']];
+            return ['status' => 'unavailable', 'url' => $url, 'total' => 0, 'rows' => [], 'complete' => false, 'scanned' => 0, 'cause' => $answer['cause']];
         }
 
-        $rows = $whole && count($reads) > 1 ? self::inOrder($answer['rows'], $filters['sort']) : $answer['rows'];
+        $rows = $scan && count($reads) > 1 ? self::inOrder($answer['rows'], $filters['sort']) : $answer['rows'];
         $total = $answer['total'];
-        $scan = null;
+        $scanned = count($rows);
         if ($words !== '') {
-            $scan = ['read' => count($rows), 'complete' => $answer['complete']];
             $rows = self::about($rows, $words);
             $total = count($rows);
         }
-
-        $counted = null;
-        if ($breakdown) {
-            $counted = ['read' => count($rows), 'complete' => $answer['complete'], 'counts' => self::counts($rows)];
-            // A set a page holds whole comes back with its rows. The counts
-            // alone sent a session back for the 18 rows they were read off
-            // (`D-ANS-090`).
-            $rows = $answer['complete'] && count($rows) <= self::LISTED ? $rows : [];
-        } elseif ($whole) {
-            $rows = array_slice($rows, $offset, $take);
-        }
-        if ($whole) {
-            $rows = $this->included($rows);
+        if ($scan && !$whole) {
+            $rows = $this->included(array_slice($rows, $offset, $limit));
         }
 
-        $results = [];
-        foreach ($rows as $raw) {
-            $row = self::entry($raw);
-            // The index answer carries the description and no journal. So a row
-            // reads for what its subject and its report name and says nothing
-            // about the comments, `D-ANS-122`.
-            $row['cites'] = CitedCode::in(
-                is_string($raw['subject'] ?? null) ? $raw['subject'] : '',
-                is_string($raw['description'] ?? null) ? $raw['description'] : '',
-            );
-            $results[] = $row;
-        }
-
-        $results = $this->reviewed($this->referenced($results));
-        if ($order === 'stale') {
-            $results = $this->noted($results);
+        $normalised = array_map(self::row(...), $rows);
+        if (!$whole) {
+            $normalised = $this->reviewed($normalised);
         }
 
         return [
-            'status' => $results === [] && ($counted === null || $counted['read'] === 0) ? 'empty' : 'answered',
+            'status' => $normalised === [] ? 'empty' : 'answered',
             'url' => $url,
             'total' => $total,
-            'categories' => $known,
-            'categoriesUsed' => $used,
-            'people' => $people,
-            'breakdown' => $counted,
-            'wordsScan' => $scan,
-            'results' => $results,
+            'rows' => $normalised,
+            'complete' => $answer['complete'],
+            'scanned' => $scanned,
             'cause' => null,
         ];
+    }
+
+    public function areas(): array
+    {
+        return array_map(strval(...), array_keys($this->categories()));
+    }
+
+    /**
+     * The members whose name carries every word, and the people the issues
+     * name where no member does.
+     *
+     * The members are who works the project rather than everybody who has ever
+     * filed something. 24 of the 100 newest issues came from outside it,
+     * measured on 2026-08-19, which is what `found()` is the fallback for.
+     */
+    public function people(string $name): array
+    {
+        $members = IssueTracker::carrying($this->members(), $name);
+
+        return $members !== [] ? $members : IssueTracker::carrying($this->found($name), $name);
+    }
+
+    /**
+     * The changes the review server holds for these issues, one query per
+     * twelve. The state comes with the handle, because the batched query
+     * already answers it per change (`D-ANS-069`).
+     *
+     * @param list<int> $numbers
+     * @return array<int, list<array{change: int, status: string, url: string}>>
+     */
+    private function changes(array $numbers): array
+    {
+        $changes = [];
+        foreach ($this->review->changesForIssues($numbers) as $issue => $found) {
+            foreach ($found as $change) {
+                $changes[$issue][] = [
+                    'change' => (int) $change['number'],
+                    'status' => is_string($change['status'] ?? null) ? $change['status'] : '',
+                    'url' => is_string($change['url'] ?? null) ? $change['url'] : '',
+                ];
+            }
+        }
+
+        return $changes;
+    }
+
+    /**
+     * The rows with the changes on review for each. Where the review server
+     * is out of reach the rows stand with none.
+     *
+     * @param list<Row> $rows
+     * @return list<Row>
+     */
+    private function reviewed(array $rows): array
+    {
+        $changes = $this->changes(array_column($rows, 'issue'));
+        foreach ($rows as $at => $row) {
+            $rows[$at]['changes'] = $changes[$row['issue']] ?? [];
+        }
+
+        return $rows;
+    }
+
+    /**
+     * The rows read again with their relations and their files, in one
+     * request, in the order they came.
+     *
+     * Where the read does not answer, the rows stand as they came, which is a
+     * row with no relation rather than no row.
+     *
+     * @param list<array<string, mixed>> $rows
+     * @return list<array<string, mixed>>
+     */
+    private function included(array $rows): array
+    {
+        $numbers = array_values(array_filter(array_map(
+            static fn(array $row): int => is_numeric($row['id'] ?? null) ? (int) $row['id'] : 0,
+            $rows,
+        )));
+        if ($numbers === []) {
+            return $rows;
+        }
+
+        $answer = $this->api(self::HOST . '/issues.json?' . http_build_query([
+            'issue_id' => implode(',', $numbers),
+            'status_id' => '*',
+            'include' => 'relations,attachments',
+            'limit' => (string) count($numbers),
+        ]), 'issues');
+        $read = self::merged([], $answer['part'] ?? []);
+
+        return array_map(
+            static fn(array $row): array => $read[is_numeric($row['id'] ?? null) ? (int) $row['id'] : 0] ?? $row,
+            $rows,
+        );
     }
 
     /**
@@ -815,69 +541,6 @@ final class Forge
 
             return false;
         }));
-    }
-
-    /**
-     * The rows read again with their relations and their files, in one
-     * request, in the order they came.
-     *
-     * A whole-set read asks for neither, because it reads a thousand rows for
-     * four fields. Where the read does not answer, the rows stand as they
-     * came, which is a row with no relation rather than no row.
-     *
-     * @param list<array<string, mixed>> $rows
-     * @return list<array<string, mixed>>
-     */
-    private function included(array $rows): array
-    {
-        $numbers = array_values(array_filter(array_map(
-            static fn(array $row): int => is_numeric($row['id'] ?? null) ? (int) $row['id'] : 0,
-            $rows,
-        )));
-        if ($numbers === []) {
-            return $rows;
-        }
-
-        $answer = $this->api(self::HOST . '/issues.json?' . http_build_query([
-            'issue_id' => implode(',', $numbers),
-            'status_id' => '*',
-            'include' => 'relations,attachments',
-            'limit' => (string) count($numbers),
-        ]), 'issues');
-        $read = self::merged([], $answer['part'] ?? []);
-
-        return array_map(
-            static fn(array $row): array => $read[is_numeric($row['id'] ?? null) ? (int) $row['id'] : 0] ?? $row,
-            $rows,
-        );
-    }
-
-    /**
-     * When a person last wrote a comment on each row, read off its journal.
-     *
-     * The tracker's own date moves on any edit. Four issues one person touched
-     * within minutes and without a word read as fresh on the stale end
-     * (`D-ANS-181`). One read per row, at the address a read of the issue
-     * takes too, so the next call for one of them comes from the cache.
-     *
-     * @param list<array<string, mixed>> $results
-     * @return list<array<string, mixed>>
-     */
-    private function noted(array $results): array
-    {
-        foreach ($results as $at => $row) {
-            $answer = $this->api(self::HOST . '/issues/' . $row['issue'] . '.json?include=journals,relations,attachments', 'issue');
-            $journals = is_array($answer['part']['journals'] ?? null) ? $answer['part']['journals'] : [];
-            foreach ($journals as $journal) {
-                $note = is_array($journal) && is_string($journal['notes'] ?? null) ? trim($journal['notes']) : '';
-                $on = is_array($journal) && is_string($journal['created_on'] ?? null) ? $journal['created_on'] : '';
-                if ($note !== '' && !in_array(self::name($journal['user'] ?? null), self::BOTS, true) && $on > $results[$at]['lastNoteOn']) {
-                    $results[$at]['lastNoteOn'] = $on;
-                }
-            }
-        }
-
-        return $results;
     }
 
     /**
@@ -1008,62 +671,6 @@ final class Forge
         return $sorted;
     }
 
-    /**
-     * How a set of issues distributes, one list per dimension.
-     *
-     * The four a reader reads a person's history by. What came of them, what
-     * kind of work they were, which part of the core, and when. Ordered by size
-     * and bounded. The tail of an area count is twenty subsystems with one
-     * issue each, and the head already says what it says.
-     *
-     * @param list<array<string, mixed>> $rows
-     * @return list<array{dimension: string, buckets: list<array{name: string, count: int}>, withheldBuckets: int, withheldCount: int}>
-     */
-    private static function counts(array $rows): array
-    {
-        $counts = ['status' => [], 'tracker' => [], 'category' => [], 'year' => [], 'touched' => []];
-        foreach ($rows as $row) {
-            foreach (['status', 'tracker', 'category'] as $dimension) {
-                // An issue nobody filed under an area is a bucket of its own.
-                // Left out, the areas add up to less than the set and nothing
-                // says why.
-                $name = self::name($row[$dimension] ?? null);
-                $counts[$dimension][$name === '' ? 'none' : $name] ??= 0;
-                $counts[$dimension][$name === '' ? 'none' : $name]++;
-            }
-            // The year it was filed, and the year anything last moved on it.
-            // The second is what an updatedBefore that makes the set fit a
-            // page is chosen by.
-            foreach (['year' => 'created_on', 'touched' => 'updated_on'] as $dimension => $field) {
-                $year = substr(is_string($row[$field] ?? null) ? $row[$field] : '', 0, 4);
-                if ($year !== '') {
-                    $counts[$dimension][$year] ??= 0;
-                    $counts[$dimension][$year]++;
-                }
-            }
-        }
-
-        $answer = [];
-        foreach ($counts as $dimension => $buckets) {
-            // By size, and by name where two are the same size: an answer that
-            // reorders between two identical calls is one nobody can diff.
-            uksort($buckets, static fn(string $one, string $other): int => [$buckets[$other], $one] <=> [$buckets[$one], $other]);
-            $shown = array_slice($buckets, 0, self::BUCKETS, true);
-            $answer[] = [
-                'dimension' => $dimension,
-                'buckets' => array_map(
-                    static fn(string $name, int $count): array => ['name' => $name, 'count' => $count],
-                    array_keys($shown),
-                    array_values($shown),
-                ),
-                'withheldBuckets' => count($buckets) - count($shown),
-                'withheldCount' => array_sum($buckets) - array_sum($shown),
-            ];
-        }
-
-        return $answer;
-    }
-
     /** A day the tracker can filter on, and nothing else. */
     private static function isDate(string $date): bool
     {
@@ -1146,7 +753,7 @@ final class Forge
     }
 
     /**
-     * The people who work the core project, name to id.
+     * The members of the core project, name to id.
      *
      * The tracker filters by a numeric user id, and it serves no public user
      * list. `/users.json` answers 401 without an administrator's credential. So
@@ -1160,7 +767,7 @@ final class Forge
      *
      * @return array<string, int>
      */
-    public function people(): array
+    private function members(): array
     {
         $people = [];
         $offset = 0;
@@ -1180,38 +787,6 @@ final class Forge
         } while ($answer['part'] !== null && $offset < min($answer['total'], self::MEMBERS * self::MEMBER_PAGES));
 
         return $people;
-    }
-
-    /**
-     * The person a name means, as the id the tracker filters by.
-     *
-     * Only a name carried whole decides, which is where this parts from the way
-     * an area gets its name. Half of "backend ui" is still the backend, and
-     * half of "Andreas Kießling" is four other people called Andreas. A name
-     * that reaches two of them resolves to neither and answers with both. Two
-     * people merged into one backlog is a wrong answer nothing about it says is
-     * wrong.
-     *
-     * @return array{name: string, id: int, candidates: list<string>}
-     */
-    public function person(string $name): array
-    {
-        $members = $this->people();
-        [$carried] = self::matching($members, $name);
-        if (count($carried) === 1) {
-            return ['name' => $carried[0], 'id' => $members[$carried[0]], 'candidates' => []];
-        }
-        if ($carried !== []) {
-            return ['name' => '', 'id' => 0, 'candidates' => $carried];
-        }
-
-        $others = $this->found($name);
-        [$filed] = self::matching($others, $name);
-        if (count($filed) === 1) {
-            return ['name' => $filed[0], 'id' => $others[$filed[0]], 'candidates' => []];
-        }
-
-        return ['name' => '', 'id' => 0, 'candidates' => $filed];
     }
 
     /**
@@ -1253,60 +828,44 @@ final class Forge
     }
 
     /**
-     * The entries of a name-to-id list a caller's words name, in the tracker's
-     * own spelling. Its areas and its people are both such a list.
+     * The rows a set of issue numbers are, as the tracker sends them.
      *
-     * Nobody types "RTE (rtehtmlarea + ckeditor)". They type "rte", and they
-     * type "backend ui" for a name that carries neither word whole. So the
-     * words match one at a time and at a word boundary. A substring match
-     * answers "rte" with every category whose name contains "reporte" or
-     * "Renderer", and "kai" with everybody called Kaiser.
+     * `/issues.json` filtered by an id list answers subject, tracker, status,
+     * area, author, assignee and both dates for the whole set in one request.
+     * `status_id=*` is what keeps a closed one in it. Every caller here asks
+     * about issues that are usually closed, and the default of that endpoint is
+     * open ones.
      *
-     * Every word carried wins and one word carried is the fallback. The first
-     * is what an exact name does and the second is what a half-remembered one
-     * does. Which entries that produced comes back too. "backend ui" that
-     * reaches three of them is a set the caller may want to narrow and cannot
-     * see from the issues alone.
-     *
-     * @param array<string, int> $entries
-     * @return list<string>
+     * @param list<mixed> $numbers
+     * @return list<array<string, mixed>>
      */
-    public static function named(array $entries, string $words): array
+    private function issuesOf(array $numbers): array
     {
-        [$all, $any] = self::matching($entries, $words);
-
-        return $all !== [] ? $all : $any;
-    }
-
-    /**
-     * The entries with every word, and the entries with some of them.
-     *
-     * @param array<string, int> $entries
-     * @return array{list<string>, list<string>}
-     */
-    private static function matching(array $entries, string $words): array
-    {
-        $terms = preg_split('/\s+/', trim($words)) ?: [];
-        $terms = array_values(array_filter($terms, static fn(string $term): bool => $term !== ''));
-        if ($terms === []) {
-            return [[], []];
+        $wanted = [];
+        foreach ($numbers as $number) {
+            if (is_int($number) && $number > 0) {
+                $wanted[$number] = $number;
+            }
+        }
+        if ($wanted === []) {
+            return [];
         }
 
-        $all = [];
-        $any = [];
-        foreach (array_keys($entries) as $name) {
-            $carried = 0;
-            foreach ($terms as $term) {
-                $carried += Text::containsWord($name, $term) ? 1 : 0;
-            }
-            if ($carried === count($terms)) {
-                $all[] = $name;
-            } elseif ($carried > 0) {
-                $any[] = $name;
+        $url = self::HOST . '/issues.json?' . http_build_query([
+            'issue_id' => implode(',', $wanted),
+            'status_id' => '*',
+            'limit' => count($wanted),
+        ]);
+        $answer = $this->api($url, 'issues');
+
+        $rows = [];
+        foreach ($answer['part'] ?? [] as $entry) {
+            if (is_array($entry)) {
+                $rows[] = $entry;
             }
         }
 
-        return [$all, $any];
+        return $rows;
     }
 
     /**
@@ -1383,17 +942,76 @@ final class Forge
     }
 
     /**
-     * One hit, as the identity and the triage state a caller who sorts a set of
-     * them needs.
+     * One issue as the tracker sent it, in the shape every provider answers
+     * in. A field the read did not include stays null.
+     *
+     * @param array<string, mixed> $raw
+     * @return Row
+     */
+    private static function row(array $raw): array
+    {
+        $issue = is_numeric($raw['id'] ?? null) ? (int) $raw['id'] : 0;
+
+        return [
+            'issue' => $issue,
+            'subject' => is_string($raw['subject'] ?? null) ? trim($raw['subject']) : '',
+            'tracker' => self::name($raw['tracker'] ?? null),
+            'status' => self::name($raw['status'] ?? null),
+            'priority' => self::name($raw['priority'] ?? null),
+            'category' => self::name($raw['category'] ?? null),
+            'targetVersion' => self::name($raw['fixed_version'] ?? null),
+            'typo3Version' => self::custom($raw, 'TYPO3 Version'),
+            'phpVersion' => self::custom($raw, 'PHP Version'),
+            'reportedBy' => self::name($raw['author'] ?? null),
+            'assignedTo' => self::name($raw['assigned_to'] ?? null),
+            'createdOn' => is_string($raw['created_on'] ?? null) ? $raw['created_on'] : '',
+            'updatedOn' => is_string($raw['updated_on'] ?? null) ? $raw['updated_on'] : '',
+            'url' => self::HOST . '/issues/' . $issue,
+            'description' => is_string($raw['description'] ?? null) ? $raw['description'] : null,
+            'relations' => is_array($raw['relations'] ?? null) ? self::relationsOf($raw, $issue) : null,
+            'attachments' => is_array($raw['attachments'] ?? null) ? self::attachments($raw) : null,
+            'comments' => is_array($raw['journals'] ?? null) ? self::notesOf($raw['journals']) : null,
+            'changes' => null,
+        ];
+    }
+
+    /**
+     * The journal entries that carry a note. One with no note is a field
+     * change, which the fields already report in their current state.
+     *
+     * @param array<mixed> $journals
+     * @return list<array{author: string, on: string, note: string, bot: bool}>
+     */
+    private static function notesOf(array $journals): array
+    {
+        $comments = [];
+        foreach ($journals as $journal) {
+            $note = is_array($journal) && is_string($journal['notes'] ?? null) ? trim($journal['notes']) : '';
+            if ($note === '') {
+                continue;
+            }
+            $author = self::name($journal['user'] ?? null);
+            $comments[] = [
+                'author' => $author,
+                'on' => is_string($journal['created_on'] ?? null) ? $journal['created_on'] : '',
+                'note' => $note,
+                'bot' => in_array($author, self::BOTS, true),
+            ];
+        }
+
+        return $comments;
+    }
+
+    /**
+     * One search hit, with the tracker and the status read off its title.
      *
      * `title` arrives as `Bug #105403 (Under Review): f:image and cache busting
-     * issue`. So the tracker and the status are readable here rather than in a
-     * second call per hit. A title in some other shape is not a broken hit,
-     * because the number and the URL are fields of their own. So what does not
-     * come off it stays empty and the whole title stands as the subject.
+     * issue`. A title in some other shape is not a broken hit, because the
+     * number and the URL are fields of their own. So what does not come off it
+     * stays empty and the whole title stands as the subject.
      *
      * @param array<string, mixed> $entry
-     * @return array<string, mixed>
+     * @return Row
      */
     private static function hit(array $entry): array
     {
@@ -1408,161 +1026,16 @@ final class Forge
             $status = $matched[3];
             $subject = $matched[4];
         }
-
         $url = is_string($entry['url'] ?? null) ? trim($entry['url']) : '';
 
-        return [
-            'issue' => $issue,
-            'subject' => $subject,
-            'tracker' => $tracker,
-            'status' => $status,
-            // A search hit is a title and a URL. The five below are fields of
-            // the issue, and `filled()` is what reads them for the whole page.
-            // What stays empty here is what that call could not reach.
-            'category' => '',
-            'reportedBy' => '',
-            'assignedTo' => '',
-            'createdOn' => '',
-            'updatedOn' => '',
-            'url' => $url !== '' ? $url : self::HOST . '/issues/' . $issue,
-            // Nothing asks the tracker or the review server about these for a
-            // search. A search answers which issues mention some words, and the
-            // three are what a triage chooses a backlog row on.
-            'relations' => [],
-            'attachments' => [],
-            'reviews' => [],
-            'cites' => [],
-            'lastNoteOn' => '',
-            'reviewAbandoned' => false,
-        ];
-    }
-
-    /**
-     * One issue of an enumeration, in the shape a search hit comes back in.
-     *
-     * Everything here is a field, where a search hit has to come out of its
-     * title. That is what makes the two dates answerable at all, and they say
-     * different things. Filed long ago is about the report, untouched for years
-     * is about the attention it got. The relations and the files come with the
-     * page and decide which row is worth reading — `D-ANS-069`.
-     *
-     * @param array<string, mixed> $raw
-     * @return array<string, mixed>
-     */
-    private static function entry(array $raw): array
-    {
-        $issue = isset($raw['id']) && is_numeric($raw['id']) ? (int) $raw['id'] : 0;
-
-        return [
-            'issue' => $issue,
-            'subject' => is_string($raw['subject'] ?? null) ? trim($raw['subject']) : '',
-            'tracker' => self::name($raw['tracker'] ?? null),
-            'status' => self::name($raw['status'] ?? null),
-            'category' => self::name($raw['category'] ?? null),
-            'reportedBy' => self::name($raw['author'] ?? null),
-            'assignedTo' => self::name($raw['assigned_to'] ?? null),
-            'createdOn' => is_string($raw['created_on'] ?? null) ? $raw['created_on'] : '',
-            'updatedOn' => is_string($raw['updated_on'] ?? null) ? $raw['updated_on'] : '',
-            'url' => self::HOST . '/issues/' . $issue,
-            'relations' => self::relationsOf($raw, $issue),
-            'attachments' => self::attachments($raw),
-            // Filled by `reviewed()`, which is one call for the page rather
-            // than a field of the row.
-            'reviews' => [],
-            // `open()` fills it from the row the tracker sent, because only an
-            // enumerated row carries the description this comes out of.
-            'cites' => [],
-            // Filled by `noted()` on the stale end, and by `reviewed()`.
-            'lastNoteOn' => '',
-            'reviewAbandoned' => false,
-        ];
-    }
-
-    /**
-     * @param array<string, mixed> $raw
-     * @return array<string, mixed>
-     */
-    private static function issueOf(array $raw, int $number, string $wanted = 'all'): array
-    {
-        $journals = is_array($raw['journals'] ?? null) ? $raw['journals'] : [];
-        $notes = [];
-        $written = [];
-        foreach ($journals as $journal) {
-            if (!is_array($journal)) {
-                continue;
-            }
-            $note = is_string($journal['notes'] ?? null) ? trim($journal['notes']) : '';
-            if ($note === '') {
-                // A journal with no note is a field change, which the fields
-                // below already report in their current state.
-                continue;
-            }
-            $author = self::name($journal['user'] ?? null);
-            $entry = [
-                'author' => $author,
-                'on' => is_string($journal['created_on'] ?? null) ? $journal['created_on'] : '',
-                'note' => $note,
-            ];
-            $notes[] = $entry;
-            if (!in_array($author, self::BOTS, true)) {
-                $written[] = $entry;
-            }
+        $row = self::row(['id' => $issue, 'subject' => $subject]);
+        $row['tracker'] = $tracker;
+        $row['status'] = $status;
+        if ($url !== '') {
+            $row['url'] = $url;
         }
-        // Filtered before the slice. So the drop of the pings is what lets more
-        // of what a person wrote fit inside the bound rather than only cuts the
-        // answer.
-        $shown = $wanted === 'people' ? $written : $notes;
 
-        $own = (int) ($raw['id'] ?? $number);
-        $description = is_string($raw['description'] ?? null) ? trim($raw['description']) : '';
-        $relations = self::relationsOf($raw, $own);
-        // The description is a text like a note and reads as one. A review URL
-        // pasted into the report dropped out while the same URL in a comment
-        // was a handle. 5 of the 100 newest open bugs carry one there
-        // (`D-ANS-123`).
-        $texts = [
-            [
-                'author' => self::name($raw['author'] ?? null),
-                'on' => is_string($raw['created_on'] ?? null) ? $raw['created_on'] : '',
-                'note' => $description,
-            ],
-            ...$notes,
-        ];
-
-        return [
-            'id' => (int) ($raw['id'] ?? $number),
-            'subject' => is_string($raw['subject'] ?? null) ? $raw['subject'] : '',
-            'status' => self::name($raw['status'] ?? null),
-            'tracker' => self::name($raw['tracker'] ?? null),
-            'priority' => self::name($raw['priority'] ?? null),
-            'assignedTo' => self::name($raw['assigned_to'] ?? null),
-            'targetVersion' => self::name($raw['fixed_version'] ?? null),
-            'typo3Version' => self::custom($raw, 'TYPO3 Version'),
-            'phpVersion' => self::custom($raw, 'PHP Version'),
-            'createdOn' => is_string($raw['created_on'] ?? null) ? $raw['created_on'] : '',
-            'updatedOn' => is_string($raw['updated_on'] ?? null) ? $raw['updated_on'] : '',
-            'url' => self::HOST . '/issues/' . (int) ($raw['id'] ?? $number),
-            'description' => $description,
-            'relations' => $relations,
-            // Filled by `referenced()`, which resolves the numbers in the read
-            // the relations already make.
-            'mentioned' => self::mentions($description, $notes, $own, array_column($relations, 'issue')),
-            'attachments' => self::attachments($raw),
-            // Read from every note rather than from the ones that come back, so
-            // a patch-set ping older than the bound is still a handle.
-            'reviews' => self::reviews($texts),
-            // From every note rather than from the ones that come back, the way
-            // the changes are. What a report names its code in is as often the
-            // comment that reproduced it as the description, `D-ANS-122`.
-            'cites' => CitedCode::in(
-                is_string($raw['subject'] ?? null) ? $raw['subject'] : '',
-                is_string($raw['description'] ?? null) ? $raw['description'] : '',
-                ...array_column($notes, 'note'),
-            ),
-            'noteCount' => count($notes),
-            'botNoteCount' => count($notes) - count($written),
-            'notes' => array_slice($shown, -self::NOTES),
-        ];
+        return $row;
     }
 
     /**
@@ -1573,7 +1046,7 @@ final class Forge
      * related to itself, which is what the first live call did.
      *
      * @param array<string, mixed> $raw
-     * @return list<array<string, mixed>>
+     * @return list<array{issue: int, relation: string}>
      */
     private static function relationsOf(array $raw, int $own): array
     {
@@ -1591,170 +1064,10 @@ final class Forge
             $relations[] = [
                 'issue' => $other,
                 'relation' => is_string($relation['relation_type'] ?? null) ? $relation['relation_type'] : '',
-                'url' => self::HOST . '/issues/' . $other,
             ];
         }
 
         return $relations;
-    }
-
-    /**
-     * The issues the report and the comments cite, which no relation carries.
-     *
-     * A relation is somebody's triage and a citation is the writer's own claim
-     * about prior art. On an old report the citation regularly carries the
-     * weight. It sits in the first line of a description while the answer says
-     * `relations: []` (`D-ANS-123`). So the two are separate fields, and a
-     * number already on file as a relation stays with the relation, which says
-     * more about it.
-     *
-     * Each once, in the order of the text, and a citation in both texts is a
-     * description. That is where the reporter framed the report.
-     *
-     * @param list<array{author: string, on: string, note: string}> $notes
-     * @param list<int>                                             $linked
-     * @return list<array<string, mixed>>
-     */
-    private static function mentions(string $description, array $notes, int $own, array $linked): array
-    {
-        $where = [];
-        foreach (self::cited($description) as $number) {
-            $where[$number] = 'description';
-        }
-        foreach ($notes as $note) {
-            foreach (self::cited($note['note']) as $number) {
-                $where[$number] ??= 'note';
-            }
-        }
-
-        $mentioned = [];
-        foreach ($where as $number => $text) {
-            if ($number === $own || in_array($number, $linked, true)) {
-                continue;
-            }
-            $mentioned[] = [
-                'issue' => $number,
-                'subject' => '',
-                'tracker' => '',
-                'status' => '',
-                'url' => self::HOST . '/issues/' . $number,
-                'where' => $text,
-            ];
-        }
-
-        return $mentioned;
-    }
-
-    /**
-     * The issue numbers one text cites, in the two forms people write them in.
-     *
-     * A URL is the form the report behind this used and the rare one. 5 of 200
-     * open bugs read on 2026-08-27 carried one, against 29 of them with
-     * Redmine's own `#NNNN`. That form binds to what an issue number is. A
-     * TYPO3 exception code is ten digits, and two of them stand in the
-     * description of #76202 (`D-ANS-123`).
-     *
-     * @return list<int>
-     */
-    private static function cited(string $text): array
-    {
-        // One group for both forms, so the bound on the bare one is a lookahead
-        // rather than a second alternative to read out.
-        preg_match_all('~(?:forge\.typo3\.org/issues/|#(?=\d{3,6}(?!\d)))(\d+)~', $text, $found);
-
-        $numbers = [];
-        foreach ($found[1] as $citation) {
-            $numbers[(int) $citation] = (int) $citation;
-        }
-
-        return array_values($numbers);
-    }
-
-    /**
-     * The review changes the report and the journal name, as handles rather than
-     * as prose.
-     *
-     * They are in the payload already and only inside a sentence, which is
-     * where a triage stops reading them (`D-ANS-064`). The answer claims
-     * nothing about their state, which is one `typo3_gerrit_lookup` call away.
-     * Two passes, because the bot's note names the change id and the number
-     * together where a human's later note is a bare URL.
-     *
-     * @param list<array{author: string, on: string, note: string}> $notes The
-     *     description first and then the journal, in the order of the text,
-     *     so the date on a handle is the last text that named it.
-     * @return list<array<string, mixed>>
-     */
-    private static function reviews(array $notes): array
-    {
-        $numberOf = [];
-        foreach ($notes as $note) {
-            [$numbers, $changeId] = self::handles($note['note']);
-            if ($changeId !== '' && count($numbers) === 1) {
-                $numberOf[strtolower($changeId)] = $numbers[0];
-            }
-        }
-
-        $reviews = [];
-        foreach ($notes as $note) {
-            [$numbers, $changeId] = self::handles($note['note']);
-            if ($numbers === [] && $changeId !== '') {
-                $numbers = [$numberOf[strtolower($changeId)] ?? 0];
-            }
-            foreach ($numbers as $number) {
-                $key = $number > 0 ? (string) $number : strtolower($changeId);
-                if ($key === '') {
-                    continue;
-                }
-                $review = $reviews[$key] ?? [
-                    'change' => $number,
-                    'changeId' => '',
-                    'patchSet' => 0,
-                    'on' => '',
-                    'url' => $number > 0 ? Gerrit::HOST . '/c/' . $number : Gerrit::HOST,
-                ];
-                // Only where the note names one change. A note naming two
-                // carries a change id belonging to neither of them for certain.
-                if ($changeId !== '' && count($numbers) === 1) {
-                    $review['changeId'] = $changeId;
-                }
-                $review['patchSet'] = max($review['patchSet'], self::patchSet($note['note']));
-                // The journal is in order, so the last note naming a change is
-                // what says how old the reference is.
-                $review['on'] = $note['on'];
-                $reviews[$key] = $review;
-            }
-        }
-
-        return array_values($reviews);
-    }
-
-    /**
-     * The change numbers and the change id one note names.
-     *
-     * A review URL carries the number in two shapes — `review.typo3.org/1186`
-     * from before the move to the current server, and
-     * `review.typo3.org/c/Packages/TYPO3.CMS/+/38419` since. A URL with neither
-     * is a query rather than a change. `review.typo3.org/#q,status:open+…`
-     * names a topic and no number, and a match on digits anywhere in the URL
-     * would report it as change 3129.
-     *
-     * @return array{list<int>, string}
-     */
-    private static function handles(string $note): array
-    {
-        preg_match_all('~review\.typo3\.org/(?:c/[^\s]*?\+/)?(\d+)~', $note, $found);
-        $numbers = array_values(array_unique(array_map(intval(...), $found[1])));
-
-        preg_match('~\bI[0-9a-f]{40}\b~i', $note, $id);
-
-        return [$numbers, $id[0] ?? ''];
-    }
-
-    /** Which patch set the note is about, and zero where it does not say. */
-    private static function patchSet(string $note): int
-    {
-        return preg_match('~\bpatch set (\d+)~i', $note, $matched) === 1 ? (int) $matched[1] : 0;
     }
 
     /**
@@ -1773,7 +1086,7 @@ final class Forge
      * transcribes nothing.
      *
      * @param array<string, mixed> $raw
-     * @return list<array<string, mixed>>
+     * @return list<array{filename: string, contentType: string, size: int, on: string, url: string}>
      */
     private static function attachments(array $raw): array
     {

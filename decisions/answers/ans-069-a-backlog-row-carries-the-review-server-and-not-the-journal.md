@@ -27,7 +27,7 @@ enumeration answer has no journal in it.
 - The index endpoint answers no journal. `feedback/2026-08-08-224333` proposes a
   row that carries two things "without a second call". Those are "whether the
   issue has any change on the review server" and "how many human comments it
-  has". Both come off `reviews` and `noteCount`, which `Forge::issueOf()`
+  has". Both come off `reviews` and `noteCount`, which `IssueTracker::issueOf()`
   derives from the journal. Measured against forge.typo3.org on 2026-08-08:
   `projects/typo3cms-core/issues.json?…&include=journals,relations,attachments`
   answers rows with no `journals` key, and so does the bulk form
@@ -36,7 +36,7 @@ enumeration answer has no journal in it.
   36.
 - What the same call does answer for free drops out today. The rows carry
   `relations`, `attachments`, `description` and the project's custom fields, and
-  `Forge::entry()` keeps none of the four. Over the feedback's own query — open
+  `IssueTracker::entry()` keeps none of the four. Over the feedback's own query — open
   Bugs untouched since 2019-01-01, 36 of them — 19 rows carry a relation and 6
   carry a file.
 - The tracker's own settleability field is empty where a caller would use it. Of

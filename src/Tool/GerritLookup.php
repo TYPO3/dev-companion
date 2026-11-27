@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Tool;
 
-use TYPO3\DevCompanion\Contribution\Forge;
 use TYPO3\DevCompanion\Contribution\Gerrit;
+use TYPO3\DevCompanion\Contribution\IssueTracker;
 use TYPO3\DevCompanion\Knowledge\ReleaseLines;
 use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
@@ -753,7 +753,7 @@ final class GerritLookup extends ReadOnlyTool
      */
     private static function reviewPostedOnIssue(int $issue): ?array
     {
-        $answer = (new Forge())->issue($issue);
+        $answer = (new IssueTracker())->issue($issue);
         if ($answer['status'] !== 'answered' || !is_array($answer['issue'])) {
             return null;
         }

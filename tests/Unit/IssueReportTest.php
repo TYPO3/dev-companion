@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace TYPO3\DevCompanion\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\After;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Contribution\Forge;
+use TYPO3\DevCompanion\Contribution\IssueTracker;
 use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tool\Registry;
@@ -19,10 +21,18 @@ use TYPO3\DevCompanion\Tool\Registry;
 #[Decision('D-ANS-171')]
 final class IssueReportTest extends TestCase
 {
+    /** The tracker alone, so what a test hands `Forge` is what the draft reads. */
+    #[Before]
+    public function askTheTrackerAlone(): void
+    {
+        IssueTracker::useProviders([Forge::class]);
+    }
+
     #[After]
     public function forgetTheTracker(): void
     {
         Cache::clear();
+        IssueTracker::useProviders(null);
         Forge::useReader(null);
     }
 

@@ -19,7 +19,7 @@ cheaper call is the authoritative one.
 - `Forge::reviewed()` fills an enumerated row from `changesForIssues(...)` — a
   Gerrit query over commit messages, one per twelve rows, which `D-ANS-069`
   decided and paid for.
-- `Forge::entry()` fills a single issue from `self::reviews($texts)`, which
+- `IssueTracker::entry()` fills a single issue from `self::reviews($texts)`, which
   parses change handles out of the description and the journal. That is what
   `D-ANS-064` decided, and its reason holds: the handle was already in the
   payload and only as prose.

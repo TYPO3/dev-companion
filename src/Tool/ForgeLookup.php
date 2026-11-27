@@ -6,6 +6,8 @@ namespace TYPO3\DevCompanion\Tool;
 
 use TYPO3\DevCompanion\Contribution\CitedCode;
 use TYPO3\DevCompanion\Contribution\Forge;
+use TYPO3\DevCompanion\Contribution\Forger;
+use TYPO3\DevCompanion\Contribution\IssueTracker;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Result\Schema;
 use TYPO3\DevCompanion\Result\ToolResult;
@@ -106,7 +108,7 @@ final class ForgeLookup extends ReadOnlyTool
                 'query' => [
                     'type' => 'string',
                     'minLength' => 1,
-                    'description' => 'Words to search the tracker for, for example "image cache busting". A full-text search over subject, description and comments, which is the one way to find a duplicate nobody has linked. Every word has to be in the same issue. A term nobody would have written — a method name, a class — empties the answer whatever else is in it. Pass the two or three words that name the subject rather than every word you have. A miss counts what each word reaches on its own, in terms. Nothing ranks the hits, and one wording does not settle it: ask again in the reporter\'s words as well as your own. A person\'s name matches only where somebody wrote it, so pass it as reportedBy or assignedTo with backlog instead. Not with issue or backlog.',
+                    'description' => 'Words to search the tracker for, for example "image cache busting". A full-text search over subject, description and comments, which is the one way to find a duplicate nobody has linked. Forger, which this server asks first, finds any of the words with their stems and ranks the hits by relevance; source says when the tracker itself answered instead. There every word has to be in the same issue, a term nobody would have written empties the answer, and nothing ranks the hits. Pass the two or three words that name the subject rather than every word you have. A miss counts what each word reaches on its own, in terms. One wording does not settle it: ask again in the reporter\'s words as well as your own. A person\'s name matches only where somebody wrote it, so pass it as reportedBy or assignedTo with backlog instead. Not with issue or backlog.',
                 ],
                 'backlog' => [
                     'type' => 'string',
@@ -201,7 +203,7 @@ final class ForgeLookup extends ReadOnlyTool
     {
         return Schema::object([
             'status' => Schema::answerStatus(),
-            'source' => Schema::string('The tracker the answer came from.'),
+            'source' => Schema::string('The host that answered: Forger, the index of the tracker, or the tracker itself where Forger did not answer. The issue URLs point at the tracker either way.'),
             'url' => Schema::string('What the call read, so you can ask the same question again by hand. A union is two reads, and both stand here with a space between them.'),
             'query' => Schema::string('The words the search sent to the tracker, so you can ask a set that looks too narrow again in other words. Empty on a read by number and on an enumeration.'),
             'placedAgainst' => Schema::string('The TYPO3 version of the installation the tool placed the names in cites against, so a verdict about a symbol has a version. Empty where the tool found no installation, and then every cited name is unplaced: a statement about this machine and not about the code.'),
@@ -542,12 +544,12 @@ final class ForgeLookup extends ReadOnlyTool
     /** One issue, whole, which is what a number asks for. */
     private static function read(int $issue, string $notes): ToolResult
     {
-        $forge = new Forge();
+        $forge = new IssueTracker();
         $answer = $forge->issue($issue, $notes);
 
         $data = [
             'status' => $answer['status'],
-            'source' => Forge::HOST,
+            'source' => $forge->source(),
             'url' => $answer['url'],
             'query' => '',
             'placedAgainst' => Instance::typo3Version() ?? '',
@@ -568,7 +570,7 @@ final class ForgeLookup extends ReadOnlyTool
             return ToolResult::create('TYPO3 issue tracker: ' . $answer['url'] . "\nCould not answer: " . $data['unavailable']['reason'], $data);
         }
         if ($answer['status'] === 'empty') {
-            return ToolResult::create('TYPO3 issue tracker: no issue ' . $issue . ' at ' . Forge::HOST . '.', $data);
+            return ToolResult::create('TYPO3 issue tracker: no issue ' . $issue . ' at ' . $forge->source() . '.', $data);
         }
 
         $found = $answer['issue'];
@@ -706,12 +708,12 @@ final class ForgeLookup extends ReadOnlyTool
      */
     private static function searched(string $query, int $limit): ToolResult
     {
-        $forge = new Forge();
+        $forge = new IssueTracker();
         $answer = $forge->search($query, $limit);
 
         $data = [
             'status' => $answer['status'],
-            'source' => Forge::HOST,
+            'source' => $forge->source(),
             'url' => $answer['url'],
             'query' => $answer['query'],
             'placedAgainst' => '',
@@ -737,11 +739,13 @@ final class ForgeLookup extends ReadOnlyTool
         if ($answer['status'] === 'empty') {
             return ToolResult::create(implode("\n", array_merge(
                 [
-                    'TYPO3 issue tracker: no issue matches "' . $answer['query'] . '" at ' . Forge::HOST . '.',
+                    'TYPO3 issue tracker: no issue matches "' . $answer['query'] . '" at ' . $forge->source() . '.',
                     'These words matched nothing, which is not that nobody reported it: an issue worded differently is '
                         . 'invisible to a full-text search.',
-                    'Every word has to be in the same issue, so one word nobody wrote empties the answer whatever '
-                        . 'else is in it.',
+                    $forge->source() === Forger::HOST
+                        ? 'Forger finds any of the words with their stems, so no word of the query is in any issue it holds.'
+                        : 'Every word has to be in the same issue, so one word nobody wrote empties the answer whatever '
+                            . 'else is in it.',
                 ],
                 self::reached($answer['terms']),
                 self::EMPTY_SEARCH,
@@ -750,7 +754,10 @@ final class ForgeLookup extends ReadOnlyTool
 
         $lines = [
             sprintf('TYPO3 issue tracker: %d issues match "%s"', count($answer['results']), $answer['query']),
-            'A full-text match over subject, description and comments, in the tracker\'s own order and unranked.'
+            'A full-text match over subject, description and comments, '
+                . ($forge->source() === Forger::HOST
+                    ? 'on any of the words with their stems, ranked by Forger\'s relevance.'
+                    : 'in the tracker\'s own order and unranked.')
                 . ' Another wording finds another set, so this is which issues mention it rather than which one it'
                 . ' duplicates. ' . self::SEARCH_HIT[0],
             self::SEARCH_HIT[1],
@@ -970,7 +977,7 @@ final class ForgeLookup extends ReadOnlyTool
         string $words,
         int $offset,
     ): ToolResult {
-        $forge = new Forge();
+        $forge = new IssueTracker();
         $answer = $forge->backlog(
             order: $order,
             tracker: $tracker,
@@ -990,7 +997,7 @@ final class ForgeLookup extends ReadOnlyTool
 
         $data = [
             'status' => $answer['status'],
-            'source' => Forge::HOST,
+            'source' => $forge->source(),
             'url' => $answer['url'],
             'query' => '',
             'placedAgainst' => Instance::typo3Version() ?? '',
@@ -1040,7 +1047,7 @@ final class ForgeLookup extends ReadOnlyTool
         // What a report filed by hand needs is the tracker's own spelling.
         // Until this the only way to it was a word wrong enough to fail
         // (`D-KNW-113`).
-        if ($category === Forge::EVERY_AREA) {
+        if ($category === IssueTracker::EVERY_AREA) {
             return ToolResult::create(
                 'TYPO3 issue tracker: the ' . count($answer['categories']) . ' areas the core files its issues'
                 . " under, read from the project itself. No issue was read.\n"

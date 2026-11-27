@@ -3,15 +3,18 @@
 Which versions an answer holds for
 ==================================
 
-The rule is in `AGENTS.md <../../AGENTS.md>`_: a statement that does not hold on
-every covered TYPO3 says so as data. This is the form of it, and what follows
-from it.
+This page covers how a statement in the knowledge base says which TYPO3 versions
+it holds for. It gives the form of that data and the rules that follow from it,
+for hints and for the catalogs.
 
-``knowledge/versions.json`` and nowhere else declares which versions the server
-covers. Every check that needs the list reads it from there.
+The rule is in `AGENTS.md <../../AGENTS.md>`_: a statement that does not hold on
+every covered TYPO3 says so as data.
+
+``knowledge/versions.json`` declares which versions the server covers, and no
+other file does. Every check that needs the list reads it from there.
 
 The covered lines are the LTS line of each major and ``main``. A minor release
-before an LTS is outside them, so a bound at a major is exact for every covered
+before an LTS is outside them. So a bound at a major is exact for every covered
 line.
 
 .. diagram::
@@ -39,10 +42,13 @@ line.
       ink "the statement holds"
       absent "the statement is absent"
 
-A statement that does not hold on all of them says so **as data, not as prose**.
-``since`` and ``until`` carry the major it starts and stops to hold at, and the
-answer renders that beside the sentence. A statement without either holds
-everywhere the knowledge base reaches, which is what most of them do.
+The form
+--------
+
+A statement that does not hold on all covered lines says so **as data, not as
+prose**. ``since`` and ``until`` give the major at which it starts and stops to
+hold. The answer renders that beside the sentence. A statement without either
+field holds everywhere the knowledge base reaches, and most statements do.
 
 .. code-block:: json
 
@@ -53,84 +59,134 @@ everywhere the knowledge base reaches, which is what most of them do.
     ]
 
 
-That is the whole mechanism, and it exists because the alternative is worse. A
-caller on an LTS with a ``main`` answer changes code that then fails at runtime,
-and the failure is silent. Everything else on this page follows from it.
+That is the whole mechanism. It exists because the alternative is worse. A
+caller on an LTS who gets a ``main`` answer changes code that then fails at
+runtime, and the failure is silent. Everything else on this page follows from
+it.
 
-* **Bind the statement, not the hint.** A subsystem does not change wholesale;
-  one sentence in it does. Splitting a hint per version duplicates the six
-  statements that did not change.
-* **The writer verifies a bound statement on both sides of its boundary.**
-  ``since: 14`` means a check against 13.4 found it absent, and a check against
-  14 found it present. Name both branches in the commit message — that is the
-  evidence nobody can reconstruct later.
-* **Split a narrowed statement before binding it.** ``until`` says the sentence
+Binding a statement
+-------------------
+
+* **Bind the statement, not the hint.** A subsystem does not change as a whole;
+  one sentence in it does. A hint split per version repeats the six statements
+  that did not change.
+
+* **Verify a bound statement on both sides of its boundary.** ``since: 14``
+  means a check against 13.4 found it absent, and a check against 14 found it
+  present. Name both branches in the commit message. Nobody can reconstruct that
+  evidence later.
+
+* **Split a narrowed statement before you bind it.** ``until`` says the sentence
   no longer holds. So a subject that survived under a new condition needs two
-  statements. The unbound half that still describes it, and the bound half with
-  what arrived. Bound whole, the half that survives reads as removed, and the
-  range is contiguous either way so nothing sees it — ``D-VER-006``.
-* **Prose stays free of version numbers.** The bound is in the field, so the
-  sentence does not need "since v14" in it. Nothing can filter, re-render or
-  check a sentence that carries one. ``HintsTest`` enforces this.
+  statements:
+
+  * the unbound half that still describes it;
+
+  * the bound half with what arrived.
+
+  If you bind the statement whole, the half that survives reads as removed. The
+  range is contiguous either way, so no check sees it — ``D-VER-006``.
+
+* **Keep version numbers out of the prose.** The bound is in the field, so the
+  sentence does not need "since v14". Nothing can filter, re-render or check a
+  sentence with a version number in it. ``HintsTest`` enforces this.
+
+What a hint states
+------------------
+
 * **State the shape that is current, not the history it replaced.** A bullet
-  whose payload is "X is deprecated" becomes a bullet whose payload is "this is
-  what new code looks like". The bound is the version the new shape arrived in.
-  The predecessor is then implied and stays a clause, not a bullet of its own.
-* **Where an area was rebuilt underneath, the hints say so themselves.** A route
-  to ``typo3_changelog_lookup`` for what the version changed here is a call a
-  session under time pressure skips. What it acts on instead is the statement
-  that described the area before it moved.
-* **Where the answer is branch-specific in a way a range cannot express, give
-  the procedure, not the result.** Name what to read in the checkout — an
-  ``@deprecated`` annotation, a ``trigger_error(..., E_USER_DEPRECATED)`` call,
-  ``Documentation/Changelog/``, the extension scanner matchers. What a given
-  version deprecated is a list; how to find it is a procedure.
-* **No concrete changelog file names, no counts.** Both are a snapshot of one
-  checkout and go stale silently. Counts measured while the author writes a hint
-  are evidence for the author and belong in the commit message, not in the
-  answer.
-* **"Check whether X" is not a hint, it is a check.** ``hints`` carries
-  statements, ``checks`` carries commands that run. A check-shaped sentence with
-  no command behind it tells the caller nothing it did not know already.
-* **Who owes it is data as well.** A version range is not the only thing an
-  answer has to know per caller. ``binding: "core"`` marks what is a condition
-  of a patch to the core and a convention anywhere else. That is the backend's
-  own design system, the changelog artifact, the paths of the mono repository.
-  It sits on the hint where the whole subject is that, and on the single
-  statement where one sentence in an otherwise transferable hint is. Nothing
-  goes for it. Outside the core the content stays and carries the marker,
-  because a project that builds a backend module wants exactly those rules.
-  Absent is the ordinary case and means it holds wherever somebody writes TYPO3.
-  An API that throws throws in a sitepackage too.
-  ``VersionsTest::whoIsObligedIsWrittenAsDataToo`` holds the vocabulary to that
-  one value; a second one is a decision, not a data entry.
-* **The catalogs carry the same binding, and it decides.** A
-  ``knowledge/catalog/`` entry is markup taken from one revision, so
-  ``since``/``until`` there is the whole entry rather than one sentence.
-  ``targetVersion`` withholds it instead of a qualification, since a class that
-  does not exist fails in a browser, silently. The bound derives from the
-  checkouts, no judgement. ``bin/cli components:check`` re-reads every covered
-  checkout and reports each entry whose recorded range no longer matches, so a
-  core update invalidates it loudly. It derives from names, so a demo rewritten
-  around the same classes reads as unchanged. The entry records a digest of what
-  each covered demo said, and the same command fails on a rewrite no name would
-  show (``D-CAT-001``).
-* **A class the query names is a second question, and carries its own range.**
-  What withholds an entry is usually a custom property that arrived after the
-  classes beside it. A caller that borrowed one backend class asks where that
-  class goes rather than for something to paste. So each class carries the
-  majors it exists on and where it sits: around the component, on it, or inside
-  it. A class named outright gets an answer below the entry's own bound, never
-  as markup (``D-CAT-006``, ``D-CAT-008``).
+  that says "X is deprecated" becomes a bullet that says "this is what new code
+  looks like". The bound is the version in which the new shape arrived. The
+  predecessor is then implied. It stays a clause, not a bullet of its own.
+
+* **Where an area was rebuilt, the hints say so themselves.** A session under
+  time pressure skips a route to ``typo3_changelog_lookup`` for what the version
+  changed. It acts instead on the statement that described the area before the
+  change.
+
+* **Where a range cannot express a branch-specific answer, give the procedure,
+  not the result.** Name what to read in the checkout:
+
+  * an ``@deprecated`` annotation;
+
+  * a ``trigger_error(..., E_USER_DEPRECATED)`` call;
+
+  * ``Documentation/Changelog/``;
+
+  * the extension scanner matchers.
+
+  What a given version deprecated is a list. How to find it is a procedure.
+
+* **Name no changelog files, and give no counts.** Both are a snapshot of one
+  checkout and go stale silently. Counts the author measures while the author
+  writes a hint are evidence for the author. They belong in the commit message,
+  not in the answer.
+
+* **"Check whether X" is a check, not a hint.** ``hints`` has statements, and
+  ``checks`` has commands that run. A sentence shaped like a check with no
+  command behind it tells the caller nothing new.
+
+Who must follow it
+------------------
+
+A version range is not the only thing an answer must know per caller. Who must
+follow a statement is data as well.
+
+``binding: "core"`` marks what is a condition of a patch to the core and a
+convention anywhere else. Examples are the design system of the backend, the
+changelog artifact and the paths of the mono repository. The marker sits on the
+hint where the whole subject is like that. It sits on the single statement where
+only one sentence of an otherwise transferable hint is.
+
+Nothing gets dropped for the marker. Outside the core, the content stays and
+shows the marker. A project that builds a backend module wants exactly those
+rules.
+
+Without the marker, which is the usual case, a statement holds wherever somebody
+writes TYPO3. An API that throws, throws in a sitepackage too.
+``VersionsTest::whoIsObligedIsWrittenAsDataToo`` limits the vocabulary to that
+one value. A second value is a decision, not a data entry.
+
+The catalogs
+------------
+
+* **The catalogs use the same binding, and there it decides.** A
+  ``knowledge/catalog/`` entry is markup taken from one revision. So
+  ``since``/``until`` there applies to the whole entry, not to one sentence.
+
+  ``targetVersion`` withholds the entry, not a qualification, because a class
+  that does not exist fails silently in a browser. The bound derives from the
+  checkouts, with no judgement.
+
+  ``bin/cli components:check`` reads every covered checkout again. It reports
+  each entry whose recorded range no longer matches, so a core update makes the
+  entry fail loudly.
+
+  The bound derives from names, so a demo rewritten around the same classes
+  reads as unchanged. So the entry records a digest of what each covered demo
+  said. The same command fails on a rewrite that no name would show
+  (``D-CAT-001``).
+
+* **A class the query names is a second question, with its own range.** Usually
+  a custom property that arrived after the classes beside it withholds an entry.
+  A caller that borrowed one backend class asks where that class goes, not for
+  something to paste.
+
+  So each class records the majors it exists on and where it sits: around the
+  component, on it, or inside it. A class named outright gets an answer below
+  the bound of the entry, never as markup (``D-CAT-006``, ``D-CAT-008``).
+
 * **Where a class sits is itself version-bound, and it derives from the
   checkouts.** ``bin/cli components:derive`` reads the ``backend.css`` each
-  covered branch commits and writes the position and the range of every class
-  the catalog names. ``bin/cli components:check`` re-derives and fails where the
-  committed state has fallen behind. A read of four committed files is the
-  verification, so no installation takes part and nobody keeps a range by hand
-  (``D-CAT-008``).
-* **A directory is not evidence that what it demonstrates is inside it.** Where
-  a worked example promises a shape rather than a path, the entry names the two
-  or three files that carry that shape in ``files``. The range derives from
-  those as well. A rewrite that keeps the directory and moves what is in it is
-  otherwise exactly what a range on existence cannot see (``D-CAT-007``).
+  covered branch commits. It writes the position and the range of every class
+  the catalog names.
+
+  ``bin/cli components:check`` derives them again and fails where the committed
+  state is behind. A read of four committed files is the verification. So no
+  installation takes part, and nobody keeps a range by hand (``D-CAT-008``).
+
+* **A directory is no evidence that what it demonstrates is inside it.** A
+  worked example can promise a shape, not a path. Then the entry names in
+  ``files`` the two or three files that have that shape, and the range derives
+  from those too. Otherwise a rewrite that keeps the directory and moves its
+  content is exactly what a range on existence cannot see (``D-CAT-007``).

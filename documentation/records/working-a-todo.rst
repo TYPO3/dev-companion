@@ -68,8 +68,8 @@ Correct the todo first
 Where the read shows that the todo is wrong, correct the file **first**. Write
 the reason into the file, not into a session that is about to end. A todo is
 wrong where its step is already done, is impossible here, is two steps, or
-serves something that no longer stands. That is the rule the order already has.
-A change of order goes into the file before the work starts.
+serves something that no longer stands. The queue already has that rule: a
+change to the order of the work goes into the todo file before the work starts.
 
 Say what the read found before any change, and what it changed about the plan. A
 session that silently does other work than the one it got leaves a queue behind.
@@ -142,7 +142,7 @@ person who queued the todo is one message away.
 
 So ask where the research runs out and the choice would change the build. Ask
 **before** the change, not in the commit that presents it. A session that
-silently picks one reading has not saved anybody the question. It has moved the
+silently picks one meaning has not saved anybody the question. It has moved the
 question to after the work, where the answer costs a rewrite instead of a
 sentence. Ask too for a step that turns out to be two, and for an option the
 todo did not consider. Ask for a conflict between what the todo says and what
@@ -154,7 +154,7 @@ The ask puts the decision to the person, not the work:
 2. Name the two or three options, with what each one costs.
 3. Recommend one and say why.
 
-"What do you want here?" gives the reading back to the person.
+"What do you want here?" leaves the person to do the read again.
 
 **One answer is to put the todo back**, and the session offers it before anybody
 asks for it. The person asked may not have the answer either. Then a todo put
@@ -180,9 +180,9 @@ difference is why the state exists. Among the workable todos, such a todo reads
 as ordinary work while it waits on a person. Every session that reaches it
 derives the same question again.
 
-No session gets a waiting todo, and the way back is a todo of its own. Every
-seven days, ``bin/cli todo:waiting`` prints what waits, and the questions come
-up again. The answer moves a todo back into the queue.
+No session gets a waiting todo. A recurring todo of its own brings the question
+back: every seven days, ``bin/cli todo:waiting`` prints what waits. The answer
+moves a todo back into the queue.
 
 Either way, the todo keeps its file. The session leaves it ready for a cold
 start. Its paragraph holds the open question in the words of the ask, and what

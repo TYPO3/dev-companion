@@ -65,7 +65,8 @@ back to, and the ones no test holds. It names the oldest of the last kind.
 is the measure behind that: of 155 entries nobody had been back to, a test
 declares 120.
 
-A second read has two cases, and only one of them is work:
+An ``open`` entry is one of two cases: an entry nobody has opened, or an entry a
+read left open. Only the first case is work. A read has two outcomes:
 
 * A read that settles the **Wrong if** changes the status.
 
@@ -74,7 +75,8 @@ A second read has two cases, and only one of them is work:
   nothing.
 
 Either one tells an entry somebody has been back to from one nobody has opened.
-So the listing counts them apart and names the oldest of the second kind.
+So the listing counts the two cases apart, and names the oldest entry nobody has
+opened.
 
 A revoked entry
 ~~~~~~~~~~~~~~~

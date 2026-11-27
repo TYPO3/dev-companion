@@ -51,7 +51,8 @@ The ``readme.md`` of each group says what that group is about.
 ``bin/cli decisions:index`` generates the listing at its foot. The same command
 generates the listing at the foot of ``decisions/readme.md``, which lists every
 entry under a heading per group. Inside a group the order is newest first.
-``bin/cli decisions:list`` prints the latest decisions across all groups.
+``bin/cli decisions:list`` prints every decision newest first, or one group of
+them.
 
 The revoked entries have a run of their own at the foot of a listing. Mixed into
 the rest, they looked exactly like something to build on.
@@ -77,6 +78,9 @@ splits the references in two:
 * It rewrites everything whose own line names the file of the entry. That is the
   entry, its name, every link, and the reference definitions at the end of the
   generated listings.
+
+* It also rewrites a bare id on a line this branch added, because that line
+  means this branch's entry. It prints those lines for a read.
 
 * It prints everything else, with its file, its line and its text.
 
@@ -234,9 +238,8 @@ somebody went back to the entry, and when. A move to ``confirmed`` or
 ``revoked`` is a change and keeps its section. Every later read of the same
 entry is a date under it.
 
-``bin/cli decisions:check`` counts the sections over the measure, and fails on
-none of them. The corpus compacts onto the rule over time, rather than hold to
-it from one commit.
+``bin/cli decisions:check`` fails on a dated section over the measure, and names
+the entry.
 `D-DOC-066 <../../decisions/documentation/doc-066-a-dated-section-says-what-the-reading-changed.md>`_
 measured what the form had cost. A quarter of ``decisions/`` sat below a dated
 heading, and two entries had become journals of their own applications.
@@ -301,11 +304,11 @@ Going back to one
 
 Most decisions are open and stay open, which makes the state easy to overlook. A
 **Wrong if** that nobody reads is a promise, and nothing says when to keep it.
-``bin/cli unresolved:list`` counts them, and names the oldest one that nobody
-has been back to. Age disproves nothing, but that entry is the one the
-repository has moved furthest away from since. To go back to one and add
-**Confirmed on** or **Revoked on** is a legitimate task with no feature behind
-it.
+``bin/cli unresolved:list`` counts them. It names the oldest one that nobody has
+been back to and that no test holds. Age disproves nothing, but that entry is
+the one the repository has moved furthest away from since. To go back to one and
+add **Confirmed on** or **Revoked on** is a legitimate task with no feature
+behind it.
 
 A visit that settles nothing is a legitimate task too, and it is the ordinary
 outcome. A **Wrong if** that only a forward run, an installation or an outside

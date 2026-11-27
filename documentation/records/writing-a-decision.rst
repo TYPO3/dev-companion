@@ -158,8 +158,8 @@ What an entry holds
   ladder is not a filter". What was wrong is evidence, and it belongs in the
   paragraph under the bold sentence.
 
-  A reader reads a listing of 138 entries for what each one settled. A title in
-  the past tense or in the negative makes the reader reconstruct that. It is
+  A reader reads the whole listing for what each entry settled. A title in the
+  past tense or in the negative makes the reader reconstruct that. It is
   `AGENTS.md <../../AGENTS.md>`_'s "say what is, not what it is not", applied
   where readers meet it most and writers follow it least.
 
@@ -204,7 +204,7 @@ What an entry holds
   does, the attribute turns the promise into something the suite keeps. A failed
   test also prints the attribute, so the session that made the test red lands
   here. A test that declares an id no entry has fails the check as well. Every
-  test an entry names, even in passing, has to exist —
+  test an entry names, even aside, has to exist —
   ``DecisionsTest::everyTestADecisionNamesExists``.
 
 * ``coveredBy`` is front matter, not a section, because it is data. A listing

@@ -94,7 +94,8 @@ descent.
 
 A feedback that does not walk down the ladder gets a guess, and the guess is
 step one either way. Somebody writes it as a fourth entry beside three that
-already say it. Or somebody waves it off as something the wording will fix.
+already say it. Or somebody waves it off, as something that other words will
+fix.
 
 The ladder orders the *diagnosis*, not the appetite. Step 1 is the most
 expensive answer and often the right one. The cheap steps exist so that nobody
@@ -206,7 +207,7 @@ a question is a domain that nobody is responsible for. The next session that
 hits it files it again.
 
 **The category is not the answer.** ``tool-gap``, ``missing-knowledge`` and
-``wrong-answer`` say how the reporting session saw it from where it stood, with
+``wrong-answer`` say how the session that reported it saw it. That session had
 no view of this repository. A feedback filed as ``missing-knowledge`` is often a
 routing failure. One filed as ``tool-gap`` is often a rule that exists and never
 arrived. Start the walk down the ladder from the observation, not from the front
@@ -241,7 +242,7 @@ matter.
 **Evidence:** the wording itself.
 
 * It is a recommendation where it needed to be a rule.
-* It is buried below the part that answers the common case.
+* It stands below the part that answers the common case.
 * It is so ambiguous that two readings are defensible.
 
 **Becomes:** a rewrite. This is the cheapest fix on the ladder, and the one that
@@ -305,9 +306,10 @@ runs. It leaves to the read only what the thing will *say* about TYPO3.
 
 Without that half, a domain that thirty sessions have described turns into a
 todo that asks whether the domain exists. That todo queues at ``low``, behind
-the wording nits. ``D-SKL-005`` is what the rule cost. A core patch review that
-made no call to this server at all first came out as *establish whether a core
-review earns a skill*. The corpus that answers it sat unread on the same board.
+the small fixes to words. ``D-SKL-005`` is what the rule cost. A core patch
+review that made no call to this server at all first came out as *establish
+whether a core review earns a skill*. The corpus that answers it sat unread on
+the same board.
 
 The expensive half belongs to the todo anyway. So the outcomes read as *what the
 work is*, not as *what the answer is*.
@@ -350,7 +352,7 @@ Closed on the spot
 *Autonomous.*
 
 Close a feedback on the spot only where nothing remains to establish. Examples
-are the wording of a rule that is already there, and a move of a rule to where
+are new words for a rule that is already there, and a move of a rule to where
 the task passes. A routing line onto a skill that exists is one too. The change
 lands in the same run, and the commit that makes it archives the feedback.
 
@@ -464,7 +466,7 @@ Then the answer is a document, and the reader who was lost decides which one:
   thing, and what was absent is a procedure.
 
 * **``documentation/``** where a session at work in this repository was lost. It
-  says how to carry out a procedure here, grouped by subject.
+  says how to do a procedure here, grouped by subject.
 
 The line this page already draws decides which of the two the judgement run may
 write. A ``documentation/`` page describes this repository, which the run has

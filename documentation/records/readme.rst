@@ -77,8 +77,8 @@ A todo is due when both of these hold:
   exits nonzero when it finds work.
 
 The sighting is the recurring todo that judges what nothing has answered for. It
-stops being the next todo as soon as the last entry has a name. Nobody edits a
-todo to say so.
+is no longer the next todo once the last entry has a name. Nobody edits a todo
+to say so.
 
 Each feedback and each unresolved entry gets a judgement from the sighting. That
 judgement is a todo that takes it on, or the sentence that says why it stays as
@@ -147,9 +147,9 @@ Since 2026-08-02 the feedback are *in* the queue rather than behind it. The
 order stayed, and what enforces it moved. The priority does it now, where a
 group boundary did it before.
 
-Until 2026-08-02 the portion was five feedback at a time. It was cut for a
-reader who could then find the judgements only in the commit that made them.
-``decisions/`` now holds those judgements instead.
+Until 2026-08-02 the sighting gave out five feedback at a time. ``D-FBK-012``
+cut that number: it served a reader who could find the judgements only in the
+commit that made them. ``decisions/`` now holds those judgements instead.
 
 A ``bin/cli todo:sync`` wrote cards until 2026-08-14. A pre-commit hook ran it
 on any commit that touched ``feedback/``. Both went with the write that made
@@ -347,17 +347,18 @@ say how to write each one.
   the next one reads this first.
 
   One todo is one file. It names what it serves and the next concrete step. When
-  the todo is done, its file goes; nobody ticks it off. The directory it sits in
-  says what it is: the queue, what recurs, what waits on an answer nothing here
-  can give, or reference. A queued todo has the priority that decides how soon.
-  ``bin/cli todo:next`` reads that priority, and ``bin/cli todo:check`` checks
-  it.
+  a session finishes the todo, it deletes the file and ticks nothing off. The
+  directory it sits in says what it is: the queue, what recurs, what waits on an
+  answer nothing here can give, or reference. A queued todo has the priority
+  that decides how soon. ``bin/cli todo:next`` reads that priority, and
+  ``bin/cli todo:check`` checks it.
 
 * ``knowledge/documents/`` and ``documentation/`` — the thing itself, where the
   other three would describe it instead. What the caller lacked is a document in
   the corpus, which is what this server hands out. What a session at work here
   lacked is a page under ``documentation/``. :doc:`judging` says which of the
-  two, and which of them a judging run may write rather than queue.
+  two, and which of them the run that judges a feedback may write rather than
+  queue.
 
 Unresolved entries
 ------------------
@@ -378,8 +379,8 @@ on.
 repository has moved furthest away from.
 
 An entry on that list is no problem. An entry that no todo names is a decision
-nobody has taken. A session makes that decision: a todo, or the sentence in
-``decisions/`` that says why not.
+nobody has taken. A session makes that decision. It writes a todo that takes the
+entry on, or the sentence in ``decisions/`` that says why not.
 
 .. toctree::
     :hidden:

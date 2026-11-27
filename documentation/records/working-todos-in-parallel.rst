@@ -109,14 +109,14 @@ was. What changed is that three of its todos now have a worktree on their
 branch.
 
 A session may have worked a todo before, and the branch that todo derives may
-still exist. The command passes it over and names it, rather than reuse or
-delete it, because that branch still holds the finished half. A worktree that
-quietly attaches to an old branch is the one failure here that looks like
-success.
+still exist. The command then does not claim that todo. It names the branch that
+a session left the todo on, and neither reuses nor deletes it, because that
+branch still holds the finished half. A worktree that quietly attaches to an old
+branch is the one failure here that looks like success.
 
 The command also prints an overlap, in the three ways two claims can overlap.
-Nothing here knows which lines a step will touch. So all three are a warning to
-read before the worktrees exist, not a refusal:
+Nothing here knows which lines a step will touch. So the command warns about all
+three before the worktrees exist, and refuses none:
 
 * Two claims that **answer for** one entry are two sessions that edit one file.
   One of them is cheaper to take than both are to merge.
@@ -199,9 +199,10 @@ machine, not of the repository. :doc:`../contributing/driving-a-session` says
 what the launch has to get right. Each session reports into
 ``.worktrees/.sessions/<name>.log``.
 
-That is the fourth step beside the other three, and it is here for the same
-reason they are. A step left over for somebody to carry out from a read is the
-step that breaks.
+The start of the sessions is a fourth step beside the three of the setup: the
+worktree, the branch and the ``composer install``. The claim does it for the
+same reason it does those. A step that somebody has to do after a read of a page
+is the step that breaks.
 
 Without the file, nothing starts, and the command prints the handover instead.
 That is one absolute ``cd`` per worktree, and the message under a line that says
@@ -309,7 +310,7 @@ A todo that needs an answer nobody here can give is the normal case, not the
 exception. A session that works alone asks and waits. One of several cannot: a
 wait blocks a worktree on a person who answers three others.
 
-So the session records the question instead of asking it. The question goes into
+So the session records the question and does not ask it. The question goes into
 the ``waitingOn:`` line of the todo itself, in the words of the ask. What the
 read already established goes with it. Then the session commits what it has and
 ends. The branch keeps the finished half.
@@ -448,7 +449,7 @@ rather than here. Renumber the later one, fix what names it, and amend; the
 check goes quiet. Whichever branch merged first keeps the number. So the order
 in which the work came home decides it, not an arbiter.
 
-**The renumbering is what is dangerous, not the collision.** Four runs of ten
+**The renumber is what is dangerous, not the collision.** Four runs of ten
 produced seven collisions. Twice, the files that named the old number did not
 all mean the same entry. ``R-PRJ-008`` rested on the ``D-ANS-013`` that kept it,
 while five other files meant the one that became ``D-ANS-015``. ``ans-006``
@@ -497,5 +498,5 @@ not do itself. The session ended on the question and left the todo in the queue,
 where the next session would get it as ordinary work. So ``todo:home`` runs
 ``bin/cli todo:park`` in the worktree, beside the listings. The move then
 reaches ``main`` in the commit the work is in. To give the todo back needs
-nothing at all. The worktree comes down two steps later, and that is what
-offered it to nobody.
+nothing at all. The worktree comes down two steps later. The todo is then in
+``waiting/``, which ``bin/cli todo:next`` offers to nobody.

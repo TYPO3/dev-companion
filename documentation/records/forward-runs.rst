@@ -9,62 +9,75 @@ forward review is, and lists the five of them.
 Running one
 -----------
 
-1. Start the MCP client in the environment the review names. Use a fresh
-   session, with the skills published there as they are in this checkout now.
+.. steps::
 
-   A person at the keyboard is optional. A client driven non-interactively gives
-   the same evidence, as long as it gets the prompt and nothing else.
-   :doc:`../contributing/driving-a-session` says what such a launch has to get
-   right, the session id the judge needs later among it.
+   .. step:: Start a fresh session in the environment
 
-   `todo/reference/ <../../todo/reference/>`_ says which checkout plays which
-   environment on this machine, and how to reach the client there. Run a
-   recorded review in one of those, not in the ``E-SITE`` this repository makes
-   for itself. In a scaffold, a review would find what this repository put there
-   (`D-EVI-004 <../../decisions/evidence/evi-004-the-environment-is-made-here-and-the-repository-under-review-is-not.md>`_).
+      Start the MCP client in the environment the review names. Use a fresh
+      session, with the skills published there as they are in this checkout now.
 
-2. Write the empty run with ``bin/cli scenarios:record <id> <client>``. Print
-   the prompt and the numbered criteria with ``bin/cli scenarios:show <id>``.
+      A person at the keyboard is optional. A client driven non-interactively gives
+      the same evidence, as long as it gets the prompt and nothing else.
+      :doc:`../contributing/driving-a-session` says what such a launch has to get
+      right, the session id the judge needs later among it.
 
-3. Paste the prompt verbatim. Add nothing: no tool names, no hint that a TYPO3
-   knowledge server is there, no correction when the agent goes the wrong way.
-   What the agent does with an under-specified request is part of the measure.
+      `todo/reference/ <../../todo/reference/>`_ says which checkout plays which
+      environment on this machine, and how to reach the client there. Run a
+      recorded review in one of those, not in the ``E-SITE`` this repository makes
+      for itself. In a scaffold, a review would find what this repository put there
+      (`D-EVI-004 <../../decisions/evidence/evi-004-the-environment-is-made-here-and-the-repository-under-review-is-not.md>`_).
 
-4. Let the review reach its own stop. Do not steer it toward a known subsystem
-   or finding.
+   .. step:: Write the empty run
 
-5. Run ``git status`` in the environment afterwards, and record what it says.
-   Start from a clean tree, so that the read means something. Where the tree is
-   not clean, note what somebody had modified.
+      Write the empty run with ``bin/cli scenarios:record <id> <client>``. Print
+      the prompt and the numbered criteria with ``bin/cli scenarios:show <id>``.
 
-   The review itself may not write, which is
-   `D-EVI-003 <../../decisions/evidence/evi-003-a-review-runs-the-checks-that-cannot-change-the-code.md>`_.
-   So a modified tree means one of two things, and both are worth the ten
-   seconds. Either the session overstepped, which is a criterion, or a lookup
-   wrote.
+   .. step:: Paste the prompt verbatim
 
-   `D-DIS-005 <../../decisions/discovery/dis-005-a-registry-with-no-console-command-is-read-by-booting-the-installation.md>`_
-   watches for the second case. The registry lookups answer with a boot of the
-   installation in a subprocess. A boot that writes outside the cache is the
-   symptom that decision named and cannot hold itself.
+      Add nothing: no tool names, no hint that a TYPO3 knowledge server is there,
+      no correction when the agent goes the wrong way.
+      What the agent does with an under-specified request is part of the measure.
 
-   The transcript shows the other half of the same **Wrong if**. A lookup that
-   answers ``answeredBy: packages`` against an installation that was up and
-   configured is a boot that did not finish. A 90-second gap in front of it is
-   the timeout.
+   .. step:: Let the review reach its own stop
 
-6. Grade against **What has to come out of it** and **How it fails**. Write the
-   judgment and its evidence into the recorded run. Add the skills that
-   activated and the tools the session called.
+      Do not steer it toward a known subsystem or finding.
 
-   A call is the name **and** the arguments it came with, copied from the
-   transcript. Write ``{}`` where the tool takes none. The name says that a
-   lookup happened, but most of the judgment turns on the question it got. For
-   example: one query per surface or one broad one, which version a lookup got,
-   whether the session followed a returned id.
+   .. step:: Read the working tree afterwards
 
-   ``bin/cli scenarios:check`` and ``composer test`` then hold that run to its
-   review.
+      Run ``git status`` in the environment afterwards, and record what it says.
+      Start from a clean tree, so that the read means something. Where the tree is
+      not clean, note what somebody had modified.
+
+      The review itself may not write, which is
+      `D-EVI-003 <../../decisions/evidence/evi-003-a-review-runs-the-checks-that-cannot-change-the-code.md>`_.
+      So a modified tree means one of two things, and both are worth the ten
+      seconds. Either the session overstepped, which is a criterion, or a lookup
+      wrote.
+
+      `D-DIS-005 <../../decisions/discovery/dis-005-a-registry-with-no-console-command-is-read-by-booting-the-installation.md>`_
+      watches for the second case. The registry lookups answer with a boot of the
+      installation in a subprocess. A boot that writes outside the cache is the
+      symptom that decision named and cannot hold itself.
+
+      The transcript shows the other half of the same **Wrong if**. A lookup that
+      answers ``answeredBy: packages`` against an installation that was up and
+      configured is a boot that did not finish. A 90-second gap in front of it is
+      the timeout.
+
+   .. step:: Grade the run and record it
+
+      Grade against **What has to come out of it** and **How it fails**. Write the
+      judgment and its evidence into the recorded run. Add the skills that
+      activated and the tools the session called.
+
+      A call is the name **and** the arguments it came with, copied from the
+      transcript. Write ``{}`` where the tool takes none. The name says that a
+      lookup happened, but most of the judgment turns on the question it got. For
+      example: one query per surface or one broad one, which version a lookup got,
+      whether the session followed a returned id.
+
+      ``bin/cli scenarios:check`` and ``composer test`` then hold that run to its
+      review.
 
 Judging one
 -----------

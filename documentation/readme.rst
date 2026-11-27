@@ -10,8 +10,8 @@ TYPO3 Dev Companion
     and verify TYPO3 work for three audiences: the core contributor, the
     extension author and the site developer. It finds the project and the
     installation the agent works in. It supplies current TYPO3 knowledge with
-    the versions each statement holds for. It leaves each task workflow to the
-    skill written for that task.
+    the versions each statement holds for. The workflow for a kind of task is a
+    task skill, and ``typo3_task_guide`` names the skill that covers it.
 
     It answers for TYPO3 **12.4**, **13.4**, **14.3** and **main**. Where a
     statement does not hold on all of them, it names the lines it holds for. So
@@ -89,9 +89,10 @@ call is behind it, :doc:`the four steps <usage/index>` say what to do.
 
     .. surface:: It reads
 
-        The server writes nothing into the TYPO3 installation it reads. The one
-        exception is the feedback channel. That channel writes into this
-        server's own checkout, and only a standalone checkout offers it.
+        The server writes nothing into the TYPO3 installation it reads. It does
+        write in other places. At start, it puts back stale task skills in the
+        project. The feedback channel writes into this server's own checkout,
+        and only a standalone checkout offers it.
 
     .. surface:: It starts nothing
 

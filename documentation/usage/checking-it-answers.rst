@@ -85,17 +85,18 @@ entry alone:
 
 The first variable names the installation. The second names the command that
 runs its console, where the server cannot find that command itself.
-:ref:`The install <installing-what-the-entry-may-carry>` lists the other two
+:ref:`The install <installing-what-the-entry-may-carry>` lists the other three
 variables the block can set.
 
 When the site is down
 ---------------------
 
 Only the installation can answer some questions. Examples are which icons it
-registers, which labels exist, and what a setting is after every extension has
-applied its part. For those, the server asks the installation itself. Where it
-cannot, it reads the files the packages ship instead. The answer then says so,
-as ``answeredBy: packages``.
+registers, which labels exist, and the value a ``TYPO3_CONF_VARS`` setting has
+once every extension has changed it. For those, the server asks the installation
+itself. Where it cannot, the icon and label lookups read the files the packages
+ship instead. The answer then says so, as ``answeredBy: packages``. The
+configuration lookup answers that it cannot read the value.
 
 **That word changes what the answer proves.** With the installation reachable, a
 lookup that finds no icon shows that the identifier is not registered. With the
@@ -113,10 +114,12 @@ remembers a failure, so the next call goes to the installation.
 The skills are files
 --------------------
 
-The install copied the skills into the skills directory of the client. From then
-on they are your files, and a later release of this server does not change them.
-So each time a client connects, the server compares what it published with what
-is there. It says so where the two differ. ``update`` refreshes them. The
+The install copied the skills into the skills directory of the client. A pull of
+this server or a ``composer update`` does not reach those copies. So each time a
+client starts the server, the server compares what it published with what is
+there. Where the two differ, it publishes the skills again and says so.
+``TYPO3_DEV_COMPANION_SKILL_REFRESH=off`` keeps the notice and leaves the copies
+alone. ``update`` refreshes them too. The
 :doc:`task-skill catalog <task-skills/index>` names the published set and opens
 each complete workflow.
 
@@ -138,11 +141,12 @@ from a client that never started it:
     printf '%s\n' \
       '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"t","version":"1"}}}' \
       '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
-      | php bin/typo3-dev-companion
+      | php /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion
 
-Run it from the project you installed into. The server has no directory of its
-own, and the directory it starts in decides what it reads. For the same reason,
-the wrong work directory gives answers about the wrong site.
+Run it from the project you installed into, with the path your entry names. The
+server has no directory of its own, and the directory it starts in decides what
+it reads. For the same reason, the wrong work directory gives answers about the
+wrong site.
 
 The server writes what it has to say at the start to stderr. Each line starts
 with ``typo3-dev-companion:``. A PHP without an extension that ``composer.json``

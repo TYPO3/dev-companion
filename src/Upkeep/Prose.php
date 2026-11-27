@@ -50,7 +50,7 @@ final class Prose
      */
     private const ITALIC = '/(?<=^|[\s(])\*(?=[^\s*])[^*]*(?<=[^\s*])\*(?=$|[\s.,;:!?)])/';
 
-    public const CHECKED = ['skills/', 'knowledge/documents/', 'requirements/', 'todo/', 'documentation/', 'decisions/'];
+    public const CHECKED = ['skills/', 'knowledge/documents/', 'requirements/', 'todo/', 'documentation/', 'decisions/', 'scenarios/'];
 
     /**
      * A passive form, as an upper bound. "is read" can be the passive or the

@@ -76,12 +76,12 @@ A todo is due when both of these hold:
   exits nonzero when it finds work.
 
 The sighting is the recurring todo that judges what nothing has answered for. It
-is no longer the next todo once the last entry has a name. Nobody edits a todo
-to say so.
+is no longer the next todo once the last entry has a judgement. Nobody edits a
+todo to say so.
 
-Each feedback and each unresolved entry gets a judgement from the sighting. That
-judgement is a todo that takes it on, or the sentence that says why it stays as
-it is. The sighting does not do the work itself. The queue holds the work.
+Each unresolved entry gets a judgement from the sighting. That judgement is a
+todo that takes it on, or a ``judged:`` date that says it stays as it is. The
+sighting does not do the work itself. The queue holds the work.
 
 The queue comes first
 ---------------------
@@ -101,7 +101,7 @@ keeps the order.
 
 Only the sighting of what nothing answers for stays behind the queue. A session
 reaches it when the queue runs dry. Then nothing decided remains, *and* nothing
-has arrived without a judgement. A sighting left in place to judge more feedback
+has arrived without a judgement. A session that leaves the queue to judge more
 decides twice and does nothing. The pile it decides over grows faster than any
 session can read it.
 
@@ -332,19 +332,21 @@ hold is not a defect. Neither is a decision that nothing has come back about. So
 no check may fail on them, and for that reason nothing read them for as long as
 they existed.
 
-``bin/cli unresolved:list`` reads them. ``bin/cli todo:next`` opens with it, and
-``bin/cli repository:check`` closes with it. It names every requirement that
-nothing answers for, and says whether a queued todo names it. It learns that
-from what each todo in the queue declares it serves. So the page that lists what
-stays out of the queue on purpose does not count as a todo that takes an entry
-on.
+``bin/cli unresolved:list`` reads them. The sighting that ``bin/cli todo:next``
+gives out once the queue is empty runs it, and ``bin/cli repository:check``
+closes with it. It names every requirement that nothing answers for. It says
+whether a queued todo names it, or on which day a session judged it to stay. It
+learns the first from what each todo in ``todo/open/`` or ``todo/waiting/``
+declares it serves.
 
 ``unresolved:list`` names the oldest open decision too, as the one the
-repository has moved furthest away from.
+repository has moved furthest away from. It names the oldest that nobody has
+been back to and that no test holds.
 
-An entry on that list is no problem. An entry that no todo names is a decision
-nobody has taken. A session makes that decision. It writes a todo that takes the
-entry on, or the sentence in ``decisions/`` that says why not.
+An entry on that list is no problem. An entry with no todo and no ``judged:``
+date is a decision nobody has taken. A session makes that decision. It writes a
+todo that takes the entry on, or a ``judged:`` date in the front matter of the
+entry.
 
 .. toctree::
     :hidden:

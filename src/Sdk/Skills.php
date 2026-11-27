@@ -180,7 +180,7 @@ final class Skills
      *
      * This stands beside the title because the documentation index needs both.
      * A read from the front matter keeps that catalog on the declaration the
-     * skill itself owns.
+     * skill itself makes.
      */
     private static function summary(string $id): string
     {

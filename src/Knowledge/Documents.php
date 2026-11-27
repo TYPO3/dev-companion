@@ -69,7 +69,7 @@ final class Documents
     /**
      * A document's address from outside this process.
      *
-     * The corpus owns it rather than the SDK adapter. The tools and the answer
+     * It belongs to the corpus rather than to the SDK adapter. The tools and the answer
      * shapes need it too, and neither may reach into `Sdk\` for a name. It
      * stood by hand in three classes before `D-KNW-059`.
      */

@@ -100,7 +100,7 @@ final class SiteExtension
         return self::json([
             'name' => self::PACKAGE,
             'type' => 'typo3-cms-extension',
-            'description' => 'The project-owned extension the E-SITE environment carries.',
+            'description' => 'The extension of the project the E-SITE environment carries.',
             'license' => 'GPL-2.0-or-later',
             'version' => '1.0.0',
             'require' => ['typo3/cms-core' => '*'],

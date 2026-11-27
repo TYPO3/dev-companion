@@ -1,7 +1,7 @@
 ---
 name: typo3-content-element-development
 description: Build or refactor TYPO3 content elements and the shared frame they all render in, replacing that frame included where a package drops the extension supplying it. Both sides, what an editor fills in and sees in the page module and what a visitor gets. Use for CType registration, TCA, child records, backend previews, TypoScript, Fluid, labels and tests.
-compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
+compatibility: Needs the typo3-dev-companion MCP server, which provides every lookup this workflow calls and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Content Element Development

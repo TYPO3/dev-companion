@@ -343,7 +343,7 @@ final class Schema
      * A call to make next, and what makes it the right one.
      *
      * A brief ends on a list of them, and a commit draft carries the one that
-     * owns the workflow it drafted for (`D-ANS-117`). The `when` is a fragment
+     * covers the workflow it drafted for (`D-ANS-117`). The `when` is a fragment
      * read after the tool name, so it opens with the arguments to pass.
      *
      * @return array<string, mixed>

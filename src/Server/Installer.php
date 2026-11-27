@@ -41,7 +41,7 @@ final class Installer
      */
     public const REFRESHED = 'The task skills here were stale and have just been refreshed; reload any you loaded. ';
     /**
-     * What a directory this package owns says to git about itself. Everything
+     * What a directory this package writes says to git about itself. Everything
      * below it, this file included, so the directory is invisible and it owes
      * no line to anybody else's file.
      */
@@ -130,7 +130,7 @@ final class Installer
             'mcp' => ['format' => 'json', 'path' => 'opencode.json', 'key' => 'mcp', 'shape' => 'opencode'],
         ],
         // A workspace plugin rather than `.agents/mcp_config.json`, which the
-        // client reads too. The plugin is a directory this package owns whole,
+        // client reads too. The plugin is a directory this package writes whole,
         // so it ignores itself and the absolute `cwd` never reaches a commit.
         'antigravity' => [
             'skills' => '.agents/skills',
@@ -228,7 +228,7 @@ final class Installer
     /**
      * The skills this server publishes, which is also where a skill starts to
      * exist for its readers. `knowledge/task-intents.json` routes a task to the
-     * skill that owns it, and a name this does not carry is one nobody can
+     * skill that covers it, and a name this does not carry is one nobody can
      * load.
      *
      * It is the directory rather than a list beside it. A list is a second
@@ -935,7 +935,7 @@ final class Installer
      * The section as it should read, with every line this package does not own
      * kept where the caller wrote it.
      *
-     * The two lines this package owns are `command` and `args`. Everything else
+     * The two lines this package writes are `command` and `args`. Everything else
      * in the section is the caller's, `env` above all. It is the only place a
      * TOML client can carry `TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`, and the
      * `install` meant to keep the entry current deleted it (`D-AUD-006`).

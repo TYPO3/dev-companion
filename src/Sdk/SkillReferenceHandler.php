@@ -12,7 +12,7 @@ use Mcp\Server\Handler\ResourceTemplateHandlerInterface;
  *
  * A template rather than a resource each, because a reader follows these and
  * does not pick them. `R-ANS-022` is about the list a host offers for
- * selection. A checklist on offer beside the workflow that owns it is an entry
+ * selection. A checklist on offer beside the workflow it belongs to is an entry
  * nobody can choose between. They stay addressable. `resources/templates/list`
  * says the shape, and the body says which of them it sends the reader to.
  */

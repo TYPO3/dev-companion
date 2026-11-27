@@ -1,7 +1,7 @@
 ---
 name: typo3-development-installation
 description: 'Bring the local development installation of a TYPO3 extension, sitepackage or project package into existence, or boot and repair the one the repository declares: the container, DDEV where it declares one, the unattended install, seeded demo content, and a site that will not come up.'
-compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
+compatibility: Needs the typo3-dev-companion MCP server, which provides every lookup this workflow calls and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Development Installation
@@ -391,10 +391,10 @@ not a test suite.
   it needs first. That choice decides the layout.
 
 - **Tests and static checks** are `typo3-extension-testing`. The boundary holds
-  in both directions. On the way out, this skill stops before you edit that
-  owner's files. On the way in, a suite that needs a served site and has none is
-  this workflow first. It runs up to the verified point of step 5, and then
-  back.
+  in both directions. On the way out, this skill stops before you edit the files
+  that skill covers. On the way in, a suite that needs a served site and has
+  none is this workflow first. It runs up to the verified point of step 5, and
+  then back.
 
 - **A major upgrade** is a project of its own. `typo3_hint_lookup` with
   `id=installation-upgrade` gives its order.

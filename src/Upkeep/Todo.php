@@ -101,7 +101,7 @@ final class Todo
      * How several sessions work todos at once, handed over with every claim.
      *
      * `bin/cli todo:claim` moves files and names branches, which is the half of
-     * the arrangement this repository owns. The other half is not something a
+     * the arrangement this repository controls. The other half is not something a
      * command can carry out. The worktree that holds the branch, what a session
      * does with a question it cannot settle, and who merges. A claim taken
      * without it is a lock nobody knows how to release.
@@ -656,7 +656,7 @@ final class Todo
      * Why what a todo names is unreadable, or null where it reads.
      *
      * Five things are legitimate to serve, and each one checks against the
-     * place that owns it rather than against a list kept here. A feedback is
+     * place that holds it rather than against a list kept here. A feedback is
      * the one worth the catch. It is the reason the todo is in the queue, and
      * the commit that closes it deletes the file. So a todo that still names
      * one is either finished or has a part left that nobody has trimmed it down

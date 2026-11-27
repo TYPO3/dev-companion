@@ -36,7 +36,7 @@ final class Environments
     /** Not a directory at all: a state the environment above it goes into. */
     public const STATE = 'state';
 
-    /** What DDEV writes into a file it owns and regenerates. */
+    /** What DDEV writes into a file it manages and regenerates. */
     private const DDEV_MARKER = '#ddev-generated';
 
     /**
@@ -381,7 +381,7 @@ final class Environments
      * the router forwards. Settings management switched off would end the same
      * collision and leave all three to a hand.
      *
-     * The marker goes with it, because DDEV regenerates a file it still owns on
+     * The marker goes with it, because DDEV regenerates a file it still manages on
      * the next start and the block comes back.
      */
     public static function takeOverGeneratedSettings(string $path): ?string
@@ -413,7 +413,7 @@ final class Environments
         );
         file_put_contents($file, $after);
 
-        return 'config/system/additional.php: the generated DB block is gone and DDEV no longer owns the file';
+        return 'config/system/additional.php: the generated DB block is gone and DDEV no longer manages the file';
     }
 
     /**

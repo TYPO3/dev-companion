@@ -40,7 +40,7 @@ final class CitedCode
      */
     public const NOT_SHIPPED = 'notShipped';
 
-    /** Nothing here could place it: no installed package owns the namespace, or there is no installation at all. */
+    /** Nothing here could place it: no installed package declares the namespace, or there is no installation at all. */
     public const UNPLACED = 'unplaced';
 
     /**
@@ -305,7 +305,7 @@ final class CitedCode
 
     /**
      * Where a qualified class sits, empty where its own package does not ship
-     * it, and null where no installed package owns the namespace at all.
+     * it, and null where no installed package declares the namespace at all.
      *
      * @param array<string, string> $packages
      * @return list<array{extension: string, path: string}>|null

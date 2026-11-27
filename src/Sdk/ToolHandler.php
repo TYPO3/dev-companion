@@ -18,7 +18,7 @@ use TYPO3\DevCompanion\Tool\Registry;
  *
  * The official SDK passes the raw (validated) argument bag to execute(). It
  * goes straight to Registry::call(). So every behaviour and every render stays
- * in the tool that owns it, and nothing about a tool has its decision here.
+ * in the tool it belongs to, and nothing about a tool has its decision here.
  * Both halves of the answer come back. The text as the tool's content, the same
  * answer as `structuredContent` that matches the output schema that tool
  * declares.

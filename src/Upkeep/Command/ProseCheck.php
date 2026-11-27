@@ -113,7 +113,7 @@ final class ProseCheck
             ));
         }
 
-        // The fourth corpus, and the one a formatter owns half of. Padding is
+        // The fourth corpus, and the one a formatter controls half of. Padding is
         // mechanical and `bin/cli prose:format` does it; the report is the
         // width that leaves, because a cell nobody can shorten is a list rather
         // than a table and only a reader can say which — `D-DOC-001`.

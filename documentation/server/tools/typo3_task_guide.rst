@@ -19,7 +19,7 @@ before anybody changes it is "diagnosis". All four get a brief of their own
 rather than the steps a patch owes. Built from bundled conventions only: it does
 not read your checkout, so it also names what you have to establish there
 yourself. It routes to the lookups that fit the task. It names the task skill
-that owns the work where a published one does. It names the guide that writes
+that covers the work where a published one does. It names the guide that writes
 the work up where this server carries one. The hints for a set of paths without
 the checklist around them are typo3_hint_lookup, and a procedure read whole is
 typo3_rule_lookup. Work that reads as a project or third-party extension gets
@@ -121,13 +121,13 @@ Answers with
     # that one is missing. What to do about it is one command, typo3-dev-companion
     # update, and what it costs is a change to the caller's own checkout.
     staleSkills: [string]
-    # The task skills that own the recognized work, named so that a caller who
+    # The task skills that cover the recognized work, named so that a caller who
     # reached this server without one can load it. This server cannot see whether
     # your project holds a copy, so skillsOwed names the typo3://skill resource it
     # serves each one at as well. A review, a triage, a boot and a diagnosis name
     # only the workflows that change nothing either. intents still recognizes the
     # kind of change under review, and the workflow that writes one is not the one
-    # you are in. Empty means no published skill owns what the brief recognized,
+    # you are in. Empty means no published skill covers what the brief recognized,
     # which is not a statement that the work has no workflow.
     skills: [string]
     # What the caller does with skills, stated beside them: load them, and in which

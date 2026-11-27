@@ -53,7 +53,7 @@ final class CommitMessage
      * message are two different rules, and only the first one travels. The
      * subject keyword, the 52/72 limits and the wrap are in use in TYPO3
      * projects and extensions throughout, and so are `Resolves:` and
-     * `Related:`. What the core owns is the Forge issue behind them, the
+     * `Related:`. What the core alone uses is the Forge issue behind them, the
      * `Releases:` trailer and the changelog, `D-GUI-017`.
      */
     public const WORKFLOW_CORE = 'core';
@@ -274,7 +274,7 @@ final class CommitMessage
      * the check as a whole. No second assembly from fields.
      *
      * Trailers this class does not know carry through untouched, `Change-Id:`
-     * above all, which the commit hook owns and an amend must keep.
+     * above all, which the commit hook writes and an amend must keep.
      *
      * @return array{
      *     input: array{

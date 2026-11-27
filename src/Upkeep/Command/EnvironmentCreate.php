@@ -207,7 +207,7 @@ final class EnvironmentCreate
             return 1;
         }
 
-        // DDEV owns config/system/additional.php until this, and what it writes
+        // DDEV manages config/system/additional.php until this, and what it writes
         // there is wrong for the driver this environment stands on. Left alone,
         // the installation talks to a database container that is not up and the
         // backend refuses every login with no word why.

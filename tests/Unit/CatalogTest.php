@@ -644,7 +644,7 @@ final class CatalogTest extends TestCase
         $result = Registry::call('typo3_snapshot_scope', ['targetVersion' => '14.3']);
 
         self::assertStringContainsString('For TYPO3 v14', $result->text);
-        self::assertStringContainsString('Each component entry owns this validity range', $result->text);
+        self::assertStringContainsString('Each component entry has this validity range of its own', $result->text);
         self::assertStringContainsString('Checkout branch: main', $result->text);
         self::assertLessThan(
             strpos($result->text, 'Checkout branch: main'),

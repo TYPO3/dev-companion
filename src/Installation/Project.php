@@ -78,7 +78,7 @@ final class Project
     private const DDEV_TASKS = ['exec', 'exec-host', 'composer'];
 
     /**
-     * The mark DDEV puts on the files it owns, and replaces them by while the
+     * The mark DDEV puts on the files it manages, and replaces them by while the
      * mark is there. `nodeps.DdevFileSignature` in v1.25.1, matched as a
      * literal anywhere in the file the way `fileutil.FgrepStringInFile` does.
      */

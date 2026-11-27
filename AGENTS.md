@@ -112,9 +112,9 @@ and their tools' `openWorldHint` says so. `Paths` sits loose because the server
 and the upkeep both stand on it.
 
 Both binaries have the same shape: they locate the autoloader and hand the
-arguments to the class that owns them. That class is `Server\Entrypoint` for one
-and `Upkeep\Cli` for the other, by way of the console application it builds. A
-command declares what it does, its name and what it takes beside the code that
+arguments to the class that handles them. That class is `Server\Entrypoint` for
+one and `Upkeep\Cli` for the other, by way of the console application it builds.
+A command declares what it does, its name and what it takes beside the code that
 does it, never in `bin/`.
 
 ## Where a session starts, and what it owes the next one
@@ -205,7 +205,7 @@ defect:
 
 - **Two claims in one name.**
   `everyLineIsSetUpOnAFileRatherThanOnAContainerOfItsOwn` states a case and the
-  case it is told apart from; the docblock owns the second half.
+  case it is told apart from; the second half belongs in the docblock.
   `bin/cli prose:check` counts the names and the titles that do this, worst
   first.
 - **A subject the name never says.** "Three audiences, not one" counts without a
@@ -653,8 +653,8 @@ name that goes stale, not a sentence that goes false. Prose is on you.
 A client installs a skill into somebody else's project, where the next release
 of this server does not correct a stale name. So a skill has rules of its own.
 They say what names and routes it, what it may state, and what it leaves to the
-tool that owns it. They say what a session has to show before a domain becomes
-one at all.
+tool that answers it. They say what a session has to show before a domain
+becomes one at all.
 [documentation/contributing/writing-a-skill.rst](documentation/contributing/writing-a-skill.rst)
 states them, and every rule there names the test that holds it.
 
@@ -682,9 +682,9 @@ carries the detail, so the message does not have to.
   both. The 80 `bin/cli prose:format` wraps at belongs to the markdown corpus
   and reaches no commit message.
 - **Every commit has a body of one or two sentences.** It states the decision
-  behind the change, and what matters that the code does not show. It leaves
-  out what the diff shows, such as which class now carries what. That is the
-  rule `typo3_commit_message_guide` gives every caller — `D-GUI-029`.
+  behind the change, and what matters that the code does not show. It leaves out
+  what the diff shows, such as which class now carries what. That is the rule
+  `typo3_commit_message_guide` gives every caller — `D-GUI-029`.
 - Where a decision or a requirement carries the reason, the body names the id
   and repeats nothing from it.
 - The prose rule holds here too: one point per sentence. A subject nobody
@@ -727,12 +727,13 @@ is the word anything machine-readable uses.
   free-text parameters of the tools that match against prose. A German sentence
   in a hint is a statement nothing can find.
 - Everything the tools answer from lives below `knowledge/`, with one exception.
-  The server reads facts an installation owns from that installation, because no
-  bundled answer could be right for it. Runtime registries use `Typo3Cli` where
-  TYPO3 exposes a command and `Typo3Runtime` where it does not. `Typo3Runtime`
-  boots the installation in a subprocess and asks its container, the only source
-  that knows what a package registers at runtime. Component contracts and the
-  fallbacks read the files those packages ship and execute nothing.
+  The server reads the facts that only an installation knows from that
+  installation, because no bundled answer could be right for it. Runtime
+  registries use `Typo3Cli` where TYPO3 exposes a command and `Typo3Runtime`
+  where it does not. `Typo3Runtime` boots the installation in a subprocess and
+  asks its container, the only source that knows what a package registers at
+  runtime. Component contracts and the fallbacks read the files those packages
+  ship and execute nothing.
 - An answer that came from the files where the container should have answered
   says so and says what it leaves out. A **failsafe** container is core-only and
   looks complete, so the server never hands it on. Add to `knowledge/` by

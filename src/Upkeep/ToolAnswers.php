@@ -180,7 +180,7 @@ final class ToolAnswers
 
         foreach (preg_split('/\\R/', $section) ?: [] as $line) {
             $indent = strlen($line) - strlen(ltrim($line));
-            // A directive owns every line indented past it, so a line at its
+            // A directive includes every line indented past it, so a line at its
             // column or left of it is where the block ends.
             if ($block !== null && trim($line) !== '' && $indent <= $at) {
                 $blocks[] = [$label, $block];

@@ -88,7 +88,7 @@ final class LabelLookup extends ReadOnlyTool
             'type' => 'object',
             'properties' => [
                 'query' => ['type' => 'string', 'minLength' => 1, 'description' => 'Words from the label text or its trans-unit id, for example "save document" or "labels.title". Several words match on their own, whatever their case and order. A label has to carry every one of them, in its text or in its id. When none carries all of them, the answer says how far each word reaches on its own.'],
-                'extension' => ['type' => 'string', 'description' => 'Restrict the search to the extension that owns the code at hand.'],
+                'extension' => ['type' => 'string', 'description' => 'Restrict the search to the extension that contains the code at hand.'],
                 'resource' => ['type' => 'string', 'description' => 'Restrict the search to the exact XLF resource the code at hand already uses, for example "EXT:my_sitepackage/Resources/Private/Language/Backend/Import.xlf". A match from another resource is not a reuse candidate. Where no label in it reaches the query, the answer names the resources that do hold one. So you replace a guessed path with one that exists.'],
                 'limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 200, 'default' => 25, 'description' => 'Maximum number of labels to return.'],
             ],

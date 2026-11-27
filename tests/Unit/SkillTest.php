@@ -4544,7 +4544,7 @@ final class SkillTest extends TestCase
         // and wrote the tests here forty minutes later — `R-SKL-018`.
         self::assertStringContainsString('typo3-extension-testing', $skill);
         self::assertStringContainsString('The moment this task grows a test, invoke', $flat);
-        self::assertStringContainsString('stops before you edit that owner\'s files', $flat);
+        self::assertStringContainsString('stops before you edit the files that skill covers', $flat);
         self::assertStringContainsString(
             'a suite that needs a served site and has none is this workflow first',
             $flat,

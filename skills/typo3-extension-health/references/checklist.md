@@ -43,15 +43,14 @@ entry by what the check establishes, not by the tool behind it:
 - **Syntax** — every shipped PHP file parses on every PHP version the package
   declares.
 - **Static analysis** — types, unreachable code, and calls that cannot succeed.
-  It runs over the paths the package owns, at a level the project can hold
-  today.
+  It runs over the paths of the package, at a level the project can hold today.
 - **Coding standards** — the TYPO3 coding guidelines as the project applies
   them. The editor-configuration and declared-PHP-range checks run beside them.
 - **Manifests and dependencies** — the manifest validates and carries no open
   advisory. It agrees with what the package declares about itself elsewhere.
 - **Shipped configuration and data** — the XLIFF, YAML and TypoScript the
-  package ships are well-formed. Fluid templates have no established linter.
-  The tests that render them prove them.
+  package ships are well-formed. Fluid templates have no established linter. The
+  tests that render them prove them.
 - **Shipped frontend assets** — the JavaScript, TypeScript and CSS sources the
   repository maintains. Never the bundle a build step produced from them.
 
@@ -122,9 +121,8 @@ into the installed package that emits or executes it. Where you can render or
 run the path, let the repository's own test settle it. Otherwise report the
 finding as unverified and say which class you did not read.
 
-A security verdict is expensive to get wrong. Disprove it before you dismiss
-it. A wrong dismissal costs the maintainer exactly the reading the review
-skipped.
+A security verdict is expensive to get wrong. Disprove it before you dismiss it.
+A wrong dismissal costs the maintainer exactly the reading the review skipped.
 
 ## When a candidate may be dropped
 
@@ -156,5 +154,5 @@ Two dismissals go wrong reliably:
   or a caller that cannot exist, at a line.
 
 The finding gate states this bar for a security verdict, where it is steepest.
-But the bar holds on every surface here. A wrong dismissal costs the
-maintainer, not the audit, whatever the subject.
+But the bar holds on every surface here. A wrong dismissal costs the maintainer,
+not the audit, whatever the subject.

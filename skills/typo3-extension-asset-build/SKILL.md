@@ -1,7 +1,7 @@
 ---
 name: typo3-extension-asset-build
 description: 'The asset build of a TYPO3 extension, sitepackage or project package: npm and package.json dependency updates, Dependabot pull requests, webpack, vite, Grunt or Sass, the built CSS and JavaScript under Resources/Public, the import map it reaches the backend by, and the core classes and icons it borrows. Stops at a bundler or library migration.'
-compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
+compatibility: Needs the typo3-dev-companion MCP server, which provides every lookup this workflow calls and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Extension Asset Build

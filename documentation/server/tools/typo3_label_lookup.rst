@@ -35,7 +35,7 @@ Takes
     # none carries all of them, the answer says how far each word reaches on its
     # own.
     query: string
-    # Restrict the search to the extension that owns the code at hand.
+    # Restrict the search to the extension that contains the code at hand.
     extension: string  # optional
     # Restrict the search to the exact XLF resource the code at hand already uses,
     # for example

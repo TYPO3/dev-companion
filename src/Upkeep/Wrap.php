@@ -268,7 +268,7 @@ final class Wrap
      * The markup is different enough for a reader of its own rather than
      * markdown with exceptions. A line break or an indent carries almost
      * everything structural here. A heading is a line and the rule under it, a
-     * directive owns whatever stands indented below it, a table consists of
+     * directive includes whatever stands indented below it, a table consists of
      * drawn rules. So what may rewrap is a smaller set than in markdown rather
      * than a larger one, and this errs towards a line left alone.
      */
@@ -280,22 +280,22 @@ final class Wrap
         $open = null;
         $lists = [];
 
-        // What a block owns: everything indented past it, until something
+        // What a block includes: everything indented past it, until something
         // stands at or left of the column it opened at.
-        $owned = null;
+        $blockIndent = null;
         $table = -1;
 
         foreach ($lines as $index => $line) {
             $trimmed = trim($line);
             $indent = self::indent($line);
 
-            if ($owned !== null) {
-                if ($trimmed === '' || $indent > $owned) {
+            if ($blockIndent !== null) {
+                if ($trimmed === '' || $indent > $blockIndent) {
                     $out[] = $line;
 
                     continue;
                 }
-                $owned = null;
+                $blockIndent = null;
             }
 
             // A drawn table is verbatim, rules and rows alike: every column
@@ -325,7 +325,7 @@ final class Wrap
                 $out = [...$out, ...self::flush($paragraph, $open !== null, self::RST_UNBREAKABLE)];
                 $paragraph = [];
                 $out[] = $line;
-                $owned = $indent;
+                $blockIndent = $indent;
 
                 continue;
             }
@@ -361,14 +361,14 @@ final class Wrap
                 $paragraph = [];
                 $out[] = $line;
                 if ($trimmed !== '') {
-                    $owned = $indent;
+                    $blockIndent = $indent;
                 }
 
                 continue;
             }
             if ($paragraph === [] && str_ends_with(rtrim((string) end($out)), '::')) {
                 $out[] = $line;
-                $owned = $indent - 1;
+                $blockIndent = $indent - 1;
 
                 continue;
             }

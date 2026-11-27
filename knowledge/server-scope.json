@@ -336,7 +336,7 @@
     },
     {
       "topic": "Task workflows for extension, sitepackage and project work: backend modules, content elements, package health, change review, distribution content, asset builds, sitepackages, documentation, tests, the development installation, and upgrades",
-      "depth": "The skills this server publishes, one resource per workflow: the order of the steps, with the lookup that owns each fact. bin/typo3-dev-companion install writes the same files into the client's own skills directory.",
+      "depth": "The skills this server publishes, one resource per workflow: the order of the steps, with the lookup that answers each fact. bin/typo3-dev-companion install writes the same files into the client's own skills directory.",
       "tools": [
         "typo3_task_guide"
       ],

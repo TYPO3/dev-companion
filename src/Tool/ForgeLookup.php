@@ -447,7 +447,7 @@ final class ForgeLookup extends ReadOnlyTool
 
         return match (true) {
             $entry['state'] === CitedCode::SHIPPED => 'shipped by ' . $extensions,
-            $entry['state'] === CitedCode::UNPLACED => 'no installed package owns it',
+            $entry['state'] === CitedCode::UNPLACED => 'no installed package declares it',
             $entry['in'] !== [] => $extensions . ' ships the class and not the method',
             default => 'no installed package ships it',
         };
@@ -476,7 +476,7 @@ final class ForgeLookup extends ReadOnlyTool
             'state' => [
                 'type' => 'string',
                 'enum' => [CitedCode::SHIPPED, CitedCode::NOT_SHIPPED, CitedCode::UNPLACED],
-                'description' => '"shipped" is a name an installed package carries, the method included where the report named one. "notShipped" is a name nothing installed carries. A name the core removed and one from an extension you never installed look the same, and the report does not tell the two apart. Where in has entries, the class stands and the method named on it does not. "unplaced" is a name the tool could not place at all: no installed package owns the namespace, or there is no installation to read here. Never read unplaced as gone.',
+                'description' => '"shipped" is a name an installed package carries, the method included where the report named one. "notShipped" is a name nothing installed carries. A name the core removed and one from an extension you never installed look the same, and the report does not tell the two apart. Where in has entries, the class stands and the method named on it does not. "unplaced" is a name the tool could not place at all: no installed package declares the namespace, or there is no installation to read here. Never read unplaced as gone.',
             ],
             'in' => Schema::listOf(Schema::object([
                 'extension' => Schema::string('The extension key of the package that carries it.'),

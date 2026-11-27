@@ -92,7 +92,7 @@ final class SnapshotScope extends ReadOnlyTool
                     )),
             $installed
                 ? 'The bundled catalog remains the curated search index and markup fallback; it does not override installed classes.'
-                : 'Each component entry owns this validity range. It does not inherit the version of the source checkout below.',
+                : 'Each component entry has this validity range of its own. It does not inherit the version of the source checkout below.',
             '',
             'Bundled fallback source checkout',
             '- Source: ' . $meta['source']['repository'],

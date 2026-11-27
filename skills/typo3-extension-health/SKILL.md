@@ -1,7 +1,7 @@
 ---
 name: typo3-extension-health
 description: 'Review a TYPO3 project, sitepackage or extension against its checkout and active installation and put it right — "look over my repository and fix it": TCA, services, backend modules, content elements, site sets, TypoScript, Fluid, labels, icons, security boundaries and deprecated APIs. The audit reports first; nothing is changed before the list is agreed.'
-compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
+compatibility: Needs the typo3-dev-companion MCP server, which provides every lookup this workflow calls and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Extension Health
@@ -66,8 +66,8 @@ report. A request for a review ends there.
    A surface is in scope because the checklist names it, not because the file
    tree shows it. A file listing cannot show a manual nobody wrote, a test that
    does not exist or an absent documentation tree. Those absences are often the
-   finding. So derive the list from the checklist and `typo3_extension_describe`.
-   Then let the reading answer it.
+   finding. So derive the list from the checklist and
+   `typo3_extension_describe`. Then let the reading answer it.
 
 4. Where the request names what it is about, read only the surfaces it names.
    Examples are security only, configuration only, or one subsystem. Mark the
@@ -121,8 +121,8 @@ follows.
   says what this checkout already does wrong.
 
 - A file that follows the opposite of a rule is a finding, not a local style to
-  keep. The project's own habits are part of the assessment, so consistency
-  with them establishes nothing.
+  keep. The project's own habits are part of the assessment, so consistency with
+  them establishes nothing.
 
 - The absence of an optional subsystem is not a defect.
 
@@ -193,10 +193,10 @@ two audits compare section by section.
   never asked about is unassessed. The reading alone cannot say whether it is
   right.
 
-- Unassessed and not requested both mean that you established nothing there,
-  and they are not the same thing. Unassessed is a gap of this review. Not
-  requested is what the request left out. Say which of the two per entry, and
-  let neither read as clean.
+- Unassessed and not requested both mean that you established nothing there, and
+  they are not the same thing. Unassessed is a gap of this review. Not requested
+  is what the request left out. Say which of the two per entry, and let neither
+  read as clean.
 
 Without the list, a thorough report and a narrow one look alike. The cheapest
 way to look thorough is to examine less.
@@ -362,10 +362,9 @@ section *When a candidate may be dropped*.
 ## Close the work
 
 14. Run the audit again on the worked list. Do not only read the files it
-    changed. The environment that writes a file can still rewrite one that
-    reads correctly. The difference shows only once that environment runs
-    again. Work that grades itself by its own diff has no evidence that the
-    finding is gone.
+    changed. The environment that writes a file can still rewrite one that reads
+    correctly. The difference shows only once that environment runs again. Work
+    that grades itself by its own diff has no evidence that the finding is gone.
 
 15. Report what remains:
 

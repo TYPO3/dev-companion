@@ -20,7 +20,7 @@ final class TaskIntents
 {
     /** Knowledge documents an intent may pull rule sections from. */
     /**
-     * The intent whose workflow owns the write of a core change, named where
+     * The intent whose workflow covers the write of a core change, named where
      * the task sentence names none, `D-SKL-082`.
      */
     private const PATCH = 'patch';
@@ -28,7 +28,7 @@ final class TaskIntents
     /**
      * The page every task that writes files owes, whatever it writes.
      *
-     * Not an intent's `owes`, because no intent owns it. What it is about is a
+     * Not an intent's `owes`, because no intent covers it. What it is about is a
      * property of any write at all. A line in each write intent would be the
      * same line in a dozen places.
      */
@@ -53,7 +53,7 @@ final class TaskIntents
         return array_map(static fn(array $entry): array => [
             'id' => (string) $entry['id'],
             'title' => (string) $entry['title'],
-            // The task skill that owns this kind of work, on each side of the
+            // The task skill that covers this kind of work, on each side of the
             // core boundary, and empty where no published skill does. The two
             // are separate entries rather than one because the same words name
             // two workflows. An audit is the conformance skill's outside the
@@ -112,7 +112,7 @@ final class TaskIntents
      * comes back as conditional rather than as recognized.
      *
      * An id in $stated counts as recognized whatever the text says. That is how
-     * a caller who classifies the work reaches the intent that owns it. It is a
+     * a caller who classifies the work reaches the intent that covers it. It is a
      * parameter rather than a word appended to the text, `D-GUI-027`.
      *
      * @param array<int, string> $stated Intent ids the call names outright.
@@ -258,7 +258,7 @@ final class TaskIntents
      */
     public static function skills(array $intents, bool $coreWork, bool $changesNothing): array
     {
-        $named = self::owned($intents, $coreWork ? 'skillCore' : 'skill', $changesNothing);
+        $named = self::covering($intents, $coreWork ? 'skillCore' : 'skill', $changesNothing);
         if ($named !== [] || !$coreWork || $changesNothing) {
             return $named;
         }
@@ -268,7 +268,7 @@ final class TaskIntents
         // changes one. A task in the words of the defect rather than of the
         // work confirms no intent, *add the missing language parameter to
         // getMovedRecordsFromPages* confirmed none. A brief that knows it is a
-        // core change owes the caller the workflow that owns it anyway
+        // core change owes the caller the workflow that covers it anyway
         // (`D-SKL-082`). `audit` and `triage` do not reach here. Both confirm
         // their own intent, so `changesNothing` is true above.
         $patch = self::declared(self::PATCH, 'skillCore');
@@ -310,7 +310,7 @@ final class TaskIntents
      */
     public static function guides(array $intents, bool $coreWork, bool $changesNothing): array
     {
-        $named = self::owned($intents, $coreWork ? 'guideCore' : 'guide', $changesNothing);
+        $named = self::covering($intents, $coreWork ? 'guideCore' : 'guide', $changesNothing);
 
         // A procedure a kind of work owes is not the write-up of it, so it
         // stands beside the intent rather than confirms a second one. The
@@ -330,7 +330,7 @@ final class TaskIntents
         }
 
         // A task that writes files hands its prose to a reviewer, and no intent
-        // owns that. The register a session reads is the one it writes its
+        // covers that. The register a session reads is the one it writes its
         // comments in. Three reports traced a patch's rejected comments back to
         // this server's own surfaces (`D-DOC-068`). So it hangs off the one
         // property every write intent shares rather than off each of them.
@@ -353,7 +353,7 @@ final class TaskIntents
      * @param array<int, array<string, mixed>> $intents
      * @return array<int, string>
      */
-    private static function owned(array $intents, string $key, bool $changesNothing): array
+    private static function covering(array $intents, string $key, bool $changesNothing): array
     {
         $reading = [];
         $writing = [];

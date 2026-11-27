@@ -10,7 +10,7 @@ namespace TYPO3\DevCompanion\Feedback;
  *
  * A feedback moves from the project a session stands in into this checkout,
  * which goes into a commit and a push. So a key, a password or a token pasted
- * as evidence leaves the repository that owns it. It lands in one where nobody
+ * as evidence leaves the repository it comes from. It lands in one where nobody
  * looks for it and nobody can take it back. No request to the session reaches
  * the one that is busy with a proof of what the live value is. What the finding
  * needed was the path and the shape. "The key at `SYS/encryptionKey` is the

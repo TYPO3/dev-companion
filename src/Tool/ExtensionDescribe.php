@@ -432,10 +432,10 @@ final class ExtensionDescribe extends ReadOnlyTool
                 );
             }
             $lines[] = $owed[] = 'The source language is what each file declares, not what it should declare — '
-                . 'typo3_hint_lookup owns that rule.';
+                . 'typo3_hint_lookup states that rule.';
         }
 
-        // Each absence names the workflow that owns it, on the object the
+        // Each absence names the workflow that covers it, on the object the
         // caller already looks at. A session read `manual: null`, `readme:
         // null` and `tests: []` twice, wrote three READMEs by hand and shipped
         // no test at all. It held the last sentence of the skill it followed,

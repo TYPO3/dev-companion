@@ -441,8 +441,9 @@ Answers with
           # removed and one from an extension you never installed look the same, and
           # the report does not tell the two apart. Where in has entries, the class
           # stands and the method named on it does not. "unplaced" is a name the
-          # tool could not place at all: no installed package owns the namespace, or
-          # there is no installation to read here. Never read unplaced as gone.
+          # tool could not place at all: no installed package declares the
+          # namespace, or there is no installation to read here. Never read unplaced
+          # as gone.
           state: string
           # Where the tool found it, one entry per package that carries it. Several
           # where a bare name matches more than one, and the choice between those is
@@ -570,7 +571,7 @@ Answers with
             # removed and one from an extension you never installed look the same,
             # and the report does not tell the two apart. Where in has entries, the
             # class stands and the method named on it does not. "unplaced" is a name
-            # the tool could not place at all: no installed package owns the
+            # the tool could not place at all: no installed package declares the
             # namespace, or there is no installation to read here. Never read
             # unplaced as gone.
             state: string

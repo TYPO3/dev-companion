@@ -499,7 +499,7 @@ final class ProjectDescribe extends ReadOnlyTool
             return [];
         }
 
-        $lines = ['', 'Files core has stopped reading, or is stopping, in the extensions this repository owns:'];
+        $lines = ['', 'Files core has stopped reading, or is stopping, in the extensions this repository contains:'];
         $found = false;
         foreach ($own as $extension) {
             foreach ($extension['deprecatedFiles'] as $deprecated) {

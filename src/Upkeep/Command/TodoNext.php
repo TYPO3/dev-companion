@@ -28,7 +28,7 @@ use TYPO3\DevCompanion\Upkeep\Voice;
  *
  * Whether a todo is due is two questions. Has the clock come round — cheap, and
  * answered by the cadence. And is there anything to do, which is expensive, and
- * the todo's own `run:` command answers it. A command this repository owns
+ * the todo's own `run:` command answers it. A command this repository provides
  * exits nonzero when it found work. So the feedback stop as the next thing the
  * moment the last one has its judgement, without an edit to a todo to say so. A
  * command it does not own gets a name rather than a run. `next` starts no
@@ -282,7 +282,7 @@ final class TodoNext
     }
 
     /**
-     * A todo's own commands, run where this repository owns them.
+     * A todo's own commands, run where this repository provides them.
      *
      * Whether there is work is the command's answer rather than a guess. The
      * listings a recurring todo starts from exit nonzero when they found

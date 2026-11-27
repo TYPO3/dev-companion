@@ -243,7 +243,7 @@ final class Typo3Runtime
      * TCA and the icon registry are the installation's, not any package's. An
      * answer about one extension cannot come from a list that belongs to all of
      * them. What every entry does carry is a reference into the package that
-     * owns it. `LLL:EXT:news/…locallang.xlf:plugin.list` on a label or a ctrl
+     * ships it. `LLL:EXT:news/…locallang.xlf:plugin.list` on a label or a ctrl
      * title, `EXT:news/Resources/Public/Icons/list.svg` on an icon. That
      * reference is evidence rather than a name convention. Where there is none,
      * the entry belongs to the installation.

@@ -1,7 +1,7 @@
 ---
 name: typo3-extension-testing
 description: 'Set up, extend, repair or run tests and static quality checks for a TYPO3 project or extension: missing test infrastructure, PHPUnit unit and functional tests, fixtures, Playwright browser and accessibility tests, PHPStan, php-cs-fixer, baselines and a failing check.'
-compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
+compatibility: Needs the typo3-dev-companion MCP server, which provides every lookup this workflow calls and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Extension Testing

@@ -1,6 +1,6 @@
 # REVIEW-02 — Review a reusable TYPO3 extension
 
-**Environment:** `E-EXT` · **Status today:** `partial`
+**Environment:** `E-EXT` · **Status today:** `covered`
 
 > Review this TYPO3 extension. Tell me the most important things that would
 > prevent us maintaining and supporting it confidently, in priority order. Do
@@ -8,9 +8,9 @@
 
 **What has to come out of it**
 
-- The review establishes the extension key, supported TYPO3 and PHP range,
-  repository-owned commands, and whether the checkout is a standalone extension
-  or part of an installation.
+- The review establishes the extension key, the supported TYPO3 and PHP range
+  and the commands of the repository. It also establishes whether the checkout
+  is a standalone extension or part of an installation.
 - It inspects only subsystems the extension actually contains and supports each
   finding with a concrete path, behavior, or failed project-owned check.
 - Compatibility, behavioral correctness, test evidence, documentation, static

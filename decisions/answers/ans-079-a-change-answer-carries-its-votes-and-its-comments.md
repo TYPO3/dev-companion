@@ -62,7 +62,7 @@ NoteDB meta ref as git history instead.
   and the accounts, 50.2 KB with the messages. The comments are 3.0 KB on 95179.
   One call with every option answered in 0.09 seconds.
 - The same payload carries `change_id`, which `Gerrit::change_()` does not read.
-  The skill tells a reviewer to hold what came back against the commit in front
+  The skill tells a reviewer to compare what came back with the commit in front
   of it. The field that identifies the change across patch sets is the one
   absent from the answer.
 

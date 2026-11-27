@@ -58,7 +58,7 @@ the base alone. The sweep's exemption in `skills/base.md` stays as it is.
 
 ## Assumed
 
-- That a session holds a list of breaking entries against the code without a
+- That a session compares a list of breaking entries with the code without a
   query per identifier. The second run found 110702 by an identifier, not by a
   list.
 

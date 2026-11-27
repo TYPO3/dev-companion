@@ -38,7 +38,7 @@ the right workflow behind four items about
 - **Measured after the change, over every contract case and forward review.**
   Two lines move and no other: `SKILL-03` confirms `documentation` where it
   confirmed `changelog`, and `SKILL-07` confirms `documentation` beside
-  `backend-module`. This entry held the eight needles against the same corpus
+  `backend-module`. This entry compared the eight needles with the same corpus
   before they went in. `readme`, `manual`, `user guide`, `changelog` and `rst`
   reach no prompt there at all. `manual` stayed out because it names the
   adjective in "manual action" as readily as the artifact.

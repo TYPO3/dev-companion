@@ -29,7 +29,7 @@ comment there.
 
 ## Held by
 
-- The sentence the text carries beside them, hold the commit against
+- The sentence the text carries beside them, compare the commit with
   `git rev-parse HEAD`, is not guarded. The tool renders it, builds its own
   reader and reaches the network as it runs, and no test in this repository
   drives one that does.

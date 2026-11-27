@@ -66,8 +66,8 @@ A backend module renders inside an iframe and nothing in this corpus says so.
 - A session that has the iframe sentence still writes locators that find
   nothing. Then the gap is a page object the suite composes from, not a fact.
 - The tile markup turns out to differ between the covered majors and the
-  statement carries no bound. Then this belonged in a catalog a check holds
-  against `.checkouts/` after all.
+  statement carries no bound. Then this belonged in a catalog a check compares
+  with `.checkouts/` after all.
 
 ## Since then
 

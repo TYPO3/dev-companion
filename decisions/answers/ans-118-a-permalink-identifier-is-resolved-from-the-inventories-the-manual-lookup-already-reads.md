@@ -37,7 +37,7 @@ URL. It answered it with about sixty `curl` round trips against docs.typo3.org.
   section — never an identifier. The session read that from the description and
   went to `curl`, which was the correct conclusion.
 - The artefact is already fetched. `Manual\Documentation` reads each manual's
-  `objects.inv` per branch and holds it against the host's `ETag` (`D-ANS-065`).
+  `objects.inv` per branch and compares it with the host's `ETag` (`D-ANS-065`).
   So a second read of a current inventory costs one round trip and no payload.
 - The manual search reads only the `std:doc` role, because what it searches is a
   table of contents (`R-DOC-001`). The identifiers are in the roles it skips.

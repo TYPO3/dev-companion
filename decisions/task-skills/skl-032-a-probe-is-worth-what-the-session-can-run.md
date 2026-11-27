@@ -37,7 +37,7 @@ four failures.
   A suite run and a read of its output answer none of them. The session shipped
   three blind corrections into the first two before the developer stopped it.
 - Where the session did have a command, it used it correctly with no further
-  help. It held the Gerrit patch set's commit against `git rev-parse HEAD` to
+  help. It compared the Gerrit patch set's commit with `git rev-parse HEAD` to
   prove it reviewed the current one. It read the reviewer comment on the
   previous patch set out of Forge rather than report a finding somebody had
   already made.

@@ -64,8 +64,8 @@ three.
   Empty where the message carries no trailer, which is every change outside the
   core project.
 - Release versions stay outside the boundary. Gerrit answers branches, and a tag
-  needs the release list held against a merge date, which is a second source and
-  a second read.
+  needs the release list compared with a merge date, which is a second source
+  and a second read.
 - The trailer and the siblings are two claims and the answer keeps them apart. A
   trailer says where the author meant the patch to go; a sibling on a branch is
   a patch that is there. That is

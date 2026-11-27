@@ -36,7 +36,7 @@ Read as a boundary rather than as a confirmation
   classification rested on an assumption rather than a check. That is why the
   session passed `isBreaking` and `isDeprecation` after it read the diff. The
   Releases validation is the one it ranks highest. It had drafted "main, 13.4"
-  from its own read, and the guide held all three branches against what takes a
+  from its own read, and the guide compared all three branches with what takes a
   patch today.
 - `feedback/2026-08-07-132520`, a different session that reviewed the commit
   which resulted. `typo3_project_describe` gave `typo3Version 15.0.0-dev`, the

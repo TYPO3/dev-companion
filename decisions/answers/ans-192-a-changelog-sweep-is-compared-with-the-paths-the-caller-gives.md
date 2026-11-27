@@ -1,13 +1,13 @@
 ---
 id: D-ANS-192
-title: A changelog sweep is held against the paths the caller gives
+title: A changelog sweep is compared with the paths the caller gives
 date: 2026-10-28
 status: open
 coveredBy:
   - ChangelogLookupTest::aSweepHeldAgainstPathsKeepsTheEntriesNamingAClassTheCodeUses
 ---
 
-# D-ANS-192 — A changelog sweep is held against the paths the caller gives
+# D-ANS-192 — A changelog sweep is compared with the paths the caller gives
 
 **`typo3_changelog_lookup` takes `paths`, the caller's own PHP. It keeps the
 entries that name a class this PHP imports or writes fully qualified. It also
@@ -18,7 +18,7 @@ and the files that use it.**
 
 - **The miss.** The fourth `REVIEW-02` run of 2026-10-28
   (`scenarios/runs/REVIEW-02.json`, server `49b0adbc`) asked for the breaking
-  entries of 15 as `D-SKL-108` asks, and got 41. It held 10 against the code.
+  entries of 15 as `D-SKL-108` asks, and got 41. It compared 10 with the code.
   Breaking-110702 was among the rest. `Classes/Service/ImageInfoService.php`
   imports the `AfterFileProcessingEvent` that entry names.
 - **Measured on 2026-10-28 against `/home/benji/projects/bootstrap_package` at

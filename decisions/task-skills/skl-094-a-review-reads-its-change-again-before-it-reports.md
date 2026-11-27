@@ -22,7 +22,7 @@ session reports the boundaries hint as three sentences it would not fetch again.
   `/home/benji/projects/typo3-cms`, `claude-opus-5`. A strength report with two
   costs in it. What the strength is evidence of went into `D-ANS-146`.
 - **The skill said nothing about a second read.** Its establish step reads the
-  change once, and the report step holds the commit against `HEAD` and nothing
+  change once, and the report step compares the commit with `HEAD` and nothing
   against the server. Votes, messages and a change pushed beside it arrive there
   with no signal in the checkout.
 - **The boundaries hint said nothing checkable.** "Keep changes inside the

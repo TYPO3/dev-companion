@@ -39,7 +39,7 @@ begun.
   server. This one named the change, by number and by URL, and the skill stayed
   shut. So the second of the two is gone and the first is where it was.
 - **What the answer carries today.** Read in this checkout on 2026-08-14:
-  `GerritLookup::answer()` ends on two sentences. One holds the commit against
+  `GerritLookup::answer()` ends on two sentences. One compares the commit with
   `git rev-parse HEAD`, and one says the fetch goes to the review server rather
   than to `origin`. Both are about the checkout. No class below `src/Tool/`
   names a skill at all — `typo3_task_guide` is the only route into one, and it

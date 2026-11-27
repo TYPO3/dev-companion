@@ -73,7 +73,7 @@ of it.
   [`D-FBK-027`](../feedback/fbk-027-the-server-builds-what-costs-its-caller-round-trips.md)'s
   measure does not clear it.
 - This entry also declines the question which of the build's outputs the
-  repository commits. That is the files git tracks held against `.gitignore`,
+  repository commits. That is the files git tracks compared with `.gitignore`,
   which is git state and the first entry of the scope's `doesNotCover`. The hint
   above already tells the caller to settle it in the repository.
 

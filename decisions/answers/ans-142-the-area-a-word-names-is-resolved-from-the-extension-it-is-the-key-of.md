@@ -24,8 +24,8 @@ a call each time.
 - Measured on 2026-09-04 over the 38 entries of
   `knowledge/catalog/system-extension/` and the 55 areas the recorded answer in
   `documentation/server/tools/typo3_forge_lookup.rst` lists. The key resolves to
-  exactly one area for 19 of them through `IssueTracker::named()`. The other 19 include
-  `impexp`, `beuser`, `belog`, `lowlevel`, `redirects` and `filelist`.
+  exactly one area for 19 of them through `IssueTracker::named()`. The other 19
+  include `impexp`, `beuser`, `belog`, `lowlevel`, `redirects` and `filelist`.
 - The composer title of the entry — the part before the dash in its
   `description` — resolves 23, and it is a different 23. Taken only where the
   key itself reached nothing it adds six: `beuser`, `extensionmanager`,
@@ -69,7 +69,7 @@ Built the same day. `knowledge/catalog/system-extension/entries.json` carries a
 `forgeCategory` on `impexp`, `redirects` and `extensionmanager`. `Forge` reads
 it where the caller's word matched no area. `categoriesUsed` names the area it
 read, which is what the answer already promised to say.
-`bin/cli forge-categories:check` holds all three against the areas the project
+`bin/cli forge-categories:check` compares all three with the areas the project
 publishes.
 
 Three rows and not sixteen, because the derivation above is what says which

@@ -10,7 +10,7 @@ coveredBy:
 # D-KNW-139 — The corpus states where an annotation is written
 
 **An annotation goes where inference cannot reach, and a second one on the same
-value is what the check holds the code under it against.**
+value is what the check compares the code under it with.**
 
 `backend-typescript` said which lint rules are off and stopped there. So a
 session that imitated a neighbour file had the rule that nothing pushes it and

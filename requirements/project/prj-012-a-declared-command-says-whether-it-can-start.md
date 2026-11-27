@@ -27,11 +27,10 @@ everything the project itself declares. Absent means no bound. Composer leaves
 the file out where nothing requires a PHP version and deletes it where
 `platform-check` is off.
 
-Where this repository configures an environment, the answer holds the bound
-against the version that environment states. Where it configures none, the
-commands run in the caller's own shell, whose PHP nothing here reads. So the
-answer states the bound with `php -v` as what settles it, and discovers no
-interpreter.
+Where this repository configures an environment, the answer compares the bound
+with the version that environment states. Where it configures none, the commands
+run in the caller's own shell, whose PHP nothing here reads. So the answer
+states the bound with `php -v` as what settles it, and discovers no interpreter.
 
 The answer reads it from these files like everything else in it. Nothing ran on
 any of these versions, and the comparison takes only `major.minor`, because that

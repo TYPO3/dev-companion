@@ -30,7 +30,7 @@ coveredBy:
   (`D-ANS-191`). The text names the same suites in one sentence above the suite
   blocks.
 - `D-SKL-106` rejected the field because it would repeat `verifies`. It does,
-  and that is the use. The list is the one a report holds its lines against, and
+  and that is the use. The list is the one a report compares its lines with, and
   the marks are scattered over every entry.
 - The skill text stays as it was otherwise. A second wording of the three
   reasons is the lever that did not move the run.

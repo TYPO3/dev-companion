@@ -52,7 +52,7 @@ session named was on the side this server reads rather than computes.
   checklist that `typo3-core-issue-triage` makes a session read before it
   writes.
 - A reader over a foreign API owes more than a reader over the corpus. A test
-  holds what it hands back against what the source said. Nothing downstream can
+  compares what it hands back with what the source said. Nothing downstream can
   tell a confident wrong answer from a right one, and both skills stop work on a
   hit.
 - The three fixes are that rule applied once. This entry does not decide whether

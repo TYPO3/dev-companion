@@ -36,15 +36,15 @@ enumeration answer has no journal in it.
   36.
 - What the same call does answer for free drops out today. The rows carry
   `relations`, `attachments`, `description` and the project's custom fields, and
-  `IssueTracker::entry()` keeps none of the four. Over the feedback's own query — open
-  Bugs untouched since 2019-01-01, 36 of them — 19 rows carry a relation and 6
-  carry a file.
+  `IssueTracker::entry()` keeps none of the four. Over the feedback's own query
+  — open Bugs untouched since 2019-01-01, 36 of them — 19 rows carry a relation
+  and 6 carry a file.
 - The tracker's own settleability field is empty where a caller would use it. Of
   those 36, `Complexity` is empty on 31 and reads `hard`, `nightmare` or
   `medium` on the other 5. `Sprint Focus` is empty on 35.
 - The review server answers a whole page in a handful of calls. The same 36
   numbers, batched twelve to a query as `message:<issue> OR …` with
-  `o=CURRENT_COMMIT`. Held against the commit message the way `Gerrit::names()`
+  `o=CURRENT_COMMIT`. Compared with the commit message the way `Gerrit::names()`
   already holds a single-issue hit. That is 3 calls, 36 changes returned, 7 rows
   with a change that really names them. One of the 7 is `#82228 → change 53819`,
   the abandoned change the session spent a `git fetch` of the review server to

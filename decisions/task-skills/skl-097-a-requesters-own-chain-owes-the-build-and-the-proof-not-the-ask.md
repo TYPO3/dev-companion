@@ -19,8 +19,8 @@ checks on the new base and the push stay.**
 - One debrief of 2026-10-16, a rebase of the 13-change chain 95425..95437 onto
   `main` with the build output rebuilt in every commit, then the push.
 - [`feedback/2026-10-16-074733-the-checkout-skill`](../../feedback/archive/2026-10-16-074733-the-checkout-skill-has-no-short-path-for-the.md).
-  The skill said the owner rule "has nothing left to protect" and nothing
-  about the rest. The session skipped the sweep, the handover for the push and
+  The skill said the owner rule "has nothing left to protect" and nothing about
+  the rest. The session skipped the sweep, the handover for the push and
   `typo3_test_run_guide`, and reported none of it. The brief named the
   development skill alone, as a submission.
 - [`feedback/2026-10-16-074733-no-procedure`](../../feedback/archive/2026-10-16-074733-no-procedure-rebuilds-the-committed-build.md).
@@ -39,7 +39,7 @@ checks on the new base and the push stay.**
 ## Decided
 
 - The section lists what stays rather than what may be skipped. A session that
-  skipped three steps had no list to hold its work against.
+  skipped three steps had no list to compare its work with.
 - The sweep stays. The code under the chain moved, which is the case the base
   names. The skill says to narrow it by the tags of the extensions the chain
   touches.
@@ -55,8 +55,8 @@ checks on the new base and the push stay.**
 
 ## Assumed
 
-- That the requester's own chain is the common case of a chain rebase. The
-  skill already says a chain "is regularly the requester's own".
+- That the requester's own chain is the common case of a chain rebase. The skill
+  already says a chain "is regularly the requester's own".
 
 ## Wrong if
 

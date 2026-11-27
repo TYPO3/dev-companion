@@ -29,8 +29,7 @@ the link names the core-ci jobs that failed it, read from git.typo3.org.**
   `pipelines?ref=` finds one without the review log. `jobs?scope[]=failed`
   answers anonymously. A job's `raw` address serves its whole log without a
   login: 94 KB for job 5959622, with the failing Playwright tests in it.
-- The maintainer chose the failed jobs over the link states alone on
-  2026-10-21.
+- The maintainer chose the failed jobs over the link states alone on 2026-10-21.
 
 ## Decided
 
@@ -41,8 +40,7 @@ the link names the core-ci jobs that failed it, read from git.typo3.org.**
 - A failed job carries its log address. Nothing here parses the log, because a
   Playwright run and a PHPUnit run report failures in two formats.
 - The comparison with `git config user.email` stays the caller's. The owner's
-  address is in the answer, and the checkout skill says to hold it against
-  that.
+  address is in the answer, and the checkout skill says to compare it with that.
 
 ## Assumed
 
@@ -51,8 +49,8 @@ the link names the core-ci jobs that failed it, read from git.typo3.org.**
 
 ## Wrong if
 
-- A session reads the log address and still cannot find the failing test in
-  it. Then the answer owes the test names, read out of the log.
+- A session reads the log address and still cannot find the failing test in it.
+  Then the answer owes the test names, read out of the log.
 - A chain long enough to hold many red links makes the read slow enough that a
   session reports the wait.
 

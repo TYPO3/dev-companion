@@ -84,7 +84,7 @@ a healthy new change.
 - **`conflicts` is the paths the conflict message on the current patch set
   names.** It is empty where that patch set carries none and null where the tool
   read no log. The patch set the message is about is `_revision_number`, and the
-  message held against it is the whole of the field. A conflict on a superseded
+  message compared with it is the whole of the field. A conflict on a superseded
   patch set is history, and 7 of the 8 open changes with one are that.
 - It comes off "The following files contain Git conflicts:" rather than off the
   cherry-pick line. A rebase writes the same list and is 13 of the 39 messages

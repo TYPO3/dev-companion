@@ -34,8 +34,8 @@ says the tool supplies the set stands one property down in the input schema.
 - So the guess was wrong rather than unverified. The answer names `13.4` on a
   priority bug fix or a grave defect, and the reported patch was neither.
 - The clause the session read is the last of six sentences: "the trailer is also
-  held against the branches that take a patch today". It promises validation, so
-  a caller who does not hold the set reads it as something to have already.
+  compared with the branches that take a patch today". It promises validation,
+  so a caller who does not hold the set reads it as something to have already.
 - What that caller needed is the `releases` property of `inputSchema()`. It
   reads "Left out, the draft carries a RELEASE_TARGET placeholder and the checks
   name the lines taking a patch today".

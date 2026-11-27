@@ -49,9 +49,9 @@ says `relations: []`.
   whole the same day, 2 carry a review URL in a note. 6 carry a bare `#NNNN`
   somewhere in their text. 3 of those numbers are in no relation.
 - The report's premise about the review server is half wrong, and the other half
-  is a second gap. `IssueTracker::issueOf()` builds `reviews` from the journal alone,
-  so a review URL in a description drops out. 5 of the 100 newest open bugs
-  carry one, and they name 6 changes that no answer names today.
+  is a second gap. `IssueTracker::issueOf()` builds `reviews` from the journal
+  alone, so a review URL in a description drops out. 5 of the 100 newest open
+  bugs carry one, and they name 6 changes that no answer names today.
 - What it costs is nothing on most calls. `Forge::issue()` already reads the
   related issues in one bulk request through `fields()`, so the citations
   resolve in the call the answer makes anyway. One read joins only on an issue
@@ -78,7 +78,7 @@ says `relations: []`.
 - The text half says it where `relations` is empty. `relations: []` under a
   description that cites an issue is the sentence this feedback is about.
 - **The enumeration rows stay out.** A row is what a caller chooses a candidate
-  on, and it carries no description to hold the citation against. What makes a
+  on, and it carries no description to compare the citation with. What makes a
   citation worth anything is the sentence around it, which a caller reads on the
   issue path. `relations` already answers the linked half there.
 - Queued rather than made in the judgement run. The fields are `src/` and a

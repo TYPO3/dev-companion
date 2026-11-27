@@ -49,7 +49,7 @@ a markdown resource to every host, whatever its shape.
 ## Decided
 
 - **The scheme stays `typo3://`.** Every prose answer, two tool descriptions and
-  every published skill body name it, and `D-SCO-010` holds it against the draft
+  every published skill body name it, and `D-SCO-010` compares it with the draft
   contract. The declaration is what makes the resources skills, so the scheme
   buys nothing.
 - **The manifest is computed from the bytes a read returns**, in

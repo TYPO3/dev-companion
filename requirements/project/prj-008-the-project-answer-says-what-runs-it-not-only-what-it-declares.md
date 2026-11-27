@@ -26,8 +26,8 @@ names a command that reaches the installation outside the caller's shell, the
 answer says so. It says that no file states the version. Silence there says
 "these run where you are", which is the claim the requirement exists against.
 
-Without it the answer offers one number where there are two. A review holds the
-declared constraint against the interpreter its own shell has, and in a
+Without it the answer offers one number where there are two. A review compares
+the declared constraint with the interpreter its own shell has, and in a
 containerised project those are two different machines. The command list makes
 it worse rather than better. `skills/base.md` sends every task to run the checks
 in it, and nothing beside them says the shell is not where they run.

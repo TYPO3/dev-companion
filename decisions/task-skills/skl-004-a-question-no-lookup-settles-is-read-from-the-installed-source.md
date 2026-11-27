@@ -35,9 +35,9 @@ order. Nothing here states that boundary.
 - What remains reaches nothing that answers it. This feedback's own query —
   *reading viewhelper source (IfViewHelper) when unable to determine expected
   behavior* — reaches `fluid-viewhelpers` at `appliesTo(10) + text(68)`, alone.
-  That entry says what a ViewHelper class looks like and what the check holds
-  its arguments against. It does not say where a behaviour question goes after
-  the lookups.
+  That entry says what a ViewHelper class looks like and what the check compares
+  its arguments with. It does not say where a behaviour question goes after the
+  lookups.
 - `skills/base.md` names a read three times, and every one of them is about the
   project's own checkout or is a prohibition. "Do not fall back to general TYPO3
   knowledge or start reading the checkout" is the answer for a server that is

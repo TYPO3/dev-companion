@@ -13,7 +13,7 @@ coveredBy:
 it everywhere and never fails on one.**
 
 Every other statement here is what the core does. This one is what a reviewer
-holds against it, so it says both. The sentence that makes it usable is the one
+compares with it, so it says both. The sentence that makes it usable is the one
 that says nothing will raise it for you.
 
 ## Evidence

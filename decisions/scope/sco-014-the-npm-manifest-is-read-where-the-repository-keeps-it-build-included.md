@@ -73,7 +73,7 @@ server had looked for.
   `.build/`, a workspace root. Then the answer reports no npm surface where
   there is one, which is the silence this entry removed, one directory over.
 - Both manifests declare a Node and they disagree. The answer carries the
-  root's. A caller who reads the number without `enginesIn` beside it holds the
-  scripts of the other one against the wrong version.
+  root's. A caller who reads the number without `enginesIn` beside it compares
+  the scripts of the other one with the wrong version.
 - `npm --prefix` stops the switch of the working directory to the prefix. Then
   every command stated for a second manifest runs in the wrong place.

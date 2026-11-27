@@ -44,7 +44,7 @@ the draft ever became a contract.
   in it. It says "The prefix `typo3.` is reserved for the mandatory part of the
   contract. Extensions register their tools under their own prefix." None of the
   26 tool names here contains a dot. They are `typo3_<subject>_<verb>`, which
-  `ToolNamingTest` holds against
+  `ToolNamingTest` compares with
   [`Registry`](../../src/Tool/Registry.php).
 - Its **TCA as a Resource** section says: "The content model MUST be served as a
   resource under a uniform scheme and MUST NOT be decomposed into a large number

@@ -42,8 +42,8 @@ The four members
 * ``instructions`` — the statement that
   `Coverage <../../src/Knowledge/Coverage.php>`_ builds from
   ``knowledge/server-scope.json``. It has four parts: the first paragraph, the
-  index of which tool answers what, the note under the index, and the last
-  paragraph.
+  index of which tool answers what, the note under the index, and the paragraphs
+  that close it.
 
 What the instructions say
 -------------------------
@@ -57,7 +57,7 @@ The whole text fits the 2048 characters the recorded client keeps —
 A client cuts the text past that limit and tells neither side. So the budget
 covers everything the server builds, prefix and suffix included.
 
-Three things change the text from one start to the next:
+Four things change the text from one start to the next:
 
 * **A notice at the start.** Where the task skills published into the project
   are stale, ``Installer`` puts them back. The instructions then open with one
@@ -68,6 +68,12 @@ Three things change the text from one start to the next:
   skills are installed. It names the ``typo3://skill`` resource that serves each
   one —
   `D-DIS-034 <../../decisions/discovery/dis-034-a-project-without-skills-is-sent-to-the-skill-resources.md>`_.
+
+* **A different start outside a repository.** Where the server starts in no
+  repository, the first paragraph, the note and the call of an index entry
+  change. The first paragraph then asks for ``targetVersion`` on every call, not
+  for ``typo3_project_describe`` —
+  `D-DIS-033 <../../decisions/discovery/dis-033-a-start-outside-any-repository-is-told-to-state-the-version.md>`_.
 
 * **The exclusion before the routing.** Where
   ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` names tools, the instructions name the

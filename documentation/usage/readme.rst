@@ -77,6 +77,9 @@ Afterwards
 * :ref:`The section on removal <installing-removing-it>` says how to take the
   server out again.
 
+* :doc:`entry-paths` says which path the entry names, and why most clients get
+  an absolute one.
+
 The server is a local subprocess that the client starts over stdio. It writes
 nothing into the TYPO3 installation it reads. It does write in other places. At
 start, it puts back stale task skills in the project. The feedback channel
@@ -87,6 +90,7 @@ it.
     :hidden:
 
     installing
+    entry-paths
     task-skills/index
     checking-it-answers
     working-with-it

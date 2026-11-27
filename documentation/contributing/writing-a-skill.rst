@@ -379,10 +379,10 @@ the verified behaviour it needs
 **And the crossing sits where it happens.** A reader learns the boundary from
 that paragraph, and it stands at the start of the file
 (`D-SKL-112 <../../decisions/task-skills/skl-112-a-skill-opens-on-its-scope-and-a-list-of-its-steps.md>`_).
-A session reads it before the work, long before it leaves the workflow. That
-moment has the least appetite for another workflow. So the crossing itself is a
-step at the point where it occurs. That step tells the session to invoke the
-successor by name, and says what crosses over
+A session reads it before the work, long before it leaves the workflow. When it
+leaves, it has the least appetite for another workflow. So the crossing itself
+is a step at the point where it occurs. That step tells the session to invoke
+the successor by name, and says what crosses over
 (`R-SKL-018 <../../requirements/task-skills/skl-018-a-skill-that-hands-over-tells-the-session-to-invoke-the-next-one.md>`_).
 
 An imperative alone is not enough. One skill closed on ``Activate`` and the

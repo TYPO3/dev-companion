@@ -59,3 +59,13 @@ of the six ways in Forger serves, measured against its API on 2026-11-27.
   ways in it does not serve today move to it.
 - The backlog read whole costs more than a session notices. Then Forger's `list`
   filter has to take the place of the client-side drop.
+
+## Since then
+
+A session on 2026-11-27 read change 87873 by its number and reported four fields
+as what kept it right. `fetch.remote` sent the fetch to the review server, where
+the checkout's `origin` has no `refs/changes`. `mergeable` predicted the
+conflict, `chain` named the change above it, and the owner's `email` said the
+change was the user's. Forger carries no owner address, so the last of these is
+the evidence for the boundary this entry draws. A change read by name stays with
+the review server.

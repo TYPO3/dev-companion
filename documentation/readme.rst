@@ -121,4 +121,3 @@ call is behind it, :doc:`the four steps <usage/index>` say what to do.
     usage/index
     server/index
     contributing/index
-    records/index

@@ -46,3 +46,4 @@ every session works under, because a session reads it before anything else.
     working-on-the-server
     writing-a-skill
     glossary
+    ../records/index

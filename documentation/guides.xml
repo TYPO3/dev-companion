@@ -72,7 +72,7 @@
         <product>Dev Companion</product>
         <cdn>jsdelivr</cdn>
         <!--
-            The four sections, and only those. The bar is where a reader goes
+            The three sections, and only those. The bar is where a reader goes
             from anywhere; the rail below it is the section they are in, and a
             manual with every page in the bar has said nothing.
 
@@ -85,7 +85,6 @@
             <link href="/usage/index"/>
             <link href="/server/index"/>
             <link href="/contributing/index"/>
-            <link href="/records/index"/>
         </navigation>
         <footer>
             <social href="https://github.com/TYPO3/dev-companion" label="GitHub"/>

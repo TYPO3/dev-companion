@@ -338,7 +338,7 @@ worst file first, and the sentences that carry a passive or an -ing form. It
 fails on two of them. One is the bold sentence a requirement or a decision opens
 with: a reader who stops after it must know what the entry settled. The other is
 a sentence over its measure in a directory a sweep has brought to it: `skills/`
-and `knowledge/documents/` at 20, `requirements/` at 25. `Prose::CHECKED` names
+and `knowledge/documents/` at 20, `requirements/` and `todo/` at 25. `Prose::CHECKED` names
 them. A quotation counts as one word there, because its source wrote it. The
 rest is a report. A long sentence can be the right one, and a rewrite driven by
 a counter produces two short sentences that say what one said.

@@ -43,7 +43,7 @@ final class Prose
      *
      * @var list<string>
      */
-    public const CHECKED = ['skills/', 'knowledge/documents/', 'requirements/'];
+    public const CHECKED = ['skills/', 'knowledge/documents/', 'requirements/', 'todo/'];
 
     /**
      * A passive form, as an upper bound. "is read" can be the passive or the

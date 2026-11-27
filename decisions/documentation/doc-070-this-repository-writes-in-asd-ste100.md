@@ -131,5 +131,5 @@ swapped "missing" for "absent" to satisfy the -ing counter. The maintainer read
 it as less clear, the second **Wrong if** in small. The word went back, the
 measure stayed, and AGENTS.md says that a common adjective stays.
 
-The `requirements/` sweep of the same day rewrote two sentences, and the check
-now fails there at 25 (`Prose::CHECKED`).
+The sweeps of `requirements/` and `todo/` landed the same day. The check fails
+there at 25 (`Prose::CHECKED`).

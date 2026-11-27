@@ -42,10 +42,10 @@ its name. That is usually the whole fix.
 Before it writes markup
 -----------------------
 
-Three answers come from the installation rather than from memory. These three
-fail at runtime on a guess: the markup and classes of a backend component, an
-icon identifier and a label resource. The server tells your agent to look each
-of them up before it writes.
+Three answers come from this server rather than from memory. These three fail at
+runtime on a guess: the markup and classes of a backend component, an icon
+identifier and a label resource. The server tells your agent to look each of
+them up before it writes.
 
 You can check that, so it is worth a note. Look for backend markup with no
 ``typo3_component_lookup`` behind it, an icon identifier nobody validated, or a
@@ -141,8 +141,9 @@ What it never does
 ------------------
 
 It writes nothing into your installation. Nothing you ask it changes a file
-there. The one place it writes at all is its own checkout, when a session
-records feedback from a clone of this repository.
+there. It does write in other places. At start, it puts back stale task skills
+in the project. When a session records feedback from a clone of this repository,
+it writes into its own checkout.
 
 It also starts nothing. The server reports a stopped DDEV project as stopped,
 with the command that would start it. It does not start the project for you. So
@@ -151,8 +152,8 @@ a lookup never costs you containers you did not ask for.
 Where a gap goes
 ----------------
 
-The channel for gaps exists only where this package is the repository somebody
-works in. A project does not have it. From a normal install, you reach the
-people who maintain it through the issues of the repository. A useful report
+The channel for gaps exists only where the server runs from a standalone
+checkout. A project that requires the package does not have it. From such a
+project, report a gap in the issues of the repository on GitHub. A useful report
 says what you asked, what came back, and what you had to find out yourself
 instead.

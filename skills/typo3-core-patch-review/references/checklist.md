@@ -98,7 +98,7 @@ Every finding carries five things, and two of them are the ones reviews skip:
 
 1. the changed path, at its line;
 2. what the patch does there;
-3. the rule or the behaviour it collides with, from the lookup that owns it;
+3. the rule or the behaviour it collides with, from the lookup that returned it;
 4. **the consequence** — what breaks, for whom, and when somebody would notice;
 5. **whether this patch introduced it**. The line the diff wrote and the line it
    only moved past are two different requests to the author.

@@ -6,392 +6,386 @@ compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup
 
 # TYPO3 Core Patch Review
 
-Review one patch against the checkout it sits in, and report in priority order.
-Keep this skill as routing and review method. The contribution rules, the suites
-and the commit-message rules are lookups. A copy of them here is one nobody can
-correct.
+This skill covers the review of one TYPO3 core patch. That is your own patch
+before you push it, or a patch set somebody else pushed. The review reports what
+is wrong, missing or not ready, in priority order. It stops before any change to
+the patch, which `typo3-core-patch-development` covers. A review of an
+extension, a sitepackage or a site project is `typo3-extension-health`. That
+skill reads other surfaces against other rules.
 
-## Establish the patch, then the rules you judge it by
+**Fetch the rules before you read the diff.** A rule you fetch after the diff
+only confirms your reading. It no longer tests it.
 
-1. Work through [references/base.md](references/base.md). It fixes the order
-   every task here starts in, and a review is where that order decides the
-   result. A rule you fetch after you read the diff confirms a reading instead
-   of a test of it.
-2. Read [references/checklist.md](references/checklist.md) for the review
-   surfaces, what a finding owes, what a dropped candidate owes, and the
-   severity rubric.
-3. Establish the patch itself: **the changed paths**, **the branch it targets**,
-   **the commit message**, and **the issue it names**. Every lookup below takes
-   one of them as its argument. A review that has not established the target
-   branch reviews against the wrong conventions and cannot tell.
-   `typo3_gerrit_lookup` with the `Change-Id` or the change number answers all
-   four for a patch set somebody has pushed. So this costs no checkout, and you
-   triage a shortlist without a fetch. A patch nobody pushed is the other case,
-   and one reading of the diff produces the same four.
+**A review does not change the patch it reviews.** A review that rewrites the
+patch destroys the evidence for its own findings.
 
-The changed paths are the argument, not the subject. Pass them to
-`typo3_hint_lookup` for the conventions of the subsystem the patch is in, one
-call per subsystem. Do that before you form a view of whether the code is right.
+Keep this skill as routing and review method: it says which tool to ask and
+when. The contribution rules, the suites and the commit-message rules come from
+the lookups. A copy of them here would go out of date where nobody can correct
+it.
 
-`typo3_task_guide` names the hints its brief left out, in `omittedHints` and in
-the line above the brief. **An omitted id for a subsystem the diff changes is a
-call you owe before any finding about that subsystem.** Fetch it with
-`typo3_hint_lookup` by id, the `lookup` its entry names. An id left out of a
-batch is still owed. `datahandler-testing` on a patch that adds DataHandler
-tests is that case. The hints the brief carried do not stand in for it. One
-review said they did, and stated the subsystem's TCA defaults wrongly.
+## Steps at a glance
+
+1. Establish the patch and the rules you judge it by.
+2. Read what the issue and the review server already say about it.
+3. Check what the patch must deliver, with one lookup per obligation.
+4. Run the verification that the diff narrows.
+5. Check the commit message and the target branch.
+6. Report the findings.
+
+When the user asks you to change the patch, follow "Where the review ends and
+the rework begins".
+
+## 1. Establish the patch and the rules
+
+1. Work through [references/base.md](references/base.md) first. It fixes the
+   order every task starts in. In a review, that order decides the result.
+
+2. Read [references/checklist.md](references/checklist.md). It lists the review
+   surfaces and the severity rubric. It also says what a finding and a dropped
+   candidate must name.
+
+3. Establish four facts about the patch. Every later lookup takes one of them as
+   its argument.
+
+   - **The changed paths.**
+   - **The target branch.** A review against the wrong branch applies the wrong
+     conventions and cannot tell.
+   - **The commit message.**
+   - **The issue it names.**
+
+   For a pushed patch set, call `typo3_gerrit_lookup` with the `Change-Id` or
+   the change number. It returns all four without a fetch. So you can compare a
+   shortlist of changes before you check out any of them. For a patch nobody
+   pushed, read the four from the diff.
+
+4. Pass the changed paths to `typo3_hint_lookup`, one call per subsystem. The
+   answer gives the conventions of the subsystem the patch is in. Do this before
+   you decide whether the code is right.
+
+5. Read `omittedHints` in the answer of `typo3_task_guide`. It lists the hints
+   the brief left out, and the line above the brief names them too. **An omitted
+   id for a subsystem the diff changes is a call you make before any finding
+   about that subsystem.** Fetch it with `typo3_hint_lookup` by id, the `lookup`
+   its entry names. The hints in the brief do not replace it.
+   `datahandler-testing` on a patch that adds DataHandler tests is such a case.
 
 **Where the review needs the patch on disk, invoke `typo3-core-patch-checkout`
-for that one change. Say in the report which ref it fetched.** A read of the
-hunks needs it, because the answer above carries the paths and not the diff. So
-does a suite run against the patch.
+for that one change.** Say in the report which ref it fetched. You need the
+patch on disk to read the hunks, because the lookup returns the paths and not
+the diff. You also need it to run a suite against the patch.
 
-The decision which of several changes to read does not. The paths, the size and
-the vote state settle that. Afterwards nobody can tell a ref you fetched for a
-triage from the branches with the reader's own work. One session pulled in eight
-before its user stopped it.
+You do not need it to choose which of several changes to read. The paths, the
+size and the votes decide that. A ref fetched for that choice later looks like
+the reader's own work. One session fetched eight before its user stopped it.
 
-## What the project already says about this patch
+## 2. What the project already says about this patch
 
-The message names two things the diff does not contain: the issue it resolves
-and the change it is. Read both before you read the code a second time.
+The commit message names two things the diff does not contain: the issue and the
+change. Read both before you read the code a second time.
 
-- `typo3_forge_lookup` with the issue number. What the change is *for* belongs
-  to the issue. A review that takes it from the commit message has the author's
-  account of the problem and of the solution. It is also where a series says it
-  is one. An issue that calls itself a part tells you the patch is not meant to
-  stand alone. That decides every finding about what it lacks.
-- The `typo3_gerrit_lookup` answer step 3 established the patch from also says
-  what the review so far is. That is the votes on it and the comments on it. A
-  comment somebody left on an earlier patch set and nobody answered is a finding
-  of its own. It is the one this review would otherwise make a second time.
+- **The issue.** Call `typo3_forge_lookup` with the issue number. The issue says
+  what the change is for. The commit message gives only the author's view of the
+  problem and the solution. An issue that calls itself a part tells you the
+  patch is not meant to stand alone. That decides every finding about what the
+  patch lacks.
 
-  What "unanswered" means is yours to read. The flag on a thread and the reply
-  under it are two facts, and both come back. Where the patch reached you as a
-  commit rather than a change number, its `Change-Id` is the argument. A commit
-  hash out of the checkout reaches the same answer.
+- **The review so far.** The `typo3_gerrit_lookup` answer from step 1 also gives
+  the votes and the comments. A comment on an earlier patch set that nobody
+  answered is a finding of its own. Without it, this review repeats a point
+  somebody already made.
+
+  You decide whether a thread is answered. The answer returns the flag on a
+  thread and the reply under it, which are two facts. Where the patch reached
+  you as a commit, its `Change-Id` is the argument. A commit hash from the
+  checkout gets the same answer.
 
 **Both arguments come out of the commit message, and that makes them safe.**
-`Resolves:` is the Forge issue, `Change-Id:` is the change, and the `Change-Id`
-still names it after an amend. A number you carry in from elsewhere does not
-fail. Asked under the other's name, both lookups answer. They return a real
-change and a real issue that belong to neither this patch nor each other.
 
-So the check is the subject. What comes back carries the subject of the commit
-under review, or the number was wrong rather than the patch.
+- `Resolves:` is the Forge issue.
+- `Change-Id:` is the change, and it still names it after an amend.
+
+A number from anywhere else can be wrong without an error. Each lookup answers a
+number that belongs to the other one. It returns a real change or issue that has
+nothing to do with this patch. So check the subject. The answer has the subject
+of the commit under review, or the number was wrong rather than the patch.
 
 A patch nobody pushed yet has no change, and an answer of nothing is a result.
-Say so rather than leave the surface silent. Where the commit in the checkout
-and the change on the server differ, name which of the two you read. A review of
-an older patch set than the one that exists is the failure this step exists for.
-The checkout cannot report it.
+Say so in the report rather than leave the surface empty.
 
-The answer carries the commit the current patch set is. Hold it against
-`git rev-parse HEAD`, and where the two differ, say which one the findings are
-about.
+The answer names the commit of the current patch set. Compare it with
+`git rev-parse HEAD`. Where the two differ, say which one the findings are
+about. A review of an older patch set is the failure this check prevents. The
+checkout cannot show it.
 
-Reading is the whole of it. Votes, comments and uploads stay with the person who
-does the review.
+This step only reads. Votes, comments and uploads stay with the person who does
+the review.
 
-## What the patch owes, per finding
+## 3. What the patch must deliver, per finding
 
-Ask the owner of each obligation rather than recall it:
+Ask the lookup for each obligation. Do not recall it.
 
-- `typo3_rule_lookup` for the contribution rules the diff makes relevant. That
-  is what a breaking change owes and what a deprecation owes. It is what belongs
-  in a changelog entry, and what review readiness means. The sections have
-  subjects for names. So ask in the words of a subject rather than in a sentence
-  about the patch.
+1. **The contribution rules.** Call `typo3_rule_lookup` for the rules the diff
+   makes relevant. Examples are what a breaking change or a deprecation
+   requires, what a changelog entry contains, and what review readiness means.
+   The sections have subjects as names, so ask in the words of a subject.
 
-  **Two subjects at most in one call, and a third is a call of its own.**
-  `breaking change changelog entry` returns both sections whole. The two asked
-  apart return the same pair twice.
+   **Two subjects at most in one call, and a third is a call of its own.**
+   `breaking change changelog entry` returns both sections whole. Asked apart,
+   the two return the same pair twice.
 
-  The lookup keeps a section only where it carries half of what the query asks
-  for. So every subject you add takes coverage off the sections the others
-  reach. `changelog entry testing review readiness` returns nothing at all,
-  while `changelog entry` and `review readiness` each answer whole. Measured:
-  two subjects never empty a query, and a third regularly does, whether or not
-  the subjects share a document.
-- Enumerate what the diff **removes or renames** before you ask. A public class,
-  method, property, constant, TCA field, TypoScript path or Fluid ViewHelper
-  argument can disappear. That is the class of finding this review exists for. A
-  read of the new code does not surface it. The evidence is in what is gone, not
-  in what is there.
-- `typo3_changelog_lookup` for the precedent, when the patch does something the
-  core has done before. What an earlier entry required of the same kind of
-  change is the strongest argument a review can make. It also settles
-  disagreement without an appeal to taste.
+   The lookup keeps a section only where it matches half of the query. So each
+   added subject takes matches away from the others.
+   `changelog entry testing review readiness` returns nothing at all.
+   `changelog entry` and `review readiness` each answer whole.
 
-  **List the kind before you search for words: `type` and `version`, and no
-  query at all.** What makes an earlier change a precedent is its shape, and a
-  shape has no vocabulary. The entry that settles a finding regularly shares no
-  noun with the diff. Two reviews lost theirs to a query and found it by hand
-  afterwards.
+2. **What the diff removes or renames.** List it before you ask. A public class,
+   method, property or constant can disappear. So can a TCA field, a TypoScript
+   path or a Fluid ViewHelper argument. This review exists for that kind of
+   finding. A read of the new code does not show it, because the evidence is
+   what is gone.
 
-  `type` is the obligation the finding is about. `version` is the line the
-  precedent would sit on. That is a released line the core backports the change
-  to, or a major before that. A released line publishes few entries per type. So
-  the listing is the whole of what the core did of that kind. You pick a
-  precedent out of its titles.
+3. **The precedent.** Call `typo3_changelog_lookup` when the patch does
+   something the core did before. What an earlier entry required of the same
+   kind of change is the strongest argument a review can make. It also settles a
+   disagreement without an appeal to taste.
 
-  A major that still collects entries holds more of a type than the default
-  answer carries, so raise `limit` there.
+   **List the kind before you search for words: `type` and `version`, and no
+   query at all.** Before you argue from a precedent, read
+   [references/precedent.md](references/precedent.md). It says which version to
+   list and what to do when the listing misses.
 
-  **Ask it in the words of the entry's title, not in the identifier the diff
-  removes.** The enumeration above leaves you with a class and a method name. A
-  removal has a title after what it removed *about*: the subsystem, the kind of
-  API. It carries the identifiers in a list inside the file.
+4. **The manual.** Call `typo3_documentation_lookup` where the diff changes
+   behaviour a manual describes. The manuals it searches are outside the core
+   repository. So the manual change is a follow-up, not part of this patch. The
+   follow-up is the finding, not a reason to skip it.
 
-  So a query that names one of them and comes back empty has established
-  nothing. Neither has one narrowed to the branch this patch targets. A
-  precedent sits under the version it landed in, which is an earlier one by
-  definition. Where the listing and the words both miss, the precedent is still
-  there, and the checkout holds it. That is `Documentation/Changelog`, which
-  this server does not read and you do. Say which of the two answered.
+   A review said the wording lived elsewhere and concluded that the patch owed
+   no documentation change. The patch had made the documented sentence about
+   `stdWrap.override` false. Whether the patch needs a manual change at all is
+   `typo3_rule_lookup` asked for `documentation`. A system extension's own
+   `Documentation/` is in the checkout, and the patch itself changes it.
 
-  **What kind of change an entry came out of is two readings rather than one.**
-  `typo3_forge_lookup` with its issue number says what the reporter filed the
-  issue as. The argument a review makes is about the commit keyword instead. It
-  says that an earlier bugfix of this kind owed an entry.
+5. **An alternative you propose.** **Sweep the checkout for the call sites
+   before you propose an alternative.** A recommendation to a core reviewer
+   needs precedent rather than taste. This server does not know how common an
+   idiom is in the core.
 
-  The two disagree in both directions, so read the keyword where it stands.
-  `git log --diff-filter=A` over the entry's own file names the commit that
-  added it. The issue behind a security entry is not public, and an unavailable
-  answer there is not an outage.
-- `typo3_documentation_lookup` where the diff changes behaviour a manual states.
-  The books it searches live outside the core repository. So what the patch owes
-  there is a follow-up rather than part of this patch. That is the finding
-  rather than the reason to skip it.
+   The base's step after the lookups starts at the class that implements a
+   behaviour. This question has none, and PHP source as code is outside what
+   this server reads. The checkout answers it with the call sites at their paths
+   and lines. Say how many: one is a coincidence and a spread across system
+   extensions is a convention.
 
-  A review said the wording lived elsewhere and concluded that the patch owed no
-  documentation change. The patch made the documented sentence about
-  `stdWrap.override` false. Whether the patch owes a manual anything at all is
-  `typo3_rule_lookup` asked for `documentation`. A system extension's own
-  `Documentation/` is in the checkout, and it changes in the patch itself.
-- **Sweep the checkout for the call sites before you propose an alternative.** A
-  recommendation to a core reviewer needs precedent rather than taste. Whether
-  an idiom has a foothold in the core is precedent this server does not hold.
-  The base's step after the lookups starts at the class that implements a
-  behaviour. This question has none, and PHP source as code is outside what this
-  server reads.
-
-  The checkout answers it, and the answer is the call sites at their paths and
-  lines. Say how many: one is a coincidence and a spread across system
-  extensions is a convention. A review that proposes an alternative and names
-  none has argued from taste.
-
-- `typo3_rule_lookup` with `documentId="any/writing/the-prose-a-patch-carries"`
-  for the **Prose** surface. A brief carries that page to a task that writes
-  files, and a review writes none. So the review asks for it here.
+6. **The prose.** Call `typo3_rule_lookup` with
+   `documentId="any/writing/the-prose-a-patch-carries"` for the **Prose**
+   surface. A brief includes that page only for a task that writes files. A
+   review writes none, so it asks here.
 
 Every finding names the changed path it is about. A statement about the
 subsystem that ties to no line in this diff belongs in the issue.
 
-Where the patch is one of a set, read a finding against the end of the set
-first. What a later patch in the same set removes is not a defect of the set. To
-establish that is a reading of that patch rather than of what a message promises
-about it. Still report it where each patch has to stand on its own, and name the
-later one that settles it.
+**Where the patch is one of a set, read a finding against the end of the set
+first.** What a later patch of the set removes is not a defect of the set.
+Establish that from a reading of that patch rather than of what a message
+promises about it. Still report the finding where each patch must stand on its
+own. Name the later patch that settles it.
 
-## Verification is the project's own, and the diff narrows it
+## 4. Run the verification the diff narrows
 
-`typo3_test_run_guide` with the changed paths returns the suites that can fail
-on this change and the targeted invocation for each. That is the verification a
-review runs: the narrowest applicable suite first, the broader ones after it.
+Call `typo3_test_run_guide` with the changed paths. It returns the suites that
+can fail on this change, with a targeted command for each. Run the narrowest
+suite first and the broader ones after it.
 
-The core's suites are not among the commands `typo3_project_describe` declares.
-That answer is about the repository's own composer scripts. The test runner is a
-script rather than one of them. Take the commands from `typo3_test_run_guide`
-and `typo3_script_lookup`, never from memory and never from the host's own PHP.
-A check run outside the project's runner is evidence about your machine.
+Take the commands from `typo3_test_run_guide` and `typo3_script_lookup`. Never
+take them from memory or from the host's own PHP. The core's test runner is a
+script, so `typo3_project_describe` does not list it. That answer lists the
+repository's composer scripts only. A check run outside the project's runner is
+evidence about your machine.
 
-A review may run what cannot change the code, and it says what it ran and what
-it printed. **It then writes out, by name, the suites on that list it did not
-run.** Left out, they make four green suites read as a finished verification.
-That is the claim a review is least able to support. "The tests would presumably
-still pass" is not a review sentence. And an unnamed suite is the same sentence
-with the words taken out.
+### Name every suite you did not run
+
+A review may run anything that cannot change the code. It says what it ran and
+what that printed. **It then writes out, by name, the suites on that list it did
+not run.** Without them, four green suites read as a finished verification. A
+review can support that claim least of all. "The tests would presumably still
+pass" is not a review sentence. And an unnamed suite is the same sentence with
+the words taken out.
 
 The list is the guide's `verifying`: every entry it marks `verifies`, by name.
-Every name on it stands on a `Ran:` line or a `Not run:` line. So the `Not run:`
-line is that list minus what ran. An install, a dispatcher or a server for a
-browser checks nothing and is not on it. One review built the list from the
-marks and left five suites off both lines.
+Every name on it appears on a `Ran:` line or a `Not run:` line. So the
+`Not run:` line is that list minus what ran. An install, a dispatcher or a
+server for a browser checks nothing and is not on the list.
 
 **A suite on that list stays unrun for one of four reasons, and its `Not run:`
-line names the reason.** The suite writes into the checkout and has no
-report-only form. The user, asked before the skip, answered no. No worktree
-holds the patch, and nobody was there to ask. The review skipped it to finish
-faster. A narrower suite that passed and a scope the session chose are the
-fourth reason. The line names it so.
+line names the reason.**
+
+1. The suite writes into the checkout and has no report-only form.
+2. You asked the user before the skip, and the user said no.
+3. No worktree holds the patch, and nobody was there to ask.
+4. The review skipped it to finish faster. A narrower suite that passed and a
+   scope the session chose are this reason too, and the line says so.
 
 **Where a worktree holds the patch, the third reason is false.** A suite left
 unrun there takes the fourth.
 
 **A skip for speed never takes the test a High or blocking finding rests on.**
 Run that test alone, in the targeted form `typo3_test_run_guide` returns for its
-suite. Give it the database the failure was seen on, in place of the form's
-`-d`. Its `Ran:` line names the test, and the suite's `Not run:` line keeps the
-rest. One review skipped `functional` whole, and its blocker rested on a CI log
-alone. The review before it had reproduced that failure with one test on
-MariaDB.
+suite. Use the database the failure was seen on, in place of the `-d` of that
+form. Its `Ran:` line names the test. The `Not run:` line of the suite names the
+rest.
+
+### Run the suites in a worktree
 
 **Run the suites in a `git worktree` on the patch set rather than in the main
 checkout.** The worktree leaves the reader's branch and uncommitted work alone.
-So a review that must not touch the checkout has a reason for a worktree, not
-against a run. Where no worktree holds the patch yet, ask the user whether to
-create one. Ask before you skip the run, never instead of the run. A skip after
-that question names the question and its answer on its `Not run:` line.
+So a review that must not touch the checkout has a reason for a worktree. It has
+no reason to skip the run.
 
-**Where nobody can answer the question, run the suites in the worktree that
-stands.** A headless session has no user to ask. It may skip a suite to finish
-faster, and says so. It creates no worktree without the question, because that
-writes into the user's repository.
+Where no worktree holds the patch yet, ask the user whether to create one. Ask
+before you skip the run, never instead of the run. A skip after that question
+names the question and its answer on its `Not run:` line.
 
-One review skipped every suite to keep the checkout clean and leaned on the CI
-vote. The one before it detached the main checkout onto the patch set.
+**Where nobody can answer the question, run the suites in a worktree that
+already exists.** A headless session has no user to ask. It may skip a suite to
+finish faster, and says so. It creates no worktree without the question, because
+that writes into the user's repository.
 
-**A scratch probe is one of the things it may run.** Add a temporary fixture
-column, a model property or a test of your own. Run a targeted suite against it,
-read what it prints, and put the tree back. You do not edit the patch under
-review, which is the boundary that matters. A probe writes files and restores
-them, and you verify the restoration rather than assume it.
+### Probe what a reading cannot settle
 
-This is what turns "this would presumably throw" into a pasted error.
-Dropped-candidate findings are where it earns most. What disproves a path is
-what makes it impossible, and a probe is often the only thing that can.
+**A scratch probe is one of the things a review may run.** Add a temporary
+fixture column, a model property or a test of your own. Run a targeted suite
+against it, read what it prints, and put the tree back. Do not edit the patch
+under review: that is the boundary. A probe writes files and restores them, and
+you verify the restoration rather than assume it.
+
+A probe turns "this would presumably throw" into a pasted error. It helps most
+with a dropped candidate. Only what makes a path impossible disproves it, and
+often only a probe can show that.
 
 **Put the tree back to what the probe found, which is not always the committed
 state.** `git checkout -- <path>` restores the file from the index, and in a
-review the index holds the patch set. On a file that carries nothing else, that
-undoes the probe. On a file that also carries a change the user asked you for,
-it undoes the change with it. Nothing reports the loss.
+review the index holds the patch set. On a file with no other change, that
+undoes the probe. On a file that also has a change the user asked you for, it
+undoes that change too. Nothing reports the loss.
 
-Where the file carries work of your own, copy it aside before the probe and back
-afterwards. Or `git add <path>` first, so the restore lands on your work. Verify
-with `git diff --stat <path>` rather than with `git status`. A clean status is
-the confirmation on a file you did not edit, and the loss on one you did.
+Where the file has work of your own, do one of these before the probe:
+
+- Copy the file aside, and copy it back afterwards.
+- Run `git add <path>`, so the restore lands on your work.
+
+Verify with `git diff --stat <path>` rather than with `git status`. A clean
+status confirms the restore on a file you did not edit. On a file you did edit,
+it means the loss.
 
 **A finding that turns on what the frontend rendered is one no reading can
 settle.** TypoScript defaults, TypoScript in an `ext_localconf.php` and anything
-below `lib.parseFunc` are the obvious half. A PHP change to the request
-pipeline, an error handler or a page renderer caller is the same case. What
-changed is what comes out, not what the file says.
+below `lib.parseFunc` are such cases. So is a PHP change to the request
+pipeline, an error handler or a caller of the page renderer. What changed is the
+output, not what the file says.
 
-Where no test covers the constellation, the suites stay green on either side of
-it. A throwaway functional test that renders one page and prints what came out
-settles it. `typo3_rule_lookup` with
-`documentId="core/testing/proving-a-rendering"` says how you build one. It says
-how you get the output out of a run that would otherwise print nothing. It says
-one marker per region, so the response says which part of it changed. It says
-what a service holds while the request still runs.
+Where no test covers the case, the suites stay green on either side of it. A
+throwaway functional test that renders one page and prints the output settles
+it. `typo3_rule_lookup` with `documentId="core/testing/proving-a-rendering"`
+says how to build one.
 
-**A speed claim in the message is checked at its cause.** A before and an after
-name an expensive call that the patch makes less often. Count that call on both
-sides before you time anything. Measure where the author measured. Turn each
-part of the patch off once, so each cause gets its share. `typo3_rule_lookup`
-with `documentId="core/testing/timing-a-code-path"` says how.
+**Check a speed claim in the message at its cause.** A before and an after name
+an expensive call that the patch makes less often. Count that call on both sides
+before you time anything. Measure where the author measured. Turn each part of
+the patch off once, so each cause gets its share. `typo3_rule_lookup` with
+`documentId="core/testing/timing-a-code-path"` says how.
 
-## Commit shape and target branch
+## 5. Check the commit message and the target branch
 
-`typo3_commit_message_guide` with `workflow="core"`, the message and the change
-type says whether the message is submittable. Without that argument it checks
-the message as a repository of its own and asks for no Forge issue. Read its
-answer against the diff rather than on its own. That is the subject that
-describes the wrong action, or the missing issue reference. It is the marker a
-breaking change needs and this one does not carry.
+Call `typo3_commit_message_guide` with `workflow="core"`, the message and the
+change type. It says whether the core accepts the message. Without
+`workflow="core"`, it checks the message as for a repository of its own. Then it
+asks for no Forge issue.
 
-The branch the patch targets decides which conventions apply and which findings
-matter. So a patch whose stated target its diff does not fit is a finding of its
-own.
+Read its answer against the diff, not on its own. Look for a subject that
+describes the wrong action, or a missing issue reference. Look for a breaking
+change without its marker.
+
+The target branch decides which conventions apply and which findings matter. So
+a diff that does not fit its stated target is a finding of its own.
 
 Every branch in `Releases:` is a claim the review checks. One `git merge-tree`
-per branch says whether the patch reaches it. `typo3_rule_lookup` with
-`documentId="core/contribution/gerrit-workflow"` has the call.
+per branch says whether the patch applies there. `typo3_rule_lookup` with
+`documentId="core/contribution/gerrit-workflow"` gives the command.
 
-## Report
+## 6. Report
 
 Call `typo3_gerrit_lookup` again before you write, where time has passed since
-you read the change. How much is enough depends on how active the patch is, and
-on a busy one it is hours. Votes, messages and alternatives pushed as separate
-changes arrive on the server with no signal in the checkout. One review read its
-change on the first day. It found the CI vote and two alternatives on the
-second, by a call made for another reason.
+you read the change. On a busy change, a few hours is enough. Votes, messages
+and alternatives pushed as separate changes reach the server with no sign in the
+checkout. One review found the CI vote and two alternatives only on its second
+day.
 
 **Write the report in the skeleton of
 [references/report.md](references/report.md), every heading in its order and
 every entry in its line form.** The three review skills share that skeleton, so
-two reports compare section by section. Order the findings by what stops the
-patch, and say why each one stops it. Beside them stands what you checked and
-found correct. Beside them also stand the points you raised while you read and
-then dropped, each with what dropped it.
+two reports compare section by section. The report contains:
 
-Close on the checklist's surfaces with each one marked assessed, unassessed or
-not applicable to this diff. A reader cannot tell a review that reports only
-findings from one that looked at less.
-
-End the report with each step of the base order you did not reach. Give each one
-a line: `Not reached: <step> — <why>`.
+- The findings, ordered by what stops the patch, each with why it stops it.
+- What you checked and found correct.
+- The points you raised while you read and then dropped, each with what dropped
+  it.
+- Each surface of the checklist, marked assessed, unassessed or not applicable
+  to this diff. Without it, a reader cannot tell a short review from one that
+  looked at less.
+- One line `Not reached: <step> — <why>` for each step of the base order you did
+  not reach.
 
 **The report is markdown the reader can copy, and the answer is where it goes.**
-Everything this section asks for makes it long, and length makes the form
-matter. Somebody carries a review into the change, the issue or a chat, and
-rendered output does not survive the move. Put the whole report in one fenced
-`markdown` block, with a fence of four backticks. A client that renders the
-answer hands a copy over as rendered text, and the fence keeps the source. Write
-it to a file only where the caller asks for one, at a path outside the checkout
-under review. A modified or untracked file beside the patch is a surface this
-review reports on.
+A full report is long, so its form matters. Somebody pastes a review into the
+change, the issue or a chat, and rendered output does not survive the move.
+
+Put the whole report in one fenced `markdown` block, with a fence of four
+backticks. A client that renders the answer copies it as rendered text, and the
+fence keeps the source. Write it to a file only where the caller asks for one,
+at a path outside the checkout under review. A changed or untracked file beside
+the patch is a surface this review reports on.
 
 **A document the caller asks for is this report, in this order and with every
 part above.** A summary in a shape of its own drops the ranks, the paths, the
-dropped candidates and the surfaces. Those are what a reader checks a review by.
+dropped candidates and the surfaces. A reader checks a review by those.
 
 ## Where the review ends and the rework begins
 
 **When the user asks you to make the change, invoke
 `typo3-core-patch-development` and work from it.** That includes the amend and
-the push. An instruction to change the patch asks for it: "finish it", "fix it",
-"amend it", "write the test". It looks like nothing at all from the inside. It
-is a sentence in a conversation in the middle of a session that goes well.
+the push. These instructions ask for it: "finish it", "fix it", "amend it",
+"write the test". Such an instruction is easy to miss. It is one sentence in the
+middle of a session that goes well.
 
-A session that carries on under review rules holds "it does not change the
-patch" while it changes the patch. One did. It edited `ColumnMap.php`, added a
-fixture column, wrote a functional test, ran seven suites and amended the
-commit. All of that was still inside this skill. Nothing broke and the tree
-stayed clean, which is why nothing marked the crossing.
+A session that goes on under review rules changes the patch and still reports
+that it does not. Nothing breaks and the tree stays clean, so nothing marks the
+change of task.
 
 **Before the first edit to a file meant to survive, ask whether
-`typo3-core-patch-development` should run.** You have to recognise a sentence,
-and one has arrived in words this enumeration does not reach. An edit is an act
-you already perform. A scratch probe is not that edit: you put it back and it
-leaves no diff. The verification section above draws its boundary.
+`typo3-core-patch-development` should run.** An instruction can arrive in words
+this list does not include. An edit is an act you notice yourself. A scratch
+probe is not that edit: you put it back and it leaves no diff. Step 4 draws that
+boundary.
 
-**Three of its calls take an argument this review has just established. That
-makes them a restart rather than a repeat.** Those are `typo3_task_guide` with
-the change type you are about to write, and `typo3_hint_lookup` with the paths
-you will edit. The third is the deprecation sweep. That sweep is
-`typo3_changelog_lookup` with `type: deprecation`, which a review is exempt from
-and a change is not. You walked the base once at the start of this review,
-against files nobody would write.
+**Three calls take an argument this review has just established. So the order
+starts again rather than repeats.**
 
-**A remark about a finding's weight is not that instruction.** "That is a reason
-to reject it", "I think the tests should show that", "that one blocks it". Each
-reaffirms a finding and commissions nothing. So it asks for the finding
-re-ranked and the review carried on.
+- `typo3_task_guide` with the change type you are about to write.
+- `typo3_hint_lookup` with the paths you will edit.
+- `typo3_changelog_lookup` with `type: deprecation`, the deprecation sweep. A
+  review skips that sweep, and a change does not.
 
-One session read "I think the tests should prove it" as the handover and invoked
-the patch skill. The reader had meant that the missing test was reason enough to
-reject the patch. Where the sentence could be either, ask which the user meant.
-A switch costs a turn under the wrong skill's rules, and a question costs one
-sentence.
+You walked the base once at the start of this review, against files nobody would
+write.
 
-Until the user asks you for the change, the rule above stands whole. A review
-that rewrites what it reviews has destroyed the evidence for its own findings.
-Where the answer is that the patch needs work, name it and stop.
+**A remark about the weight of a finding is not that instruction.** "That is a
+reason to reject it", "I think the tests should show that", "that one blocks
+it". Each confirms a finding and asks for no change. So re-rank the finding and
+continue the review.
 
-This skill covers the review of a core patch and the order it reports its
-findings in. A review of an extension, a sitepackage or a site project belongs
-to `typo3-extension-health` and its checklist. That reads different surfaces
-against different rules.
+Where the sentence could be either, ask which the user meant. A switch costs a
+turn under the wrong skill's rules, and a question costs one sentence.
+
+Until the user asks for the change, the review changes nothing. Where the patch
+needs work, name the work and stop.

@@ -1967,6 +1967,15 @@ final class SkillTest extends TestCase
             '**List the kind before you search for words: `type` and `version`, and no query at all.**',
             $skill,
         );
+        // The rest is a reference the step names with its trigger — `D-SKL-112`.
+        self::assertStringContainsString('[references/precedent.md](references/precedent.md)', $skill);
+        $skill = self::flat((string) file_get_contents(
+            Paths::root() . '/skills/typo3-core-patch-review/references/precedent.md',
+        ));
+        self::assertStringContainsString(
+            '**List the kind before you search for words: `type` and `version`, and no query at all.**',
+            $skill,
+        );
         // Which line to list, since a filter set to the branch under review is
         // the one the paragraph below forbids.
         self::assertStringContainsString('the line the precedent would sit on', $skill);
@@ -1975,7 +1984,7 @@ final class SkillTest extends TestCase
         // 2026-08-21. 14.0 through 14.3.x hold 99 breaking and 36 important
         // entries. One answer carries them since the cap moved to 200
         // (`D-ANS-093`), and the default of 20 does not.
-        self::assertStringContainsString('holds more of a type than the default answer carries', $skill);
+        self::assertStringContainsString('has more entries of a type than the default answer returns, so raise', $skill);
         self::assertStringContainsString('so raise `limit` there', $skill);
         self::assertStringContainsString(
             '**Ask it in the words of the entry\'s title, not in the identifier the diff removes.**',
@@ -1983,7 +1992,7 @@ final class SkillTest extends TestCase
         );
         // Why the identifier is what the reviewer is holding, and where it
         // actually sits in the entry.
-        self::assertStringContainsString('carries the identifiers in a list inside the file', $skill);
+        self::assertStringContainsString('It lists the identifiers inside the file', $skill);
         // The empty answer is the trap: it reads as "no precedent exists" from
         // both the identifier and the version filter, and it is neither.
         self::assertStringContainsString('comes back empty has established nothing', $skill);
@@ -2116,7 +2125,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
         ));
 
-        self::assertStringContainsString('## What the project already says about this patch', $skill);
+        self::assertStringContainsString('## 2. What the project already says about this patch', $skill);
         self::assertStringContainsString('`typo3_forge_lookup` with the issue number', $skill);
         // The call moved into the step that establishes the patch when the
         // answer began to carry the paths and the message (`D-ANS-112`). So
@@ -2138,7 +2147,7 @@ final class SkillTest extends TestCase
         // this one.
         self::assertStringContainsString('Both arguments come out of the commit message', $skill);
         self::assertStringContainsString(
-            'carries the subject of the commit under review, or the number was wrong',
+            'The answer has the subject of the commit under review, or the number was wrong',
             $skill,
         );
         // The Change-Id is the one that survives an amend. So it is what a

@@ -111,7 +111,7 @@ final class TerLookup extends ReadOnlyTool
             'extension' => Schema::string('The key the call named, lowercased, as the call sent it. Empty in a search.'),
             'query' => Schema::string('The subject the call searched for, as the call passed it. Empty where it named a key.'),
             'extensionVersion' => Schema::string('The version number the call asked about, as the call passed it. Empty where it passed none.'),
-            'held' => Schema::nullable([
+            'published' => Schema::nullable([
                 'type' => 'boolean',
                 'description' => 'Whether the registry has published that exact number. Null where the call named no version, and null where the call read nothing at all. A false here is the registry\'s answer, never a question that failed. It is a fact about the registry and not a judgement that the number is free to release.',
             ]),
@@ -145,7 +145,7 @@ final class TerLookup extends ReadOnlyTool
                 'source-not-answering' => 'the registry did not answer this time.',
                 'source-not-parseable' => 'something answered with a page rather than with the API.',
             ], 'Why the registry answered nothing, where status says unavailable. Null otherwise, and null on a key with nothing published under it; that one is an answer. In a search, why neither registry answered.'),
-        ], ['status', 'source', 'url', 'page', 'extension', 'query', 'extensionVersion', 'held', 'total', 'versions', 'matches', 'searches', 'unavailable']);
+        ], ['status', 'source', 'url', 'page', 'extension', 'query', 'extensionVersion', 'published', 'total', 'versions', 'matches', 'searches', 'unavailable']);
     }
 
     /** @param array<string, mixed> $args */
@@ -167,7 +167,7 @@ final class TerLookup extends ReadOnlyTool
         }
 
         $answer = (new Ter())->versions($key);
-        $held = self::held($answer, $version);
+        $published = self::isPublished($answer, $version);
         $data = [
             'status' => $answer['status'],
             'source' => Ter::HOST,
@@ -176,7 +176,7 @@ final class TerLookup extends ReadOnlyTool
             'extension' => $key,
             'query' => '',
             'extensionVersion' => $version,
-            'held' => $held,
+            'published' => $published,
             'total' => count($answer['versions']),
             'versions' => array_slice($answer['versions'], 0, $limit),
             'matches' => [],
@@ -205,7 +205,7 @@ final class TerLookup extends ReadOnlyTool
             );
         }
 
-        return ToolResult::create(self::published($key, $version, $held, $answer['versions'], $data['versions']), $data);
+        return ToolResult::create(self::listing($key, $version, $published, $answer['versions'], $data['versions']), $data);
     }
 
     /**
@@ -254,7 +254,7 @@ final class TerLookup extends ReadOnlyTool
                 'extension' => $key,
                 'query' => '',
                 'extensionVersion' => $version,
-                'held' => null,
+                'published' => null,
                 'total' => 0,
                 'versions' => [],
                 'matches' => [],
@@ -329,7 +329,7 @@ final class TerLookup extends ReadOnlyTool
             'extension' => '',
             'query' => $query,
             'extensionVersion' => '',
-            'held' => null,
+            'published' => null,
             'total' => 0,
             'versions' => [],
             'matches' => $matches,
@@ -398,7 +398,7 @@ final class TerLookup extends ReadOnlyTool
      *
      * @param array{status: string, versions: list<array<string, mixed>>} $answer
      */
-    private static function held(array $answer, string $version): ?bool
+    private static function isPublished(array $answer, string $version): ?bool
     {
         if ($version === '' || $answer['status'] === 'unavailable') {
             return null;
@@ -418,7 +418,7 @@ final class TerLookup extends ReadOnlyTool
      * @param list<array<string, mixed>> $all
      * @param list<array<string, mixed>> $shown
      */
-    private static function published(string $key, string $version, ?bool $held, array $all, array $shown): string
+    private static function listing(string $key, string $version, ?bool $published, array $all, array $shown): string
     {
         $latest = $all[0];
         $lines = [sprintf(
@@ -434,10 +434,10 @@ final class TerLookup extends ReadOnlyTool
 
         if ($version !== '') {
             $lines[] = '';
-            $lines[] = $held === true
-                ? 'The registry holds ' . self::describe(self::numbered($all, $version)) . '.'
+            $lines[] = $published === true
+                ? 'The registry has published ' . self::describe(self::numbered($all, $version)) . '.'
                 : sprintf(
-                    'The registry holds no version %s of %s. That is what is published, not a judgement that the '
+                    'The registry has published no version %s of %s. That is what is published, not a judgement that the '
                     . 'number is free — what the release process requires of the extension is typo3_hint_lookup with '
                     . 'id="extension-ter-release".',
                     $version,

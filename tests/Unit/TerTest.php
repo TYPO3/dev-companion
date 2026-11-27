@@ -109,12 +109,12 @@ final class TerTest extends TestCase
         Ter::useReader(static fn(): string => self::RESPONSE);
 
         $held = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'extensionVersion' => '14.0.1']);
-        self::assertTrue($held->data['held']);
-        self::assertStringContainsString('The registry holds 14.0.1 · stable', $held->text);
+        self::assertTrue($held->data['published']);
+        self::assertStringContainsString('The registry has published 14.0.1 · stable', $held->text);
 
         $free = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'extensionVersion' => '14.0.2']);
-        self::assertFalse($free->data['held']);
-        self::assertStringContainsString('holds no version 14.0.2', $free->text);
+        self::assertFalse($free->data['published']);
+        self::assertStringContainsString('has published no version 14.0.2', $free->text);
         // What the answer may not turn into: the registry says what is out, and
         // whether the number is free is the caller's comparison.
         self::assertStringContainsString('not a judgement that the number is free', $free->text);
@@ -167,7 +167,7 @@ final class TerTest extends TestCase
         self::assertSame(0, $asked, 'the registry was read for a name it does not take');
         self::assertSame('empty', $result->data['status']);
         self::assertSame('', $result->data['url']);
-        self::assertNull($result->data['held'], 'a name that was never read answered about a version');
+        self::assertNull($result->data['published'], 'a name that was never read answered about a version');
         self::assertStringContainsString('is not an extension key', $result->text);
     }
 
@@ -253,7 +253,7 @@ final class TerTest extends TestCase
         $result = Registry::call('typo3_ter_lookup', ['extension' => 'blog', 'extensionVersion' => '14.0.1']);
 
         self::assertSame('unavailable', $result->data['status']);
-        self::assertNull($result->data['held']);
+        self::assertNull($result->data['published']);
     }
 
     /**

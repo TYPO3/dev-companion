@@ -174,8 +174,8 @@ final class ServerScope extends ReadOnlyTool
             ], ['state', 'repository', 'revision', 'behind', 'checkedAt', 'lastAnswered', 'reason', 'variable']),
             'withheld' => Schema::listOf(Schema::object([
                 'section' => Schema::string(),
-                'holds' => Schema::string('What that part of the answer would have carried.'),
-            ], ['section', 'holds']), 'The parts this call did not ask for. A field named here is absent from this answer rather than empty, so a narrowed answer does not read as the whole one. Empty where sections was not passed, which is the whole orientation.'),
+                'carries' => Schema::string('What that part of the answer would have carried.'),
+            ], ['section', 'carries']), 'The parts this call did not ask for. A field named here is absent from this answer rather than empty, so a narrowed answer does not read as the whole one. Empty where sections was not passed, which is the whole orientation.'),
         ], ['purpose', 'excludedTools', 'withheld']);
     }
 
@@ -498,14 +498,14 @@ final class ServerScope extends ReadOnlyTool
      * whole one.
      *
      * @param list<string> $sections
-     * @return list<array{section: string, holds: string}>
+     * @return list<array{section: string, carries: string}>
      */
     private static function withheld(array $sections): array
     {
         $withheld = [];
-        foreach (self::SECTIONS as $section => $holds) {
+        foreach (self::SECTIONS as $section => $carries) {
             if (!in_array($section, $sections, true)) {
-                $withheld[] = ['section' => $section, 'holds' => $holds];
+                $withheld[] = ['section' => $section, 'carries' => $carries];
             }
         }
 

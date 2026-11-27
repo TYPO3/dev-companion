@@ -105,7 +105,7 @@ Answers with
     # named no version, and null where the call read nothing at all. A false here is
     # the registry's answer, never a question that failed. It is a fact about the
     # registry and not a judgement that the number is free to release.
-    held: boolean or null
+    published: boolean or null
     # How many versions the registry holds under the key in total, of which versions
     # carries at most limit. Zero where it holds none, and zero in a search, whose
     # counts searches carries.
@@ -190,7 +190,7 @@ Answers with
 Answered
 --------
 
-Recorded on 2026-10-29 by ``bin/cli tools:record``. Answered against
+Recorded on 2026-11-27 by ``bin/cli tools:record``. Answered against
 core-checkout, TYPO3 15.0.0-dev, the main core checkout below .checkouts/. Its
 console is out of reach: <installation> has no TYPO3 console — none of
 bin/typo3, vendor/bin/typo3 exists. Its dependencies are not installed —
@@ -216,63 +216,30 @@ Called with:
 
         .. code-block:: text
 
-            TYPO3 Extension Repository: blog — 32 published versions, highest 14.0.1 (stable, uploaded 2026-08-20)
-            https://extensions.typo3.org/extension/blog
-
-            ## The newest 3 of 32, by version number
-            Version order and not upload order: a release on an older line sits further down and may have been uploaded after the ones above it, which the days say.
-            - 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99
-            - 14.0.0 · stable · uploaded 2025-08-25 · TYPO3 13 · >=13.4.15 <=13.4.99
-            - 13.0.1 · stable · uploaded 2025-08-25 · TYPO3 12, 13 · >=12.4.22 <=13.4.99
+            TYPO3 Extension Repository: https://extensions.typo3.org/api/v1/extension/blog/versions
+            Could not answer: The registry did not answer. It is reachable at https://extensions.typo3.org in a browser; nothing here can answer this offline, and no bundled list of releases could be right for it.
 
     .. tab:: Data
 
         .. code-block:: json
 
             {
-                "status": "answered",
+                "status": "unavailable",
                 "source": "https://extensions.typo3.org",
                 "url": "https://extensions.typo3.org/api/v1/extension/blog/versions",
                 "page": "https://extensions.typo3.org/extension/blog",
                 "extension": "blog",
                 "query": "",
                 "extensionVersion": "",
-                "held": null,
-                "total": 32,
-                "versions": [
-                    {
-                        "number": "14.0.1",
-                        "state": "stable",
-                        "uploaded": "2026-08-20",
-                        "majors": [
-                            13,
-                            14
-                        ],
-                        "constraint": ">=13.4.15 <=14.3.99"
-                    },
-                    {
-                        "number": "14.0.0",
-                        "state": "stable",
-                        "uploaded": "2025-08-25",
-                        "majors": [
-                            13
-                        ],
-                        "constraint": ">=13.4.15 <=13.4.99"
-                    },
-                    {
-                        "number": "13.0.1",
-                        "state": "stable",
-                        "uploaded": "2025-08-25",
-                        "majors": [
-                            12,
-                            13
-                        ],
-                        "constraint": ">=12.4.22 <=13.4.99"
-                    }
-                ],
+                "published": null,
+                "total": 0,
+                "versions": [],
                 "matches": [],
                 "searches": [],
-                "unavailable": null,
+                "unavailable": {
+                    "cause": "source-not-answering",
+                    "reason": "The registry did not answer. It is reachable at https://extensions.typo3.org in a browser; nothing here can answer this offline, and no bundled list of releases could be right for it."
+                },
                 "owed": []
             }
 
@@ -295,65 +262,30 @@ Called with:
 
         .. code-block:: text
 
-            TYPO3 Extension Repository: blog — 32 published versions, highest 14.0.1 (stable, uploaded 2026-08-20)
-            https://extensions.typo3.org/extension/blog
-
-            The registry holds 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99.
-
-            ## The newest 3 of 32, by version number
-            Version order and not upload order: a release on an older line sits further down and may have been uploaded after the ones above it, which the days say.
-            - 14.0.1 · stable · uploaded 2026-08-20 · TYPO3 13, 14 · >=13.4.15 <=14.3.99
-            - 14.0.0 · stable · uploaded 2025-08-25 · TYPO3 13 · >=13.4.15 <=13.4.99
-            - 13.0.1 · stable · uploaded 2025-08-25 · TYPO3 12, 13 · >=12.4.22 <=13.4.99
+            TYPO3 Extension Repository: https://extensions.typo3.org/api/v1/extension/blog/versions
+            Could not answer: The registry did not answer. It is reachable at https://extensions.typo3.org in a browser; nothing here can answer this offline, and no bundled list of releases could be right for it.
 
     .. tab:: Data
 
         .. code-block:: json
 
             {
-                "status": "answered",
+                "status": "unavailable",
                 "source": "https://extensions.typo3.org",
                 "url": "https://extensions.typo3.org/api/v1/extension/blog/versions",
                 "page": "https://extensions.typo3.org/extension/blog",
                 "extension": "blog",
                 "query": "",
                 "extensionVersion": "14.0.1",
-                "held": true,
-                "total": 32,
-                "versions": [
-                    {
-                        "number": "14.0.1",
-                        "state": "stable",
-                        "uploaded": "2026-08-20",
-                        "majors": [
-                            13,
-                            14
-                        ],
-                        "constraint": ">=13.4.15 <=14.3.99"
-                    },
-                    {
-                        "number": "14.0.0",
-                        "state": "stable",
-                        "uploaded": "2025-08-25",
-                        "majors": [
-                            13
-                        ],
-                        "constraint": ">=13.4.15 <=13.4.99"
-                    },
-                    {
-                        "number": "13.0.1",
-                        "state": "stable",
-                        "uploaded": "2025-08-25",
-                        "majors": [
-                            12,
-                            13
-                        ],
-                        "constraint": ">=12.4.22 <=13.4.99"
-                    }
-                ],
+                "published": null,
+                "total": 0,
+                "versions": [],
                 "matches": [],
                 "searches": [],
-                "unavailable": null,
+                "unavailable": {
+                    "cause": "source-not-answering",
+                    "reason": "The registry did not answer. It is reachable at https://extensions.typo3.org in a browser; nothing here can answer this offline, and no bundled list of releases could be right for it."
+                },
                 "owed": []
             }
 
@@ -374,27 +306,30 @@ Called with:
 
         .. code-block:: text
 
-            TYPO3 Extension Repository: nothing is published under the key "quantumflux_transponder" at https://extensions.typo3.org.
-            The registry holds no extension by that key. That is not a statement that no such package exists: one distributed through Composer alone is never registered here, and a key can be registered without a version having been uploaded to it yet.
+            TYPO3 Extension Repository: https://extensions.typo3.org/api/v1/extension/quantumflux_transponder/versions
+            Could not answer: The registry did not answer. It is reachable at https://extensions.typo3.org in a browser; nothing here can answer this offline, and no bundled list of releases could be right for it.
 
     .. tab:: Data
 
         .. code-block:: json
 
             {
-                "status": "empty",
+                "status": "unavailable",
                 "source": "https://extensions.typo3.org",
                 "url": "https://extensions.typo3.org/api/v1/extension/quantumflux_transponder/versions",
                 "page": "https://extensions.typo3.org/extension/quantumflux_transponder",
                 "extension": "quantumflux_transponder",
                 "query": "",
                 "extensionVersion": "",
-                "held": null,
+                "published": null,
                 "total": 0,
                 "versions": [],
                 "matches": [],
                 "searches": [],
-                "unavailable": null,
+                "unavailable": {
+                    "cause": "source-not-answering",
+                    "reason": "The registry did not answer. It is reachable at https://extensions.typo3.org in a browser; nothing here can answer this offline, and no bundled list of releases could be right for it."
+                },
                 "owed": []
             }
 
@@ -430,7 +365,7 @@ Called with:
                 "extension": "georgringer/news",
                 "query": "",
                 "extensionVersion": "",
-                "held": null,
+                "published": null,
                 "total": 0,
                 "versions": [],
                 "matches": [],
@@ -457,13 +392,14 @@ Called with:
 
         .. code-block:: text
 
-            Published extensions for "news": 522 on https://extensions.typo3.org, 283 extension packages on https://packagist.org
+            Published extensions for "news": 0 on https://extensions.typo3.org, 291 extension packages on https://packagist.org
+            Not searched: The registry did not answer. It is reachable at https://extensions.typo3.org in a browser; nothing here can answer this offline, and no bundled list of releases could be right for it. What it holds is missing from this answer.
 
-            - georgringer/news · key news · 14.1.2, uploaded 2026-10-12 · TYPO3 13, 14 · 5781129 installs
+            - georgringer/news · 5933610 installs
               News system - Versatile news system based on Extbase & Fluid and using the latest technologies provided by TYPO3 CMS.
-            - georgringer/eventnews · 678167 installs
+            - georgringer/eventnews · 694895 installs
               Extend EXT:news with event and calendar functionality
-            - georgringer/news-seo · 119707 installs
+            - georgringer/news-seo · 128625 installs
               Indivdual indexing/robot information for each news article record
 
             A version range here is what the author declared, not evidence that the release was tested on it. Read every version of one with typo3_ter_lookup and extension set to its key. Whether to take one or build your own is typo3_hint_lookup with id="extension-reuse".
@@ -480,26 +416,22 @@ Called with:
                 "extension": "",
                 "query": "news",
                 "extensionVersion": "",
-                "held": null,
+                "published": null,
                 "total": 0,
                 "versions": [],
                 "matches": [
                     {
                         "package": "georgringer/news",
-                        "key": "news",
+                        "key": "",
                         "description": "News system - Versatile news system based on Extbase & Fluid and using the latest technologies provided by TYPO3 CMS.",
-                        "version": "14.1.2",
-                        "uploaded": "2026-10-12",
-                        "majors": [
-                            13,
-                            14
-                        ],
-                        "constraint": ">=13.4.29 <=14.99.99",
-                        "terDownloads": 4354780,
-                        "packagistDownloads": 5781129,
+                        "version": "",
+                        "uploaded": "",
+                        "majors": [],
+                        "constraint": "",
+                        "terDownloads": 0,
+                        "packagistDownloads": 5933610,
                         "foundIn": [
-                            "https://packagist.org",
-                            "https://extensions.typo3.org"
+                            "https://packagist.org"
                         ]
                     },
                     {
@@ -511,7 +443,7 @@ Called with:
                         "majors": [],
                         "constraint": "",
                         "terDownloads": 0,
-                        "packagistDownloads": 678167,
+                        "packagistDownloads": 694895,
                         "foundIn": [
                             "https://packagist.org"
                         ]
@@ -525,7 +457,7 @@ Called with:
                         "majors": [],
                         "constraint": "",
                         "terDownloads": 0,
-                        "packagistDownloads": 119707,
+                        "packagistDownloads": 128625,
                         "foundIn": [
                             "https://packagist.org"
                         ]
@@ -535,14 +467,14 @@ Called with:
                     {
                         "source": "https://extensions.typo3.org",
                         "url": "https://extensions.typo3.org/api/v1/extension?filter%5Bsearch%5D=news&per_page=3",
-                        "status": "answered",
-                        "total": 522
+                        "status": "unavailable",
+                        "total": 0
                     },
                     {
                         "source": "https://packagist.org",
                         "url": "https://packagist.org/search.json?q=news&type=typo3-cms-extension&per_page=3",
                         "status": "answered",
-                        "total": 283
+                        "total": 291
                     }
                 ],
                 "unavailable": null,
@@ -570,6 +502,7 @@ Called with:
 
         .. code-block:: text
 
+            Not searched: The registry did not answer. It is reachable at https://extensions.typo3.org in a browser; nothing here can answer this offline, and no bundled list of releases could be right for it. What it holds is missing from this answer.
             No published extension matches "quantumflux transponder". Another word for the subject may still find one.
 
     .. tab:: Data
@@ -584,7 +517,7 @@ Called with:
                 "extension": "",
                 "query": "quantumflux transponder",
                 "extensionVersion": "",
-                "held": null,
+                "published": null,
                 "total": 0,
                 "versions": [],
                 "matches": [],
@@ -592,7 +525,7 @@ Called with:
                     {
                         "source": "https://extensions.typo3.org",
                         "url": "https://extensions.typo3.org/api/v1/extension?filter%5Bsearch%5D=quantumflux%20transponder&per_page=10",
-                        "status": "empty",
+                        "status": "unavailable",
                         "total": 0
                     },
                     {

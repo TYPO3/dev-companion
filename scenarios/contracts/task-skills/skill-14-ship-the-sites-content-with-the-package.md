@@ -8,10 +8,10 @@ and `SkillTest::everySkillSaysWhatItCovers` read back the order the workflow
 asks its three lookups in, and that it says where it stops.
 `SkillTest::theCommitStepIsNamedWhereASkillsWorkflowEndsInAChange` holds the
 commit, because the artifact and the site configuration are that repository's
-own files. That the task reaches the workflow at all is **not guarded** and
-cannot be. No assertion can hold that a request in somebody's own words reaches
-a workflow, and only a run measures it. The skill went out on 2026-08-19. The
-draft declaration is gone, `distribution-content` in
+own files. `ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout`
+holds that the prompt below confirms `distribution-content`. That a session then
+follows the workflow is **not guarded**, and only a run measures it. The skill
+went out on 2026-08-19. The draft declaration is gone, `distribution-content` in
 `knowledge/task-intents.json` routes to it, and
 `SkillTest::everyPublishedSkillIsNamedByAnIntent` holds that route.
 
@@ -19,13 +19,11 @@ draft declaration is gone, `distribution-content` in
 below, now as seven steps. The script seeds and the session reads it back in
 step 2. Step 3 judges the export on the file, and step 5 copies the whole
 directory of the site configuration. Step 6 proves the package on an
-installation that never had it, with the three checks. **The route does not
-hold.** The prompt below confirms no intent, and the brief names no skill. It
-matches `installation-setup` and `sitepackage` weakly, and none of the needles
-of `distribution-content`. The sentence above that no assertion can hold the
-route is also false.
-`ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout` holds it for
-other cases, `SKILL-11` among them. `T-261127-26df` holds the repair.
+installation that never had it, with the three checks. The route failed on the
+first read of the day. The prompt below confirmed no intent, because it says
+"ship with the package" and the needle was "ship the content". The needles
+"content to ship" and "content ships with" repaired it the same day, and the
+test row above holds it.
 
 > The pages and the content on them are built in my development installation,
 > and the site package sits in the repository beside it. I want that content to

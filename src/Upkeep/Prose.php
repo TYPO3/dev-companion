@@ -60,9 +60,10 @@ final class Prose
 
     /**
      * An -ing form of a verb, as an upper bound. The list names the nouns that
-     * end the same way, and a capitalised word is a name STE permits.
+     * end the same way, the terms this corpus defines, and the common
+     * adjectives AGENTS.md keeps. A capitalised word is a name STE permits.
      */
-    private const ING = '/\b(?!(?:nothing|something|anything|everything|thing|things|during|string|strings|bring|ring|sing|king|wing|sibling|siblings|ceiling|meaning|morning|evening|building|heading|headings|setting|settings|listing|listings|mapping|mappings|according|regarding|following)\b)[a-z]+ing\b/';
+    private const ING = '/\b(?!(?:nothing|something|anything|everything|thing|things|during|string|strings|bring|ring|sing|king|wing|sibling|siblings|ceiling|meaning|morning|evening|building|heading|headings|setting|settings|listing|listings|mapping|mappings|according|regarding|following|existing|missing|remaining|recurring|waiting|finding|findings|crossing|crossings|routing|drawing|drawings|testing|sighting|sightings|logging|binding)\b)[a-z]+ing\b/';
 
     /**
      * A word the prose rules replace with a plain verb — `D-DOC-073`. "own"

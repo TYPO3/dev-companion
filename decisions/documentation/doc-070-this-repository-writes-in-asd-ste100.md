@@ -5,7 +5,7 @@ date: 2026-09-14
 status: open
 coveredBy:
   - ProseTest::aQuotationCountsAsOneWord
-  - ProseTest::everySentenceInAProcedureIsWithinItsMeasure
+  - ProseTest::everySentenceInACheckedDirectoryIsWithinItsMeasure
 ---
 
 # D-DOC-070 — This repository writes in ASD-STE100
@@ -130,3 +130,6 @@ other directories stay a report until their todo sweeps them. That sweep had
 swapped "missing" for "absent" to satisfy the -ing counter. The maintainer read
 it as less clear, the second **Wrong if** in small. The word went back, the
 measure stayed, and AGENTS.md says that a common adjective stays.
+
+The `requirements/` sweep of the same day rewrote two sentences, and the check
+now fails there at 25 (`Prose::CHECKED`).

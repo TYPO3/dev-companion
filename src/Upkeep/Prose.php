@@ -21,8 +21,8 @@ use TYPO3\DevCompanion\Tool\Registry;
  * right sentence. A rewrite that satisfies a counter produces two short
  * sentences that say what one said. `bin/cli prose:check` fails on two things.
  * One is the bold lead of a requirement or a decision: a reader who stops after
- * it must know what the entry settled. The other is a sentence in a procedure,
- * which a caller follows step by step — `D-DOC-070`.
+ * it must know what the entry settled. The other is a long sentence in a
+ * directory its sweep has brought to the measure — `D-DOC-070`.
  */
 final class Prose
 {
@@ -36,6 +36,14 @@ final class Prose
      * `knowledge/documents/` are the procedures a caller follows — `D-DOC-070`.
      */
     public const PROCEDURE = 20;
+
+    /**
+     * The directories `bin/cli prose:check` fails on, each at its own measure.
+     * The rest is a report until its sweep lands — `D-DOC-070`.
+     *
+     * @var list<string>
+     */
+    public const CHECKED = ['skills/', 'knowledge/documents/', 'requirements/'];
 
     /**
      * A passive form, as an upper bound. "is read" can be the passive or the
@@ -167,17 +175,29 @@ final class Prose
         return count(explode(' ', (string) preg_replace('/"[^"]*"/', '""', $sentence)));
     }
 
+    /** Whether `bin/cli prose:check` fails on a long sentence in this file. */
+    public static function isChecked(string $file): bool
+    {
+        foreach (self::CHECKED as $directory) {
+            if (str_starts_with($file, $directory)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
-     * Every sentence in a procedure that runs past its measure. A caller follows
-     * these files step by step, so the check fails on them — `D-DOC-070`.
+     * Every sentence in a checked directory that runs past its measure —
+     * `D-DOC-070`.
      *
      * @return list<array{file: string, words: int, text: string}>
      */
-    public static function proceduresOverTheMeasure(): array
+    public static function checkedOverTheMeasure(): array
     {
         $over = [];
         foreach (self::documents() as $file) {
-            if (self::measureOf($file) !== self::PROCEDURE) {
+            if (!self::isChecked($file)) {
                 continue;
             }
             foreach (self::measure($file)['over'] as $sentence) {

@@ -16,7 +16,7 @@ use TYPO3\DevCompanion\Upkeep\Wrap;
  * A test or a check holds every other rule that file states, and a reader who
  * rereads the paragraph held "one point per sentence". This command counts. It
  * fails on two things: the bold sentence a requirement or a decision opens
- * with, and a sentence in a procedure over its measure (`D-DOC-070`). It
+ * with, and a sentence in a checked directory over its measure (`D-DOC-070`). It
  * reports the rest, over the three corpora `D-DOC-035` names.
  */
 #[AsCommand(
@@ -176,17 +176,17 @@ final class ProseCheck
             Voice::row($output, sprintf('%s %3d words  %s…', Voice::key($lead['id'], 10), $lead['words'], substr($lead['text'], 0, 60)));
         }
 
-        $procedures = Prose::proceduresOverTheMeasure();
-        $procedureVerdict = Voice::verdict(
+        $checked = Prose::checkedOverTheMeasure();
+        $checkedVerdict = Voice::verdict(
             $output,
-            count($procedures),
-            sprintf('Every sentence in a skill or a knowledge document is within %d words.', Prose::PROCEDURE),
-            sprintf('%d sentences in a procedure run past %d words:', count($procedures), Prose::PROCEDURE),
+            count($checked),
+            sprintf('Every sentence in %s is within its measure.', implode(', ', Prose::CHECKED)),
+            sprintf('%d sentences in %s run past their measure:', count($checked), implode(', ', Prose::CHECKED)),
         );
-        foreach ($procedures as $sentence) {
+        foreach ($checked as $sentence) {
             Voice::row($output, sprintf('%3d words  %s  %s', $sentence['words'], $sentence['file'], $sentence['text']));
         }
 
-        return max($verdict, $procedureVerdict);
+        return max($verdict, $checkedVerdict);
     }
 }

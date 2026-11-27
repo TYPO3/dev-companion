@@ -68,16 +68,18 @@ final class ProseTest extends TestCase
     }
 
     /**
-     * A caller follows a skill or a knowledge document step by step, so a long
-     * sentence there is a defect and not a report.
+     * A directory its sweep has brought to the measure stays there, so a long
+     * sentence in it is a defect and not a report.
      */
     #[Decision('D-DOC-070')]
     #[Test]
-    public function everySentenceInAProcedureIsWithinItsMeasure(): void
+    public function everySentenceInACheckedDirectoryIsWithinItsMeasure(): void
     {
-        $over = Prose::proceduresOverTheMeasure();
+        $over = Prose::checkedOverTheMeasure();
 
-        self::assertNotEmpty(array_filter(Prose::documents(), static fn(string $file): bool => Prose::measureOf($file) === Prose::PROCEDURE));
+        foreach (Prose::CHECKED as $directory) {
+            self::assertNotEmpty(array_filter(Prose::documents(), static fn(string $file): bool => str_starts_with($file, $directory)), $directory);
+        }
         self::assertSame([], $over, implode("\n", array_map(
             static fn(array $sentence): string => sprintf('%s has %d words: %s', $sentence['file'], $sentence['words'], $sentence['text']),
             $over,

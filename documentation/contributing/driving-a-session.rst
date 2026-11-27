@@ -24,7 +24,8 @@ in every client:
 * **The current build.** A client that also ships inside an editor keeps its own
   binary there. The binary on ``PATH`` can be an old release pinned to a model
   that has since retired. That binary fails, and the failure looks like a fault
-  of the work rather than of the client. That is the expensive way round.
+  of the work rather than of the client. So somebody searches the work for a
+  fault that is in the client.
 
 * **A session id the caller chose.** With it, somebody finds the transcript
   afterwards. A session without one still does the work, but nobody can grade
@@ -37,8 +38,8 @@ in every client:
 
 * **Debug output on stderr.** Only there does a stalled tool call show. A client
   that waits on a call that never returns looks exactly like a client that
-  thinks hard. *When a run stops without an error* in
-  :doc:`../records/forward-runs` reads that stream.
+  thinks hard. *A run that hangs* in :doc:`../records/forward-runs` reads that
+  stream.
 
 The launch for a claim
 ----------------------
@@ -54,8 +55,8 @@ holds the command line this machine starts a session with.
 * the message on standard input,
 * ``TODO_SESSION_ID`` in the environment.
 
-The flags that pass them on depend on the client. So the file belongs to the
-machine, and git ignores it.
+Each client has its own flags to pass them on to the session. So the file
+belongs to the machine, and git ignores it.
 
 A session nobody watches needs its tool calls approved without a question. Do
 not switch the permission layer off altogether to get there. A client may refuse

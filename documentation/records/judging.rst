@@ -92,10 +92,9 @@ The question comes in five steps, cheapest first. Each step has evidence that a
 session can check in this repository. The first step that answers stops the
 descent.
 
-A feedback that does not walk down the ladder gets a guess, and the guess is
-step one either way. Somebody writes it as a fourth entry beside three that
-already say it. Or somebody waves it off, as something that other words will
-fix.
+A feedback that does not walk down the ladder gets a guess instead. Somebody
+writes it as a fourth entry beside three that already say it. Or somebody waves
+it off, as something that other words will fix.
 
 The ladder orders the *diagnosis*, not the appetite. Step 1 is the most
 expensive answer and often the right one. The cheap steps exist so that nobody
@@ -480,8 +479,8 @@ a todo that serves an archived feedback as a problem.
 at least one todo that serves it. It leaves no card that still asks for the
 judgement it has just made. Anything else drops the feedback back to unjudged.
 The next session to read it then starts from the feedback again, and the
-judgement is lost. So "nothing to do" is no special case. It is the *close*
-answer: archive in the same commit.
+judgement is lost. So "nothing to do" is no special case. It is an answer that
+closes the feedback: archive it in the same commit.
 
 No check can hold whether the judgement reached ``decisions/``. A state check
 cannot see it, and a judgement may confirm an entry without a change to any
@@ -504,6 +503,6 @@ ladder, on what evidence. One or two sentences are enough, not a paragraph.
 Otherwise the same account is in ``feedback/``, in ``todo/`` and, once a
 requirement exists, a third time in ``requirements/``. That is three places to
 maintain. An update to one of them can leave the other two with something else
-to say. ``bin/cli todo:next`` prints the feedback a todo serves along with the
+to say. ``bin/cli todo:next`` names the feedback a todo serves along with the
 todo. The feedback is what happened once, the requirement is what must hold from
 now on, and the todo is what to do next.

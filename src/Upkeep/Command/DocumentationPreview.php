@@ -36,8 +36,11 @@ use TYPO3\DevCompanion\Upkeep\Voice;
 )]
 final class DocumentationPreview
 {
-    /** Named with no constraint, so a fetch takes the theme's newest release. */
-    private const THEME = 'typo3/soul-guides-theme';
+    /**
+     * Any version, so each preview takes the theme's newest release, as the
+     * published render does — `D-DOC-028`.
+     */
+    private const THEME = 'typo3/soul-guides-theme:*';
 
     /** Where the renderer lands, below the build directory it renders into. */
     private const RENDERER = 'renderer';
@@ -76,7 +79,7 @@ final class DocumentationPreview
         int $port = 8000,
     ): int {
         Voice::heading($output, sprintf('Rendering %s/ into %s', Site::SOURCE, $into . '/html'));
-        $rendered = $this->render($output, $into);
+        $rendered = $this->render($output, $into, true);
         if (!$watch) {
             // Over a server rather than from the file: the search fetches its
             // index beside the pages, which a browser refuses over `file://`.
@@ -114,7 +117,7 @@ final class DocumentationPreview
                 continue;
             }
             $output->writeln(sprintf('%s %s', Voice::dim(date('H:i:s')), implode(', ', $changed)));
-            $this->render($output, $into);
+            $this->render($output, $into, false);
         }
         $stop();
 
@@ -130,11 +133,11 @@ final class DocumentationPreview
      * on the site. The finish step reads it too, and looped over three stale
      * ones for two minutes before this existed.
      */
-    private function render(OutputInterface $output, string $into): bool
+    private function render(OutputInterface $output, string $into, bool $update): bool
     {
         $started = microtime(true);
         $renderer = $into . '/' . self::RENDERER;
-        $fetch = $this->fetch($renderer);
+        $fetch = $this->fetch($renderer, $update);
         $bar = Voice::progress($output, 3 + ($fetch === [] ? 0 : 1));
         $bar->setMessage(str_pad('copy', self::STEP));
         $bar->start();
@@ -156,7 +159,7 @@ final class DocumentationPreview
                 }
             }
             $bar->clear();
-            self::step($output, 'fetch', sprintf('the renderer, once, into %s', $renderer));
+            self::step($output, 'fetch', sprintf('the newest theme into %s', $renderer));
             $bar->advance();
         }
 
@@ -221,8 +224,8 @@ final class DocumentationPreview
     }
 
     /**
-     * What it takes to have a renderer at that path, or nothing where there is
-     * one already.
+     * What it takes to have the newest renderer at that path. The first render
+     * of a preview updates one that is there; a watch's next render does not.
      *
      * Composer has no way to require into an empty directory, so `init` writes
      * the manifest before the require that fills it in. It is not this
@@ -231,23 +234,29 @@ final class DocumentationPreview
      *
      * @return list<list<string>>
      */
-    private function fetch(string $renderer): array
+    private function fetch(string $renderer, bool $update): array
     {
         // The build directory is an argument and may be anywhere, which is what
         // lets the suite drive this and write nothing into the checkout.
         $where = str_starts_with($renderer, '/') ? $renderer : Paths::root() . '/' . $renderer;
-        if (is_file($where . '/vendor/bin/guides')) {
+        $there = is_file($where . '/vendor/bin/guides');
+        if ($there && !$update) {
             return [];
+        }
+
+        $directory = '--working-dir=' . $renderer;
+        $require = ['composer', 'require', $directory, '--no-interaction', '--no-progress', '--update-with-all-dependencies', self::THEME];
+        if ($there) {
+            return [$require];
         }
 
         if (!is_dir($where)) {
             mkdir($where, 0777, true);
         }
-        $directory = '--working-dir=' . $renderer;
 
         return [
             ['composer', 'init', $directory, '--no-interaction', '--name=typo3/dev-companion-render'],
-            ['composer', 'require', $directory, '--no-interaction', '--no-progress', self::THEME],
+            $require,
         ];
     }
 

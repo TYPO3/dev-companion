@@ -117,12 +117,13 @@ final class DocumentationPreviewTest extends TestCase
     }
 
     /**
-     * A preview runs again after every paragraph, so the fetch happens once —
+     * A preview takes the newest theme once, as the published render does. A
+     * watch renders again after every paragraph and fetches nothing then —
      * `D-DOC-028`.
- */
+     */
     #[Decision('D-DOC-028')]
     #[Test]
-    public function aRendererThatIsAlreadyThereIsNotFetchedAgain(): void
+    public function aRendererThatIsAlreadyThereTakesTheNewestThemeOnce(): void
     {
         $binary = $this->into . '/renderer/vendor/bin';
         mkdir($binary, 0777, true);
@@ -130,7 +131,10 @@ final class DocumentationPreviewTest extends TestCase
 
         ($this->preview())(new BufferedOutput(), $this->into);
 
-        self::assertStringNotContainsString('composer', implode("\n", $this->ran));
+        $composer = array_values(array_filter($this->ran, static fn(string $ran): bool => str_contains($ran, 'composer')));
+        self::assertCount(1, $composer);
+        self::assertStringContainsString('composer require', $composer[0]);
+        self::assertStringContainsString('typo3/soul-guides-theme:*', $composer[0]);
     }
 
     /**
@@ -154,10 +158,14 @@ final class DocumentationPreviewTest extends TestCase
     public function aWatchRendersAgainAfterASaveAndNamesTheFile(): void
     {
         $output = new BufferedOutput();
+        mkdir($this->into . '/renderer/vendor/bin', 0777, true);
+        touch($this->into . '/renderer/vendor/bin/guides');
 
         self::assertSame(0, ($this->preview([[], ['documentation/readme.rst'], [], null]))($output, $this->into, true));
 
         self::assertSame(2, $this->renders());
+        // The render after a save fetches nothing — `D-DOC-028`.
+        self::assertCount(1, array_filter($this->ran, static fn(string $ran): bool => str_contains($ran, 'composer require')));
         self::assertStringContainsString("Ctrl-C stops both\n", $printed = $output->fetch());
         self::assertMatchesRegularExpression('/^\d\d:\d\d:\d\d documentation\/readme\.rst$/m', $printed);
     }

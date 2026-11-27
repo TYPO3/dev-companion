@@ -7,7 +7,7 @@ coveredBy:
   - DocumentationPrepareTest::oneCallWritesTheCopyAndSaysWhereItWent
   - DocumentationPrepareTest::whatTheDocumentationNoLongerHasIsReported
   - DocumentationPreviewTest::aFailedStepStopsThePreviewAndQuotesTheCommand
-  - DocumentationPreviewTest::aRendererThatIsAlreadyThereIsNotFetchedAgain
+  - DocumentationPreviewTest::aRendererThatIsAlreadyThereTakesTheNewestThemeOnce
   - DocumentationPreviewTest::onePreviewFetchesTheRendererThenRendersThenFinishes
 ---
 
@@ -86,3 +86,11 @@ each release, and the day one came up the maintainer said to name none. What
 this changes: the third **Wrong if** has its answer, because a release is a
 commit somebody can go back to. `rm -rf .site/renderer` is still how a preview
 takes the newest one.
+
+## Since then
+
+On 2026-11-27 a preview rendered with soul v0.11.1 while the published site took
+v0.13.0. The preview had fetched the theme once, weeks before, and Composer had
+pinned it below 0.12. Now each preview requires the theme at any version once,
+at its first render. A watch's later renders still fetch nothing, which keeps
+the reason this entry gave.

@@ -790,7 +790,7 @@ is the word anything machine-readable uses.
 
 The knowledge base covers more than one TYPO3. A statement that does not hold on
 all of them says so **as data, not as prose**. It carries `since` and `until`,
-never a version number in the sentence, and `HintsTest` enforces that. The
+never a version number in the sentence, and `VersionsTest` enforces that. The
 writer verifies a bound statement on both sides of its boundary, and the commit
 message names both branches. That is evidence nobody can reconstruct later.
 `knowledge/versions.json` declares the versions the knowledge covers, and
@@ -800,5 +800,5 @@ The mechanism exists because the alternative is worse. A caller on an LTS who
 gets a `main` answer changes code that then fails at runtime, and the failure is
 silent. [documentation/server/versions.rst](documentation/server/versions.rst)
 says what follows from it. It says where the bound sits and what belongs in
-`hints` rather than `checks`. It says what `binding: "core"` is, and why the
+`hints` rather than `checks`. It says what `scope: "core"` is, and why the
 catalogs withhold an entry instead of a qualification.

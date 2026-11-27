@@ -218,8 +218,7 @@ final class TodoClaim
      * The sessions themselves, where this machine has said how one starts.
      *
      * The fourth step, and it is here for the reason the other three are. A
-     * claim, the commit that carries it and a worktree apiece already happen in
-     * one move. The launch was the step left over for somebody to carry out
+     * claim, a branch and a worktree apiece already happen in one move. The launch was the step left over for somebody to carry out
      * from a page. It broke the way the left-over step always breaks. The run
      * of 2026-08-02 started every session in the directory that was already
      * open, and the claims sat untouched while three worktrees stood there.

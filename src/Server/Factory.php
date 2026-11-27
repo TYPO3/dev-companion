@@ -190,12 +190,11 @@ final class Factory
      * The model calls a tool in the middle of a task and the tool can explain
      * itself in its answer. The host application or the user picks a resource
      * out of a list, so `description`, `annotations.priority` and `size` are
-     * what the choice rests on, `R-ANS-022`. Two families, because the
-     * knowledge documents are mostly the core's own process and the skills
-     * mostly extension and site work. That leaves all three audiences of
-     * `R-AUD-001` something to pick. Two fields of the spec stay absent.
-     * `annotations.audience` means the client's user, and `lastModified` is in
-     * no `Mcp\Schema\Annotations` of mcp/sdk v0.8.0.
+     * what the choice rests on, `R-ANS-022`. Two families: the documents and
+     * the workflows, so all three audiences of `R-AUD-001` have something to
+     * pick. Two fields of the spec stay absent. `annotations.audience` means
+     * the client's user, and `Mcp\Schema\Annotations` of the SDK in use has no
+     * `lastModified`.
      *
      * @return array<int, ResourceDefinition>
      */

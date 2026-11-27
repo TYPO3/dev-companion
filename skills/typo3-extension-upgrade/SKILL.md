@@ -1,159 +1,178 @@
 ---
 name: typo3-extension-upgrade
-description: 'Keep a TYPO3 extension, sitepackage or project package working on the TYPO3 and PHP versions it declares, or carry it to another set: code broken by what a supported major deprecated or removed, adding a new major, dropping one, and proving every version it claims.'
+description: 'Keep a TYPO3 extension, sitepackage or project package working on the TYPO3 and PHP versions it declares, or move it to another set: code broken by what a supported major deprecated or removed, adding a new major, dropping one, and proving every version it claims.'
 compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup this workflow routes to and publishes this skill together with the references/base.md it opens on. Install it from github.com/TYPO3/dev-companion and run typo3-dev-companion install in the project. A copy taken out of that repository's skills directory alone has neither the tools nor that base file.
 ---
 
 # TYPO3 Extension Upgrade
 
-A package is broken by what a major it already supports removed. Or it has to
-support a range it does not declare yet. Both run in the same order, where each
-step decides what the next one is worth. Keep this skill as routing and
-workflow. Never keep version-specific APIs, constraints, replacements, or the
-contents of a changelog. Every one of those is a property of the installation
-you read and of the target you aim at.
+This skill covers what a package must change to work on the TYPO3 majors it
+declares or will declare. Use it in two cases. Code fails on a major the package
+already declares, because that major deprecated or removed an API. Or the
+package must support a major it does not declare yet. The skill stops at
+anything outside the upgrade: other defects, missing tests and the manual. Step
+3 names the skill for each.
 
-## The order
+**Find what breaks before you choose the range.** What breaks decides whether
+the package can reach a range at all. So each step decides what the next one is
+worth.
 
-1. Work through [references/base.md](references/base.md). It fixes what this
-   package is and what it ships. Its last step before the checkout is the sweep
-   of the installed core's deprecations over that surface. This workflow starts
-   from the result of that sweep and does not restate it.
-2. Widen the sweep, below, into the work list.
-3. Settle the range the package has to serve, below. Not before: what breaks
-   decides whether you can reach a range at all. Where you cross nothing, that
-   range is the declared one. This step reads it rather than resolves it. It
-   still decides what the two steps after it may do.
-4. Change what the list justifies, and nothing else.
-5. Prove it against every combination the package declares.
+**An upgrade changes only what the work list justifies.** It is not a
+modernization, a cleanup or a rewrite.
 
-## Widen the sweep into a work list
+Keep this skill as routing and order. It never holds version-specific APIs,
+constraints, replacements or changelog contents. Those come from the
+installation you read and from the target version.
 
-The base sweeps one source. This workflow needs three, because each reaches call
-sites the others cannot:
+## Steps at a glance
 
-- **The changelog**, as the base sweeps it, and `typo3_changelog_lookup` again
-  with `type: breaking`. Same majors, still no query and no tag. A review asks
-  what will break. An upgrade also asks what already broke.
-- **The Extension Scanner**, in the installation's own Upgrade module. It needs
-  a reachable backend and an administrator, and it reads the extension's
-  installed files. It finds the call sites of what its matchers cover. The
-  `FullyScanned` / `PartiallyScanned` tag the base carries out of the changelog
-  says whether its silence means anything. A clean scan for a partially scanned
-  entry is not a result. You find those call sites.
+1. Make the work list: every call site that breaks, from three sources.
+2. Settle the range of TYPO3 and PHP versions the package must serve.
+3. Change what the work list justifies, and nothing else.
+4. Prove the result on every version the package declares, and report.
+
+## 1. Make the work list
+
+Work through [references/base.md](references/base.md) first. It establishes what
+this package is and what it ships. Its last step before the checkout is the
+sweep of the installed core's deprecations over those files. This workflow
+starts from the result of that sweep and does not restate it.
+
+Then add two more sources. Each one finds call sites the others cannot find.
+
+- **The changelog**, as the base sweeps it. Call `typo3_changelog_lookup` again
+  with `type: breaking`, for the same majors, still without a query or a tag. A
+  review asks what will break. An upgrade also asks what already broke.
+
+- **The Extension Scanner**, in the Upgrade module of the installation. It needs
+  a backend you can reach and an administrator account. It reads the installed
+  files of the extension, and finds call sites of what its matchers cover. The
+  `FullyScanned` / `PartiallyScanned` tag on each changelog entry says whether
+  an empty scan means anything. A clean scan for a partially scanned entry is
+  not a result. You find those call sites yourself.
+
 - **The deprecation annotations on what this package actually calls**, in the
-  installed core and in the packages it depends on. A changelog entry is per
-  release, and the core writes one. An annotation sits on the class, method or
-  property itself. So only this source reaches a symbol deprecated outside the
-  majors the sweep covered. Only it reaches one in a package that publishes no
-  changelog at all. A class deprecated as a whole takes every call site of it
-  with it.
+  installed core and in the packages it depends on. The core writes one
+  changelog entry per change and release. An annotation sits on the class,
+  method or property itself. So only this source finds a symbol that a major
+  outside the sweep deprecated. Only this source finds one in a package without
+  a changelog. A class deprecated as a whole makes every call to it an entry.
 
-The **target** is the major this work has to reach. That is the one you add, or,
-where you add nothing, the declared one the code fails on.
+The **target** is the major this work must reach. That is the major you add. If
+you add none, it is the declared major the code fails on.
 
-Both the changelog and the scanner answer from the **installed core**. This
-whole order rests on that boundary. They say what this package owes the majors
-it already runs on. They do not know what the target major changed until the
-installation is on it. Until then the target's changes come from official
-documentation for that version, never from memory. A list of "what the new major
-changed" written from recall reads exactly like one you looked up.
+**The changelog and the scanner answer from the installed core.** They say what
+the package must change for the majors the installation runs. They do not know
+what the target major changed until the installation is on it. Until then, get
+the changes of the target from the official documentation for that version,
+never from memory. A list of changes written from memory looks exactly like one
+you looked up.
 
-Once the installation is on the target, run the sweep again there. That second
-pass says whether the work is complete.
+When the installation is on the target, run the sweep again there. That second
+sweep shows whether the work is complete.
 
-Write the result down before you change a file. Write one entry per call site,
-with the identifier and the path and line in this package. Add which declared
-major deprecates or removes it, and which of the three established it.
+Write the work list before you change a file. Give it one entry per call site:
 
- That list is the work, and the result closes on it. Include the entries that
- came back empty, with the majors they covered.
+- the identifier, with the path and line in this package;
+- the declared major that deprecates or removes it;
+- the source that found it.
 
-## Settle the range, rather than assert it
+Also list each source that found nothing, with the majors it covered. The work
+list is the work, and the report closes on it.
 
-Where the work crosses no range, the first two entries are the whole of this
-step. The declared range is what the fix has to hold on. The three below them
-decide a constraint that does not move.
+## 2. Settle the range
 
-- The declared range is in the Composer manifest and in `ext_emconf.php`. The
-  two either say the same thing, or the difference is itself a finding. For a
-  non-Composer installation `ext_emconf.php` is the only constraint that
-  governs.
-- The PHP range is the intersection of what every declared TYPO3 major supports.
-  It is never the PHP the current machine happens to run.
-- Where the package requires a system extension, establish that the target still
-  ships it. `typo3_system_extension_lookup` answers by key and package name and
-  does not need it installed. One that is no longer part of the core is a
-  requirement that cannot resolve. The replacement is a decision, not a rename.
-- Let the dependency solver answer, and quote what it printed. A constraint that
-  should work and one the solver accepts are different claims. The solver
-  reports a third-party dependency without a release for the target as a
-  conflict rather than as advice. That dependency then decides the schedule.
-- To drop a major is the user's decision, never one you take to make the code
-  simpler. When you widen to a new one, keep every version the package declares
-  today unless the request says otherwise.
+If the work adds no major and drops none, the range is the declared one. Then
+only the first two items below apply. They read the declared range, which the
+fix must work on. The other three items decide a change of the range.
 
-## The boundary of what may change
+- **Read the declared range** from the Composer manifest and from
+  `ext_emconf.php`. If the two differ, the difference is a finding. In an
+  installation without Composer, only `ext_emconf.php` applies.
 
-The **lowest declared major decides every shape in the package**. A registration
-form, attribute or API introduced later cannot replace one that still has to
-work there. So a runtime branch on the major and a registration written the
-older way are what the declared range requires. They are not debt to clean up.
-Say so where the code already does it. The alternative is an upgrade that breaks
-the version it was told to keep.
+- **The PHP range** is the intersection of the PHP versions that every declared
+  TYPO3 major supports. It is never the PHP version of the current machine.
 
-Where a replacement belongs to a subsystem outside the base's scope, ask its
-conventions before you write it. That is `typo3_hint_lookup` with the concrete
-paths, and `typo3_documentation_lookup` with the target version where the
-official API decides the shape. Where nothing in the declared range replaces a
-removal, that is the answer. One package version cannot serve both. A silent
-choice is how a supported version breaks and nobody notices.
+- **Check each required system extension.** Ask `typo3_system_extension_lookup`
+  whether the target still ships it. It answers by extension key and package
+  name, also for an extension that is not installed. A system extension the core
+  no longer ships is a requirement that cannot resolve. Its replacement is a
+  decision, not a rename.
 
-Change what the work list justifies. An upgrade is not a modernization, a
-cleanup or a rewrite.
+- **Let the dependency solver answer, and quote what it printed.** "This
+  constraint should work" and "the solver accepts this constraint" are different
+  claims. A third-party dependency without a release for the target shows up as
+  a conflict. That dependency then decides when the upgrade can happen.
 
-**Where the change in front of you is not on the list, invoke the workflow that
-owns it.** Do not make it here. That is `typo3-extension-health` for what else
-is wrong with the package. It is `typo3-extension-testing` for coverage the
-upgrade wants but does not have. It is `typo3-extension-documentation` for the
-manual that now describes a different range.
+- **Only the user drops a major.** Never drop one to make the code simpler. When
+  you add a major, keep every major the package declares today, unless the
+  request says otherwise.
 
-That is a step at the moment the reading turns it up, not a note about
-ownership. Load the skill by name and work from it.
+## 3. Change what the work list justifies
 
-## Prove it on every version it claims
+**The lowest declared major decides every shape in the package.** A later major
+can introduce a new registration form, attribute or API. The new form cannot
+replace the old one while the lowest major still needs the old one. So a runtime
+check of the major, or a registration in the older form, is what the declared
+range requires. It is not debt to clean up. Say so where the code already does
+it. Otherwise the upgrade breaks the version it had to keep.
 
-1. Build the matrix from the declaration, not from convenience. Take every TYPO3
-   major the package declares against the PHP versions that major supports.
-2. Resolve each cell before you run it. Treat a cell that will not resolve as a
-   result — it is the finding. A skip there is what lets a package declare a
-   version nobody has ever installed it on.
-3. Run the repository's own commands per cell, the checks first. A step that
-   runs in only one cell leaves the others unproven. That includes the ones the
-   repository's CI declares. The installation supplies one cell. For every other
-   one, ask `typo3_rule_lookup` with
+Before you write a replacement in a subsystem outside the base's scope, ask for
+its conventions:
+
+- `typo3_hint_lookup` with the concrete paths;
+- `typo3_documentation_lookup` with the target version, where the official API
+  decides the shape.
+
+If nothing in the declared range replaces a removed API, say so. One version of
+the package cannot then serve both majors. If you choose silently, a supported
+version breaks and nobody notices.
+
+**If a change in front of you is not on the work list, invoke the skill that
+covers it.** Do not make the change here. Load that skill by name and work from
+it, at the moment you find the change:
+
+- `typo3-extension-health` for other defects in the package;
+- `typo3-extension-testing` for tests the upgrade needs and the package does not
+  have;
+- `typo3-extension-documentation` for a manual that now describes another range.
+
+Give that skill the range and the call sites you already found. Tell it the
+point the upgrade reached, and do not edit its files from here.
+
+## 4. Prove it on every version it claims
+
+1. **Build the matrix from the declaration.** Take every TYPO3 major the package
+   declares. Pair each one with every PHP version that major supports.
+
+2. **Resolve each cell before you run it.** Treat a cell that does not resolve
+   as a result — it is the finding. If you skip it, the package declares a
+   version nobody ever installed it on.
+
+3. **Run the repository's own commands in every cell, the checks first.** That
+   includes the commands its CI declares. A command that runs in one cell only
+   leaves the other cells unproven.
+
+   The installation gives you one cell. For every other cell, call
+   `typo3_rule_lookup` with
    `documentId="extension/compatibility/running-on-a-declared-major-that-is-not-installed"`.
-   It says how you make that cell exist beside it and what it costs the
-   installation.
+   It says how to set up that cell beside the installation, and what that costs
+   the installation. It also says how to tell a cell that could fail from a cell
+   that could not.
 
-   It says how you tell a cell that could have failed from one that could not.
-4. Report the work list with every entry closed or explicitly left open. Report
-   the resolutions with what the solver printed. Report what changed and what
-   did not on purpose, and the matrix cell by cell. Name a cell nobody ran as
-   unrun rather than leave it out. The matrix is the claim the package makes
-   about itself. An unrun cell is the part of that claim nothing stands behind.
-5. Draft the message with `typo3_commit_message_guide` and `workflow="project"`.
-   The crossing lands in the package's own repository, and the range it now
-   declares is what the message is about.
+4. **Report the result.** The report contains:
 
-This skill covers what a package owes the TYPO3 majors it declares and the ones
-it is meant to declare. That is the sweep that says what breaks and the
-constraints that say what it may declare. It is the changes those two justify,
-and the proof per declared combination.
+   - the work list, with every entry closed or left open on purpose;
+   - each resolution, with what the solver printed;
+   - what changed, and what did not change on purpose;
+   - the matrix, cell by cell.
 
-It does not own the decision whether the package is otherwise sound. It owns
-neither a missing harness nor a rewrite of the documentation. The sections above
-name each of those with the workflow it belongs to, and the crossing to it is
-explicit. State the verified point the upgrade reached. Stop before you edit
-that owner's files. Carry across the range and the call sites you already
-established.
+   Name a cell nobody ran as unrun, and do not leave it out. The matrix is what
+   the package claims about itself. An unrun cell is a claim without proof.
+
+   End the answer with each step of the base order you did not reach. Give each
+   one a line: `Not reached: <step> — <why>`.
+
+5. **Draft the commit message** with `typo3_commit_message_guide` and
+   `workflow="project"`. The change goes into the package's own repository. The
+   message is about the range the package now declares.

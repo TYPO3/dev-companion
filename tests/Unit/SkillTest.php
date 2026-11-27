@@ -3308,8 +3308,8 @@ final class SkillTest extends TestCase
         $body = self::flat((string) file_get_contents(
             Paths::root() . '/skills/typo3-extension-upgrade/SKILL.md',
         ));
-        self::assertStringContainsString('A package is broken by what a major it already supports removed', $body);
-        self::assertStringContainsString('Where you cross nothing, that range is the declared one', $body);
+        self::assertStringContainsString('Code fails on a major the package already declares, because that major deprecated or removed an API', $body);
+        self::assertStringContainsString('If the work adds no major and drops none, the range is the declared one', $body);
     }
 
     /**
@@ -4252,11 +4252,12 @@ final class SkillTest extends TestCase
         );
 
         $order = [
+            '## 1. Make the work list',
             '[references/base.md](references/base.md)',
-            '## Widen the sweep into a work list',
-            '## Settle the range, rather than assert it',
-            '## The boundary of what may change',
-            '## Prove it on every version it claims',
+            '**The changelog**',
+            '## 2. Settle the range',
+            '## 3. Change what the work list justifies',
+            '## 4. Prove it on every version it claims',
         ];
         $position = -1;
         foreach ($order as $step) {
@@ -4298,7 +4299,7 @@ final class SkillTest extends TestCase
         // The decision the review already made correctly. That is why it stands
         // here as the boundary of the work rather than as a judgement to arrive
         // at.
-        self::assertStringContainsString('lowest declared major decides every shape', $skill);
+        self::assertStringContainsString('lowest declared major decides every shape', self::flat($skill));
         self::assertStringContainsString('not debt to clean up', $skill);
 
         // The solver resolves a range. A matrix cell that nobody ran or that
@@ -4308,7 +4309,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('as unrun', self::flat($skill));
 
         // What it does not own, and the skill that hands it the sweep whole.
-        self::assertStringContainsString('This skill covers what a package owes the TYPO3 majors', $skill);
+        self::assertStringContainsString('This skill covers what a package must change to work on the TYPO3 majors', self::flat($skill));
         foreach ([
             'typo3-extension-health',
             'typo3-extension-testing',

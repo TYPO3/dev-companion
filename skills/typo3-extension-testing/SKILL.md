@@ -6,152 +6,196 @@ compatibility: Needs the typo3-dev-companion MCP server, which owns every lookup
 
 # TYPO3 Extension Testing
 
-Establish or grow the smallest useful test and static-quality surface at the
-correct layer. Make the first green run part of the setup, and run only commands
-the checkout supports. Keep this skill as routing and workflow. Never keep
-version-specific APIs, paths, dependency constraints, or commands that the
-installation or the checkout owns.
+This skill covers the tests and the static quality checks of a TYPO3 project or
+extension. Use it to set up or repair a test harness, and to add and run tests.
+It stops at the code under test. A defect a test finds in other code goes to the
+skill for that code. "Where this skill stops" names them.
 
-## Establish the test surface
+**Add the smallest useful set of tests at the correct layer.** The first green
+run is part of the setup. Run only commands the checkout supports.
 
-Work through [references/base.md](references/base.md) first. It fixes the order
-every task here starts in and says why that order is not interchangeable. Two of
-its answers decide this workflow before you write any test. The commands
-`typo3_project_describe` reports are the only ones that exist in this
-repository.
+Keep this skill as routing and workflow: it says which tool to ask and in which
+order. Versions, APIs, paths, dependency constraints and commands come from the
+installation and the checkout. A copy of them here would go out of date in
+somebody else's project.
 
-The layers `typo3_extension_describe` reports below `Tests/` are what the
-extension has today.
+## Steps at a glance
 
-An empty list is the answer that there is no harness yet.
+1. Find out which tests and checks the project has today.
+2. Choose the layer that can observe the behaviour.
+3. Set up or repair the harness for that layer.
+4. Add or extend the tests.
+5. Prove the result and report it.
 
-Then, for this workflow:
+## 1. Find out what the project has
 
-- `typo3_documentation_lookup` with several short English queries and the target
-  TYPO3 version. Use it when dependency setup, bootstrap, fixtures, browser
-  configuration, or an API needs confirmation.
-- Verify that the harness for every relevant layer can discover and run its
-  tests. Treat missing or broken infrastructure as a prerequisite of the
-  requested work. It is not a separate kind of task, and it is no reason to
-  force the behavior into another layer.
-- Read the target code, its tests and fixtures, test configuration, dependency
-  manifests, CI, and the development environment.
+1. Work through [references/base.md](references/base.md) first. It fixes the
+   order every task starts in. Two of its answers decide this workflow:
 
-If a lookup is unavailable, state the gap apart from a lookup that found no
-match. Do not replace current project evidence with a TYPO3 setup you recall.
+   - **The commands.** The commands `typo3_project_describe` reports are the
+     only ones this repository has.
+   - **The test layers.** `typo3_extension_describe` lists the layers the
+     extension has below `Tests/` today. An empty list means that there is no
+     harness yet.
 
-## Choose the layer and its owner
+2. Verify that the harness for every relevant layer can discover and run its
+   tests. A missing or broken harness is part of the requested work. It is not a
+   separate task, and it is no reason to move the behaviour into another layer.
 
-Read [references/checklist.md](references/checklist.md) when you select layers,
-establish missing infrastructure, choose commands, or audit coverage. After you
-select a layer, read only its implementation guide:
+3. Read the target code, its tests and fixtures, the test configuration, the
+   dependency manifests, CI and the development environment.
+
+4. Call `typo3_documentation_lookup` with several short English queries and the
+   target TYPO3 version. Do this when the dependency setup, the bootstrap, the
+   fixtures, the browser configuration or an API needs confirmation.
+
+If a lookup is unavailable, report that apart from a lookup that found no match.
+Do not replace what the project shows with a TYPO3 setup you remember.
+
+## 2. Choose the layer
+
+Read [references/checklist.md](references/checklist.md) when you choose layers,
+set up missing infrastructure, choose commands or audit coverage. After you
+choose a layer, read only its implementation guide:
 
 - [references/phpunit.md](references/phpunit.md) for unit or functional tests.
 - [references/playwright.md](references/playwright.md) for browser,
-  accessibility, or visual tests.
+  accessibility or visual tests.
 - [references/static-quality.md](references/static-quality.md) for static
-  analysis, coding standards, and the commands that run them.
+  analysis, coding standards and the commands that run them.
 
-- Prefer a unit test for isolated logic without TYPO3 state or persistence.
-- Use a functional test when the behavior involves TYPO3 bootstrap,
-  configuration, database schema, DataHandler, repositories or services. Use one
-  for integration between framework components.
-- Use a browser test for rendered user journeys, backend interaction,
-  JavaScript, or accessibility behavior nothing below the UI can establish.
-- Use static analysis and coding standards for the defects and the style no test
-  observes. A task that asks for them establishes them whether or not the
-  project already runs them. A task that does not ask extends what is there and
-  reports what is missing. It introduces no check nobody requested.
-- Keep unit and functional infrastructure with the extension whose PHP it
-  exercises. Keep browser infrastructure with the runnable project, because it
-  needs a served site rather than an extension package alone.
-- Establish only the layers the task can justify. A setup request does not
-  require every possible test runner.
+Choose the lowest layer that can observe the behaviour:
 
-## Establish or repair the required harness
+- **Unit test** — isolated logic without TYPO3 state or persistence.
 
-Before you add or extend coverage, fix any missing or broken prerequisite for
-the selected layer. For an explicit setup request, this is the requested work.
-For a review-only request, report the defect and do not change it.
+- **Functional test** — behaviour that needs the TYPO3 bootstrap, configuration,
+  the database schema, DataHandler, repositories or services. Also the
+  integration between framework components.
 
-1. Determine compatible development dependencies from the project's constraints,
-   the installed packages, the Composer resolution, and the versioned
-   documentation. Add a dependency only when changes are in scope and the
-   selected layer requires it. Never guess its version.
-2. Take configuration and bootstrap templates from the installed dependency or
-   the source `typo3_hint_lookup` names. Copy and adapt templates that say they
-   are examples. Do not point extension suites into a core checkout.
+- **Browser test** — rendered user journeys, backend interaction, JavaScript, or
+  accessibility behaviour that no lower layer can show.
 
-   `typo3_reference_list` says which extensions the core ships as worked
-   examples of its own conventions. It says what each one is a reference for.
-   The browser suite and the static analysis setup are among them. One of those
-   is the form of the harness you establish here that passes today. A template
-   copied out of a manual is not.
-3. Preserve configuration, scripts, and CI that work. Extend them instead of a
-   parallel harness.
-4. Give each selected layer one stable local command before you add CI. Derive
-   functional database settings and browser URLs from the project's environment.
-   Do not commit credentials or machine-specific hosts.
-5. For unit or functional tests, establish what the returned guidance requires.
+- **Static analysis and coding standards** — the defects and the style that no
+  test observes. A task that asks for them establishes them whether or not the
+  project already runs them. A task that does not ask for them extends what is
+  there and reports what is missing. It adds no check that nobody requested.
+
+Set up only the layers the task can justify. A setup request does not need every
+possible test runner.
+
+Put each harness where its tests run:
+
+- Keep unit and functional infrastructure with the extension whose PHP the tests
+  exercise.
+- Keep browser infrastructure with the runnable project. A browser test needs a
+  served site, and an extension package alone has none.
+
+## 3. Set up or repair the harness
+
+Fix every missing or broken prerequisite of the chosen layer before you add
+tests. For an explicit setup request, this is the requested work. For a
+review-only request, report the defect and do not change it.
+
+1. **Dependencies.** Find compatible development dependencies from the project's
+   constraints, the installed packages, the Composer resolution and the
+   versioned documentation. Add a dependency only when changes are in scope and
+   the layer needs it. Never guess its version.
+
+2. **Configuration and bootstrap.** Take the templates from the installed
+   dependency or from the source `typo3_hint_lookup` names. Copy and adapt the
+   templates that say they are examples. Do not point extension suites into a
+   core checkout.
+
+   Then call `typo3_reference_list`. It names the extensions the core ships as
+   examples of its conventions. It says what each one is an example of. The
+   browser suite and the static analysis setup are among them. Where one of them
+   covers your layer, follow its form, because it passes today. A template
+   copied out of a manual gives no such proof.
+
+3. **What already works.** Keep configuration, scripts and CI that work. Extend
+   them, and do not build a second harness beside them.
+
+4. **One local command per layer.** Give each layer one stable local command
+   before you add CI. Take the functional database settings and the browser URLs
+   from the project's environment. Do not commit credentials or hosts of one
+   machine.
+
+5. **Unit and functional tests.** Set up what the returned guidance requires.
    That is the suite configuration, the bootstrap, the test directories, the
-   extension load, and the environment. Never translate a core-only
+   loaded extensions and the environment. Never translate a core-only
    `runTests.sh` command into an extension command.
-6. For browser tests, require a runnable site. Establish project-owned runner
-   configuration, scripts, artifacts, and one real target. Choose host,
-   container, or dedicated browser image from the project. Do not impose one
-   topology.
-7. For static analysis and coding standards, establish one project-owned command
-   per check. Keep the command that reports apart from the one that writes. Fix
-   a new finding rather than record it in a baseline. Keep automatic formatting
-   inside the first-party paths the project intends it to touch.
-8. Make CI call the same commands that passed locally. Add a version matrix only
-   for combinations the package declares and the dependency solver accepts.
 
-## Add or extend tests
+6. **Browser tests.** Require a runnable site. Put the runner configuration, the
+   scripts, the artifact paths and one real target into the project. Choose
+   where the browser runs from what the project uses: the host, a container or a
+   dedicated browser image. Do not impose one setup.
 
-- Follow nearby tests that pass and the established harness. If the required
-  layer is missing, establish it first. Do not force the behavior into a cheaper
-  layer.
-- Keep a regression test that fails for the observed defect before you apply its
-  fix, when practical.
-- Keep fixtures minimal and deterministic. Avoid unrelated site data, execution
-  order, wall-clock time, and external services.
-- Put reusable setup at the narrowest scope that removes meaningful duplication.
-- Test observable behavior and public contracts. Avoid assertions tied only to
-  implementation details.
-- Tell a broken runner, a missing environment prerequisite, and an assertion
-  that fails apart before you change production code.
+7. **Static analysis and coding standards.** Give each check one command in the
+   project. Keep the command that reports apart from the command that writes.
+   Fix a new finding, and do not add it to a baseline. Keep automatic formatting
+   inside the first-party paths the project intends it to change.
 
-**Where the failed assertion is a defect in another workflow's code, invoke the
-skill that owns it before the fix.** That is a step, not a note about ownership.
-Load the skill by name and work from it. What crosses over is the test that
-fails, what it establishes and the paths it runs over. The test itself stays
-here and runs again on what comes back.
+8. **CI.** Make CI call the same commands that passed locally. Add a version
+   matrix only for combinations the package declares and the dependency solver
+   accepts.
 
-## Prove the result
+## 4. Add or extend the tests
 
-1. Prove the setup with a meaningful test at every layer the task established.
-   Do not add `assertTrue(true)` or production code whose only purpose is to
-   give the harness something to test. If no unit-testable behavior exists,
-   prove discovery and report the unit suite as empty.
+- Follow the nearby tests that pass and the harness from step 3. If the layer
+  the behaviour needs is missing, set it up first. Do not move the behaviour
+  into a cheaper layer.
+
+- Write a regression test that fails on the observed defect before you apply the
+  fix, where that is practical.
+
+- Keep fixtures minimal and deterministic. Avoid unrelated site data, a fixed
+  execution order, the wall-clock time and external services.
+
+- Put shared setup at the narrowest scope that removes real duplication.
+
+- Test observable behaviour and public contracts. Avoid assertions that only
+  check implementation details.
+
+- Before you change production code, find out what failed: the runner, the
+  environment or an assertion.
+
+**When a failed assertion shows a defect in another skill's code, invoke the
+skill that covers it before the fix.** Load that skill by name and work from it.
+Give it the failing test, what the test shows and the paths it runs over. The
+test stays in this skill, and you run it again on the fixed code.
+
+## 5. Prove the result
+
+1. Prove the setup with a meaningful test at every layer you set up. Do not add
+   `assertTrue(true)`, or production code whose only purpose is to give the
+   harness something to test. If no behaviour can be unit-tested, prove that the
+   unit suite is discovered and report it as empty.
+
 2. Run the narrowest relevant test first, then the local suite that contains it.
-3. Run the declared CI-equivalent commands after the local commands pass.
-4. For browser work, execute at least one real spec. Confirm that it produces
-   its expected artifact or report.
-5. For a static check, run it again after its fix command. Inspect the tree for
-   files the fixer touched outside the intended scope.
-6. Report the exact commands you ran, the results, and the files you added or
-   changed. Report the checks you did not run, with the reason.
-7. Draft the message for each commit with `typo3_commit_message_guide` and
-   `workflow="project"`.
-   [references/static-quality.md](references/static-quality.md) says where you
-   split a formatting pass off and in which order the commits go. What each of
-   them says is this tool's answer.
 
-This skill covers testing and static-quality infrastructure, the changes they
-require, and the execution of both. A broad conformance audit is
-`typo3-extension-health`. A documentation rewrite is
-`typo3-extension-documentation`. A backend module is
-`typo3-backend-module-development`, and a content element is
-`typo3-content-element-development`. Hand that work to its owner at the verified
-point. Stop before you edit its files, and keep only the testing part.
+3. Run the commands that CI runs after the local commands pass.
+
+4. For browser tests, run at least one real spec. Confirm that it writes its
+   expected artifact or report.
+
+5. For a static check, run the check again after its fix command. Look for files
+   the fixer changed outside the intended paths.
+
+6. Report the exact commands you ran, their results, and the files you added or
+   changed. Report every check you did not run, with the reason.
+
+7. Write the message for each commit with `typo3_commit_message_guide` and
+   `workflow="project"`. The tool's answer says what each message contains.
+   [references/static-quality.md](references/static-quality.md) says where you
+   split a formatting pass into its own commit, and in which order the commits
+   go.
+
+## Where this skill stops
+
+Hand the work to the skill that covers it at the point you verified. Stop before
+you edit its files, and keep only the testing part.
+
+- **A broad conformance audit** is `typo3-extension-health`.
+- **A documentation rewrite** is `typo3-extension-documentation`.
+- **A backend module** is `typo3-backend-module-development`.
+- **A content element** is `typo3-content-element-development`.

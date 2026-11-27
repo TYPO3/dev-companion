@@ -46,8 +46,8 @@ reported defect. Record why a higher layer is necessary.
 - Resolve development dependencies against the package's declared TYPO3 and PHP
   constraints. Do not copy a version from another project.
 - Reuse installed template configuration and the project's conventions.
-- Keep extension-owned unit and functional tests in the extension. Keep
-  browser-owned configuration in the project that serves the tested site.
+- Keep the unit and functional tests of an extension in that extension. Keep
+  browser configuration in the project that serves the tested site.
 - Establish a stable local command before CI, then make CI call that command.
 - Keep a check command apart from the command that writes. Keep automatic
   formatting inside the first-party paths the project intends it to touch.
@@ -62,7 +62,7 @@ reported defect. Record why a higher layer is necessary.
 ## Select commands
 
 1. Prefer the narrowest existing command that names the affected test or suite.
-2. During setup, introduce one project-owned command per selected layer. Run it
+2. During setup, introduce one command per selected layer in the project. Run it
    before you wire CI.
 3. Use a direct PHPUnit or browser-runner invocation only when its executable,
    configuration, and target path exist in the checkout.

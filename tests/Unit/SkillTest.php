@@ -4101,8 +4101,8 @@ final class SkillTest extends TestCase
         );
 
         $verify = strpos($skill, 'Verify that the harness');
-        $establish = strpos($skill, '## Establish or repair the required harness');
-        $add = strpos($skill, '## Add or extend tests');
+        $establish = strpos($skill, '## 3. Set up or repair the harness');
+        $add = strpos($skill, '## 4. Add or extend the tests');
         self::assertNotFalse($verify);
         self::assertNotFalse($establish);
         self::assertNotFalse($add);

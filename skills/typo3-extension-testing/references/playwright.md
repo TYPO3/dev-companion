@@ -32,11 +32,12 @@ with `documentId="project/testing/playwright"` holds the files, whole. Those are
 `Build/playwright.config.ts`, the login setup and a spec per project. The page
 adds the environment they read the site from, and what you do not commit.
 
-- Project-owned describes the suite's lifecycle, not necessarily the repository
-  root. Reuse an existing frontend package manifest when it belongs to this
-  deployed project and can own browser commands. Do not create a second manifest
-  only to move Playwright closer to the root. If the only manifest belongs to a
-  reusable extension, establish an explicit project test package instead.
+- The browser suite belongs to the project, which is not necessarily the
+  repository root. Reuse an existing frontend package manifest when it belongs
+  to this deployed project and can hold the browser commands. Do not create a
+  second manifest only to move Playwright closer to the root. If the only
+  manifest belongs to a reusable extension, establish an explicit project test
+  package instead.
 - Point `testDir` at the chosen browser-test root. Do not rely on accidental
   discovery across PHP or frontend unit tests.
 - Keep setup files distinct from journey specs. Then express their order through
@@ -46,12 +47,12 @@ adds the environment they read the site from, and what you do not commit.
 - Store accepted visual baselines beside their specs or under an explicit
   snapshot path. Commit only those baselines.
 - If the repository already uses `Tests/Browser/`, `e2e/`, or a frontend-package
-  directory, keep it and map the same ownership boundaries there.
+  directory, keep it and draw the same boundaries there.
 
 ## Establish or repair it
 
 - Put configuration and specs at the project level unless the repository already
-  owns them elsewhere. A standalone extension cannot prove a rendered journey
+  keeps them elsewhere. A standalone extension cannot prove a rendered journey
   without a site that mounts it.
 - Read the base URL from the environment or the project configuration. Do not
   commit a developer-specific host.

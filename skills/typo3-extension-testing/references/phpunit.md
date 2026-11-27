@@ -44,7 +44,7 @@ it out.
   to find. Organize functional tests by behavior or subsystem when several
   production classes participate.
 - Put fixtures beside the functional test or its small subsystem. Do not put
-  them in one extension-wide bucket whose ownership is unclear.
+  them in one extension-wide directory that no subsystem clearly belongs to.
 - If a project already uses another shape that works, adapt it. Do not move
   files for cosmetic consistency. Calculate testsuite paths from the final
   configuration location.

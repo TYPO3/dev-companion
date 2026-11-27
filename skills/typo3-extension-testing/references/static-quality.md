@@ -25,7 +25,7 @@ configuration contents, and commands.
 5. For a review-only request this is the whole workflow. Report what is missing
    or unenforced and change nothing.
 
-## What a complete surface covers
+## What a complete set of checks covers
 
 This is the expectation the checkout is measured against. It names each check by
 what it establishes rather than by the tool behind it. What the package ships
@@ -37,7 +37,7 @@ is absent for a reason rather than missing.
   `php-parallel-lint/php-parallel-lint`, so one command covers the tree.
 - **Static analysis** — types, unreachable code, and calls that cannot succeed.
   Run `phpstan/phpstan` against the extension's own paths, which is what the
-  core runs on itself. `GeneralUtility::makeInstance()` and its neighbours carry
+  core runs on itself. `GeneralUtility::makeInstance()` and its neighbours have
   `@template` annotations. So the analyser gets its types from the installed
   core rather than from a TYPO3-specific analyser extension.
 
@@ -53,14 +53,14 @@ is absent for a reason rather than missing.
   Which packages to require is the whole of what this page decides about the
   analyser. What goes into its configuration is not. Ask `typo3_hint_lookup`
   with `id=extension-static-analysis`. It answers where the file belongs, which
-  include it carries, and the constants an extension's analysis never sees. It
+  include it needs, and the constants an extension's analysis never sees. It
   answers which manifest you exclude rather than fix, the cache directory, the
   level, and what a baseline is for. It reads that off the packages that
   configure themselves this way. So ask it rather than recall a configuration
   from another project.
 - **Coding standards** — the TYPO3 coding guidelines as the project applies
   them. Run `friendsofphp/php-cs-fixer` with the `typo3/coding-standards` rule
-  set, which also owns the file header the guidelines require. Run
+  set, which also defines the file header the guidelines require. Run
   `editorconfig-checker` where the repository ships an `.editorconfig`. Run
   `squizlabs/php_codesniffer` with `phpcompatibility/php-compatibility` where
   you have to prove the declared PHP range without a matrix.
@@ -109,7 +109,7 @@ from the solver and from what the package's range allows, never from this list.
 
 `rector/rector` with `ssch/typo3-rector` reads like a check in its dry-run mode
 and is not one. It proposes migrations, which belong to an upgrade task rather
-than to the surface CI has to keep green.
+than to the checks CI has to keep green.
 
 Then say which axis each one has, because that decides where it runs. Syntax and
 analysis depend on the PHP and TYPO3 combination and belong in the matrix. A
@@ -137,12 +137,12 @@ with what it costs and what it does not buy.
 
    Where it cannot meet it, the tool gets an installation of its own. That is a
    second manifest below the build directory with its own vendor directory. The
-   project-owned command calls that binary. The check exists either way. What
-   moves is where the tool's own dependencies live.
+   project's command calls that binary. The check exists either way. What moves
+   is where the tool's own dependencies live.
 
 ## Establish one command per check
 
-1. Give each check one stable project-owned command. Declare it where the
+1. Give each check one stable command in the project. Declare it where the
    project already declares its commands. Name it for what it checks rather than
    for the binary behind it.
 2. Keep the check and the fix apart. A check reports and fails; a fix writes.
@@ -153,7 +153,7 @@ with what it costs and what it does not buy.
    fixtures that assert exact bytes stay outside the fixer's paths. Confirm that
    with the fixer's own dry run before the first write and with the tree's
    status afterwards.
-4. Point analysis at the paths the extension owns, at the level the project can
+4. Point analysis at the extension's own paths, at the level the project can
    hold today. A level chosen for the eventual state produces a wall of findings
    nobody works off.
 5. Run each command locally until it passes. Then make CI call that same
@@ -164,9 +164,9 @@ with what it costs and what it does not buy.
 
 - Fix the finding. A baseline records what was already there on the day somebody
   wrote it. It never receives an error the change in hand introduced.
-- Where a baseline exists, read it as a work list with an owner and a horizon.
-  The horizon is usually the release that drops the oldest supported version.
-  Say which of its entries the current change retires.
+- Where a baseline exists, read it as a work list with somebody responsible and
+  a horizon. The horizon is usually the release that drops the oldest supported
+  version. Say which of its entries the current change retires.
 - A suppression that is correct while the package supports an older version is
   evidence rather than debt. Establish what it is there for, and what would
   remove it, before you propose that it goes.

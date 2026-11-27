@@ -45,37 +45,42 @@ them from inside the server's own checkout.
 Standalone
 ----------
 
-Clone the repository and install its dependencies once:
+.. steps::
 
-.. code-block:: bash
+   .. step:: Clone the server and install its dependencies
 
-    git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
-    cd typo3-dev-companion
-    composer install
+      .. code-block:: bash
 
-The clone takes its name from the binary, not from the repository. In every
-command below, the absolute path is the directory ``git clone`` just made.
+          git clone https://github.com/TYPO3/dev-companion.git typo3-dev-companion
+          cd typo3-dev-companion
+          composer install
 
-Then change into your project and install the entrypoint into its ``.mcp.json``:
+      The clone takes its name from the binary, not from the repository. In every
+      command below, the absolute path is the directory ``git clone`` just made.
 
-.. code-block:: bash
+   .. step:: Install the entrypoint into your project
 
-    cd /path/to/your/project
-    /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
+      Change into your project. ``install`` writes the entry into its
+      ``.mcp.json``.
 
-``install`` writes this entry, with the real absolute path:
+      .. code-block:: bash
 
-.. code-block:: json
+          cd /path/to/your/project
+          /absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion install
 
-    {
-      "mcpServers": {
-        "typo3-dev-companion": {
-          "type": "stdio",
-          "command": "php",
-          "args": ["/absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion"]
-        }
-      }
-    }
+      ``install`` writes this entry, with the real absolute path:
+
+      .. code-block:: json
+
+          {
+            "mcpServers": {
+              "typo3-dev-companion": {
+                "type": "stdio",
+                "command": "php",
+                "args": ["/absolute/path/to/typo3-dev-companion/bin/typo3-dev-companion"]
+              }
+            }
+          }
 
 Use this setup to work on the knowledge base itself. The ``feedback/`` tools
 exist only in a checkout.
@@ -131,23 +136,29 @@ As a dependency
 ---------------
 
 The package is on Packagist as ``typo3/dev-companion``. The project that uses it
-requires it, and needs nothing else:
+requires it, and needs nothing else.
 
-.. code-block:: bash
+.. steps::
 
-    composer require "typo3/dev-companion:@dev"
+   .. step:: Require the package
 
-The constraint names a stability, because no release has a tag yet. ``dev-main``
-is the only version, and the default minimum stability refuses a plain require.
-The experimental note in the `readme <../../readme.md>`_ says why. Pin a commit
-where the project depends on the server.
+      .. code-block:: bash
 
-Composer installs the entrypoint as ``vendor/bin/typo3-dev-companion``, so the
-entry names a path inside the project. Install it from the root of the project:
+          composer require "typo3/dev-companion:@dev"
 
-.. code-block:: bash
+      The constraint names a stability, because no release has a tag yet. ``dev-main``
+      is the only version, and the default minimum stability refuses a plain require.
+      The experimental note in the `readme <../../readme.md>`_ says why. Pin a commit
+      where the project depends on the server.
 
-    vendor/bin/typo3-dev-companion install
+   .. step:: Install the entrypoint
+
+      Composer installs the entrypoint as ``vendor/bin/typo3-dev-companion``, so the
+      entry names a path inside the project. Install it from the root of the project:
+
+      .. code-block:: bash
+
+          vendor/bin/typo3-dev-companion install
 
 ``vendor/bin/typo3-dev-companion help`` lists both commands and every client
 they accept. Any other argument prints the same text and fails.
@@ -311,115 +322,164 @@ has no tool. Two sessions in one project ended like that, on 2026-07-29 and on
 2026-07-31.
 
 ``install`` and ``update`` print the step for your client below the line that
-reports the entry. So you read it at the terminal. The list below quotes each
+reports the entry. So you read it at the terminal. Each entry below quotes the
 client's own documentation, read on 2026-08-02. Where that documentation does
-not answer, the list says so and guesses nothing.
+not answer, the entry says so and guesses nothing.
 
-* **Claude Code** — restart the session and approve the server. "Claude Code
-  reads ``.mcp.json`` at session start. Exit and restart the session after
-  editing the file". And "the first time Claude Code sees a project-scoped
-  server, it asks you to approve it".
+.. diagram::
+    :caption: Open your client below for the step and its source.
 
-  Approve at the prompt or in ``/mcp``. To reset a server you refused, run
-  ``claude mcp reset-project-choices``.
-  (`quickstart <https://code.claude.com/docs/en/mcp-quickstart>`_,
-  `reference <https://code.claude.com/docs/en/mcp>`_)
+    matrix canvas=680
+    title "Two clients start the server on their own"
+    description "What each client needs after install before a session has the tools. Rows are the clients, the two columns are an approval and a new session. Kiro and Droid need neither, and an empty cell means not needed. Most of the others need an approval, and the documentation of most says nothing about a new session."
+    column "Approve or trust"
+    column "New session"
+    row "Claude Code": yes yes
+    row "Amp": yes unknown
+    row "VS Code": yes unknown
+    row "Codex": yes unknown
+    row "Zed": yes unknown
+    row "Kiro": - -
+    row "Droid": - -
+    row "Junie": - unknown
+    row "Cursor": unknown unknown
+    row "opencode": unknown unknown
+    row "Antigravity": unknown unknown
+    row "Grok": unknown unknown
+    legend yes="needed" unknown="not documented"
 
-* **Amp** — approve the server. "MCP servers in workspace settings
-  (``.amp/settings.json``) require explicit approval before they can run." And
-  "in the CLI, you'll be prompted to approve workspace servers when they're
-  first detected".
+.. accordion::
+   :group: clients
 
-  ``amp mcp approve typo3-dev-companion`` approves it without the prompt.
-  ``amp mcp doctor`` shows a server that is ``awaiting approval``.
-  (`manual <https://ampcode.com/manual>`_)
+   .. accordion-item:: Claude Code
 
-* **VS Code** — confirm that you trust the server. "When you add an MCP server
-  to your workspace or change its configuration, you need to confirm that you
-  trust the server and its capabilities before starting it."
+      Restart the session and approve the server. "Claude Code
+      reads ``.mcp.json`` at session start. Exit and restart the session after
+      editing the file". And "the first time Claude Code sees a project-scoped
+      server, it asks you to approve it".
 
-  The experimental ``chat.mcp.autoStart`` restarts the server when the
-  configuration changes.
-  (`MCP servers <https://code.visualstudio.com/docs/copilot/customization/mcp-servers>`_)
+      Approve at the prompt or in ``/mcp``. To reset a server you refused, run
+      ``claude mcp reset-project-choices``.
+      (`quickstart <https://code.claude.com/docs/en/mcp-quickstart>`_,
+      `reference <https://code.claude.com/docs/en/mcp>`_)
 
-* **Codex** — trust the project. Codex scopes MCP servers "to a project with
-  ``.codex/config.toml`` (trusted projects only)". So the trust prompt for the
-  directory admits them.
+   .. accordion-item:: Amp
 
-  No documentation says whether a running session reads the file again.
-  ``codex mcp list`` shows what the session has.
-  (`MCP <https://learn.chatgpt.com/docs/extend/mcp>`_)
+      Approve the server. "MCP servers in workspace settings
+      (``.amp/settings.json``) require explicit approval before they can run." And
+      "in the CLI, you'll be prompted to approve workspace servers when they're
+      first detected".
 
-* **Zed** — trust the worktree. Every worktree starts in Restricted Mode. That
-  mode prevents "project settings (``.zed/settings.json``) from being parsed and
-  applied" and "MCP servers from being installed and spawned".
+      ``amp mcp approve typo3-dev-companion`` approves it without the prompt.
+      ``amp mcp doctor`` shows a server that is ``awaiting approval``.
+      (`manual <https://ampcode.com/manual>`_)
 
-  Trust the directory at the exclamation mark in the title bar, or with
-  ``workspace::ToggleWorktreeSecurity``. No documentation says whether a window
-  that was already open reads a new file.
+   .. accordion-item:: VS Code
 
-  The MCP page of Zed describes ``context_servers`` only in the user settings
-  file. The rest of the documentation puts it in the project file too: "every
-  worktree opened may contain a ``.zed/settings.json`` file with extra
-  configuration options that may require installing and spawning language
-  servers or MCP servers". Zed's own security advisory agrees: "the Zed IDE
-  loads Model Context Protocol (MCP) configurations from the ``settings.json``
-  file located within a project's ``.zed`` subdirectory".
+      Confirm that you trust the server. "When you add an MCP server
+      to your workspace or change its configuration, you need to confirm that you
+      trust the server and its capabilities before starting it."
 
-  Read on 2026-08-02, when the current release was v1.13.1. The trust model came
-  with v0.218.2-pre. (`MCP <https://zed.dev/docs/ai/mcp>`_,
-  `trusted worktrees <https://zed.dev/docs/worktree-trust>`_,
-  `GHSA-cv6g-cmxc-vw8j <https://github.com/zed-industries/zed/security/advisories/GHSA-cv6g-cmxc-vw8j>`_)
+      The experimental ``chat.mcp.autoStart`` restarts the server when the
+      configuration changes.
+      (`MCP servers <https://code.visualstudio.com/docs/copilot/customization/mcp-servers>`_)
 
-* **Kiro** — nothing to do. "Changes to MCP configuration apply automatically
-  when you save the file" and "servers will reconnect". Kiro still asks at the
-  call for each tool that ``autoApprove`` does not name.
-  (`MCP configuration <https://kiro.dev/docs/mcp/configuration/>`_)
+   .. accordion-item:: Codex
 
-* **Droid** — nothing to do. "Droid reloads automatically when an ``mcp.json``
-  file changes, so new servers are available immediately." Droid asks for each
-  tool at its first use, and ``droid mcp permissions`` keeps the answer.
-  (`MCP <https://docs.factory.ai/cli/configuration/mcp>`_)
+      Trust the project. Codex scopes MCP servers "to a project with
+      ``.codex/config.toml`` (trusted projects only)". So the trust prompt for the
+      directory admits them.
 
-* **Junie** — no approval. Servers "imported from the ``mcp.json`` file are
-  enabled by default". No documentation says whether an IDE that was already
-  open reads a new file. The list is at *Settings | Tools | Junie | MCP
-  Settings*.
-  (`MCP configuration <https://junie.jetbrains.com/docs/junie-cli-mcp-configuration.html>`_)
+      No documentation says whether a running session reads the file again.
+      ``codex mcp list`` shows what the session has.
+      (`MCP <https://learn.chatgpt.com/docs/extend/mcp>`_)
 
-* **Cursor** — not established. The servers are under *Customize*, where a
-  toggle switches one off. "Cursor asks for approval before using MCP tools by
-  default" means each tool call, not the server. No documentation says whether a
-  window that was already open reads a new file.
+   .. accordion-item:: Zed
 
-  In the CLI, ``--approve-mcps`` approves the server and not its tools. So a
-  first task asks once per tool. ``install`` writes no permission. To get fewer
-  questions, list the read-only tools under ``permissions.allow`` in
-  ``.cursor/cli.json``, one ``Mcp(typo3-dev-companion:typo3_hint_lookup)`` per
-  tool.
+      Trust the worktree. Every worktree starts in Restricted Mode. That
+      mode prevents "project settings (``.zed/settings.json``) from being parsed and
+      applied" and "MCP servers from being installed and spawned".
 
-  Do not use ``Mcp(typo3-dev-companion:*)``. It also allows
-  ``typo3_feedback_record``, the one tool that writes.
-  (`MCP <https://cursor.com/docs/mcp>`_,
-  `Permissions <https://cursor.com/docs/cli/reference/permissions>`_)
+      Trust the directory at the exclamation mark in the title bar, or with
+      ``workspace::ToggleWorktreeSecurity``. No documentation says whether a window
+      that was already open reads a new file.
 
-* **opencode** — not established. ``enabled: false`` switches a server off, and
-  the written entry does not set it. No documentation says whether a session
-  that was already open reads the file again.
-  (`MCP servers <https://opencode.ai/docs/mcp-servers/>`_)
+      The MCP page of Zed describes ``context_servers`` only in the user settings
+      file. The rest of the documentation puts it in the project file too: "every
+      worktree opened may contain a ``.zed/settings.json`` file with extra
+      configuration options that may require installing and spawning language
+      servers or MCP servers". Zed's own security advisory agrees: "the Zed IDE
+      loads Model Context Protocol (MCP) configurations from the ``settings.json``
+      file located within a project's ``.zed`` subdirectory".
 
-* **Antigravity** — not established. A plugin in ``.agents/plugins/`` "activates
-  only when working in that project". Neither page says whether an open session
-  reads a new plugin, or whether anything gates it. ``/mcp`` lists the servers a
-  session has. Read on 2026-10-06.
-  (`plugins <https://antigravity.google/docs/plugins/>`_,
-  `MCP <https://antigravity.google/docs/mcp/>`_)
+      Read on 2026-08-02, when the current release was v1.13.1. The trust model came
+      with v0.218.2-pre. (`MCP <https://zed.dev/docs/ai/mcp>`_,
+      `trusted worktrees <https://zed.dev/docs/worktree-trust>`_,
+      `GHSA-cv6g-cmxc-vw8j <https://github.com/zed-industries/zed/security/advisories/GHSA-cv6g-cmxc-vw8j>`_)
 
-* **Grok** — not established. A project ``.grok/config.toml`` adds its
-  ``[mcp_servers]``, up to the git root. No documentation says whether a running
-  session reads it again, or whether anything gates it. ``grok mcp doctor``
-  shows what it has.
-  (`MCP servers <https://docs.x.ai/build/features/mcp-servers>`_)
+   .. accordion-item:: Kiro
+
+      Nothing to do. "Changes to MCP configuration apply automatically
+      when you save the file" and "servers will reconnect". Kiro still asks at the
+      call for each tool that ``autoApprove`` does not name.
+      (`MCP configuration <https://kiro.dev/docs/mcp/configuration/>`_)
+
+   .. accordion-item:: Droid
+
+      Nothing to do. "Droid reloads automatically when an ``mcp.json``
+      file changes, so new servers are available immediately." Droid asks for each
+      tool at its first use, and ``droid mcp permissions`` keeps the answer.
+      (`MCP <https://docs.factory.ai/cli/configuration/mcp>`_)
+
+   .. accordion-item:: Junie
+
+      No approval. Servers "imported from the ``mcp.json`` file are
+      enabled by default". No documentation says whether an IDE that was already
+      open reads a new file. The list is at *Settings | Tools | Junie | MCP
+      Settings*.
+      (`MCP configuration <https://junie.jetbrains.com/docs/junie-cli-mcp-configuration.html>`_)
+
+   .. accordion-item:: Cursor
+
+      Not established. The servers are under *Customize*, where a
+      toggle switches one off. "Cursor asks for approval before using MCP tools by
+      default" means each tool call, not the server. No documentation says whether a
+      window that was already open reads a new file.
+
+      In the CLI, ``--approve-mcps`` approves the server and not its tools. So a
+      first task asks once per tool. ``install`` writes no permission. To get fewer
+      questions, list the read-only tools under ``permissions.allow`` in
+      ``.cursor/cli.json``, one ``Mcp(typo3-dev-companion:typo3_hint_lookup)`` per
+      tool.
+
+      Do not use ``Mcp(typo3-dev-companion:*)``. It also allows
+      ``typo3_feedback_record``, the one tool that writes.
+      (`MCP <https://cursor.com/docs/mcp>`_,
+      `Permissions <https://cursor.com/docs/cli/reference/permissions>`_)
+
+   .. accordion-item:: opencode
+
+      Not established. ``enabled: false`` switches a server off, and
+      the written entry does not set it. No documentation says whether a session
+      that was already open reads the file again.
+      (`MCP servers <https://opencode.ai/docs/mcp-servers/>`_)
+
+   .. accordion-item:: Antigravity
+
+      Not established. A plugin in ``.agents/plugins/`` "activates
+      only when working in that project". Neither page says whether an open session
+      reads a new plugin, or whether anything gates it. ``/mcp`` lists the servers a
+      session has. Read on 2026-10-06.
+      (`plugins <https://antigravity.google/docs/plugins/>`_,
+      `MCP <https://antigravity.google/docs/mcp/>`_)
+
+   .. accordion-item:: Grok
+
+      Not established. A project ``.grok/config.toml`` adds its
+      ``[mcp_servers]``, up to the git root. No documentation says whether a running
+      session reads it again, or whether anything gates it. ``grok mcp doctor``
+      shows what it has.
+      (`MCP servers <https://docs.x.ai/build/features/mcp-servers>`_)
 
 A session can have the entry and still offer no ``typo3_`` tool.
 :doc:`checking-it-answers` gives the next checks.
@@ -558,21 +618,12 @@ Variables in the entry
 The entry takes four environment variables. Set them in the ``env`` block of the
 client entry. ``install`` and ``update`` leave that block as it is.
 
-* ``TYPO3_DEV_COMPANION_ROOT`` — the installation to read, where the server
-  finds the wrong one from the working directory. See
-  :doc:`checking-it-answers`.
+.. facts::
 
-* ``TYPO3_DEV_COMPANION_CONSOLE`` — the command that runs the console of that
-  installation, such as ``ddev exec .build/bin/typo3``. See
-  :doc:`checking-it-answers`.
-
-* ``TYPO3_DEV_COMPANION_EXCLUDE_TOOLS`` — the names of the tools the client does
-  not get, separated by commas. See
-  :ref:`which tools the client gets <installing-which-tools-are-offered>`.
-
-* ``TYPO3_DEV_COMPANION_SKILL_REFRESH`` — ``off`` reports skills that are out of
-  date and does not refresh them. See
-  :ref:`when they go stale <installing-when-they-go-stale>`.
+   :TYPO3_DEV_COMPANION_ROOT: The installation to read, where the server finds the wrong one from the working directory. See :doc:`checking-it-answers`.
+   :TYPO3_DEV_COMPANION_CONSOLE: The command that runs the console of that installation, such as ``ddev exec .build/bin/typo3``. See :doc:`checking-it-answers`.
+   :TYPO3_DEV_COMPANION_EXCLUDE_TOOLS: The names of the tools the client does not get, separated by commas. See :ref:`which tools the client gets <installing-which-tools-are-offered>`.
+   :TYPO3_DEV_COMPANION_SKILL_REFRESH: ``off`` reports skills that are out of date and does not refresh them. See :ref:`when they go stale <installing-when-they-go-stale>`.
 
 .. _installing-which-tools-are-offered:
 

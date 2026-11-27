@@ -15,6 +15,18 @@ draft declaration is gone, `distribution-content` in
 `knowledge/task-intents.json` routes to it, and
 `SkillTest::everyPublishedSkillIsNamedByAnIntent` holds that route.
 
+**Read 2026-11-27:** `typo3-distribution-content` still carries every outcome
+below, now as seven steps. The script seeds and the session reads it back in
+step 2. Step 3 judges the export on the file, and step 5 copies the whole
+directory of the site configuration. Step 6 proves the package on an
+installation that never had it, with the three checks. **The route does not
+hold.** The prompt below confirms no intent, and the brief names no skill. It
+matches `installation-setup` and `sitepackage` weakly, and none of the needles
+of `distribution-content`. The sentence above that no assertion can hold the
+route is also false.
+`ScenariosTest::aCasesOwnPromptConfirmsTheIntentItIsWrittenAbout` holds it for
+other cases, `SKILL-11` among them. `T-261127-26df` holds the repair.
+
 > The pages and the content on them are built in my development installation,
 > and the site package sits in the repository beside it. I want that content to
 > ship with the package, so a colleague installing it on an empty TYPO3 gets the

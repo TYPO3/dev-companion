@@ -9,7 +9,7 @@ workflow exists since 2026-07-31 and owns the order this case asks for
 That a session works in that order is `not guarded`. By `D-EVI-002`'s reasoning
 no forward run will hold it, so the wording is the proxy
 
-**Read 2026-09-02, again 2026-09-19, 2026-10-11 and 2026-10-28:** `typo3-extension-upgrade` still owns the order this case asks for. It starts from the base's deprecation sweep rather than restates it. It widens that sweep into the work list, and stops before the work another skill owns. Its description and body were rewritten on 2026-08-18 so a defect inside
+**Read 2026-09-02, again 2026-09-19, 2026-10-11, 2026-10-28 and 2026-11-27:** `typo3-extension-upgrade` still covers the order this case asks for, rewritten as four steps on 2026-11-27 (`D-SKL-112`). Its step 1 starts from the result of the base's deprecation sweep and does not restate it. It widens that sweep into the work list with the changelog, the Extension Scanner and the deprecation annotations. Its step 3 invokes the skill that covers a change outside the work list. Its description and body were rewritten on 2026-08-18 so a defect inside
 the declared range meets the premise — `D-SKL-061`. Nothing guards the order a
 session works in, as before.
 

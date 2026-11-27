@@ -12,6 +12,15 @@ rather than pastes it is **not guarded**. Three runs of this case, each graded
 blind, measure it (`D-EVI-013`), and they answered whether a conversion needs a
 skill of its own (`D-SKL-035`).
 
+**Read 2026-11-27:** the prompt confirms the `sitepackage` intent, and the brief
+names `typo3-sitepackage-development`. Step 2 of the skill converts a design
+rather than pastes it, by the hints `sitepackage-from-a-design` and
+`content-model-vs-markup`. Step 6 counts one `<html>`, one `<head>` and one
+`<body>` per response and forbids `config.disableAllHeaderCode`. Step 6 also
+sets a test page layout through DataHandler and never by SQL. So the workaround
+of the three runs of 2026-10-29 now meets a rule. The prompt also confirms
+`installation-upgrade`, on "maintain", and its condition excludes this task.
+
 The design is an ordinary small site. A session of this repository wrote it on
 2026-10-29, the maintainer's choice over the design of the run that failed. It
 knows no TYPO3 idiom and carries no hint of what a conversion owes.

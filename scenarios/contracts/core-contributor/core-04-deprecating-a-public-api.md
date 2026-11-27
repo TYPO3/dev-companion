@@ -5,11 +5,14 @@
 `CommitMessageTest::deprecationRulesAreEnforced`; what an upgrade wizard looks
 like is the thin part `R-KNW-001` names and is not guarded
 
-**Read 2026-09-02, again 2026-09-19, 2026-10-11 and 2026-10-28:** `R-KNW-001` is `held`, and
+**Read 2026-09-02, again 2026-09-19, 2026-10-11, 2026-10-28 and 2026-11-27:**
+`R-KNW-001` is `held`.
 `bin/cli hints:probe "upgrade wizard for a deprecated api"` still reaches
 `upgrade-wizards` through the curated vocabulary, behind `deprecated-apis` and
-`installation-upgrade`. So the thin part has a hint to reach. Nothing guards
-that a session writes the wizard, as before.
+`installation-upgrade`. So the thin part has a hint to reach. With the path of
+`GeneralUtility.php`, the prompt confirms `deprecation` and the brief names
+`typo3-core-patch-development`. Nothing guards that a session writes the wizard,
+as before.
 
 > `\TYPO3\CMS\Core\Utility\GeneralUtility::getUrl()` should go away in favour of
 > the request factory. Deprecate it properly for the next major, including

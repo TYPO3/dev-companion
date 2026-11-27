@@ -11,6 +11,15 @@ prompt below confirms that intent. That a session keeps the content rendering,
 rather than writes rows into the database to see a layout, is **not guarded**.
 That it leaves the project free of `theme_camino` is **not guarded** either.
 
+**Read 2026-11-27:** the prompt confirms the `sitepackage` intent, and the brief
+names `typo3-sitepackage-development`. The `sitepackage-layout` hint still says
+to read `typo3/theme-camino` and not to depend on it. A sitepackage that
+requires it or extends its set "buys that migration for nothing". The intent
+asks for a data migration with the package where the installation already holds
+content, by `upgrade-wizards`. Step 6 of the skill writes a page layout through
+DataHandler and never by SQL. Nothing guards that a session keeps the content
+rendering, as before.
+
 `SITE-11` is this case without the one thing that makes it ordinary. Three runs
 of it on 2026-10-29 met all eleven criteria. None of them created a page or a
 content element, and all three tested a layout by writing SQL straight into the

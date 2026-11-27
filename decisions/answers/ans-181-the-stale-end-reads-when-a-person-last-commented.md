@@ -21,8 +21,8 @@ change under it is ABANDONED.**
   journal of #109690, read on 2026-10-21, shows why. Georg Ringer changed a
   custom field on 2026-08-06 and wrote no note. The last comment was on
   2026-04-23. The stale list read those four as fresh.
-- The same feedback names #108821 and #109256: Under Review, with only
-  ABANDONED changes. The user found that useful, and nothing said it.
+- The same feedback names #108821 and #109256: Under Review, with only ABANDONED
+  changes. The user found that useful, and nothing said it.
 - The tracker's issue list carries no journal. One read per row is the only
   source, checked on 2026-10-21 with `include=journals` on the list endpoint.
 - The maintainer chose the stale end alone on 2026-10-21, between that, every
@@ -39,12 +39,12 @@ change under it is ABANDONED.**
 
 ## Assumed
 
-- That a comment is what attention looks like. A status change without a word
-  by the person who works on it counts as no attention here.
+- That a comment is what attention looks like. A status change without a word by
+  the person who works on it counts as no attention here.
 
 ## Wrong if
 
-- A session reads a row with an old `lastNoteOn` as untouched while a status
-  change or an assignment since then shows that somebody is on it.
+- A session reads a row with an old `lastNoteOn` as untouched. A status change
+  or an assignment since then shows that somebody is on it.
 - The page read on the stale end gets slow enough that a session reports the
   wait. Then the reads belong on request rather than by default.

@@ -50,7 +50,7 @@ tree written by hand.**
 ## Wrong if
 
 - A run of `SITE-10` with the skill installed reads core source for the tree,
-  the wiring or the page layout fallback, or skips a step of the wiring.
+  the wiring or the page layout fallback. Or it skips a step of the wiring.
 - A session offered both starts cannot finish the builder's one without the
   user's help beyond the base package and the author.
 
@@ -60,15 +60,16 @@ The first run with the skill, the same day, loaded it and stopped on four
 questions with no package written. The maintainer ruled that a result without a
 rendered frontend is not one. So the skill ends on a page per page layout, and
 it takes a default where the request leaves a choice open. The defaults are
-fluid_styled_content kept, the builder as the start, the vendor and the author
-read from the project, and `Default` as the first page layout. The report names
-each of them with its alternative.
+fluid_styled_content kept and the builder as the start. The vendor and the
+author come from the project, and `Default` is the first page layout. The report
+names each of them with its alternative.
 
 Three more runs followed, the last with a full shell. It took the builder,
-trimmed its output and rendered all three cases. What the runs still worked out
-alone now stands in the skill: the deprecation tags a sitepackage reads, a
-second layout rendered through a page set for the request, a stop without a
-shell, and each generated file read against the hints.
+trimmed its output and rendered all three cases. Four things the runs still
+worked out alone now stand in the skill. One is the deprecation tags a
+sitepackage reads. Another is a second layout rendered through a page set for
+the request. The last two are a stop without a shell and each generated file
+read against the hints.
 
 ## Since then
 
@@ -116,7 +117,7 @@ The contract reading of 2026-10-28 found two answers that disagreed. The
 `sitepackage` checklist told a session to lay the package out after the core's
 theme, which 13.4 does not ship. The skill left the tree to the session. The
 hints had already chosen: `sitepackage-start` calls a generated package a
-starting point rather than a layout to keep, and names the place of each builder
+starting point rather than a layout to keep. It names the place of each builder
 part in the tree of `sitepackage-layout`. So the skill and the checklist now say
 the same. The builder stays the start, and its parts move into that tree. The
 checklist item names no theme, because `sitepackage-layout` binds the theme to
@@ -126,7 +127,7 @@ the majors that ship it as data.
 
 All three `SITE-11` runs of 2026-10-29 set a page layout by SQL, as step 5 then
 said. That skips the DataHandler, and on a shared database it reaches the
-project's data. So step 5 now writes the field through DataHandler and routes
-to `datahandler-seeding` for the script. DataHandler checks a select without a
+project's data. So step 5 now writes the field through DataHandler and routes to
+`datahandler-seeding` for the script. DataHandler checks a select without a
 foreign table against no item list, on 13.4 and 14.3. So it stores
 `pagets__<identifier>` as written.

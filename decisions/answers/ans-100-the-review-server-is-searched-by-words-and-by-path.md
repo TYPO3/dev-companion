@@ -103,7 +103,7 @@ measurement, and each part is a query that fails without a failure. The value
 stands in quotes, because unquoted the pattern belongs to the server's own
 parser and silently answers nothing. The path and what is under it are one
 group, `^path(/.*)?`, since 2026-09-19. The two alternatives it was built as met
-the server's firewall: `file:"^a/tree/.*|a/tree"` answers 403 and the group 200,
-bisected against `feedback/2026-09-18-093119`, where a path that ends in `tree`
-answered `source-not-answering` every time. The argument's description now says
-a change matches by the paths its own patch set touches.
+the server's firewall: `file:"^a/tree/.*|a/tree"` answers 403 and the group 200.
+A bisection against `feedback/2026-09-18-093119` found that, where a path that
+ends in `tree` answered `source-not-answering` every time. The argument's
+description now says a change matches by the paths its own patch set touches.

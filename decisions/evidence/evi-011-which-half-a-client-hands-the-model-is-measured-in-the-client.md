@@ -61,9 +61,9 @@ the session read two clients' code and then measured both.
 ## Decided
 
 - **The measurement stands in the repository.** `bin/cli tools:proxy` relays a
-  client to the server with `structuredContent` or `outputSchema` taken away,
-  and `bin/cli tools:tokens` runs `claude -p` through it three ways and reads
-  the traces. A reader who doubts a number in this entry runs it.
+  client to the server with `structuredContent` or `outputSchema` taken away.
+  `bin/cli tools:tokens` runs `claude -p` through it three ways and reads the
+  traces. A reader who doubts a number in this entry runs it.
 - **`tools:measure` counts the data half as the compact JSON a client hands
   over**, and counts each definition in its two halves. The record keeps the
   data pretty-printed, and the indentation reached no model.
@@ -105,7 +105,7 @@ the session read two clients' code and then measured both.
 
 ## Since then
 
-The maintainer answered the question on the day: the session reads what it acts
+The maintainer answered the question on the day. The session reads what it acts
 on best, and that is the data, at the cost measured here. `D-ANS-162` records it
 and the waiting todo went with it.
 

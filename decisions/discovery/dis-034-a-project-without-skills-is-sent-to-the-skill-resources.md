@@ -153,8 +153,8 @@ separate a cause from the spread of that model.
 
 ## Wrong if
 
-- A Claude Code session in a project without skill files reports that it had no
-  workflow, or reads no `typo3://skill` resource for a task a skill covers.
+- A Claude Code session without skill files reports that it had no workflow, or
+  reads no `typo3://skill` resource for a task a skill covers.
 - A client lists the skills through the Skills extension and also gets this
   sentence. Then the sentence is redundant there, and the check has to read the
   client's capabilities.

@@ -24,17 +24,18 @@ can rebuild the answer from the data of any provider.
 - Forger is the index TYPO3 GmbH keeps of forge.typo3.org and review.typo3.org.
   It serves a public JSON API at `/api/v1` with an OpenAPI document at
   `/api/doc.json`. forger.typo3.org redirects to forger.typo3.com with a 301.
-- On 2026-11-27, Forger answered an issue list in 0.13 seconds. Its newest
-  issue and change were minutes behind review.typo3.org. The same issue list
-  from forge.typo3.org answered nothing in 20 seconds.
-- A read of one issue on Forger carries the description, the comments with a
-  bot flag, the relations, the files and the changes with their state. The
-  tracker needs a journal read and a review-server query for the same.
-- Forger takes one value per filter. `category[]` answers `The parameter
-  "category" takes a single value.` Several numbers in `q` find the issues that
-  mention them: "99203 105953" answered neither of the two.
-- Forger's `q` finds any of the words with stems and ranks by relevance:
-  "cache busting image" answered 6715. The tracker's search needs every word.
+- On 2026-11-27, Forger answered an issue list in 0.13 seconds. Its newest issue
+  and change were minutes behind review.typo3.org. The same issue list from
+  forge.typo3.org answered nothing in 20 seconds.
+- A read of one issue on Forger carries the description and the comments with a
+  bot flag. It also carries the relations, the files and the changes with their
+  state. The tracker needs a journal read and a review-server query for the
+  same.
+- Forger takes one value per filter. `category[]` answers
+  `The parameter "category" takes a single value.` Several numbers in `q` find
+  the issues that mention them: "99203 105953" answered neither of the two.
+- Forger's `q` finds any of the words with stems and ranks by relevance: "cache
+  busting image" answered 6715. The tracker's search needs every word.
 - Forger serves no list of areas, versions or members. The category counts of
   `breakdown=1` over every issue name 56 areas.
 

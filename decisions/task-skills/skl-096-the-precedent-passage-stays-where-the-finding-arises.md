@@ -13,8 +13,8 @@ in the skill, beside the obligation it serves, rather than in a reference.**
 ## Evidence
 
 - `feedback/archive/2026-10-05-105018-review-skill-requires-the-checkout-skill-but-a.md`.
-  A review of a `[TASK]` patch found the passage cost reading time and gave
-  nothing, and proposed a reference file with one line in the skill.
+  A review of a `[TASK]` patch found that the passage cost reading time and gave
+  nothing. It proposed a reference file with one line in the skill.
 - The passage came from two reviews that lost their precedent to a query and
   found it by hand afterwards, which the skill itself says.
 - The maintainer chose on 2026-10-05 to keep it in the skill.

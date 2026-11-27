@@ -35,8 +35,8 @@ of the six ways in Forger serves, measured against its API on 2026-11-27.
 
 - `ChangeProvider` carries the three reads both hosts serve: the changes of an
   issue, a search, and the backlog. A change read by name and by commit stays a
-  method of `ChangeTracker` that asks `Gerrit`, because the checkout skill holds
-  the commit against `HEAD` and the owner's address against `git config`.
+  method of `ChangeTracker` that asks `Gerrit`. The checkout skill holds the
+  commit against `HEAD` and the owner's address against `git config`.
 - Forger answers a backlog only without a filter on a person or on a vote. It
   reads the open set whole and drops the changes in progress.
 - The changes of an issue come from the read of the issue, so a change with the

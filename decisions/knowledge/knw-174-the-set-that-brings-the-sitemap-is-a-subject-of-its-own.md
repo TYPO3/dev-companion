@@ -44,8 +44,8 @@ coveredBy:
 
 ## Assumed
 
-- That the session would have asked for a sitemap of pages in words the new
-  hint carries.
+- That the session would have asked for a sitemap of pages in words the new hint
+  carries.
 
 ## Wrong if
 
@@ -71,5 +71,5 @@ pass yet, which `writing-a-skill.rst` asks before it publishes.
 ## Since then
 
 The maintainer reviewed the pass "Read what the finished site serves" on
-2026-10-28 and released it as written: the skill fixes the templates, the
+2026-10-28 and released it as written. The skill fixes the templates, the
 partials and the CSS, and reports the rest.

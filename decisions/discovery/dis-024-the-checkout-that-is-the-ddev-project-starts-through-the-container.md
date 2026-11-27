@@ -15,8 +15,7 @@ project where the entrypoint sits below the project, after the bin directory and
 gets `ddev exec php bin/typo3-dev-companion`.**
 
 Whether the container can see the entrypoint and whether the project depends on
-this server are two questions, and the installer answered the first with the
-second.
+this server are two questions. The installer answered the first with the second.
 
 ## Evidence
 

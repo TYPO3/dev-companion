@@ -35,8 +35,8 @@ refused the call.
 
 ## Decided
 
-- The maintainer chose the integer on 2026-10-06. The two other options were to
-  keep the string, with the rejection as the correction, and to wait for a
+- The maintainer chose the integer on 2026-10-06. One other option was to keep
+  the string, with the rejection as the correction. The other was to wait for a
   second model that sends an integer.
 - The `#` form goes with the string. `Forge::issue()` and
   `Gerrit::changesForIssue()` take the integer and strip nothing.

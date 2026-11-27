@@ -69,5 +69,5 @@ them was a number in free text.
 
 Built the same day, in the session that judged it. The read of the review log
 found the two alternatives by one URL with a patch set after it and by bare
-digits, and the resolve query left the Forge issue and the build number out.
+digits. The resolve query left the Forge issue and the build number out.
 `namedInMessages` is the field, and the text half prints it under the chain.

@@ -20,7 +20,7 @@ options. The maintainer answered it on 2026-09-17.
 ## Evidence
 
 - The maintainer's answer, in their words: the session reads what it can process
-  better, and where the structured data is better it is preferred even at a
+  better. Where the structured data is better, it is preferred even at a
   slightly higher token cost.
 - `R-ANS-002` already demands that nothing a caller needs in order to act lives
   in the text alone. So the data half is written to be read alone since
@@ -35,7 +35,7 @@ options. The maintainer answered it on 2026-09-17.
   `clientInfo.name`, no answer shape per client.
 - **The data half is the answer a session acts on**, and the text is the same
   answer for a client that hands over text. `ToolResult` says so. The rule for a
-  change to an answer follows from it: a fact goes into the data first, and into
+  change to an answer follows from it. A fact goes into the data first, and into
   the text where the text renders it.
 - **The cost is accepted as measured**, and `bin/cli tools:measure` prints it
   per tool, worst first. A trim of the data half is a trim of a field nobody

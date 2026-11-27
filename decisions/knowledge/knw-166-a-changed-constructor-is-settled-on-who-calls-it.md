@@ -19,9 +19,9 @@ Breaking one.**
   A review of change 96354 met a removed parameter in the constructor of
   `SetupCommand`, which is neither final nor `@internal`. The hint covered
   methods and stopped one step before the case.
-- PHP 8.3 on 2026-10-05: a subclass constructor with another signature loads, an
-  abstract constructor is compared, and an extra argument to
-  `parent::__construct()` is dropped without a word. The manual says the same of
+- PHP 8.3 on 2026-10-05: a subclass constructor with another signature loads,
+  and an abstract constructor is compared. PHP drops an extra argument to
+  `parent::__construct()` without a word. The manual says the same of
   `__construct()`.
 - Read in `.checkouts/main` on 2026-10-05. `926b9a704b`, a `[TASK]` with no
   changelog file, added a `FailsafePackageManager` to the constructor of

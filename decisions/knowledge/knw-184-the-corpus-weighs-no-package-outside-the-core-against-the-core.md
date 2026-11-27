@@ -36,4 +36,4 @@ status: open
 ## Wrong if
 
 - A recorded run builds an element the core way where the user had asked for a
-  package outside it, and nothing in the brief routed it to the registry.
+  package outside it. Nothing in the brief routed it to the registry.

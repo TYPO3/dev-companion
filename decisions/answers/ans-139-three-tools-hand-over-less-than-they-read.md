@@ -90,8 +90,8 @@ stops one field short of it. So what the work builds is the handover.**
 - 2026-10-28, REVIEW-02: a query by a class name reached two entries, so neither
   carried its migration. The sweep told the session to ask again by the issue
   number, and 110702 reaches a Breaking and a Feature. Of the issues
-  docs.typo3.org lists for 12 to 15, about one in eight has several entries, and
-  about one in fifty has several of one type. So each entry now carries its
+  docs.typo3.org lists for 12 to 15, about one in eight has several entries.
+  About one in fifty has several of one type. So each entry now carries its
   `name`, which as the query reaches that entry alone, and the sweep names it.
   `typo3_documentation_lookup` refuses a changelog URL with that query. The
   single-entry answer still carries the migration and not the description.

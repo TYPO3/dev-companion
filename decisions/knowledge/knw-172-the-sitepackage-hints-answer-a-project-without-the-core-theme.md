@@ -65,13 +65,13 @@ source for the page layouts. They read `PageViewContentObject` for how an
 identifier becomes a template name, and `GridColumn` for the keys of a layout
 file. One asked how its own `default` stands beside the core's.
 `sitepackage-backend-layouts` now answers all three. The name rule was read in
-`.checkouts/13.4`, where PAGEVIEW upper-cases the first letter, and in
-`.checkouts/14.3` and `main`, where Fluid 5 tries the exact name first.
+`.checkouts/13.4`, where PAGEVIEW upper-cases the first letter. It was read in
+`.checkouts/14.3` and `main` too, where Fluid 5 tries the exact name first.
 
 A fourth question had its answer already. `page-variables-and-processors` says
-that PAGEVIEW hands the set's settings to the template, and the run that asked
-never fetched it, because neither the skill nor the brief named it. The skill
-now names it, and the statement carries the dotted path as an example.
+that PAGEVIEW hands the set's settings to the template. The run that asked never
+fetched it, because neither the skill nor the brief named it. The skill now
+names it, and the statement carries the dotted path as an example.
 
 ## Since then
 
@@ -98,7 +98,7 @@ them is kept here.
 The eighth run took two shapes from memory. `site-set-settings` now names the
 label keys in the set's `labels.xlf`, read in `.checkouts/13.4` and `14.3`.
 `sitepackage-backend-layouts` says that a layout's icon becomes the icon of its
-entry in the layout field, so it takes an image path or a registered icon.
+entry in the layout field. So it takes an image path or a registered icon.
 
 ## Since then
 

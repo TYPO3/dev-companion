@@ -34,8 +34,8 @@ ViewHelper does and none of what a template writes into it.
 ## Decided
 
 - The maintainer gave this its own todo on 2026-10-11, and this session decided
-  to build it, because the arguments are what a template needs and the page
-  excerpt never carried them.
+  to build it. The arguments are what a template needs, and the page excerpt
+  never carried them.
 - The entry is found by the page it documents: `path` plus `.html` against the
   result URL. A page the file lists nothing for answers from the page as before.
 - `description` of an argument and `documentation` stay out of the data. The

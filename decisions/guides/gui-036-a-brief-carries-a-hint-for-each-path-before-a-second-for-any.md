@@ -53,7 +53,7 @@ matcher.**
 
 ## Wrong if
 
-- A run of a case skips a hint that the spread brought in as off the subject,
-  and that run uses the backend hint that the spread moved out.
+- A run of a case skips a hint that the spread brought in as off the subject.
+  That run uses the backend hint that the spread moved out.
 - A path prefix that every core path matches, such as `typo3/sysext/`, takes a
   slot in place of a hint for one subsystem.

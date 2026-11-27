@@ -25,8 +25,8 @@ user rather than settle it alone.**
   `LanguageAspectFactory` appends `pageNotFound` to the fallback chain of every
   site language. So `fallbacks` decides an untranslated page and `fallbackType`
   decides the records on a translated one, on all four lines.
-- Same read: the EXT:form mail templates declare the `SystemEmail` layout, the
-  XML sitemap filters by doktype and `no_index` and never by `nav_hide`, and no
+- Same read: the EXT:form mail templates declare the `SystemEmail` layout, and
+  the XML sitemap filters by doktype and `no_index` and never by `nav_hide`. No
   core class processes an `index_config` record. `form:cleanup:uploads` exists
   on `14.3` and `main` and on neither LTS line.
 - `bin/cli hints:probe` reached no hint for any of the six subjects before this
@@ -65,6 +65,7 @@ that contradicted the project
 The maintainer chose `skills/base.md` on 2026-11-06 over the instructions, which
 have no room left for a sentence that holds for every task.
 
-The **Wrong if** fired on 2026-11-06. Two `SITE-11` runs against `39fd0169` asked
-the user nothing. The Fable run read this item, looked up none of the five hints,
-and left out forms and search unasked. `T-261106-a7c1` asks which lever holds it.
+The **Wrong if** fired on 2026-11-06. Two `SITE-11` runs against `39fd0169`
+asked the user nothing. The Fable run read this item, looked up none of the five
+hints, and left out forms and search unasked. `T-261106-a7c1` asks which lever
+holds it.

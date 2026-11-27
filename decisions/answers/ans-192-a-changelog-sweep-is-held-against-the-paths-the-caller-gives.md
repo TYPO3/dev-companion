@@ -59,5 +59,5 @@ and the files that use it.**
 - A review passes `paths` and misses a breaking entry the code calls. Then the
   class match is the wrong key, and the entry shows which key it needed.
 - A short class name the core shares with another package matches entries the
-  code has nothing to do with, often enough that a review reads them as noise.
-  Then the match takes the namespace.
+  code has nothing to do with. That happens often enough that a review reads
+  them as noise. Then the match takes the namespace.

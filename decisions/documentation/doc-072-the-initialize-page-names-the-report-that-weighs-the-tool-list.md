@@ -16,8 +16,8 @@ process. What the list weighs is `bin/cli tools:measure`'s, and the page names
 the command in place of the number.**
 
 `D-DOC-071` put the bytes per member on the page, and its second **Wrong if**
-fired the same day. Every edit to a description or a schema moved the number,
-and the move was a diff in a page the edit had not meant to touch.
+fired the same day. Every edit to a description or a schema moved the number.
+Each move was a diff in a page the edit had not meant to touch.
 
 ## Evidence
 
@@ -30,7 +30,7 @@ and the move was a diff in a page the edit had not meant to touch.
   carried a copy of a report, and `D-DOC-009` says a copy of a count goes stale
   where the report does not.
 - The count of tools stays. It moves when a tool arrives, and that regenerates
-  the tool pages and the index in the same commit, so the page's diff is the
+  the tool pages and the index in the same commit. So the page's diff is the
   change a reader expects.
 - The generators wrote reStructuredText through the markdown wrap, and the first
   sentence with a literal at a line's end showed it. `Wrap::text()` broke
@@ -54,5 +54,5 @@ and the move was a diff in a page the edit had not meant to touch.
   Then the page carries a rendered report the way `decisions:index` renders a
   listing, dated, and regenerated on purpose rather than on every edit.
 - A generated page picks up another count that moves with an edit elsewhere.
-  Then the rule belongs in `ToolSurfaceTest` rather than in a decision, as a
+  Then the rule belongs in `ToolSurfaceTest` rather than in a decision. It is a
   check over the standing pages for a number that is not a tool count.

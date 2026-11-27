@@ -32,8 +32,8 @@ arrive, and that the description is a channel after all: the one a search reads.
   `instructions` nor `knowledge/server-scope.json` nor an `outputSchema`. The
   `instructions` reach a session that knows the tool's name. The search reaches
   the one that knows the subject.
-- **The gap.** A regex over that text per tool, on the patterns a caller writes:
-  `typoscript` reached `typo3_documentation_lookup` alone, `routing` and
+- **The gap.** A regex ran over that text per tool, on the patterns a caller
+  writes. `typoscript` reached `typo3_documentation_lookup` alone, `routing` and
   `dashboard` reached no tool, `security` reached `typo3_commit_message_guide`
   alone. `typo3_hint_lookup` covers one subject per file below
   `knowledge/hints/`, 38 that day, and its text named two of them. Both are the

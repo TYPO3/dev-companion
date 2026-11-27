@@ -58,7 +58,7 @@ that would cover the rest has an exception inside the same corpus.
   `13.4/Deprecation-105297-DeprecateTableoptionsAndCollateConnectionConfiguration.rst`
   names "TYPO3 v15 (or later)" and skips v14, and it held. On `.checkouts/14.3`
   `ConnectionPool::migrateTableOptionsToDefaultTableOptions()` still migrates
-  the key, under an
+  the key. Its tag reads
   `@deprecated since 13.4 and will be removed in v15 (or later as it does not hurt to keep them)`.
   So "the next major" is the default and the entry is what carries the
   exception.

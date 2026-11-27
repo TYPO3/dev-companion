@@ -15,9 +15,9 @@ process, through a transport that keeps the answers.**
 
 The maintainer asked for the handshake and the descriptions it delivers to stand
 in the documentation. The tool pages stood there already, one per tool from the
-registry. What a client gets before its first call stood nowhere: not the
-`serverInfo`, not the `capabilities`, not the instructions in their wording, not
-the two prompts.
+registry. What a client gets before its first call stood nowhere. That is the
+`serverInfo`, the `capabilities`, the instructions in their wording and the two
+prompts.
 
 ## Evidence
 
@@ -40,14 +40,15 @@ the two prompts.
 
 ## Decided
 
-- The page is a standing page of `ToolSurface`, so `tools:index` writes it,
+- The page is a standing page of `ToolSurface`. So `tools:index` writes it,
   `tools:check` reports it and `ToolSurfaceTest` fails on it, the way the index
   and the answer-sources page already work.
-- The generated half shows the `initialize` result as JSON with the
-  `instructions` shown as text after it, the prompts and the resource template
-  as the wire carries them, and the tool list as a count and its bytes per
-  member. The prose above the marker says what each member is for and names the
-  three things that change the instructions from one start to the next.
+- The generated half shows the `initialize` result as JSON, with the
+  `instructions` shown as text after it. It shows the prompts and the resource
+  template as the wire carries them. It shows the tool list as a count and its
+  bytes per member. The prose above the marker says what each member is for. It
+  names the three things that change the instructions from one start to the
+  next.
 - The page shows the standalone checkout's form. The write sentence and the
   `debrief` prompt stand on it, and the prose says a dependency install gets
   neither.
@@ -63,10 +64,10 @@ the two prompts.
 ## Revoked on 2026-09-17
 
 The second **Wrong if** fired on the day the entry was written. The weight moved
-four times in one afternoon, once per edit to an input schema, and each move was
-a diff in a page no edit had meant to touch. The maintainer had asked for no
-such churn before the page existed, and `D-DOC-009` says the same for every
-count of something that grows.
+four times in one afternoon, once per edit to an input schema. Each move was a
+diff in a page no edit had meant to touch. The maintainer had asked for no such
+churn before the page existed, and `D-DOC-009` says the same for every count of
+something that grows.
 
 The page is still read off a session in the same process, and `D-DOC-072`
 carries that with the weight taken out of it.

@@ -12,7 +12,7 @@ coveredBy:
 **`typo3_commit_message_guide` warns on a core body that names a path into the
 source tree or a fully qualified class name. It counts no sentences.**
 
-The maintainer asked for four body rules on 2026-11-24, after an agent pushed
+The maintainer asked for four body rules on 2026-11-24. An agent had pushed
 patch set 2 of core change 97935 with a body of five paragraphs. The rules are
 no list, no long path, no sentence the reader does not need, and behaviour
 rather than a list of code changes.
@@ -33,16 +33,16 @@ rather than a list of code changes.
 - `body-names-a-path`, at `warning`, for `workflow="core"` alone. The
   measurement ran on the core, as for `body-counts-what-it-touched`.
 - The pattern takes a file path of three or more segments with a source
-  extension, anything below `typo3/sysext/<extension>/`, and a class name of
-  three namespace segments. It takes a URL out first.
+  extension, and anything below `typo3/sysext/<extension>/`. It also takes a
+  class name of three namespace segments. It takes a URL out first.
 - No sentence count. The maintainer chose that with the 727 in front of them.
   The rule of one or two sentences stays in the document and in `D-GUI-029`.
 - The two rules a check cannot see stand in `core/contribution/commit-messages`
   alone. That is the sentence nobody needs and the behaviour over the list of
-  code changes. The document carries a rejected and an accepted body from
-  change 97935.
-- The four rules go further than the official appendix, and the document says
-  so where it states them.
+  code changes. The document carries a rejected and an accepted body from change
+  97935.
+- The four rules go further than the official appendix, and the document says so
+  where it states them.
 
 ## Assumed
 

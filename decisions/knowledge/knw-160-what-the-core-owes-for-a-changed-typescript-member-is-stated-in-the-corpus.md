@@ -10,22 +10,22 @@ status: open
 **`public-api-surface` says what a shipped TypeScript module's surface is and
 what a moved export owes, beside the PHP signature rules it carried alone.**
 
-A patch that changed a protected member's type on a backend module was sent to
-the hint by `typo3-core-patch-development` to settle its target branch, and read
-PHP autoload fatals and nothing about TypeScript. The session settled it itself
-in the checkout and left it to the reviewer.
+A patch changed a protected member's type on a backend module, and
+`typo3-core-patch-development` sent its session to the hint to settle the target
+branch. The session read PHP autoload fatals and nothing about TypeScript. The
+session settled it itself in the checkout and left it to the reviewer.
 
 ## Evidence
 
 - `feedback/2026-09-18-093155`: the session read that the core ships no
-  declarations and that no core file outside `tree.ts` reads the member, and
+  declarations and that no core file outside `tree.ts` reads the member. It
   decided nothing was owed, as an open point in its report.
 - Read on 2026-09-19 in `.checkouts/13.4`, `14.3` and `main`: no `.d.ts` stands
   below `typo3/sysext`, and `Build/tsconfig.json` names no `declaration`. So a
   consumer types against nothing, and `protected` is a word the build drops.
 - The changelog on `main` carries a Deprecation entry with the `:js:` role for
-  `markFieldAsChanged()` moved out of `@typo3/backend/form-engine-validation`,
-  with a deprecation notice in the browser console as its impact. That is the
+  `markFieldAsChanged()` moved out of `@typo3/backend/form-engine-validation`.
+  Its impact is a deprecation notice in the browser console. That is the
   precedent for a moved export. Six backend modules on every covered line carry
   `@internal` in their TypeScript.
 - `bin/cli hints:probe` on the member and the module reached the PHP half and no

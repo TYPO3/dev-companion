@@ -58,7 +58,7 @@ stops the check.
   still the selector a stylesheet takes. The statement adds the condition the
   selector has to meet, and the mechanism alone stops at being the whole claim.
 - No sweep of the corpus for mechanism-shaped statements. Nothing tells one
-  apart from a statement whose mechanism is the fact, so a sweep is a read of
+  apart from a statement whose mechanism is the fact. So a sweep is a read of
   every hint, and no feedback but these two has reported the cost.
 - `coveredBy` stays empty. No check reads whether a sentence names a condition,
   and a counter on words such as `must` would report the statements that are
@@ -80,7 +80,7 @@ stops the check.
   the lever, and the check belongs in a skill step rather than in a sentence.
 - A third feedback reports a list in `knowledge/` that a reader took as
   complete, after this rule stood. Then a rule a writer has to remember does not
-  hold the corpus, and the need is a field on the list rather than a word in it.
+  hold the corpus. The need is a field on the list rather than a word in it.
 
 ## Since then
 

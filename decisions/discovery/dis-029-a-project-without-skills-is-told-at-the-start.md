@@ -58,6 +58,6 @@ its own opening, and this notice stays where a repository is.
 ## Revoked on 2026-10-27
 
 By `D-DIS-034`. The notice stays where it stood, and it names the
-`typo3://skill` resource rather than `install`. Runs that day showed that a
+`typo3://skill` resource rather than `install`. Runs that day showed it. A
 Claude Code session without skill files read the skill when the sentence named
 the URI, and read none when it named the command.

@@ -103,7 +103,7 @@ The third **Wrong if** fired on 2026-09-19, `feedback/2026-09-18-093147`. A
 session read the stated boundary, committed a draft with a line of exactly 72,
 found it with `awk` against the checkout's `AGENTS.md` and amended. So the
 sentence settles which rule runs and not which rule a session obeys. The
-maintainer took the wrap the first bullet under **Decided** rejected: a core
+maintainer took the wrap the first bullet under **Decided** rejected. A core
 body wraps at `CommitMessage::CORE_WRAP_WIDTH`, 71, and a project body at the
 hook's 72. The boundary sentence stays as it was, and `body-line-too-long` still
 fires at the hook's line alone. The core's `AGENTS.md` is still one character

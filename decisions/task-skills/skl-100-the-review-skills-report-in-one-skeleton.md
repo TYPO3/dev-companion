@@ -37,7 +37,7 @@ and the fields of a finding.**
   `references/report.md`, which the server already serves as a `typo3://skill`
   reference. The *Report* section links it and keeps the reason for the order.
 - **The same in all three:** a head as a `Field | Value` table that ends on the
-  verdict, then the severity headings, then *Checked and correct*, *Open*,
+  verdict, then the severity headings. Then come *Checked and correct*, *Open*,
   *Dropped*, *Verification*, *Surfaces* and *Not reached*. A finding carries
   *Where*, *Observed*, *Rule*, *Consequence*, *Remediation* and *Evidence*.
 - **Each skill's own:** the fields of the head, the severity headings and one
@@ -90,5 +90,5 @@ Rule clause says a name is no source. `REVIEW-02` still wrote a paragraph after
 the fence. So the maintainer chose the filled example on 2026-11-06, and each
 `report.md` carries one after its skeleton. The fifth `REVIEW-01` and
 `REVIEW-03` runs cited line numbers out of one output of several files. So a
-sixth rule ties a `<path>:<line>` to a read of that one file, and
-`skills/base.md` says to read each file with a call of its own.
+sixth rule ties a `<path>:<line>` to a read of that one file. `skills/base.md`
+says to read each file with a call of its own.

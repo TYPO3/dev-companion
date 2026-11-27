@@ -29,16 +29,16 @@ set. Where none exists, the review asks the user before it skips the run.**
 ## Decided
 
 - The verification section of the review skill states the worktree as the place,
-  the question as the step before a skip, and the `Not run:` line as where a
+  and the question as the step before a skip. The `Not run:` line is where a
   skip records both.
 - The skill names `git worktree` only. A worktree tool of the user's own is the
   project's business, as `D-SKL-095` decided for both core skills.
 
 ## Assumed
 
-- That the next review that skips a run does so for want of the worktree, and
-  not because the install a worktree needs costs too much. The checkout skill
-  and `typo3_test_run_guide` already state that install.
+- That the next review that skips a run skips it for want of the worktree, not
+  because the install a worktree needs costs too much. The checkout skill and
+  `typo3_test_run_guide` already state that install.
 
 ## Wrong if
 

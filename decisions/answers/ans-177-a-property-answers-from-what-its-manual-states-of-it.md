@@ -57,4 +57,4 @@ handful of pages.
 - A property hit answers from the page where the manual publishes the file. Then
   the anchor and the key differ.
 - A session reports a property answer that leaves out what the page said and the
-  file did not, often enough that the page read was worth its cost.
+  file did not. That happens often enough that the page read was worth its cost.

@@ -35,7 +35,7 @@ the next change answered one run.
 - Each miss of `REVIEW-01` fell in a different run: met 1 in the third, met 4 in
   the second. Most passes carry a doubt, so a stricter judge moves them.
 - Outside the criteria, one of nine runs cited line numbers past the end of a
-  file, and one cited a hint as `typo3_hint_lookup` that `typo3_task_guide` had
+  file. One cited a hint as `typo3_hint_lookup` that `typo3_task_guide` had
   carried.
 
 ## Decided

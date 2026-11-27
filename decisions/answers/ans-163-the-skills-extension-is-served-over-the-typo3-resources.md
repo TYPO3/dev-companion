@@ -14,9 +14,9 @@ coveredBy:
 and `skills/get` with a manifest over the `typo3://skill/` resources it already
 serves.**
 
-A host may not tell a skill from a page by its URI, and it issues the two
-methods only after it has seen the declaration. Without it every published
-workflow was a markdown resource to every host, whatever its shape.
+A host may not tell a skill from a page by its URI. It issues the two methods
+only after it has seen the declaration. Without it every published workflow was
+a markdown resource to every host, whatever its shape.
 
 ## Evidence
 

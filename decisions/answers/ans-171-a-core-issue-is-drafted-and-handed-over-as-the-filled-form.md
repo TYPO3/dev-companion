@@ -18,16 +18,16 @@ the tag `dev-companion`.
 ## Evidence
 
 - The maintainer asked on 2026-10-05 for a simple way to file the bugs a session
-  finds on the way, drafted here and opened as a filled form, for core work
-  alone. The tool name, the duplicate search in the same call, the target
-  version, the regression flag and the tag were the maintainer's choices.
+  finds on the way. The server drafts each one and opens it as a filled form,
+  for core work alone. The tool name, the duplicate search in the same call, the
+  target version, the regression flag and the tag were the maintainer's choices.
 - Read on 2026-10-05. An anonymous request for
   `/projects/typo3cms-core/issues/new?issue[...]=…` redirects to the login and
   keeps every parameter in `back_url`. The maintainer opened such a link signed
   in and got the form with tracker, subject, description and TYPO3 Version
   filled.
 - The field ids come from the tracker: TYPO3 Version 4, PHP Version 5, Tags 3,
-  Complexity 8 and Is Regression 15 on a filed issue, the priorities from
+  Complexity 8 and Is Regression 15 on a filed issue. The priorities come from
   `/enumerations/issue_priorities.json`, the open versions from
   `/projects/typo3cms-core/versions.json`. The custom field list itself needs an
   administrator.

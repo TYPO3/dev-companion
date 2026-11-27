@@ -36,9 +36,9 @@ reasons, and names that reason on its `Not run:` line.**
   guide does not know that the caller reviews, so the field would repeat
   `verifies`. The lever that remains is the sentence that contradicted it.
 - The suite entry carries `filesFromGit`. The guide reads the `.git` of the
-  checkout it serves, and where that names a gitdir outside the checkout, the
-  entry answers `verifies: false` with a line of its own. The axis is the
-  gitdir, as `D-ANS-154` has it.
+  checkout it serves. Where that names a gitdir outside the checkout, the entry
+  answers `verifies: false` with a line of its own. The axis is the gitdir, as
+  `D-ANS-154` has it.
 
 ## Assumed
 

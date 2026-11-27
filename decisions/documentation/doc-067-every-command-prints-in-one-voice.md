@@ -25,9 +25,9 @@ read the sum of them as unfinished, which it was.
 ## Evidence
 
 - On 2026-09-05 the read-only commands ran in one sweep. A check ended in one of
-  three shapes. A sentence that begins "Every", a count line such as
-  `234 requirements, 0 problems`, or `%d problem(s) found.` Where a command
-  printed a problem it went to stdout in one command and to stderr in the next.
+  three shapes: `%d problem(s) found.`, a sentence that begins "Every", or a
+  count line, `234 requirements, 0 problems`. Where a command printed a problem
+  it went to stdout in one command and to stderr in the next.
 - Headings were bare lines, and an aggregator drew its own with `── subject`.
   Whether a blank line stood before a section was each command's own choice, and
   `components:check` put one after a section and none before the next.

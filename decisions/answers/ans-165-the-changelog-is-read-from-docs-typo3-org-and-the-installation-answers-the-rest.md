@@ -68,8 +68,8 @@ nobody pulled today.
 - **A shown entry's body is the rendered page whichever side listed it.** The
   RST on disk is the source the build ran on, includes unresolved and every role
   as markup, and the page is its result. So the removal and the migration come
-  from docs.typo3.org for an entry the installation listed as well, and from the
-  RST only where docs.typo3.org did not answer.
+  from docs.typo3.org, also for an entry the installation listed. They come from
+  the RST only where docs.typo3.org did not answer.
 - **The identifier search stays on disk.** It reads the body of every entry in
   the narrowed set, `D-ANS-042`, and the listing carries no body. The answer
   says it reaches the entries the installation ships.
@@ -88,7 +88,7 @@ nobody pulled today.
   none away.
 - **Against a bound by the installed major**, which a first cut held for an
   afternoon. It lost the patch level of the installed line and a change merged
-  since the last pull, and both are what a caller on a current major asks for.
+  since the last pull. A caller on a current major asks for both.
 
 ## Assumed
 
@@ -117,6 +117,6 @@ nobody pulled today.
 ## Since then
 
 - The bullet "The identifier search stays on disk" no longer describes the
-  server. A PHP class or member reaches an entry from docs.typo3.org through
-  the class index it publishes, `D-ANS-168`. Every other identifier still
-  reaches the entries on disk alone.
+  server. A PHP class or member reaches an entry from docs.typo3.org through the
+  class index it publishes, `D-ANS-168`. Every other identifier still reaches
+  the entries on disk alone.

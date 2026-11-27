@@ -33,9 +33,9 @@ that call as the cost.
   Every entry stays, with its topic, its tools, its source and its scope.
 - Measured on 2026-10-30 with
   `bin/cli tools:tokens typo3_server_scope '{}' --runs=2` on Haiku 4.5, against
-  `11d82bce` and against `14e2fde6`, plus three runs of the "as served" mode on
-  `14e2fde6`. Haiku did not call the tool in seven of the fifteen sessions. The
-  table holds the sessions that called it.
+  `11d82bce` and against `14e2fde6`. Three runs of the "as served" mode on
+  `14e2fde6` came on top. Haiku did not call the tool in seven of the fifteen
+  sessions. The table holds the sessions that called it.
 
 | State      | Mode                 | The model received                          | Tokens           |
 | ---------- | -------------------- | ------------------------------------------- | ---------------- |

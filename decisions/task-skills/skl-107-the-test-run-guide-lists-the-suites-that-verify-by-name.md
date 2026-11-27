@@ -30,7 +30,7 @@ coveredBy:
   (`D-ANS-191`). The text names the same suites in one sentence above the suite
   blocks.
 - `D-SKL-106` rejected the field because it would repeat `verifies`. It does,
-  and that is the use: the list is the one a report holds its lines against, and
+  and that is the use. The list is the one a report holds its lines against, and
   the marks are scattered over every entry.
 - The skill text stays as it was otherwise. A second wording of the three
   reasons is the lever that did not move the run.
@@ -46,5 +46,5 @@ coveredBy:
   lines. Then the list did not arrive.
 - A headless review still skips a suite of `verifying` with a reason off the
   closed list. Then neither the skill nor the guide holds the lever. The next
-  read is the transcript: what the client did with the session's time, and
-  whether the session chose its scope before it read the list.
+  read is the transcript. It shows what the client did with the session's time,
+  and whether the session chose its scope before it read the list.

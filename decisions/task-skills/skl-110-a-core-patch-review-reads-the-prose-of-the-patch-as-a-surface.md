@@ -33,8 +33,9 @@ readability. The review found neither gap on its own.
 - The maintainer chose the STE sentence rules without a word list. The page
   gains the word limits, the simple tenses, the noun cluster limit and the kept
   articles. It says that the core does not require STE.
-- The page gains two rules across the patch: one term for one thing, taken from
-  the code near the change, and the prose read as one text.
+- The page gains two rules across the patch. The first is one term for one
+  thing, taken from the code near the change. The second reads the prose as one
+  text.
 - The checklist gains **Prose**, the report skeleton its row, and the skill
   names the `typo3_rule_lookup` call at the step that asks the owners.
 - A sentence finding ranks as **Worth a change**, because the core does not ask

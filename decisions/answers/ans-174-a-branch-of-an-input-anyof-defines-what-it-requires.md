@@ -37,9 +37,9 @@ message guide published no parameter names.
 
 ## Decided
 
-- The maintainer chose the typed branches on 2026-10-06. The two other options
-  were to drop the root `anyOf` and leave the rule to each tool's own refusal,
-  and to wait for a second report from Gemini or Antigravity.
+- The maintainer chose the typed branches on 2026-10-06. One other option was to
+  drop the root `anyOf` and leave the rule to each tool's own refusal. The other
+  was to wait for a second report from Gemini or Antigravity.
 - A branch property carries its type alone. The full schema, its description
   included, stands once in the root `properties`, so the listing does not carry
   each description twice.

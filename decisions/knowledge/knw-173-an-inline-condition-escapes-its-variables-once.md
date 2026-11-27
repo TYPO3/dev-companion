@@ -9,8 +9,8 @@ coveredBy:
 
 # D-KNW-173 — An inline condition escapes its variables once
 
-**The Fluid hints state where an inline `f:if` escapes, because a session read
-a correct escape as a defect and asked for a workaround.**
+**The Fluid hints state where an inline `f:if` escapes, because a session read a
+correct escape as a defect and asked for a workaround.**
 
 ## Evidence
 
@@ -21,13 +21,14 @@ a correct escape as a defect and asked for a workaround.**
 - The claim does not reproduce. A probe rendered fourteen templates with
   standalone Fluid at `2.15.0`, `4.6.1` and `5.3.2` from `.checkouts/fluid`.
   Those are the lines 12.4, 13.4 and 14.3 pin. A variable inside `then` came out
-  escaped exactly once in a plain HTML attribute, in a tag-based ViewHelper
-  attribute, in a declared argument and in the body. A literal in `then` came
-  out raw. A block `<f:if>` in the attribute rendered the same string.
-- `AbstractConditionViewHelper` registers `then` and `else` as escaped
-  arguments and sets `escapeOutput` to false. `TemplateParser::parseArguments()`
-  turns the escaping off for an argument that is not declared escaped, so a
-  tag attribute is escaped once by the `TagBuilder`.
+  escaped exactly once in four places. They are a plain HTML attribute, a
+  tag-based ViewHelper attribute, a declared argument and the body. A literal in
+  `then` came out raw. A block `<f:if>` in the attribute rendered the same
+  string.
+- `AbstractConditionViewHelper` registers `then` and `else` as escaped arguments
+  and sets `escapeOutput` to false. `TemplateParser::parseArguments()` turns the
+  escaping off for an argument that is not declared escaped, so a tag attribute
+  is escaped once by the `TagBuilder`.
 - TYPO3 registers no Fluid interceptor on 12.4, 13.4, 14.3 or `main`.
   `f:link.typolink` hands `class` and `title` to `LinkFactory`, and `LinkResult`
   escapes them once through `implodeAttributes()`. That half was read in
@@ -38,8 +39,8 @@ a correct escape as a defect and asked for a workaround.**
 ## Decided
 
 - **Step 1a of the ladder, with the knowledge corrected rather than copied.**
-  The hint states the behaviour the probe measured, and the query now reaches
-  it first.
+  The hint states the behaviour the probe measured, and the query now reaches it
+  first.
 - **Rejected: the suggested workaround.** A partial or a block `f:if` renders
   the same string, so the hint would send a reader to a rewrite that changes
   nothing.

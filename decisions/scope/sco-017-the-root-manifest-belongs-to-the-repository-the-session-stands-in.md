@@ -47,7 +47,7 @@ trailing slash reads as the directory.**
 ## Assumed
 
 - A caller who passes a bare `composer.json` means the one at the root of the
-  repository the session is in, rather than one inside a package.
+  session's repository, rather than one inside a package.
 
 ## Wrong if
 

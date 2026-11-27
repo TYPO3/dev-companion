@@ -38,11 +38,11 @@ sessions took between the two: the search for the issues nobody had linked.
   So it cannot see an issue nobody linked, which is what a duplicate is until
   somebody recognises it.
 - The endpoint answers JSON to this server's own agent, measured the same day.
-  That is `results[]` of `id`, `title`
-  (`Bug #105403 (Under Review): f:image and cache busting issue`), `type`, `url`
-  and `description`, in an envelope of `total_count`, `offset` and `limit`. A
-  query nothing matches answers `total_count: 0`. It clears `D-ANS-034` without
-  a parser, and tracker and status arrive without a second call per hit.
+  That is `results[]` of `id`, `title`, `type`, `url` and `description`, in an
+  envelope of `total_count`, `offset` and `limit`. A `title` reads
+  `Bug #105403 (Under Review): f:image and cache busting issue`. A query nothing
+  matches answers `total_count: 0`. It clears `D-ANS-034` without a parser, and
+  tracker and status arrive without a second call per hit.
 - One query is not the answer. `cache busting` returned 15, `f:image` 134 and
   `image cache` 279 on 2026-08-03, three wordings of one question. `145217`
   reports four wordings that found four different sets.
@@ -151,14 +151,14 @@ names the call to compose.
 ## Since then
 
 Read on 2026-09-19 against `feedback/2026-09-18-093205`. A triage found its
-issue family in one read of 90056, relations and notes included, and settled
-that no fourth issue exists with the backlog by category. What cost it was the
-lexical AND: "pagetree filter reset highlight" answered zero, and the session
-proposed that the answer drop the rarest word itself. Measured the same day:
-every three-word subset of that query answers 1 to 6 issues and none of them is
-90056, and "highlight" alone answers 420 without it. The wording that reached
-it, "pagetree search clear selected", is the issue's own vocabulary, which no
-subset of the first query carries. So the zero answer stays as `f1e047d1` built
-it, the per-term counts and the backlog route, and the suggestion has its answer
-in the measure.
+issue family in one read of 90056, relations and notes included. The backlog by
+category then settled that no fourth issue exists. What cost it was the lexical
+AND: "pagetree filter reset highlight" answered zero, and the session proposed
+that the answer drop the rarest word itself. Measured the same day: every
+three-word subset of that query answers 1 to 6 issues, and none of them is
+90056. The word "highlight" alone answers 420 without it. The wording that
+reached it, "pagetree search clear selected", is the issue's own vocabulary,
+which no subset of the first query carries. So the zero answer stays as
+`f1e047d1` built it, the per-term counts and the backlog route, and the
+suggestion has its answer in the measure.
 

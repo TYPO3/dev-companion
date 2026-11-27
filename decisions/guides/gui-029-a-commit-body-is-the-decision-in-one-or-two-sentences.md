@@ -16,8 +16,8 @@ without a body.**
 
 The guide said "Keep the body brief. Say what changed and why." The maintainer
 found the bodies agents wrote with it too long on 2026-10-15. They carried what
-the diff shows, such as a class that now sits on an element, beside the
-decision that put it there.
+the diff shows, such as a class that now sits on an element, beside the decision
+that put it there.
 
 ## Evidence
 
@@ -35,8 +35,8 @@ decision that put it there.
   optional body the appendix allows. So the rule is stricter than the core's,
   and the check is a warning rather than an error.
 - One or two sentences. The maintainer asked for a body that is really short.
-- What matters and the code does not show belongs in the body, because the
-  appendix asks for it as what a reviewer has to look out for.
+- What matters and the code does not show belongs in the body. The appendix asks
+  for it as what a reviewer has to look out for.
 
 ## Assumed
 

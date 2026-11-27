@@ -13,9 +13,9 @@ coveredBy: []
 refusal names ext-curl, the PHP and what to do. It does not answer as a source
 that did not answer, and it does not leave PHP's own error to say it.**
 
-`composer.json` requires ext-curl, and two ways in pass that: an install with
-the platform check off, and an entry that starts a PHP other than the one
-Composer resolved against.
+`composer.json` requires ext-curl, and two ways in pass that requirement. One is
+an install with the platform check off. The other is an entry that starts a PHP
+other than the one Composer resolved against.
 
 ## Evidence
 

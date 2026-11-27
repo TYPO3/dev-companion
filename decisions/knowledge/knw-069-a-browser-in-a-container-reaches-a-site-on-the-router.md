@@ -63,9 +63,9 @@ installation the report came from.
 
 - The page ends where the request reaches the site, and says so since
   2026-09-19. A session ran it end to end on first use, the wildcard host and
-  the harness placement included, and found the one thing it had to look up
-  elsewhere was the backend login of a worktree that inherited its database.
-  That is the add-on's business, `feedback/2026-09-18-093214`, `D-FBK-018`.
+  the harness placement included. The one thing it had to look up elsewhere was
+  the backend login of a worktree that inherited its database. That is the
+  add-on's business, `feedback/2026-09-18-093214`, `D-FBK-018`.
 
 ## Assumed
 

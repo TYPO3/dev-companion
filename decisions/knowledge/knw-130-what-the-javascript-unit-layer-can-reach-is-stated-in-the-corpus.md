@@ -93,13 +93,14 @@ anywhere in the corpus.
 
 ## Since then
 
-Read on 2026-09-19 against two feedback of 2026-09-18, `093132` and `093139`:
-one session paid nine full suite runs because the hint said nothing about a
-component that fetches and named no way past a target that passes nothing
-through. Both step 1a, and five statements went in the same day. The core's own
-`ajax-request-test.ts` stubs `window.fetch`, `AjaxResponse.resolve()` reads
-`Content-Type`, and the `oneEvent` typing declares a third parameter the runtime
-has not, read on 13.4, 14.3 and main. Measured in the container: `--files`
-narrows nothing where the config declares groups, `-s npm` runs without a
-browser, and a failing assertion on an element runs into the mocha timeout, a
-file of them into `testsFinishTimeout` with no failure shown.
+Read on 2026-09-19 against two feedback of 2026-09-18, `093132` and `093139`.
+One session paid nine full suite runs, because the hint said nothing about a
+component that fetches. The hint also named no way past a target that passes
+nothing through. Both step 1a, and five statements went in the same day. The
+core's own `ajax-request-test.ts` stubs `window.fetch`, and
+`AjaxResponse.resolve()` reads `Content-Type`. The `oneEvent` typing declares a
+third parameter the runtime has not. All three read the same on 13.4, 14.3 and
+main. Measured in the container: `--files` narrows nothing where the config
+declares groups, and `-s npm` runs without a browser. A failing assertion on an
+element runs into the mocha timeout, and a file of them into
+`testsFinishTimeout` with no failure shown.

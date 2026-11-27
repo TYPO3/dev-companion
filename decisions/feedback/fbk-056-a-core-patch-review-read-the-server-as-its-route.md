@@ -58,9 +58,9 @@ A third core session, a fix of Forge #79571 pushed as change 96975 on
 2026-10-21, names eight answers that held
 ([`feedback/2026-10-21-153139-what-worked`](../../feedback/archive/2026-10-21-153139-what-worked-triage-order-watch-it-fail-rule.md)).
 Three are the boundaries above: the `cglGit` warning, the changelog rule and the
-release rule. Five are new here. The backlog rows carried cites, the triage
-skill sent the session to the existing test and made it watch a red check fail,
-`typo3_gerrit_lookup` by path found two abandoned attempts, the commit message
+release rule. Five are new here. The backlog rows carried cites. The triage
+skill sent the session to the existing test and made it watch a red check fail.
+`typo3_gerrit_lookup` by path found two abandoned attempts. The commit message
 guide caught a long subject, and the review checklist found the precedent. The
 handovers between three skills fired as `D-SKL-022` says. Nothing changes.
 
@@ -69,10 +69,10 @@ handovers between three skills fired as `D-SKL-022` says. Nothing changes.
 A fourth core session, a review and amend of change 97164 on 2026-10-26, names
 three answers that held
 ([`feedback/2026-10-26-102428-what-worked`](../../feedback/archive/2026-10-26-102428-what-worked-in-the-review-of-change-97164.md)).
-They are the boundaries above: the fetch ref, patch set, commit and mergeable of
-`typo3_gerrit_lookup`, the `cglGit` worktree warning and the suites not run, and
-the commit message guide. Each field is required in the tool's output schema,
-and the warning has its test. So nothing changes.
+They are the boundaries above. One is the fetch ref, patch set, commit and
+mergeable of `typo3_gerrit_lookup`. The others are the `cglGit` worktree warning
+and the suites not run, and the commit message guide. Each field is required in
+the tool's output schema, and the warning has its test. So nothing changes.
 
 The same session says it reported those answers wrongly while the tools gave
 correct data. That is the other side of the boundary: the report, which the

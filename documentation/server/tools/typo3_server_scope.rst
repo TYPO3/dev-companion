@@ -497,7 +497,7 @@ Called with:
             A service outside this machine. An unreachable one says so out loud rather than answers as empty.
             Tools: typo3_documentation_lookup, typo3_permalink_lookup, typo3_forge_lookup, typo3_issue_report_guide, typo3_gerrit_lookup, typo3_changelog_lookup, typo3_ter_lookup
             ## Answers from checkout
-            This server's own checkout, which is why the tool offering it exists only in a standalone one.
+            This server's own checkout, which is why the tools that answer from it exist only in a standalone one.
             Tools: typo3_feedback_record, typo3_feedback_list
 
             Whether this checkout is behind github.com/TYPO3/dev-companion is not known: it stands on a commit the upstream does not have, or nothing has asked yet.
@@ -1313,7 +1313,7 @@ Called with:
                     },
                     {
                         "source": "checkout",
-                        "meaning": "This server's own checkout, which is why the tool offering it exists only in a standalone one.",
+                        "meaning": "This server's own checkout, which is why the tools that answer from it exist only in a standalone one.",
                         "tools": [
                             "typo3_feedback_record",
                             "typo3_feedback_list"

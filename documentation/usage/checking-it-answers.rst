@@ -3,62 +3,69 @@
 Checking that it answers
 ========================
 
-An entry on disk registers nothing. The client has to have read it, and in most
-clients somebody has to have approved it. So the ordinary end of an install is a
-configuration that is entirely correct and a session with no ``typo3_`` tool in
-it.
+This page covers how you find out whether the server answers in your session,
+and what to do where it does not. It also covers an installation that is down,
+skills that do not activate, and a test without a client.
 
-Nothing tells you. An agent with no server answers from the checkout and from
-what it already knows, same tone, same speed, same confidence. The sentence that
-is wrong looks exactly like the ones that are right. Two sessions went a whole
-task that way, each with a published skill beside it that named eleven tools
-that were not there. So the check is worth the minute, and the minute is one
+An entry on disk registers nothing. The client must read it, and in most clients
+somebody must approve it. So an install usually ends with a configuration that
+is entirely correct, and a session with no ``typo3_`` tool in it.
+
+Nothing tells you. An agent without the server answers from the checkout and
+from what it already knows, with the same tone, speed and confidence. The wrong
+sentence looks exactly like the right ones. Two sessions did a whole task that
+way. Each had a published skill beside it that named eleven tools, and none of
+those tools was there. So the check is worth the minute, and the minute is one
 question.
 
 Ask it something
 ----------------
 
-Not a command — a question your project has and this server answers. In the
-client you actually work in:
+Ask a question that your project has and that this server answers, not a
+command. Ask it in the client you actually work in:
 
     Which icon identifier is the right one for a delete button in the TYPO3
     backend?
 
 Then look at what the agent did, not at what it said. A client that shows tool
-calls shows one named ``typo3_icon_lookup``; where yours does not show them, ask
-it afterwards which tools it used. **An answer with no call behind it is the
-failure this page is about.** The model knows enough about TYPO3 to produce
-something plausible, and plausible is what you cannot check.
+calls shows one named ``typo3_icon_lookup``. Where your client does not show
+them, ask the agent afterwards which tools it used.
+
+**An answer with no call behind it is the failure this page is about.** The
+model knows enough about TYPO3 to produce something plausible. You cannot check
+something that is only plausible.
 
 Where no call happened
 ----------------------
 
-The install printed what remained to do under the line that reports the entry,
-and it differs per client. An approval, a restart, a trusted directory, or
-nothing at all. That list, with each client's own documentation behind it, is
-:ref:`in the install <installing-finishing-in-the-client>`.
+The install printed what remained to do under the line that reports the entry.
+That differs per client: an approval, a restart, a trusted directory, or nothing
+at all. :ref:`The install <installing-finishing-in-the-client>` has that list,
+with the documentation of each client behind it.
 
-The client's own listing is where you read it back. ``/mcp`` in Claude Code,
-``amp mcp doctor``, ``codex mcp list``, ``grok mcp doctor``,
-``droid mcp permissions``. A server in the listing that does not run is a
-different problem from one nobody wrote. The two look identical from inside the
-session.
+The listing of the client shows the result: ``/mcp`` in Claude Code,
+``amp mcp doctor``, ``codex mcp list``, ``grok mcp doctor`` or
+``droid mcp permissions``. A server in the listing that does not run is another
+problem than a server nobody wrote. From inside the session, the two look the
+same.
 
 Ask what it reads
 -----------------
 
     Ask the TYPO3 server what it covers and which installation it is reading.
 
-That is ``typo3_server_scope``, the one tool nothing can take away, and it
-answers in prose for a reader. What it will answer for, which project it found
-and how, and how many packages that project has. Whether it can reach that
-installation's console, with the reason where it cannot.
+That calls ``typo3_server_scope``, the one tool that nothing can take away. It
+answers in prose for a reader. It says what it answers for, which project it
+found and how, and how many packages that project has. It also says whether it
+can reach the console of that installation, and the reason where it cannot.
 
-Read the project it names. A server started in the wrong directory is the other
-quiet failure. It finds *an* installation, answers about that one, and nothing
-in the answers is wrong except which site they are about. Where it guessed
-wrong, an ``env`` block in the client entry ends the guesswork. That block is
-the one part of the entry ``install`` and ``update`` leave alone:
+Read the project it names. A server that started in the wrong directory is the
+other quiet failure. It finds *an* installation and answers about that one.
+Nothing in the answers is wrong, except the site they are about.
+
+Where the server guessed wrong, add an ``env`` block to the client entry. Then
+the server no longer guesses. ``install`` and ``update`` leave that block of the
+entry alone:
 
 .. code-block:: json
 
@@ -76,51 +83,54 @@ the one part of the entry ``install`` and ``update`` leave alone:
       }
     }
 
-The first names the installation, the second the command that runs its console
-where the server cannot work that out. The other two variables the block may
-carry are :ref:`in the install <installing-what-the-entry-may-carry>`.
+The first variable names the installation. The second names the command that
+runs its console, where the server cannot find that command itself.
+:ref:`The install <installing-what-the-entry-may-carry>` lists the other two
+variables the block can set.
 
 When the site is down
 ---------------------
 
-Some questions only the installation can answer: which icons it registers, which
-labels exist, what a setting is after every extension has had its say. For those
-the server asks the installation itself. Where it cannot, it reads the files the
-packages ship instead and says so, in the answer, as ``answeredBy: packages``.
+Only the installation can answer some questions. Examples are which icons it
+registers, which labels exist, and what a setting is after every extension has
+applied its part. For those, the server asks the installation itself. Where it
+cannot, it reads the files the packages ship instead. The answer then says so,
+as ``answeredBy: packages``.
 
 **That word changes what the answer proves.** With the installation reachable, a
-lookup that finds no icon has established that the identifier is not registered.
-With it down, the same answer has established nothing: what an extension
-registers while it runs is not in the files. Two sessions read such an answer as
-a fact and concluded that a well-known sitepackage registers no icons at all.
-That is false, it registers about forty.
+lookup that finds no icon shows that the identifier is not registered. With the
+installation down, the same answer shows nothing. The files do not contain what
+an extension registers while it runs.
 
-So an empty answer is worth one glance at that line before you act on it. If it
-says the files answered and you meant the site, start the containers, run
-``composer install``, and ask again in the same session. The server never
-remembers a failure, and the next call goes to the installation.
+Two sessions read such an answer as a fact. They concluded that a well-known
+sitepackage registers no icons at all. That is false: it registers about forty.
+
+So look at that line once before you act on an empty answer. If it says the
+files answered and you meant the site, start the containers and run
+``composer install``. Then ask again in the same session. The server never
+remembers a failure, so the next call goes to the installation.
 
 The skills are files
 --------------------
 
-The install copied them into the client's own skills directory. From then on
-they are yours, and a later release of this server does not reach them. So the
-server compares what it published against what is there every time a client
-connects and says so where they differ. ``update`` is what refreshes them. The
+The install copied the skills into the skills directory of the client. From then
+on they are your files, and a later release of this server does not change them.
+So each time a client connects, the server compares what it published with what
+is there. It says so where the two differ. ``update`` refreshes them. The
 :doc:`task-skill catalog <task-skills/index>` names the published set and opens
 each complete workflow.
 
-A skill that never activates is the other half, and it is not a fault in the
-install. A client chooses a skill by its description before it loads anything of
-it. So a task described in words that description does not carry runs without
-it, and nothing reports that it happened. Where a workflow you expected did not
-run, say the subject the way the skill names it and watch whether it activates.
+A skill that never activates is the other half, and the install is not at fault.
+A client chooses a skill by its description before it loads any of the skill. So
+a task described in words outside that description runs without the skill, and
+nothing reports it. Where a workflow you expected did not run, name the subject
+the way the skill names it. Then watch whether the skill activates.
 
 Without a client at all
 -----------------------
 
 Where none of the above settles it, ask the server directly. Two lines on stdin
-start it and list what it offers, which separates a server that cannot start
+start it and list what it offers. That tells a server that cannot start apart
 from a client that never started it:
 
 .. code-block:: bash
@@ -131,16 +141,16 @@ from a client that never started it:
       | php bin/typo3-dev-companion
 
 Run it from the project you installed into. The server has no directory of its
-own. Where it started decides what it reads, which is the same reason the wrong
-work directory produces answers about the wrong site.
+own, and the directory it starts in decides what it reads. For the same reason,
+the wrong work directory gives answers about the wrong site.
 
-What the start has to say goes to stderr, each line opened by
-``typo3-dev-companion:``. A PHP that lacks an extension ``composer.json``
-requires is one of those lines, and it names the PHP that ran. Where a client
-did start the server, every call answers with the same sentence.
+The server writes what it has to say at the start to stderr. Each line starts
+with ``typo3-dev-companion:``. A PHP without an extension that ``composer.json``
+requires gets one of those lines, and the line names the PHP that ran. Where a
+client did start the server, every call answers with the same sentence.
 
-The MCP Inspector asks the same two lines with a form around them. Its protocol
-era ``Legacy``, the default, opens with ``initialize``. The server answers with
-the handshake revision ``2025-11-25``. ``Modern`` and ``Auto`` open with
-``server/discover`` instead. The server answers with ``2026-07-28`` and the same
-capabilities.
+The MCP Inspector sends the same two lines, with a form around them. Its default
+protocol era, ``Legacy``, opens with ``initialize``. The server answers with the
+handshake revision ``2025-11-25``. ``Modern`` and ``Auto`` open with
+``server/discover`` instead. The server then answers with ``2026-07-28`` and the
+same capabilities.

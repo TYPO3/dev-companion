@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Contribution;
 
+use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Http\Fetch;
-use TYPO3\DevCompanion\Http\Recent;
 
 /**
  * The pipelines core-ci runs for every patch set on review.typo3.org, read
@@ -47,10 +47,10 @@ final class CoreCi
     {
         $api = self::HOST . '/api/v4/projects/' . self::PROJECT;
         $url = $api . '/pipelines?' . http_build_query(['ref' => $branch . '.' . $change . '.' . $patchSet, 'per_page' => '1']);
-        /** @var Pipeline|null $held */
-        $held = Recent::held($url, Gerrit::HELD_FOR);
-        if ($held !== null) {
-            return $held;
+        /** @var Pipeline|null $cached */
+        $cached = Cache::get($url, Gerrit::CACHE_DURATION);
+        if ($cached !== null) {
+            return $cached;
         }
 
         $pipelines = Fetch::decode($this->fetch->get($url, ['Accept: application/json']));
@@ -88,7 +88,7 @@ final class CoreCi
             'status' => is_string($pipeline['status'] ?? null) ? $pipeline['status'] : '',
             'failedJobs' => $failed,
         ];
-        Recent::hold($url, $answer);
+        Cache::put($url, $answer);
 
         return $answer;
     }

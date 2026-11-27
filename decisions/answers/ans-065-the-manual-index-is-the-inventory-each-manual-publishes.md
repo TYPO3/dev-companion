@@ -69,7 +69,7 @@ named CSS or JavaScript reached it.
   objects inside the pages: 748 TCA properties at 14.3, and every label and
   section title. What this searches is a table of contents (`R-DOC-001`).
 - The reader holds the index per URL with its entity tag and revalidates it on
-  every lookup. It does not sit in `Http\Recent`, which holds an answer for a
+  every lookup. It does not sit in `Http\Cache`, which caches an answer for a
   chosen while because its source cannot say whether it is still current. This
   source can, so there is no while to choose and nothing goes stale. That branch
   has a measurement and no test. A transport is a body without a status or a

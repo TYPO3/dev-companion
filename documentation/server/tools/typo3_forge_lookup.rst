@@ -610,10 +610,10 @@ Answers with
         # where nobody ever commented.
         lastNoteOn: string
     # When this server read the tracker for this answer, in UTC as ISO 8601:
-    # 2026-10-27T14:03:09Z. The process holds an answered read for 300 seconds, so
+    # 2026-10-27T14:03:09Z. The process caches an answered read for 300 seconds, so
     # this can be earlier than the call. Where the answer stands on several reads,
     # this is the earliest of them. updatedOn says when the issue last moved, and
-    # this says how old the read of it is. The list of areas and of people is held
+    # this says how old the read of it is. The list of areas and of people is cached
     # for a day and does not count here.
     readAt: string
     # Why the source answered nothing, where status says unavailable. Null

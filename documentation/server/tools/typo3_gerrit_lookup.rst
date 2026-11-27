@@ -672,7 +672,7 @@ Answers with
       # of regular support.
       readAt: string
     # When this server read the review server for this answer, in UTC as ISO 8601:
-    # 2026-10-27T14:03:09Z. The process holds an answered read for 30 seconds, so
+    # 2026-10-27T14:03:09Z. The process caches an answered read for 30 seconds, so
     # this can be earlier than the call. Where the answer stands on several reads,
     # this is the earliest of them. updated says when a change last moved, and this
     # says how old the read of it is.

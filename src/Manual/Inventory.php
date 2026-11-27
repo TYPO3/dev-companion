@@ -36,7 +36,7 @@ final class Inventory
      * round trip and no payload for an inventory that is still current. That is
      * what makes it affordable: `D-ANS-065` has the sizes.
      *
-     * It is not held in `Http\Recent`, which holds an answer for a chosen while
+     * It is not cached in `Http\Cache`, which caches an answer for a chosen while
      * because its source cannot say whether it is still current. This one can,
      * so there is no while to choose.
      *

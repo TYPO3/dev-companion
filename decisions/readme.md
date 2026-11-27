@@ -120,6 +120,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### answers
 
+- [`D-ANS-196`][D-ANS-196] — An empty registry answer for a system extension names the core package · 2026-11-24
 - [`D-ANS-195`][D-ANS-195] — A changelog lookup takes the word the other tools take · 2026-11-06
 - [`D-ANS-194`][D-ANS-194] — The whole orientation stays under what Claude Code keeps in context · 2026-10-30
 - [`D-ANS-193`][D-ANS-193] — A feature task is asked for the extension that already does it · 2026-10-29
@@ -257,7 +258,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-058`][D-ANS-058] — The release lines a trailer claims are a lookup · 2026-08-05 · confirmed
 - [`D-ANS-059`][D-ANS-059] — What a session named as load-bearing is kept · 2026-08-05
 - [`D-ANS-048`][D-ANS-048] — A tool declares what can answer it, and both readers render that · 2026-08-04
-- [`D-ANS-049`][D-ANS-049] — An answer from outside is held where the caller cannot change it · 2026-08-04
+- [`D-ANS-049`][D-ANS-049] — An answer from outside is cached where the caller cannot change it · 2026-08-04
 - [`D-ANS-050`][D-ANS-050] — A curated needle matches the word it is · 2026-08-04
 - [`D-ANS-051`][D-ANS-051] — A manual result carries how much of the question it covers · 2026-08-04
 - [`D-ANS-052`][D-ANS-052] — The configuration lookup answers for the installation as it stands · 2026-08-04
@@ -306,6 +307,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-196]: answers/ans-196-an-empty-registry-answer-for-a-system-extension-names-the-core-package.md
 [D-ANS-195]: answers/ans-195-a-changelog-lookup-takes-the-word-the-other-tools-take.md
 [D-ANS-194]: answers/ans-194-the-whole-orientation-stays-under-what-claude-code-keeps-in-context.md
 [D-ANS-193]: answers/ans-193-a-feature-task-is-asked-for-the-extension-that-already-does-it.md
@@ -443,7 +445,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 [D-ANS-058]: answers/ans-058-the-release-lines-a-trailer-claims-are-a-lookup.md
 [D-ANS-059]: answers/ans-059-what-a-session-named-as-load-bearing-is-kept.md
 [D-ANS-048]: answers/ans-048-a-tool-declares-what-can-answer-it-and-both-readers-render-that.md
-[D-ANS-049]: answers/ans-049-an-answer-from-outside-is-held-where-the-caller-cannot-change-it.md
+[D-ANS-049]: answers/ans-049-an-answer-from-outside-is-cached-where-the-caller-cannot-change-it.md
 [D-ANS-050]: answers/ans-050-a-curated-needle-matches-the-word-it-is.md
 [D-ANS-051]: answers/ans-051-a-manual-result-carries-how-much-of-the-question-it-covers.md
 [D-ANS-052]: answers/ans-052-the-configuration-lookup-answers-for-the-installation-as-it-stands.md
@@ -932,6 +934,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### guides
 
+- [`D-GUI-037`][D-GUI-037] — A core body names no path, and the check says so · 2026-11-24
 - [`D-GUI-035`][D-GUI-035] — A brief opens on the hint its confirmed intent names first · 2026-10-28
 - [`D-GUI-036`][D-GUI-036] — A brief carries a hint for each path before a second for any · 2026-10-28
 - [`D-GUI-033`][D-GUI-033] — A hint the brief names by id is carried or listed as left out · 2026-10-26
@@ -968,6 +971,7 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-GUI-008`][D-GUI-008] — Operating an installation is a change type of its own · 2026-08-03
 - [`D-GUI-001`][D-GUI-001] — A missing release target becomes a placeholder, not `main` · 2026-07-29
 
+[D-GUI-037]: guides/gui-037-a-core-body-names-no-path-and-the-check-says-so.md
 [D-GUI-035]: guides/gui-035-a-brief-opens-on-the-hint-its-confirmed-intent-names-first.md
 [D-GUI-036]: guides/gui-036-a-brief-carries-a-hint-for-each-path-before-a-second-for-any.md
 [D-GUI-033]: guides/gui-033-a-hint-the-brief-names-by-id-is-carried-or-listed-as-left-out.md
@@ -1042,6 +1046,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 
 ### task-skills
 
+- [`D-SKL-110`][D-SKL-110] — A core patch review reads the prose of the patch as a surface · 2026-11-24
+- [`D-SKL-111`][D-SKL-111] — Adding a language to a site is a task intent · 2026-11-24
 - [`D-SKL-102`][D-SKL-102] — A core review runs its suites in a worktree or asks for one · 2026-10-28
 - [`D-SKL-103`][D-SKL-103] — A review brief carries the surface list it is written from · 2026-10-28
 - [`D-SKL-105`][D-SKL-105] — A review's Not run line lists the suites that verify · 2026-10-28
@@ -1145,6 +1151,8 @@ and not a defect. What was decided lately is `bin/cli decisions:list`.
 - [`D-SKL-004`][D-SKL-004] — A question no lookup settles is read from the installed source · 2026-08-02
 - [`D-SKL-001`][D-SKL-001] — The order a task starts in is one file · 2026-08-01 · confirmed
 
+[D-SKL-110]: task-skills/skl-110-a-core-patch-review-reads-the-prose-of-the-patch-as-a-surface.md
+[D-SKL-111]: task-skills/skl-111-adding-a-language-to-a-site-is-a-task-intent.md
 [D-SKL-102]: task-skills/skl-102-a-core-review-runs-its-suites-in-a-worktree-or-asks-for-one.md
 [D-SKL-103]: task-skills/skl-103-a-review-brief-carries-the-surface-list-it-is-written-from.md
 [D-SKL-105]: task-skills/skl-105-a-reviews-not-run-line-lists-the-suites-that-verify.md

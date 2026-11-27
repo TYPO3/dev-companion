@@ -423,7 +423,7 @@ final class Schema
     public static function readAt(string $source, int $seconds, string $more = ''): array
     {
         return self::string(trim(sprintf(
-            'When this server read %s for this answer, in UTC as ISO 8601: 2026-10-27T14:03:09Z. The process holds '
+            'When this server read %s for this answer, in UTC as ISO 8601: 2026-10-27T14:03:09Z. The process caches '
                 . 'an answered read for %d seconds, so this can be earlier than the call. Where the answer stands '
                 . 'on several reads, this is the earliest of them. %s',
             $source,

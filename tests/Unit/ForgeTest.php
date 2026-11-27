@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Contribution\Forge;
-use TYPO3\DevCompanion\Http\Recent;
+use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Installation\Instance;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
@@ -27,9 +27,9 @@ final class ForgeTest extends TestCase
     use TemporaryInstallation;
 
     #[After]
-    public function forgetWhatWasHeld(): void
+    public function emptyTheCache(): void
     {
-        Recent::forget();
+        Cache::clear();
         Forge::useReader(null);
         Instance::discoverFrom(null);
     }
@@ -1612,7 +1612,7 @@ final class ForgeTest extends TestCase
      */
     #[Decision('D-ANS-054')]
     #[Test]
-    public function theAreasAreReadFromTheProjectAndHeld(): void
+    public function theAreasAreReadFromTheProjectAndCached(): void
     {
         $calls = 0;
         $forge = new Forge(function (string $url) use (&$calls): string {

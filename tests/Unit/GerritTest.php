@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Contribution\Gerrit;
-use TYPO3\DevCompanion\Http\Recent;
+use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Knowledge\ReleaseLines;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tests\Support\Requirement;
@@ -24,9 +24,9 @@ use TYPO3\DevCompanion\Tool\GerritLookup;
 final class GerritTest extends TestCase
 {
     #[After]
-    public function forgetWhatWasHeld(): void
+    public function emptyTheCache(): void
     {
-        Recent::forget();
+        Cache::clear();
     }
 
     /**
@@ -1313,7 +1313,7 @@ final class GerritTest extends TestCase
 
         // The same chain URL, so what stayed from the first read is what the
         // second would get.
-        Recent::forget();
+        Cache::clear();
         $unnamed = new Gerrit(static fn(string $url): string => str_contains($url, '/related')
             ? ")]}'\n" . '{"changes":[{"commit":{"subject":"[TASK] Something"},"_change_number":92323,'
                 . '"_revision_number":1,"_current_revision_number":1,"status":"NEW"}]}'

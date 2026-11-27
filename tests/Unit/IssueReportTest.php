@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TYPO3\DevCompanion\Contribution\Forge;
-use TYPO3\DevCompanion\Http\Recent;
+use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Tests\Support\Decision;
 use TYPO3\DevCompanion\Tool\Registry;
 
@@ -22,7 +22,7 @@ final class IssueReportTest extends TestCase
     #[After]
     public function forgetTheTracker(): void
     {
-        Recent::forget();
+        Cache::clear();
         Forge::useReader(null);
     }
 

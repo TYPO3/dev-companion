@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Contribution;
 
+use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Http\Fetch;
-use TYPO3\DevCompanion\Http\Recent;
 
 /**
  * The review server the core's patches live on, read over its REST API.
@@ -26,14 +26,14 @@ final class Gerrit
     public const PROJECT = 'Packages/TYPO3.CMS';
 
     /**
-     * Seconds a found change stays in the hold.
+     * Seconds a found change stays in the cache.
      *
      * Short, because the caller is the one who changes these answers. It pushes
      * a patch and asks about it, or amends one and asks which patch set is
      * current. Long enough that the same question inside one task reaches the
      * review server once.
      */
-    public const HELD_FOR = 30;
+    public const CACHE_DURATION = 30;
 
     private readonly Fetch $fetch;
 
@@ -68,13 +68,13 @@ final class Gerrit
      */
     public function readAt(): string
     {
-        return Recent::stated($this->readAt);
+        return Cache::timestamp($this->readAt);
     }
 
-    /** Ages the answer by one read, the held one or the fetch about to happen. */
+    /** Ages the answer by one read, the cached one or the fetch about to happen. */
     private function read(string $url): void
     {
-        $this->readAt = min($this->readAt ?? PHP_INT_MAX, Recent::since($url));
+        $this->readAt = min($this->readAt ?? PHP_INT_MAX, Cache::storedAt($url));
     }
 
     /**
@@ -841,11 +841,11 @@ final class Gerrit
         }
 
         $url = self::HOST . '/changes/' . $number . '/comments';
-        /** @var list<array<string, mixed>>|null $held */
-        $held = Recent::held($url, self::HELD_FOR);
+        /** @var list<array<string, mixed>>|null $cached */
+        $cached = Cache::get($url, self::CACHE_DURATION);
         $this->read($url);
-        if ($held !== null) {
-            return $held;
+        if ($cached !== null) {
+            return $cached;
         }
 
         $decoded = Fetch::decode($this->fetch->get($url, ['Accept: application/json']));
@@ -887,7 +887,7 @@ final class Gerrit
         usort($comments, static fn(array $one, array $other): int => strcmp($one['on'], $other['on']));
         $comments = self::threaded($comments);
 
-        Recent::hold($url, $comments);
+        Cache::put($url, $comments);
 
         return $comments;
     }
@@ -1013,11 +1013,11 @@ final class Gerrit
         }
 
         $url = self::HOST . '/changes/' . $number . '/revisions/current/related';
-        /** @var list<array<string, mixed>>|null $held */
-        $held = Recent::held($url, self::HELD_FOR);
+        /** @var list<array<string, mixed>>|null $cached */
+        $cached = Cache::get($url, self::CACHE_DURATION);
         $this->read($url);
-        if ($held !== null) {
-            return $held;
+        if ($cached !== null) {
+            return $cached;
         }
 
         $decoded = Fetch::decode($this->fetch->get($url, ['Accept: application/json']));
@@ -1062,7 +1062,7 @@ final class Gerrit
             };
         }
 
-        Recent::hold($url, $chain);
+        Cache::put($url, $chain);
 
         return $chain;
     }
@@ -1195,11 +1195,11 @@ final class Gerrit
     {
         $url = self::HOST . '/changes/?q=' . rawurlencode($query) . '&n=' . $take
             . ($skip > 0 ? '&S=' . $skip : '') . $options;
-        /** @var Answer|null $held */
-        $held = Recent::held($url, self::HELD_FOR);
+        /** @var Answer|null $cached */
+        $cached = Cache::get($url, self::CACHE_DURATION);
         $this->read($url);
-        if ($held !== null) {
-            return $held;
+        if ($cached !== null) {
+            return $cached;
         }
 
         $body = $this->fetch->get($url, ['Accept: application/json']);
@@ -1237,7 +1237,7 @@ final class Gerrit
         // stale "there is none" cannot be what sends somebody to write a patch
         // that exists.
         if ($answer['status'] === 'answered') {
-            Recent::hold($url, $answer);
+            Cache::put($url, $answer);
         }
 
         return $answer;

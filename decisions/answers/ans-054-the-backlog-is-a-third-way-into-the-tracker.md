@@ -6,7 +6,7 @@ status: confirmed
 coveredBy:
   - ForgeTest::anAreaIsNamedInTheCallersWordsAndMatchedAtAWordBoundary
   - ForgeTest::awordThatNamesNoAreaReadsNothingAndSaysWhichAreasExist
-  - ForgeTest::theAreasAreReadFromTheProjectAndHeld
+  - ForgeTest::theAreasAreReadFromTheProjectAndCached
   - ForgeTest::theCountOfEverythingThatMatchedComesBackWithThePage
   - ForgeTest::theEnumerationAsksForTheOpenIssuesAndReadsThemAsFields
   - ForgeTest::theNeglectedEndIsOrderedByTwoThingsAndNotOne

@@ -5,6 +5,9 @@ Glossary
 
     :answer: What became of a feedback: the change, and the commit that made it.
     :archive: To move a feedback to ``feedback/archive/`` once it has an answer.
+    :cache: What ``Http\Cache`` keeps of an answer from a host outside this
+        machine, per process. Each source states its *cache duration* in
+        seconds. The word for it is cache, never hold.
     :catalog: The component catalog in ``knowledge/catalog/``.
     :checkout: One TYPO3 core worktree below ``.checkouts/``, this repository's
         own, created by ``bin/cli checkouts:update``.

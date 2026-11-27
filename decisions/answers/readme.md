@@ -4,6 +4,7 @@ What a lookup retrieves, what it withholds, and what a caller may read into a re
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-ANS-196`][D-ANS-196] — An empty registry answer for a system extension names the core package · 2026-11-24
 - [`D-ANS-195`][D-ANS-195] — A changelog lookup takes the word the other tools take · 2026-11-06
 - [`D-ANS-194`][D-ANS-194] — The whole orientation stays under what Claude Code keeps in context · 2026-10-30
 - [`D-ANS-193`][D-ANS-193] — A feature task is asked for the extension that already does it · 2026-10-29
@@ -141,7 +142,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-058`][D-ANS-058] — The release lines a trailer claims are a lookup · 2026-08-05 · confirmed
 - [`D-ANS-059`][D-ANS-059] — What a session named as load-bearing is kept · 2026-08-05
 - [`D-ANS-048`][D-ANS-048] — A tool declares what can answer it, and both readers render that · 2026-08-04
-- [`D-ANS-049`][D-ANS-049] — An answer from outside is held where the caller cannot change it · 2026-08-04
+- [`D-ANS-049`][D-ANS-049] — An answer from outside is cached where the caller cannot change it · 2026-08-04
 - [`D-ANS-050`][D-ANS-050] — A curated needle matches the word it is · 2026-08-04
 - [`D-ANS-051`][D-ANS-051] — A manual result carries how much of the question it covers · 2026-08-04
 - [`D-ANS-052`][D-ANS-052] — The configuration lookup answers for the installation as it stands · 2026-08-04
@@ -190,6 +191,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-ANS-002`][D-ANS-002] — Rarity, field length and corpus length decide a lookup's rank · 2026-07-30 · confirmed
 - [`D-ANS-003`][D-ANS-003] — Retrieval stays lexical and runtime inspection stays narrow · 2026-07-30 · confirmed
 
+[D-ANS-196]: ans-196-an-empty-registry-answer-for-a-system-extension-names-the-core-package.md
 [D-ANS-195]: ans-195-a-changelog-lookup-takes-the-word-the-other-tools-take.md
 [D-ANS-194]: ans-194-the-whole-orientation-stays-under-what-claude-code-keeps-in-context.md
 [D-ANS-193]: ans-193-a-feature-task-is-asked-for-the-extension-that-already-does-it.md
@@ -327,7 +329,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 [D-ANS-058]: ans-058-the-release-lines-a-trailer-claims-are-a-lookup.md
 [D-ANS-059]: ans-059-what-a-session-named-as-load-bearing-is-kept.md
 [D-ANS-048]: ans-048-a-tool-declares-what-can-answer-it-and-both-readers-render-that.md
-[D-ANS-049]: ans-049-an-answer-from-outside-is-held-where-the-caller-cannot-change-it.md
+[D-ANS-049]: ans-049-an-answer-from-outside-is-cached-where-the-caller-cannot-change-it.md
 [D-ANS-050]: ans-050-a-curated-needle-matches-the-word-it-is.md
 [D-ANS-051]: ans-051-a-manual-result-carries-how-much-of-the-question-it-covers.md
 [D-ANS-052]: ans-052-the-configuration-lookup-answers-for-the-installation-as-it-stands.md

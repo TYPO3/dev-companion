@@ -27,7 +27,7 @@ final class Upstream
 
     public const STATES = ['current', 'behind', 'unknown', 'unavailable', 'off', 'not-a-checkout'];
 
-    private const HELD_FOR = 3600;
+    private const CACHE_DURATION = 3600;
 
     /** The server start waits on this read, so it gets two seconds and not the default eight. */
     private const TIMEOUT = 2;
@@ -130,7 +130,7 @@ final class Upstream
         $kept = self::kept();
         $fresh = $kept !== null && $kept['revision'] === $revision
             && $kept['state'] !== 'unavailable'
-            && time() - (int) strtotime((string) $kept['checkedAt']) < self::HELD_FOR;
+            && time() - (int) strtotime((string) $kept['checkedAt']) < self::CACHE_DURATION;
         if ($fresh || !$mayAsk) {
             return $kept !== null && $kept['revision'] === $revision
                 ? $kept

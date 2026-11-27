@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TYPO3\DevCompanion\Contribution;
 
+use TYPO3\DevCompanion\Http\Cache;
 use TYPO3\DevCompanion\Http\Fetch;
-use TYPO3\DevCompanion\Http\Recent;
 use TYPO3\DevCompanion\Knowledge\Catalog\SystemExtensions;
 use TYPO3\DevCompanion\Result\Unreachable;
 use TYPO3\DevCompanion\Search\Text;
@@ -41,7 +41,7 @@ final class Forge
     private const VERSIONS_URL = self::HOST . '/projects/' . self::PROJECT . '/versions.json';
 
     /**
-     * Seconds an answered read stays in the hold.
+     * Seconds an answered read stays in the cache.
      *
      * Longer than the review server's, because nothing the caller does through
      * this server changes what the tracker says. An issue's status, its target
@@ -49,11 +49,11 @@ final class Forge
      * pace people work. What this is against is a session that walks a list of
      * issues and asks the tracker the same thing a dozen times.
      */
-    public const HELD_FOR = 300;
+    public const CACHE_DURATION = 300;
 
     /**
      * Seconds the project's own lists, its categories and its members, stay in
-     * the hold.
+     * the cache.
      *
      * Two orders of magnitude longer than an issue's, because they answer how
      * the core organises itself rather than what happened to one issue. A
@@ -61,7 +61,7 @@ final class Forge
      * which are things that happen between releases. A session that filters by
      * area or by person asks for the same names on every call it makes.
      */
-    public const LISTS_HELD_FOR = 86400;
+    public const LIST_CACHE_DURATION = 86400;
 
     /**
      * How many journal entries come back. The decision is usually in the last
@@ -140,7 +140,7 @@ final class Forge
      * The tracker ids `/trackers.json` answered with on 2026-08-05.
      *
      * The API filters by id and nobody says "tracker 1", so the caller's word
-     * turns into the id here. Held as data rather than fetched. A twelfth
+     * turns into the id here. Kept as data rather than fetched. A twelfth
      * tracker would cost every enumeration a second round trip to find out
      * about, and its absence costs one filter nobody can ask for.
      */
@@ -205,7 +205,7 @@ final class Forge
      */
     public function readAt(): string
     {
-        return Recent::stated($this->readAt);
+        return Cache::timestamp($this->readAt);
     }
 
     /**
@@ -419,7 +419,7 @@ final class Forge
      * advice to drop the identifiers would have dropped the word that answers,
      * `D-ANS-038`. One read per word rather than one re-read of the query with
      * the AND off. That re-read answers the union in issue number order at the
-     * commonest word's size. Run on the miss alone, and each stays in the hold
+     * commonest word's size. Run on the miss alone, and each stays in the cache
      * like any other read.
      *
      * @return list<array{term: string, matchCount: int}>
@@ -858,7 +858,7 @@ final class Forge
      * The tracker's own date moves on any edit. Four issues one person touched
      * within minutes and without a word read as fresh on the stale end
      * (`D-ANS-181`). One read per row, at the address a read of the issue
-     * takes too, so the next call for one of them is held.
+     * takes too, so the next call for one of them comes from the cache.
      *
      * @param list<array<string, mixed>> $results
      * @return list<array<string, mixed>>
@@ -1100,13 +1100,13 @@ final class Forge
      * is one the core can add to with no report from anything. The addition is
      * exactly the subsystem somebody would filter for. A category nobody can
      * name is a filter that answers nothing and looks like an empty backlog.
-     * What keeps it from being a round trip per call is the hold, not a copy.
+     * What keeps it from being a round trip per call is the cache, not a copy.
      *
      * @return array<string, int>
      */
     public function categories(): array
     {
-        $answer = $this->api(self::AREAS_URL, 'project', self::LISTS_HELD_FOR);
+        $answer = $this->api(self::AREAS_URL, 'project', self::LIST_CACHE_DURATION);
 
         $categories = [];
         $listed = $answer['part']['issue_categories'] ?? null;
@@ -1131,7 +1131,7 @@ final class Forge
      */
     public function versions(): array
     {
-        $answer = $this->api(self::VERSIONS_URL, 'versions', self::LISTS_HELD_FOR);
+        $answer = $this->api(self::VERSIONS_URL, 'versions', self::LIST_CACHE_DURATION);
 
         $versions = [];
         $listed = $answer['part'];
@@ -1167,7 +1167,7 @@ final class Forge
         do {
             $url = self::HOST . '/projects/' . self::PROJECT . '/memberships.json?'
                 . http_build_query(['limit' => self::MEMBERS, 'offset' => $offset]);
-            $answer = $this->api($url, 'memberships', self::LISTS_HELD_FOR);
+            $answer = $this->api($url, 'memberships', self::LIST_CACHE_DURATION);
             foreach ($answer['part'] ?? [] as $membership) {
                 // A membership is a person or a group, and only a person files
                 // and holds issues.
@@ -1320,17 +1320,17 @@ final class Forge
      *
      * @return array{status: int, part: ?array<mixed>, total: int, cause: ?string}
      */
-    private function api(string $url, string $key, int $heldFor = self::HELD_FOR): array
+    private function api(string $url, string $key, int $cacheDuration = self::CACHE_DURATION): array
     {
-        /** @var array{status: int, part: ?array<mixed>, total: int, cause: ?string}|null $held */
-        $held = Recent::held($url, $heldFor);
-        // The areas and the people are held for a day and describe no issue,
+        /** @var array{status: int, part: ?array<mixed>, total: int, cause: ?string}|null $cached */
+        $cached = Cache::get($url, $cacheDuration);
+        // The areas and the people are cached for a day and describe no issue,
         // so they do not age the answer.
-        if ($heldFor === self::HELD_FOR) {
-            $this->readAt = min($this->readAt ?? PHP_INT_MAX, Recent::since($url));
+        if ($cacheDuration === self::CACHE_DURATION) {
+            $this->readAt = min($this->readAt ?? PHP_INT_MAX, Cache::storedAt($url));
         }
-        if ($held !== null) {
-            return $held;
+        if ($cached !== null) {
+            return $cached;
         }
 
         $response = $this->fetch->read($url, ['Accept: application/json']);
@@ -1351,9 +1351,9 @@ final class Forge
         ];
         // Only what the tracker actually answered. A 404 for an issue nobody
         // has filed yet and a body the protection replaced are both states of
-        // this minute. A hold on either turns one bad minute into five.
+        // this minute. Cached, either turns one bad minute into five.
         if ($part !== null) {
-            Recent::hold($url, $answer);
+            Cache::put($url, $answer);
         }
 
         return $answer;

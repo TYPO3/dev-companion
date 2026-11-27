@@ -71,15 +71,16 @@ Afterwards
   See :ref:`installing-keeping-it-current`.
 
 * :ref:`installing-what-the-entry-may-carry` lists which tools the server offers
-  and the four environment variables the entry can set.
+  and the five environment variables the entry can set.
 
 * :ref:`The section on removal <installing-removing-it>` says how to take the
   server out again.
 
-The server is a local subprocess that the client starts over stdio, and it only
-reads. It writes nothing into the TYPO3 installation it reads. The one exception
-is the feedback channel. That channel writes into this server's own checkout,
-and only a standalone checkout offers it.
+The server is a local subprocess that the client starts over stdio. It writes
+nothing into the TYPO3 installation it reads. It does write in other places. At
+start, it puts back stale task skills in the project. The feedback channel
+writes into this server's own checkout, and only a standalone checkout offers
+it.
 
 .. toctree::
     :hidden:

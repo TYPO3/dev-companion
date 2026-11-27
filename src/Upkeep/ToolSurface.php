@@ -384,16 +384,19 @@ final class ToolSurface
             ...Rst::navigationTitle('Answer sources'),
             ...Rst::heading('Where an answer comes from'),
             self::wrap(
-                'Every tool declares which sources can answer it, and says so at the foot of its own description '
-                                . 'and on its page here. What that answers is whether a caller can ask a tool at all right now, '
-                . 'not what the tool is about. With nothing up, the tools under knowledge and packages are the '
-                . 'ones still worth a call. Which source answered one call is ' . Rst::literal('answeredBy')
-                . ' in that answer, where the tool has two. ' . Rst::literal('bin/cli tools:index')
-                . ' writes this page from the Source enum.',
+                'This page covers the five sources a tool can answer from, and which tools answer from each. '
+                . 'Every tool declares its sources at the foot of its description and on its page here.',
+            ),
+            '',
+            self::wrap(
+                'The sources say whether a caller can ask a tool at all right now, not what the tool is about. '
+                . 'When nothing runs, the tools under knowledge and packages are still worth a call. Where a '
+                . 'tool has two sources, ' . Rst::literal('answeredBy') . ' in an answer says which one answered '
+                . 'that call. ' . Rst::literal('bin/cli tools:index') . ' writes this page from the Source enum.',
             ),
             '',
             ...Rst::diagram(
-                'A tool declares its sources, so the answer is known to be reachable before the question is asked.',
+                'A tool declares its sources, so a caller knows before the question whether an answer is reachable.',
                 self::SOURCES_DIAGRAM,
             ),
         ];

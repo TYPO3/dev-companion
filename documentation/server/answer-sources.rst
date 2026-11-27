@@ -3,16 +3,19 @@
 Where an answer comes from
 ==========================
 
-Every tool declares which sources can answer it, and says so at the foot of its
-own description and on its page here. What that answers is whether a caller can
-ask a tool at all right now, not what the tool is about. With nothing up, the
-tools under knowledge and packages are the ones still worth a call. Which source
-answered one call is ``answeredBy`` in that answer, where the tool has two.
-``bin/cli tools:index`` writes this page from the Source enum.
+This page covers the five sources a tool can answer from, and which tools answer
+from each. Every tool declares its sources at the foot of its description and on
+its page here.
+
+The sources say whether a caller can ask a tool at all right now, not what the
+tool is about. When nothing runs, the tools under knowledge and packages are
+still worth a call. Where a tool has two sources, ``answeredBy`` in an answer
+says which one answered that call. ``bin/cli tools:index`` writes this page from
+the Source enum.
 
 .. diagram::
     :zoomable:
-    :caption: A tool declares its sources, so the answer is known to be reachable before the question is asked.
+    :caption: A tool declares its sources, so a caller knows before the question whether an answer is reachable.
 
     bars canvas=960
       bands "nothing running,files on disk,a booted installation,network reach"

@@ -3102,7 +3102,7 @@ final class SkillTest extends TestCase
             // The raise is an offer rather than an act, and the project's own
             // bound is what can refuse it.
             self::assertMatchesRegularExpression('/a finding that (carries|proposes) the raise/', $body, $skill . ' raises rather than reports');
-            self::assertStringContainsString('speaks against', $body, $skill . ' names nothing that can refuse the raise');
+            self::assertMatchesRegularExpression('/speaks against|can rule out a raise/', $body, $skill . ' names nothing that can refuse the raise');
         }
     }
 
@@ -4078,7 +4078,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('`typo3_hint_lookup` takes the observation as its `task`', $skill);
         // Before the installed source, which is the order the session inverted:
         // the base fixes that reading as the step after the lookups.
-        self::assertStringContainsString('before reading the installed source', $skill);
+        self::assertStringContainsString('before you read the installed source', $skill);
 
         $symptoms = [
             'the content elements render in reverse order' => 'datahandler-placement',

@@ -109,9 +109,9 @@ are part of the same decision.
 - A list that filters, pages, resolves a detail view or has its own routing is a
   plugin.
 
-`typo3_hint_lookup` with `id=extbase` states that decision. A data processor
-that somebody chose by default for a list shows it. You then find a second query
-beside the list, request arguments read by hand, and page numbers computed by
+`typo3_hint_lookup` with `id=extbase` states that decision. You can recognize a
+list where somebody chose a data processor by default. Beside the list you find
+a second query, request arguments read by hand, and page numbers computed by
 hand. You find a storage pid checked again for one record.
 
 ## 3. Settle the frame the element renders in
@@ -120,7 +120,7 @@ Every element on a site renders inside one shared object. That object is the
 content element FLUIDTEMPLATE, with the layout, partials and settings it
 resolves. Either the site provides that object, or a system extension does. The
 answer decides where the template of an element may look for a partial. It also
-decides what a change to the layout costs every other element on the site.
+decides which other elements on the site a change to the layout affects.
 
 1. **Find out who provides the frame before you write into it.** The answer of
    `typo3_extension_describe` in the base lists two things. One is the content
@@ -140,8 +140,8 @@ decides what a change to the layout costs every other element on the site.
 
    `typo3_record_lookup` answers the last two from the content that exists, not
    from what the templates allow. Its `groupBy` names the rows that differ from
-   the default of a column. Each such row is a record that a branch written for
-   the default alone breaks.
+   the default of a column. A template branch written only for the default value
+   breaks each such row.
 
 3. **Read the two hints about a removal.** A removal causes two failures that
    show no error, and neither is in the element you work on. `typo3_hint_lookup`
@@ -227,8 +227,9 @@ the preview, the icon or the badges on the record.
 **Where the layer this element needs has no harness, invoke
 `typo3-extension-testing` before you write the test.** Load the skill by name
 and work from it. Hand over the extension key, the target version, the layer the
-behaviour needs, and what you verified without it. This is a step of its own,
-because sessions skipped the name in a last paragraph — `D-SKL-022`.
+behaviour needs, and what you verified without it. This instruction stands
+apart, because agents overlooked the skill name at the end of a paragraph —
+`D-SKL-022`.
 
 ## 8. Write it up, and commit it
 
@@ -251,18 +252,18 @@ the observation as its `task`, for example "content elements in reverse order"
 or "child rows that saved without their parent". It matches the observation
 against what each hint states, so you need not name the subject first.
 
-Make that call before reading the installed source. The base puts that reading
-after the lookups, not in their place. An empty result is an answer, and the
-reading comes after it.
+Make that call before you read the installed source. The base puts that read
+after the lookups, and the read does not replace them. An empty result is an
+answer too. Read the source after it.
 
 ## Where this skill stops
 
 **When the user asks whether the package is sound, invoke
 `typo3-extension-health` and work from its report.** A request about the package
-asks for it, not one about this element. Examples are "review it", "what else is
-wrong with it" and "is it ready". The request usually comes when the work here
-looks finished. Hand over the extension key, the target version and what this
-workflow verified.
+asks for that audit. A request about this element does not. Examples are "review
+it", "what else is wrong with it" and "is it ready". The request usually comes
+when the work here looks finished. Hand over the extension key, the target
+version and what this workflow verified.
 
 A question about this element is work for this skill, not an audit. Examples are
 "does the preview render", "is the inline relation right" and "why is the order

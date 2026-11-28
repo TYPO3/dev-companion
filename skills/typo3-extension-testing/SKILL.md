@@ -143,7 +143,7 @@ review-only request, report the defect and do not change it.
 
 - Follow the nearby tests that pass and the harness from step 3. If the layer
   the behaviour needs is missing, set it up first. Do not move the behaviour
-  into a cheaper layer.
+  into a lower layer instead.
 
 - Write a regression test that fails on the observed defect before you apply the
   fix, where that is practical.

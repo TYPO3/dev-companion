@@ -12,8 +12,8 @@ browser installation commands.
    directories. It is the scripts, the ignored artifacts, and CI. Inspect the
    command that serves the site.
 2. Establish the real mounted URL and whether the journey needs backend or
-   frontend authentication. Do not invent a page identifier. Do not certify an
-   unmounted content element.
+   frontend authentication. Do not invent a page identifier. Do not report a
+   content element as tested when no page shows it.
 3. Run test discovery and one existing spec before you edit the harness. Tell
    runner installation, browser availability, site reachability, authentication,
    and assertion failures apart.
@@ -22,8 +22,8 @@ browser installation commands.
    paths reachable from that execution environment.
 5. If the checkout does not decide browser execution, leave the topology open.
    Local and CI reachability, browser persistence, and the project's container
-   policy decide it later. Do not turn a generic host or DDEV preference into
-   project evidence.
+   policy decide it later. Do not treat a general preference for the host or
+   DDEV as evidence from the project.
 
 ## Choose the folders
 

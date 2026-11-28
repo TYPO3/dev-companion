@@ -52,8 +52,8 @@ it out.
 ## Write the test
 
 - Unit-test isolated behavior without a TYPO3 boot. Prefer real value objects
-  and collaborators. A test whose subject is only mocks is evidence about the
-  mock arrangement.
+  and collaborators. A test that uses only mocks proves how you arranged the
+  mocks, and nothing about the code.
 - Use a functional test for dependency injection, configuration, persistence,
   repositories, TCA, DataHandler, routing, database schema, and server-side
   frontend rendering.
@@ -65,8 +65,8 @@ it out.
   the contract.
 - Reset or isolate state that survives between tests. A test that passes alone
   but fails in the suite that contains it is not finished.
-- Add the smallest real assertion that proves the behavior. Never use a vacuous
-  assertion to certify the harness.
+- Add the smallest real assertion that proves the behavior. Never add a vacuous
+  assertion only to show that the harness runs.
 
 ## Prove it
 

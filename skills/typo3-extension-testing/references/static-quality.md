@@ -11,9 +11,9 @@ configuration contents, and commands.
 1. Inspect what is there before you change any of it. That is the package
    manifests, the lock file, the installed analysers and fixers, and their
    configuration and rule sets. It is the baselines, the Composer scripts, the
-   development environment, and CI. Half an infrastructure is the ordinary case.
-   That is a fixer without an analyser, a lint step without either, a
-   configuration nothing calls.
+   development environment, and CI. Usually only a part of the infrastructure
+   exists. Examples are a fixer without an analyser, a lint step without either,
+   a configuration nothing calls.
 2. Run every check that already exists, unchanged, and record its output. You
    measure every later claim against that run. A first analyser report on a
    project that never ran one is a list of findings rather than a regression.
@@ -75,12 +75,12 @@ is absent for a reason rather than missing.
   such as `j13k/yaml-lint` or the framework's own `lint:yaml` covers
   configuration. `helmich/typo3-typoscript-lint` covers TypoScript.
 
-  Two of them have to learn about this project before their verdict is worth
-  anything. `typo3_hint_lookup` with `id=language-files` says what the XLIFF
-  linter needs before it accepts a file named the way TYPO3 names one. A linter
-  ships a configuration of its own and merges yours over it. So what it reports
-  and what it advises are its defaults rather than this project's conventions.
-  Advice written for an older TYPO3 is still advice the tool gives today.
+  Configure two of these linters for this project before you trust their result.
+  `typo3_hint_lookup` with `id=language-files` says what the XLIFF linter needs
+  before it accepts a file named the way TYPO3 names one. A linter ships a
+  configuration of its own and merges yours over it. So its findings and its
+  advice follow its defaults, not this project's conventions. The tool still
+  gives advice that somebody wrote for an older TYPO3.
 
   Fluid templates have no established linter. The functional tests that render
   them prove them. Say so rather than invent a check for them.
@@ -97,26 +97,28 @@ is absent for a reason rather than missing.
   same one command exists locally and in CI. Take the Node version from what the
   project declares rather than from the machine that happens to run it. Run each
   one over the files it guards before you report the entry as covered. A linter
-  that finds nothing in the only sources the package ships is a gap dressed as
-  coverage. That is the standard this page already applies to a matrix whose
-  cells run only version-independent steps.
+  that finds nothing in the only sources the package ships can still be a gap.
+  Do not report it as coverage. This page applies the same rule to a matrix
+  whose cells run only version-independent steps.
 
 Read the names as the default for a check the checkout does not cover. They
 never replace what it already runs. A project with another analyser, another
-lint runner or its own wrapper around one has answered that question already. A
-second tool for the same check is a second answer to maintain. Versions come
-from the solver and from what the package's range allows, never from this list.
+lint runner or its own wrapper around one has answered that question already. Do
+not add a second tool for the same check, because somebody then has to maintain
+both. Versions come from the solver and from what the package's range allows,
+never from this list.
 
 `rector/rector` with `ssch/typo3-rector` reads like a check in its dry-run mode
 and is not one. It proposes migrations, which belong to an upgrade task rather
 than to the checks CI has to keep green.
 
-Then say which axis each one has, because that decides where it runs. Syntax and
-analysis depend on the PHP and TYPO3 combination and belong in the matrix. A
-standards, manifest or format check is version-independent, and one run of it
-proves as much as sixteen. A matrix whose every cell runs only
-version-independent steps proves that the files parse and nothing more. Say so,
-with what it costs and what it does not buy.
+Then say for each check whether its result depends on the PHP and TYPO3
+versions. That decides where it runs. Syntax and analysis depend on the PHP and
+TYPO3 combination and belong in the matrix. A standards, manifest or format
+check is version-independent. One run of it proves as much as sixteen runs. A
+matrix whose every cell runs only version-independent steps proves that the
+files parse and nothing more. Report that, with the runs it costs and what it
+does not prove.
 
 ## Resolve the dependencies
 
@@ -129,11 +131,11 @@ with what it costs and what it does not buy.
    another one. Every added package is a further thing that has to stay current
    across the whole declared range. An abandoned one no longer does that.
 4. Keep every one of them in the development requirements.
-5. Where the solver refuses one, read what it refused rather than which TYPO3
-   version the project runs. A check tool has to meet what this project
-   resolved. A package nothing here pins can sit a major ahead of what the
-   framework asks for. So the same tool goes into one project and not into the
-   next.
+5. Where the solver refuses one, read the constraint it refused. Do not decide
+   from the TYPO3 version the project runs. A check tool has to fit the package
+   versions this project resolved. A package nothing here pins can sit a major
+   ahead of what the framework asks for. So the same tool goes into one project
+   and not into the next.
 
    Where it cannot meet it, the tool gets an installation of its own. That is a
    second manifest below the build directory with its own vendor directory. The
@@ -145,17 +147,17 @@ with what it costs and what it does not buy.
 1. Give each check one stable command in the project. Declare it where the
    project already declares its commands. Name it for what it checks rather than
    for the binary behind it.
-2. Keep the check and the fix apart. A check reports and fails; a fix writes.
-   One command that rewrites the tree on the way to its verdict is not a check.
-   CI cannot call it.
+2. Keep the check and the fix apart. A check reports and fails; a fix writes. A
+   command that rewrites the tree before it reports is not a check. CI cannot
+   call it.
 3. Keep automatic formatting inside the first-party paths the project intends it
    to touch. Vendored code, generated output, other packages' files, and
    fixtures that assert exact bytes stay outside the fixer's paths. Confirm that
    with the fixer's own dry run before the first write and with the tree's
    status afterwards.
 4. Point analysis at the extension's own paths, at the level the project can
-   hold today. A level chosen for the eventual state produces a wall of findings
-   nobody works off.
+   hold today. A level chosen for the target state produces more findings than
+   anybody fixes.
 5. Run each command locally until it passes. Then make CI call that same
    command. A CI step assembled apart proves something the developer cannot
    reproduce.
@@ -167,16 +169,16 @@ with what it costs and what it does not buy.
 - Where a baseline exists, read it as a work list with somebody responsible and
   a horizon. The horizon is usually the release that drops the oldest supported
   version. Say which of its entries the current change retires.
-- A suppression that is correct while the package supports an older version is
-  evidence rather than debt. Establish what it is there for, and what would
-  remove it, before you propose that it goes.
+- Some suppressions are correct while the package supports an older version.
+  Establish what a suppression is there for, and what would remove it, before
+  you propose that it goes.
 - Keep a formatting pass in its own commit, apart from a behavioural change.
   Nobody can review a diff that mixes both.
 - Where you introduce a check onto a repository that does not yet pass it, the
   conformance commits come first. The commit that adds the check comes last.
-  Then no commit fails the check it introduces. The obvious split does the
-  opposite. Tooling first leaves the new check on a tree the conformance pass
-  has not reached yet. Verify it: run the check at the new HEAD.
+  Then no commit fails the check it introduces. Do not commit the tools first.
+  If you do, the new check runs on a tree that the conformance commits have not
+  fixed yet. Verify it: run the check at the new HEAD.
 - Report a finding in code the task does not touch. Do not fix it quietly beside
   the requested work.
 

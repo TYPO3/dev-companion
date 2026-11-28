@@ -70,12 +70,12 @@ it too if the build does not run at all.
    - the package registry;
    - the repository that tags an action.
 
-   Report every pin behind it as a finding that carries the raise.
+   Report every pin behind it as a finding that proposes the raise.
 
-   A bound this repository declares speaks against a raise. Examples are the
-   Node the build needs and the majors the package supports. Then the finding
-   names the newest release that bound allows. The maintainer decides the raise.
-   A change of the bound is a separate task.
+   A bound this repository declares can rule out a raise. Examples are the Node
+   the build needs and the majors the package supports. Then the finding names
+   the newest release that bound allows. The maintainer decides the raise. A
+   change of the bound is a separate task.
 
 ## 2. Find what the repository commits, and the route of each file
 
@@ -111,9 +111,9 @@ it never saw.
 
 ## 3. Verify each core class and icon before the change uses it
 
-Verify a class or an icon the output takes from the core before you write it. A
-check after the change finds it already in the diff. Then a no costs a second
-pass over markup that looks finished.
+Verify a class or an icon the output takes from the core before you write it. If
+you check after the change, the class is already in the diff. When the answer is
+no, you must rework markup that looks finished.
 
 Call these in this order:
 
@@ -185,8 +185,9 @@ Check each path in the import map against the file the build wrote. A build that
 renames, splits, hashes or drops a file breaks the map. Nothing fails in PHP.
 
 A pipeline written for the frontend gives the wrong shape here: one hashed
-bundle where the map names single files. The document of the frontend check says
-which file declares the map, and which check belongs to it.
+bundle where the map names single files. `typo3_rule_lookup` with
+`documentId="any/assets/how-an-asset-reaches-a-page"` says which file declares
+the map. It also gives the check for the map.
 
 ### The frontend
 

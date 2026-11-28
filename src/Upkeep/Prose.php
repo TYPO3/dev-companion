@@ -66,10 +66,11 @@ final class Prose
     private const ING = '/\b(?!(?:nothing|something|anything|everything|thing|things|during|string|strings|bring|ring|sing|king|wing|sibling|siblings|ceiling|meaning|morning|evening|building|heading|headings|setting|settings|listing|listings|mapping|mappings|according|regarding|following|existing|missing|remaining|recurring|waiting|finding|findings|crossing|crossings|routing|drawing|drawings|testing|sighting|sightings|logging|binding)\b)[a-z]+ing\b/';
 
     /**
-     * A word the prose rules replace with a plain verb — `D-DOC-073`. "own"
-     * as an adjective stays, so only the verb form "owns" is here.
+     * A word the prose rules replace with a plain verb — `D-DOC-073` — or a
+     * picture only a reader of the decision behind it decodes — `D-DOC-074`.
+     * "own" as an adjective stays, so only the verb form "owns" is here.
      */
-    private const VAGUE = '/\b(?:carr(?:y|ies|ied)|ow(?:e|es|ed)|owns|hands? over|stands? in)\b/i';
+    private const VAGUE = '/\b(?:carr(?:y|ies|ied)|ow(?:e|es|ed)|owns|hands? over|stands? in|cheap(?:er|est)?|dispos(?:e|es|ed) of|let go|(?:go|goes|went) quiet|pays?|buys?|earns?)\b/i';
 
     /**
      * Where a comment has stopped to name its reason and started to retell it.

@@ -5,6 +5,7 @@ What a writer assumed about their form belongs here.
 
 See [the decisions readme](../readme.md) for how a session writes an entry and when it adds one.
 
+- [`D-DOC-074`][D-DOC-074] — A sentence makes sense without the decision behind it · 2026-11-28
 - [`D-DOC-073`][D-DOC-073] — A page opens on what it covers · 2026-11-27
 - [`D-DOC-072`][D-DOC-072] — The initialize page names the report that weighs the tool list · 2026-09-17
 - [`D-DOC-070`][D-DOC-070] — This repository writes in ASD-STE100 · 2026-09-14
@@ -70,6 +71,7 @@ See [the decisions readme](../readme.md) for how a session writes an entry and w
 - [`D-DOC-008`][D-DOC-008] — The calls that reach outside stay in the shared table · 2026-08-02 · confirmed
 - [`D-DOC-001`][D-DOC-001] — A table is written so it reads unrendered · 2026-08-01 · confirmed
 
+[D-DOC-074]: doc-074-a-sentence-makes-sense-without-the-decision-behind-it.md
 [D-DOC-073]: doc-073-a-page-opens-on-what-it-covers.md
 [D-DOC-072]: doc-072-the-initialize-page-names-the-report-that-weighs-the-tool-list.md
 [D-DOC-070]: doc-070-this-repository-writes-in-asd-ste100.md

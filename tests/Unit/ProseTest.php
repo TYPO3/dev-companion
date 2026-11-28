@@ -643,6 +643,7 @@ final class ProseTest extends TestCase
             'a passive' => ['The version is written into the answer by the server.', ['passive']],
             'an -ing form' => ['The server answers, reading the version from the checkout.', ['-ing']],
             'a vague verb' => ['The answer carries the version, and the skill owns the order.', ['carries', 'owns']],
+            'a picture of the reason' => ['Assessed is the cheapest sentence, and the surface went quiet.', ['cheapest', 'went quiet']],
             'own as an adjective' => ['Each project keeps its own copy of the skills.', []],
             'a quoted word' => ['The rules replace "carries" with a plain verb.', []],
             'a working tree' => ['Read the working tree and the working directory afterwards.', []],
@@ -652,6 +653,7 @@ final class ProseTest extends TestCase
 
     /** @param list<string> $flags */
     #[Decision('D-DOC-073')]
+    #[Decision('D-DOC-074')]
     #[DataProvider('sentencesAndWhatTheRulesReplace')]
     #[Test]
     public function aSentenceIsFlaggedForWhatTheRulesReplace(string $sentence, array $flags): void

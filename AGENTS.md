@@ -304,6 +304,9 @@ above the heading it names. A path that leaves the tree is an embedded link
   case and always adds a paragraph.
 - A plain verb, not a picture. "Has", "must" or "is responsible for" replace
   "carries", "owes" and "owns" — `D-DOC-073`. "Its own" as an adjective stays.
+- A sentence makes sense to a reader who never read the decision behind it. Say
+  what to do in literal words, and leave out the picture of the reason —
+  `D-DOC-074`. "The cheapest sentence in a review" makes the reader guess.
 - Say what is, not what it is not. A list of what something is not belongs where
   the confusion happened.
 - Length is a symptom. A paragraph that does not come out short is two points,

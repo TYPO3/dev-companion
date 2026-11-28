@@ -184,23 +184,25 @@ Called with:
               - `PropertyPublicMatcher.php` — a removed public property.
               - `PropertyProtectedMatcher.php` — a public property that became protected.
               - `ClassNameMatcher.php` — a whole class or interface.
-            - Visibility routes a property and never a method. The method matchers are a
-              weak match on the method name where code uses it. They do not resolve the
-              class, so they cannot see visibility, and a protected method goes with a
-              public one. `RendererRegistry->getRendererInstances` went from public to
-              protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The
-              list above has no row for a protected method because it needs none. That
-              absence says nothing about whether the change owes an entry.
+            - Visibility decides the matcher file for a property, never for a method. The
+              method matchers are a weak match on the method name where code uses it. They
+              do not resolve the class, so they cannot see visibility, and a protected
+              method goes with a public one. `RendererRegistry->getRendererInstances` went
+              from public to protected in `Breaking-110277`, and it stands in
+              `MethodCallMatcher.php`. The list above has no row for a protected method
+              because it needs none. That absence says nothing about whether the change owes
+              an entry.
             - The fully qualified name with `->` or `::` keys an entry. The entry carries
               `restFiles`, which names the changelog file that removed the member. The
               method matchers add `numberOfMandatoryArguments` and
               `maximumNumberOfArguments`. A member deprecated before its removal lists both
               changelog files.
             - Every Breaking and Deprecation entry carries exactly one of `NotScanned`,
-              `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is
-              the claim those entries have to back. `FullyScanned` says the scanner finds
-              every item the changelog entry names. The scanner reads PHP. So what an entry
-              changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.
+              `PartiallyScanned` and `FullyScanned` in its `.. index::` line. The tag is a
+              claim about the scanner, and the matchers must make it true. `FullyScanned`
+              says the scanner finds every item the changelog entry names. The scanner reads
+              PHP. So what an entry changes in TypoScript, TCA, YAML or JavaScript leaves it
+              partially scanned.
             - `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the
               changelog files the matchers name exist. Nothing checks the other direction. A
               missing entry surfaces when somebody audits the matcher files against the
@@ -214,10 +216,10 @@ Called with:
             method on a class that is not final is an override point. Every subclass that
             declares the old signature fatals as it loads.
 
-            - The obligation follows from the member being overridable, not from an override
-              anybody found. `Breaking-101133` files a changed parameter of
-              `IconFactory->getIcon()` against "custom extensions extending the method".
-              `Breaking-110218` declares `LogRecord` final and calls the affected
+            - The obligation exists because a subclass can override the member. It holds
+              even where nobody has found an override. `Breaking-101133` files a changed
+              parameter of `IconFactory->getIcon()` against "custom extensions extending the
+              method". `Breaking-110218` declares `LogRecord` final and calls the affected
               installations very unlikely.
             - A member marked `@internal` takes an `Important` instead. `Important-107342`
               extended `FormPersistenceManagerInterface::listForms()` by two optional
@@ -227,20 +229,20 @@ Called with:
             - Neither owes a matcher, and both are `NotScanned`. A matcher keys on where
               code calls a member. An override is not a call, and an added optional
               parameter leaves every existing call site valid.
-            - So it decides the target branch before anything else. A maintained release
-              line takes no breaking change. So a fix you owe to one cannot carry the
-              signature change at all. The shape that reaches it is the additive one. That
-              is a method of its own, or the state on something the callee already receives.
-              To declare the class or the method final first is no cheaper, because that is
-              itself a breaking change.
+            - So a signature change decides the target branch first. A maintained release
+              line takes no breaking change. So a fix for a release line cannot change the
+              signature at all. Only an additive fix reaches that line. That is a method of
+              its own, or state on an object the callee already receives. Do not first
+              declare the class or the method final. That is itself a `[!!!]` change, which
+              a release line does not take either.
             - Nothing in a core checkout reports any of this. No core class has to override
               the method. So the unit, functional, coding-guidelines and static-analysis
               runs are all green on the change.
             - A member promoted from protected to public is not a signature change and owes
               none of it. The core promotes one in a plain `[TASK]` or `[BUGFIX]` commit
               that carries no changelog file. Such a patch reaches a maintained release
-              line, which a breaking change cannot. The changelog holds the move in the
-              other direction only: `Deprecation-86047` narrows public members of
+              line, which a breaking change cannot. The changelog records only the opposite
+              move: `Deprecation-86047` narrows public members of
               `TypoScriptFrontendController` to protected. A subclass that re-declares the
               member as protected fatals with "Access level … must be public". The core
               files nothing for that either.
@@ -265,13 +267,13 @@ Called with:
               `typo3_commit_message_guide` names them where you leave the trailer out. It
               reports a branch that is out of regular support as an error.
             - A line out of regular support still has releases, and the ELTS partners make
-              them. A patch pushed to Gerrit is not one of them.
+              them. A patch you push to Gerrit does not reach those releases.
             - The branch list in a checkout does not answer this. `git branch -r` reaches
               back to `TYPO3_3-6`. A count of `Releases:` trailers on recent commits samples
               what other changes needed rather than what this one does.
             - Which of the maintained lines a change reaches is your judgement of where the
-              defect is. The trailer is the claim you verified it there, when you read the
-              changed file on each branch you name.
+              defect is. The trailer claims that you verified the defect there. You verify
+              it when you read the changed file on each branch you name.
             - A feature, a deprecation and a breaking change go to `main`. A backport of one
               happens, and it is the release managers' call. `origin/main..origin/13.4`
               carries three `[FEATURE]` commits against 969 `[BUGFIX]` ones, and
@@ -281,15 +283,16 @@ Called with:
               trailer. The older lines take priority bug fixes and grave or
               security-relevant defects. When you name one for an ordinary fix, you ask a
               merger to cherry-pick onto the wrong line.
-            - So the trailer is two judgements rather than one. Where the defect is, on each
-              line, is the first. Whether its severity earns an older line is the second.
-              You state that judgement rather than derive it from the first.
-            - What a release branch carries since its cut is `origin/main..origin/14.3`. A
-              plain log on that branch, or a `--since` window over it, answers about the
-              history it shares with `main`. It reports every change made before the branch
-              existed as if the branch had taken it. The same count is 0 one way and 188 the
-              other. The two differ by one operator and give opposite answers about whether
-              features reach a release line.
+            - So decide the trailer in two steps. First, find on which lines the defect is.
+              Second, decide whether its severity justifies an older line. The second step
+              does not follow from the first, so state it yourself.
+            - To list what a release branch got since its cut, use
+              `origin/main..origin/14.3`. A plain log on that branch, or a `--since` window
+              over it, also lists the history it shares with `main`. It reports every change
+              made before the branch existed as if the branch had taken it. The `[FEATURE]`
+              count on 14.3 is 0 with the range and 188 with the plain log. The two commands
+              differ by one operator and give opposite answers about whether features reach
+              a release line.
 
             ## Review Readiness
             Source: TYPO3 Core Contribution Rules (typo3://guides/core/contribution/rules) — matches 100% of the query terms
@@ -332,7 +335,7 @@ Called with:
                         "title": "TYPO3 Core Commit Message Rules",
                         "uri": "typo3://guides/core/contribution/commit-messages",
                         "heading": "Breaking Changes",
-                        "body": "- A breaking change must use `[!!!]` before the keyword.\n- A breaking change must have a changelog RST file.\n- A breaking change should usually target `main`.\n- A removed or narrowed PHP API gets an extension scanner matcher entry in the\n  same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.\n  How code writes the removed member where it uses it decides the file:\n  - `MethodCallMatcher.php` — an instance method.\n  - `MethodCallStaticMatcher.php` — a static method.\n  - `PropertyPublicMatcher.php` — a removed public property.\n  - `PropertyProtectedMatcher.php` — a public property that became protected.\n  - `ClassNameMatcher.php` — a whole class or interface.\n- Visibility routes a property and never a method. The method matchers are a\n  weak match on the method name where code uses it. They do not resolve the\n  class, so they cannot see visibility, and a protected method goes with a\n  public one. `RendererRegistry->getRendererInstances` went from public to\n  protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The\n  list above has no row for a protected method because it needs none. That\n  absence says nothing about whether the change owes an entry.\n- The fully qualified name with `->` or `::` keys an entry. The entry carries\n  `restFiles`, which names the changelog file that removed the member. The\n  method matchers add `numberOfMandatoryArguments` and\n  `maximumNumberOfArguments`. A member deprecated before its removal lists both\n  changelog files.\n- Every Breaking and Deprecation entry carries exactly one of `NotScanned`,\n  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is\n  the claim those entries have to back. `FullyScanned` says the scanner finds\n  every item the changelog entry names. The scanner reads PHP. So what an entry\n  changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.\n- `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the\n  changelog files the matchers name exist. Nothing checks the other direction. A\n  missing entry surfaces when somebody audits the matcher files against the\n  changelog.",
+                        "body": "- A breaking change must use `[!!!]` before the keyword.\n- A breaking change must have a changelog RST file.\n- A breaking change should usually target `main`.\n- A removed or narrowed PHP API gets an extension scanner matcher entry in the\n  same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.\n  How code writes the removed member where it uses it decides the file:\n  - `MethodCallMatcher.php` — an instance method.\n  - `MethodCallStaticMatcher.php` — a static method.\n  - `PropertyPublicMatcher.php` — a removed public property.\n  - `PropertyProtectedMatcher.php` — a public property that became protected.\n  - `ClassNameMatcher.php` — a whole class or interface.\n- Visibility decides the matcher file for a property, never for a method. The\n  method matchers are a weak match on the method name where code uses it. They\n  do not resolve the class, so they cannot see visibility, and a protected\n  method goes with a public one. `RendererRegistry->getRendererInstances` went\n  from public to protected in `Breaking-110277`, and it stands in\n  `MethodCallMatcher.php`. The list above has no row for a protected method\n  because it needs none. That absence says nothing about whether the change owes\n  an entry.\n- The fully qualified name with `->` or `::` keys an entry. The entry carries\n  `restFiles`, which names the changelog file that removed the member. The\n  method matchers add `numberOfMandatoryArguments` and\n  `maximumNumberOfArguments`. A member deprecated before its removal lists both\n  changelog files.\n- Every Breaking and Deprecation entry carries exactly one of `NotScanned`,\n  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. The tag is a\n  claim about the scanner, and the matchers must make it true. `FullyScanned`\n  says the scanner finds every item the changelog entry names. The scanner reads\n  PHP. So what an entry changes in TypoScript, TCA, YAML or JavaScript leaves it\n  partially scanned.\n- `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the\n  changelog files the matchers name exist. Nothing checks the other direction. A\n  missing entry surfaces when somebody audits the matcher files against the\n  changelog.",
                         "versions": "",
                         "coverage": 1,
                         "score": 30,
@@ -343,7 +346,7 @@ Called with:
                         "title": "TYPO3 Core Commit Message Rules",
                         "uri": "typo3://guides/core/contribution/commit-messages",
                         "heading": "Changed Signatures",
-                        "body": "A signature change is the third breaking move beside a removal and a narrowing.\nAn added parameter is one, an optional parameter included. A public or protected\nmethod on a class that is not final is an override point. Every subclass that\ndeclares the old signature fatals as it loads.\n\n- The obligation follows from the member being overridable, not from an override\n  anybody found. `Breaking-101133` files a changed parameter of\n  `IconFactory->getIcon()` against \"custom extensions extending the method\".\n  `Breaking-110218` declares `LogRecord` final and calls the affected\n  installations very unlikely.\n- A member marked `@internal` takes an `Important` instead. `Important-107342`\n  extended `FormPersistenceManagerInterface::listForms()` by two optional\n  arguments and reached `13.4.x` on that ground. The change still owes an entry.\n  Only its type changes, and that is what lets such a change reach a release\n  line.\n- Neither owes a matcher, and both are `NotScanned`. A matcher keys on where\n  code calls a member. An override is not a call, and an added optional\n  parameter leaves every existing call site valid.\n- So it decides the target branch before anything else. A maintained release\n  line takes no breaking change. So a fix you owe to one cannot carry the\n  signature change at all. The shape that reaches it is the additive one. That\n  is a method of its own, or the state on something the callee already receives.\n  To declare the class or the method final first is no cheaper, because that is\n  itself a breaking change.\n- Nothing in a core checkout reports any of this. No core class has to override\n  the method. So the unit, functional, coding-guidelines and static-analysis\n  runs are all green on the change.\n- A member promoted from protected to public is not a signature change and owes\n  none of it. The core promotes one in a plain `[TASK]` or `[BUGFIX]` commit\n  that carries no changelog file. Such a patch reaches a maintained release\n  line, which a breaking change cannot. The changelog holds the move in the\n  other direction only: `Deprecation-86047` narrows public members of\n  `TypoScriptFrontendController` to protected. A subclass that re-declares the\n  member as protected fatals with \"Access level … must be public\". The core\n  files nothing for that either.",
+                        "body": "A signature change is the third breaking move beside a removal and a narrowing.\nAn added parameter is one, an optional parameter included. A public or protected\nmethod on a class that is not final is an override point. Every subclass that\ndeclares the old signature fatals as it loads.\n\n- The obligation exists because a subclass can override the member. It holds\n  even where nobody has found an override. `Breaking-101133` files a changed\n  parameter of `IconFactory->getIcon()` against \"custom extensions extending the\n  method\". `Breaking-110218` declares `LogRecord` final and calls the affected\n  installations very unlikely.\n- A member marked `@internal` takes an `Important` instead. `Important-107342`\n  extended `FormPersistenceManagerInterface::listForms()` by two optional\n  arguments and reached `13.4.x` on that ground. The change still owes an entry.\n  Only its type changes, and that is what lets such a change reach a release\n  line.\n- Neither owes a matcher, and both are `NotScanned`. A matcher keys on where\n  code calls a member. An override is not a call, and an added optional\n  parameter leaves every existing call site valid.\n- So a signature change decides the target branch first. A maintained release\n  line takes no breaking change. So a fix for a release line cannot change the\n  signature at all. Only an additive fix reaches that line. That is a method of\n  its own, or state on an object the callee already receives. Do not first\n  declare the class or the method final. That is itself a `[!!!]` change, which\n  a release line does not take either.\n- Nothing in a core checkout reports any of this. No core class has to override\n  the method. So the unit, functional, coding-guidelines and static-analysis\n  runs are all green on the change.\n- A member promoted from protected to public is not a signature change and owes\n  none of it. The core promotes one in a plain `[TASK]` or `[BUGFIX]` commit\n  that carries no changelog file. Such a patch reaches a maintained release\n  line, which a breaking change cannot. The changelog records only the opposite\n  move: `Deprecation-86047` narrows public members of\n  `TypoScriptFrontendController` to protected. A subclass that re-declares the\n  member as protected fatals with \"Access level … must be public\". The core\n  files nothing for that either.",
                         "versions": "",
                         "coverage": 1,
                         "score": 30,
@@ -365,7 +368,7 @@ Called with:
                         "title": "TYPO3 Core Commit Message Rules",
                         "uri": "typo3://guides/core/contribution/commit-messages",
                         "heading": "Release Targets",
-                        "body": "- `Releases:` names branches: `main` and the maintained release lines, comma\n  separated.\n- Which lines those are changes with every LTS release and every support window\n  that closes. So it is a lookup and not a rule to remember.\n  `typo3_commit_message_guide` names them where you leave the trailer out. It\n  reports a branch that is out of regular support as an error.\n- A line out of regular support still has releases, and the ELTS partners make\n  them. A patch pushed to Gerrit is not one of them.\n- The branch list in a checkout does not answer this. `git branch -r` reaches\n  back to `TYPO3_3-6`. A count of `Releases:` trailers on recent commits samples\n  what other changes needed rather than what this one does.\n- Which of the maintained lines a change reaches is your judgement of where the\n  defect is. The trailer is the claim you verified it there, when you read the\n  changed file on each branch you name.\n- A feature, a deprecation and a breaking change go to `main`. A backport of one\n  happens, and it is the release managers' call. `origin/main..origin/13.4`\n  carries three `[FEATURE]` commits against 969 `[BUGFIX]` ones, and\n  `origin/main..origin/14.3` carries none at all.\n- A bug fix and a task go to `main` and to the one release line back from it. A\n  defect present on an older maintained line does not put that line in the\n  trailer. The older lines take priority bug fixes and grave or\n  security-relevant defects. When you name one for an ordinary fix, you ask a\n  merger to cherry-pick onto the wrong line.\n- So the trailer is two judgements rather than one. Where the defect is, on each\n  line, is the first. Whether its severity earns an older line is the second.\n  You state that judgement rather than derive it from the first.\n- What a release branch carries since its cut is `origin/main..origin/14.3`. A\n  plain log on that branch, or a `--since` window over it, answers about the\n  history it shares with `main`. It reports every change made before the branch\n  existed as if the branch had taken it. The same count is 0 one way and 188 the\n  other. The two differ by one operator and give opposite answers about whether\n  features reach a release line.",
+                        "body": "- `Releases:` names branches: `main` and the maintained release lines, comma\n  separated.\n- Which lines those are changes with every LTS release and every support window\n  that closes. So it is a lookup and not a rule to remember.\n  `typo3_commit_message_guide` names them where you leave the trailer out. It\n  reports a branch that is out of regular support as an error.\n- A line out of regular support still has releases, and the ELTS partners make\n  them. A patch you push to Gerrit does not reach those releases.\n- The branch list in a checkout does not answer this. `git branch -r` reaches\n  back to `TYPO3_3-6`. A count of `Releases:` trailers on recent commits samples\n  what other changes needed rather than what this one does.\n- Which of the maintained lines a change reaches is your judgement of where the\n  defect is. The trailer claims that you verified the defect there. You verify\n  it when you read the changed file on each branch you name.\n- A feature, a deprecation and a breaking change go to `main`. A backport of one\n  happens, and it is the release managers' call. `origin/main..origin/13.4`\n  carries three `[FEATURE]` commits against 969 `[BUGFIX]` ones, and\n  `origin/main..origin/14.3` carries none at all.\n- A bug fix and a task go to `main` and to the one release line back from it. A\n  defect present on an older maintained line does not put that line in the\n  trailer. The older lines take priority bug fixes and grave or\n  security-relevant defects. When you name one for an ordinary fix, you ask a\n  merger to cherry-pick onto the wrong line.\n- So decide the trailer in two steps. First, find on which lines the defect is.\n  Second, decide whether its severity justifies an older line. The second step\n  does not follow from the first, so state it yourself.\n- To list what a release branch got since its cut, use\n  `origin/main..origin/14.3`. A plain log on that branch, or a `--since` window\n  over it, also lists the history it shares with `main`. It reports every change\n  made before the branch existed as if the branch had taken it. The `[FEATURE]`\n  count on 14.3 is 0 with the range and 188 with the plain log. The two commands\n  differ by one operator and give opposite answers about whether features reach\n  a release line.",
                         "versions": "",
                         "coverage": 1,
                         "score": 30,

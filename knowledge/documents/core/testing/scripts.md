@@ -71,8 +71,8 @@ The first suite there stops at `exec: line 9: bin/phpunit: not found`. That
 names phpunit rather than the directory, so you cannot read the cause from the
 symptom. Run the install once in that directory first.
 
-A symlink of `vendor/` and `bin/` from another checkout does not stand in for
-it. The target sits outside the one mount and does not resolve inside the
+A symlink of `vendor/` and `bin/` from another checkout does not replace the
+install. The target sits outside the one mount and does not resolve inside the
 container. That holds whether the link is absolute or relative.
 
 `composer install` on the host installs the same dependencies, but it wants the
@@ -251,10 +251,9 @@ cause. So here it is false: the script never got as far as a file.
 Git creates the commit anyway. The hook means to abort where
 `TYPO3_GIT_HOOK_ABORT_ON_ERROR` is `yes`, and its test of that variable is the
 wrong way round. Set or unset, the hook aborts on nothing. Do not amend on the
-strength of it. The suite that runs the same config as the script that failed
-settles whether there is a real finding. For this message that is `-s cglHeader`
-rather than
-`-s cglGit`.
+strength of it. To find out whether there is a real finding, run the suite with
+the same configuration as the failed script. For this message that is
+`-s cglHeader` rather than `-s cglGit`.
 
 The third script is `spacesInPathsAndFilenames.sh`. It runs `find . -name "* *"`
 over the working directory, so it reads the file system rather than the commit.
@@ -280,16 +279,17 @@ A listed path is about the commit only where git tracks it.
 
 `git commit --no-verify` skips this hook and the `commit-msg` hook as well. The
 second one writes the `Change-Id`. So take it only on an amend of a commit that
-already carries one. Then run the checks the hook stands for in the container.
-From a normal checkout, that is `-s cglGit` and `-s cglHeaderGit`. From a
-worktree, it is `-s cgl -n` and `-s cglHeader -n`.
+already carries one. Then run the checks of the hook in the container. From a
+normal checkout, that is `-s cglGit` and `-s cglHeaderGit`. From a worktree, it
+is `-s cgl -n` and `-s cglHeader -n`.
 
-`-s cgl` settles the coding-guideline message the hook prints for the other
-script. Both suites run in the container on the PHP the branch asks for, and
-both ask git nothing. Their quicker latest-commit forms, `-s cglHeaderGit` and
-`-s cglGit`, take their file list from git. So from a git worktree they report
-SUCCESS after they read nothing. `composer gerrit:setup:preCommitHook:disable`
-turns the hook off where the host PHP will not match for a while.
+`-s cgl` shows whether the guideline message the hook prints for
+`cglFixMyCommit.sh` is a real finding. Both suites run in the container on the
+PHP the branch asks for, and both ask git nothing. Their quicker latest-commit
+forms, `-s cglHeaderGit` and `-s cglGit`, take their file list from git. So from
+a git worktree they report SUCCESS after they read nothing.
+`composer gerrit:setup:preCommitHook:disable` turns the hook off where the host
+PHP will not match for a while.
 
 ## Script Notes
 

@@ -2,7 +2,7 @@
 description: >-
   The JavaScript and CSS the core commits beside the sources they come from: how you read a change to one without a build, rebuild one where nothing of yours is at risk, rebuild every link of a rebased chain, and resolve one a backport conflicted in.
 whenToUse: >-
-  When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those and stages the whole tree on the way, so it is no way there from a checkout with work of your own.
+  When a change touches Build/Sources/TypeScript or Build/Sources/Sass together with the generated file below Resources/Public/ that belongs to it. The question is whether the committed file carries the source change, how you produce it after an edit or after a rebase of a chain, or what you do with a backport that came back with conflict markers in it. The checkGruntClean suite answers the first of those, but it stages the whole tree. So do not run it in a checkout with uncommitted work of your own.
 hints:
   - backend-typescript
 ---
@@ -16,10 +16,10 @@ hints:
 compiles into the same packages' `Resources/Public/Css/`. The source directory
 carries the extension key with its underscores as dashes, so `rte-ckeditor`
 builds into `rte_ckeditor`. The core commits both outputs, so a patch that edits
-a source carries the rebuilt file in the same commit. A review of either half
-reviews both. The core's own `AGENTS.md` states the rule that follows: nobody
-edits a file below `Resources/Public/JavaScript` or `Resources/Public/Css` by
-hand.
+a source carries the rebuilt file in the same commit. Review the source and the
+generated file together. The core's own `AGENTS.md` states the rule that
+follows: nobody edits a file below `Resources/Public/JavaScript` or
+`Resources/Public/Css` by hand.
 
 The minifier writes the generated file onto one line. EXT:form's `view-model.js`
 on 14.3 is twelve lines of licence header and one line of 24,240 characters.
@@ -83,8 +83,8 @@ belongs to it.
 
 A build touches two things besides its output. `exec:stylefix` runs
 `stylelint --fix` over `Build/Sources/Sass/**/*.scss`, so a Sass source can come
-back rewritten. `npm install` can rewrite `Build/package-lock.json`. Stage what
-your own work owns and nothing else.
+back rewritten. `npm install` can rewrite `Build/package-lock.json`. Stage only
+the files your own work changed.
 
 Run `git worktree remove ../build-check` when you have the answer. Git ignores
 the `node_modules` the build installed below `Build/`, and it goes with the
@@ -94,9 +94,9 @@ worktree.
 
 A build overwrites what it emits and deletes nothing below `typo3/sysext`. So a
 generated file whose source somebody renamed or deleted survives it and leaves
-`git status` empty. That is the one question the procedure above does not
-answer. It is why `checkGruntClean` deletes every generated `.js` before it
-builds. In the same worktree you ask it when you delete them there:
+`git status` empty. The procedure above does not find such a file. That is why
+`checkGruntClean` deletes every generated `.js` before it builds. To find such
+files, delete the generated files in the same worktree and build again:
 
 ```bash
 find typo3/sysext -name '*.js' -not -path '*/theme_camino/*' -not -path '*/Fixtures/*' -not -path '*/Documentation/*' -delete
@@ -115,10 +115,11 @@ FAILURE over a clean tree.
 
 ## Rebuilding Every Commit of a Chain
 
-Each link of a chain commits its own build output. So a rebase owes a build per
-link rather than one at the tip. `git rebase --exec` runs a command after each
-commit it picks. A command that fails stops the rebase on that commit. A command
-that amends the commit carries the amend into every commit above it.
+Each link of a chain commits its own build output. So after a rebase, build
+every link of the chain, not only the tip. `git rebase --exec` runs a command
+after each commit it picks. A command that fails stops the rebase on that
+commit. A command that amends the commit carries the amend into every commit
+above it.
 
 Build the target branch first, as above, and require an empty `git status`. Read
 the chain for a renamed or deleted source, because the build leaves its old
@@ -151,10 +152,10 @@ rebase on the link that caused it, and `git rebase --abort` puts the branch
 back.
 
 `git range-diff` is the check afterwards. `=` on a link says the rebased commit
-is the pushed one, output included. A link with a difference shows the
-generated file that moved, and the tokenised diff above reads it. A session
-rebuilt a chain of 13 links this way on 2026-10-16. Each build took about 40
-seconds, and every link came back `=`.
+is the pushed one, output included. A link with a difference shows the generated
+file that moved, and the tokenised diff above reads it. A session rebuilt a
+chain of 13 links this way on 2026-10-16. Each build took about 40 seconds, and
+every link came back `=`.
 
 ## A Backport That Conflicts in a Generated File
 
@@ -177,7 +178,7 @@ The target branch's own build resolves the conflict:
    `git checkout <the target branch> -- <the generated path>`.
 2. Build in a worktree branched off the target branch, as above, with the source
    half of the patch applied.
-3. Stage the generated file the patch owns and nothing else.
+3. Stage only the generated file that belongs to the patch's source change.
 
 The tokenised diff shows that the resolution is right. It shows exactly the
 change the source makes, and no other generated file moved. It is also how you
@@ -192,5 +193,5 @@ different. The sources differ in a handful of lines. The same import binds to
 `x` on one branch and to `k` on the other.
 
 That is why neither side of the conflict resolves it. The newer side puts its
-whole module onto the older branch and presents as a resolved file. The older
+whole module onto the older branch and looks like a resolved file. The older
 side keeps the output the fix was meant to replace.

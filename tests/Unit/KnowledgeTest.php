@@ -984,7 +984,7 @@ final class KnowledgeTest extends TestCase
         // visibility. So what the list omits is what needs no row.
         $bodies = implode("\n", array_column(Documents::search('breaking change'), 'body'));
 
-        self::assertStringContainsString('Visibility routes a property and never a method', $bodies);
+        self::assertStringContainsString('Visibility decides the matcher file for a property, never for a method', $bodies);
         self::assertStringContainsString('getRendererInstances', $bodies);
     }
 
@@ -1617,7 +1617,7 @@ final class KnowledgeTest extends TestCase
             $body,
         );
         self::assertStringContainsString(
-            'A review that demands one of a `BUGFIX` that changes none of the three has a defect of its own',
+            'A review that asks for an entry on a `BUGFIX` that changes none of the three is wrong',
             $body,
         );
         // The condition the refusal used to carry was `removes nothing public`.
@@ -1656,7 +1656,7 @@ final class KnowledgeTest extends TestCase
         // The other half: a line out of regular support is an error rather
         // than a line one may name and leave to the release managers.
         self::assertStringContainsString('reports a branch that is out of regular support as an error', $body);
-        self::assertStringContainsString('A patch pushed to Gerrit is not one of them', $body);
+        self::assertStringContainsString('A patch you push to Gerrit does not reach those releases', $body);
     }
 
     /**
@@ -1683,7 +1683,7 @@ final class KnowledgeTest extends TestCase
         $changelog = (string) preg_replace('/\s+/', ' ', Documents::read('core/contribution/changelog'));
 
         self::assertStringContainsString(
-            'A review that demands one of a `BUGFIX` that changes none of the three has a',
+            'A review that asks for an entry on a `BUGFIX` that changes none of the three',
             $changelog,
             'the changelog page states the obligation without the demand it refuses',
         );
@@ -1782,7 +1782,7 @@ final class KnowledgeTest extends TestCase
             'the merged history that breaks the rule reads as permission to break it — D-KNW-161',
         );
         self::assertStringContainsString(
-            "A change to any of this is the maintainer's call",
+            'Only the maintainer can change these rules',
             $body,
             'nothing says who the rule belongs to, which is what sends a session to the checkout instead',
         );

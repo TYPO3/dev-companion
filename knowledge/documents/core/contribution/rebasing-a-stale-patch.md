@@ -9,14 +9,14 @@ hints:
 
 # Rebasing a Stale Patch
 
-A rebase that raised no conflict is not a patch that still holds. Where a change
-rewrites a class rather than edits it, every later fix `main` landed there is at
-risk. Git reports nothing, because the code moved to a different file and no
-text collides.
+A rebase without a conflict does not prove that the patch still holds. Where a
+change rewrites a class rather than edits it, every later fix `main` landed
+there is at risk. Git reports nothing, because the code moved to a different
+file and no text collides.
 
 The four steps below say whether that happened. They are cheap. They stand in
-this order because each narrows what the next one reads. None of them is what a
-conflict list shows.
+this order because each narrows what the next one reads. No conflict list shows
+what they find.
 
 `BASE` throughout is the commit the author wrote the patch set on. That is the
 parent of the fetched commit, which the review server answers as part of the
@@ -35,7 +35,7 @@ the set the next step reads.
 ## 2. Whether a Fix Survived the Rewrite
 
 Do this for each file the change **rewrites, moves or deletes**. Skip the ones
-it edits, where git already speaks up.
+it edits, because there git already reports a conflict.
 
 ```bash
 git log -p BASE..origin/main -- <the rewritten file>
@@ -87,9 +87,8 @@ git log --oneline BASE..origin/main -- <the source> <the committed output>
 ```
 
 Empty on both means `main` touched neither. Then the pair is as consistent as
-the patch author left it, and nobody owes a rebuild. Anything else is
+the patch author left it, and you need no rebuild. Anything else is
 `typo3_rule_lookup` with
 `documentId="core/contribution/committed-build-output"`, which has the
 procedure. Do not reach for `checkGruntClean` here. It runs `git add` over the
-whole tree. A tree with a half-finished rebase is the one place you cannot undo
-that cheaply.
+whole tree. In a tree with a half-finished rebase, you cannot easily undo that.

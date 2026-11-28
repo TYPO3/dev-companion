@@ -9,10 +9,10 @@ hints:
 
 # Exercising Asset Publishing in a Functional Test
 
-Three facts decide whether such a test exercises anything, and none of them
-stands in the code the test calls. A session that reasoned from the class names
-alone wrote two tests it discarded and one wrong hypothesis. That is how this
-page came to be.
+Three facts decide whether such a test exercises anything, and the code the test
+calls shows none of them. A session that reasoned from the class names alone
+wrote two tests it discarded and one wrong hypothesis. That is how this page
+came to be.
 
 Everything here holds from TYPO3 14, where
 `typo3/sysext/core/Classes/SystemResource/` arrived. The older lines have no
@@ -74,5 +74,5 @@ that asserts on it asserts on the word `symlink` rather than on a file name.
 No file in the core writes down which `TYPO3_CONF_VARS` a functional instance
 sets. Dump `$GLOBALS['TYPO3_CONF_VARS']` from inside a test you then delete;
 that is how you read it. Do that before you reason from
-`DefaultConfiguration.php` about any other setting. This page settles one of
-them, and the same trap lies under the rest.
+`DefaultConfiguration.php` about any other setting. This page settles only one
+setting. The same mistake is possible for every other one.

@@ -461,23 +461,25 @@ Called with:
               - `PropertyPublicMatcher.php` — a removed public property.
               - `PropertyProtectedMatcher.php` — a public property that became protected.
               - `ClassNameMatcher.php` — a whole class or interface.
-            - Visibility routes a property and never a method. The method matchers are a
-              weak match on the method name where code uses it. They do not resolve the
-              class, so they cannot see visibility, and a protected method goes with a
-              public one. `RendererRegistry->getRendererInstances` went from public to
-              protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The
-              list above has no row for a protected method because it needs none. That
-              absence says nothing about whether the change owes an entry.
+            - Visibility decides the matcher file for a property, never for a method. The
+              method matchers are a weak match on the method name where code uses it. They
+              do not resolve the class, so they cannot see visibility, and a protected
+              method goes with a public one. `RendererRegistry->getRendererInstances` went
+              from public to protected in `Breaking-110277`, and it stands in
+              `MethodCallMatcher.php`. The list above has no row for a protected method
+              because it needs none. That absence says nothing about whether the change owes
+              an entry.
             - The fully qualified name with `->` or `::` keys an entry. The entry carries
               `restFiles`, which names the changelog file that removed the member. The
               method matchers add `numberOfMandatoryArguments` and
               `maximumNumberOfArguments`. A member deprecated before its removal lists both
               changelog files.
             - Every Breaking and Deprecation entry carries exactly one of `NotScanned`,
-              `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is
-              the claim those entries have to back. `FullyScanned` says the scanner finds
-              every item the changelog entry names. The scanner reads PHP. So what an entry
-              changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.
+              `PartiallyScanned` and `FullyScanned` in its `.. index::` line. The tag is a
+              claim about the scanner, and the matchers must make it true. `FullyScanned`
+              says the scanner finds every item the changelog entry names. The scanner reads
+              PHP. So what an entry changes in TypoScript, TCA, YAML or JavaScript leaves it
+              partially scanned.
             - `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the
               changelog files the matchers name exist. Nothing checks the other direction. A
               missing entry surfaces when somebody audits the matcher files against the
@@ -867,7 +869,7 @@ Called with:
                         "title": "TYPO3 Core Commit Message Rules",
                         "uri": "typo3://guides/core/contribution/commit-messages",
                         "heading": "Breaking Changes",
-                        "body": "- A breaking change must use `[!!!]` before the keyword.\n- A breaking change must have a changelog RST file.\n- A breaking change should usually target `main`.\n- A removed or narrowed PHP API gets an extension scanner matcher entry in the\n  same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.\n  How code writes the removed member where it uses it decides the file:\n  - `MethodCallMatcher.php` — an instance method.\n  - `MethodCallStaticMatcher.php` — a static method.\n  - `PropertyPublicMatcher.php` — a removed public property.\n  - `PropertyProtectedMatcher.php` — a public property that became protected.\n  - `ClassNameMatcher.php` — a whole class or interface.\n- Visibility routes a property and never a method. The method matchers are a\n  weak match on the method name where code uses it. They do not resolve the\n  class, so they cannot see visibility, and a protected method goes with a\n  public one. `RendererRegistry->getRendererInstances` went from public to\n  protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The\n  list above has no row for a protected method because it needs none. That\n  absence says nothing about whether the change owes an entry.\n- The fully qualified name with `->` or `::` keys an entry. The entry carries\n  `restFiles`, which names the changelog file that removed the member. The\n  method matchers add `numberOfMandatoryArguments` and\n  `maximumNumberOfArguments`. A member deprecated before its removal lists both\n  changelog files.\n- Every Breaking and Deprecation entry carries exactly one of `NotScanned`,\n  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is\n  the claim those entries have to back. `FullyScanned` says the scanner finds\n  every item the changelog entry names. The scanner reads PHP. So what an entry\n  changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.\n- `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the\n  changelog files the matchers name exist. Nothing checks the other direction. A\n  missing entry surfaces when somebody audits the matcher files against the\n  changelog.",
+                        "body": "- A breaking change must use `[!!!]` before the keyword.\n- A breaking change must have a changelog RST file.\n- A breaking change should usually target `main`.\n- A removed or narrowed PHP API gets an extension scanner matcher entry in the\n  same patch, below `typo3/sysext/install/Configuration/ExtensionScanner/Php/`.\n  How code writes the removed member where it uses it decides the file:\n  - `MethodCallMatcher.php` — an instance method.\n  - `MethodCallStaticMatcher.php` — a static method.\n  - `PropertyPublicMatcher.php` — a removed public property.\n  - `PropertyProtectedMatcher.php` — a public property that became protected.\n  - `ClassNameMatcher.php` — a whole class or interface.\n- Visibility decides the matcher file for a property, never for a method. The\n  method matchers are a weak match on the method name where code uses it. They\n  do not resolve the class, so they cannot see visibility, and a protected\n  method goes with a public one. `RendererRegistry->getRendererInstances` went\n  from public to protected in `Breaking-110277`, and it stands in\n  `MethodCallMatcher.php`. The list above has no row for a protected method\n  because it needs none. That absence says nothing about whether the change owes\n  an entry.\n- The fully qualified name with `->` or `::` keys an entry. The entry carries\n  `restFiles`, which names the changelog file that removed the member. The\n  method matchers add `numberOfMandatoryArguments` and\n  `maximumNumberOfArguments`. A member deprecated before its removal lists both\n  changelog files.\n- Every Breaking and Deprecation entry carries exactly one of `NotScanned`,\n  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. The tag is a\n  claim about the scanner, and the matchers must make it true. `FullyScanned`\n  says the scanner finds every item the changelog entry names. The scanner reads\n  PHP. So what an entry changes in TypoScript, TCA, YAML or JavaScript leaves it\n  partially scanned.\n- `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the\n  changelog files the matchers name exist. Nothing checks the other direction. A\n  missing entry surfaces when somebody audits the matcher files against the\n  changelog.",
                         "versions": "",
                         "coverage": 1,
                         "score": 21,

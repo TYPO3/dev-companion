@@ -15,10 +15,10 @@ checkout, which is the authority on all of this.
 
 ## Which Change Owes a Changelog File
 
-This is the changelog obligation per change type. It says which change types owe
-a changelog entry and which owe none. It says what the entry a review asks for
-has to be, which is the changelog half of review readiness. A `BUGFIX` owes
-none, a `TASK` owes none, and the four types below are the whole list.
+This part states the changelog obligation of each change type. It says which
+change types need a changelog entry and which need none. It also says which
+entry a review may ask for, as part of review readiness. A `BUGFIX` owes none, a
+`TASK` owes none, and the four types below are the whole list.
 
 - The type is the first of four that describes the change. `Breaking` moves or
   removes core functionality that may break or affect third-party code.
@@ -28,11 +28,11 @@ none, a `TASK` owes none, and the four types below are the whole list.
   may carry.
 - A casual bug fix owes no entry, because its commit message carries the
   information. Casual is the fix that changes nothing an installation renders,
-  is configured by, or has documented. A review that demands one of a `BUGFIX`
-  that changes none of the three has a defect of its own.
+  is configured by, or has documented. A review that asks for an entry on a
+  `BUGFIX` that changes none of the three is wrong.
 - A `BUGFIX` that does change one of the three owes an `Important`. That is the
-  entry a review asks such a fix for. The keyword is what you read the
-  obligation off in the common case, and it does not settle it.
+  entry a review asks such a fix for. In the common case the keyword tells you
+  whether a change needs an entry. It does not decide it.
 - `@internal` on the changed member does not exempt it either. The test is what
   the fix changes for an installation. The core has filed entries for
   `@internal` members on the ground that extensions used them.
@@ -54,9 +54,9 @@ none, a `TASK` owes none, and the four types below are the whole list.
   decides nothing. So a backport's file stands in the same directory on every
   branch that carries the change.
 - Add the entry to both `.x` directories where two maintained lines take the
-  change, on each branch that has both. Each release branch carries the
-  directories it has. That happens for the fixes an old LTS still takes, so it
-  is `Important` in practice.
+  change. Do this on each branch that has both directories, because each release
+  branch has its own set of directories. This case arises for the fixes an old
+  LTS still takes, so in practice the entry is an `Important`.
 - Nobody deletes an entry from a younger branch. That is why `main` carries a
   directory per maintained line.
 - The third example in `Howto.rst` names a directory and then says the branch
@@ -66,8 +66,8 @@ none, a `TASK` owes none, and the four types below are the whole list.
 
 - The name is `<Type>-<forgeIssueNumber>-<UpperCamelCaseDescription>.rst`, with
   the type spelled as one of the four.
-- The prefix is the registration. Each directory's `Index.rst` pulls the types
-  in by a glob toctree. So you add the file and edit nothing else.
+- The type prefix registers the file. Each directory's `Index.rst` pulls the
+  types in by a glob toctree. So you add the file and edit nothing else.
 - A directory that replaced a type's toctree with a sentence carries no file of
   that type. That is what the LTS directories do with `Breaking`.
 - `Task` is a commit message keyword and not a changelog type. Those four are
@@ -76,8 +76,8 @@ none, a `TASK` owes none, and the four types below are the whole list.
 ## What a Changelog File Carries
 
 - The core ships the skeleton: `Build/rstTemplates/rstTemplate<Type>.rst`, with
-  `{ISSUE}`, `{TITLE}` and `{TIMESTAMP}` to substitute. A copy of it is cheaper
-  than the same file assembled from a neighbour. `typo3_hint_lookup` with the id
+  `{ISSUE}`, `{TITLE}` and `{TIMESTAMP}` to substitute. Copy it rather than
+  assemble the file from another entry. `typo3_hint_lookup` with the id
   `documentation-changelog` says what each part of it is for.
 - `./Build/Scripts/runTests.sh -s watchRst core interactive` writes that file
   from the template. It asks for the type, the issue and the title, and renders
@@ -86,15 +86,16 @@ none, a `TASK` owes none, and the four types below are the whole list.
 - Every type has a Description section. A `Feature`, a `Deprecation` and a
   `Breaking` have an Impact section. A `Deprecation` and a `Breaking` also have
   a Migration section.
-- What a type owes is not what its entries carry. An `Important` owes no Impact
-  section and plenty of them carry one. The Affected installations section is in
-  the `Deprecation` and `Breaking` templates and in a minority of their entries.
+- The sections a type requires differ from the sections its entries have. An
+  `Important` owes no Impact section and plenty of them carry one. The Affected
+  installations section is in the `Deprecation` and `Breaking` templates and in
+  a minority of their entries.
 - The `Important` template is the one that disagrees with the tree. It ships
   Affected installations and Migration, which few `Important` entries carry, and
   no Impact, which many do. Read a neighbouring entry in the target directory
   before you copy the template.
-- A `Deprecation` or `Breaking` entry also commits the patch to an extension
-  scanner matcher. Which matcher file takes which kind of removal is
+- A `Deprecation` or `Breaking` entry also needs an extension scanner matcher in
+  the same patch. Which matcher file takes which kind of removal is
   `typo3_rule_lookup` with `documentId` `core/contribution/commit-messages`.
 
 ## What Checks a Changelog File
@@ -105,7 +106,7 @@ none, a `TASK` owes none, and the four types below are the whole list.
 - `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` holds a matcher to
   the changelog file it names, in that direction only.
 - Neither reports which of the four types the change owes. A wrong type passes
-  every suite, and a review catches it or nobody does.
+  every suite, so only a review can catch it.
 - `./Build/Scripts/runTests.sh -s checkRstRenderingSingle core` renders the
   whole changelog into `Documentation-GENERATED-temp/` for a read.
 

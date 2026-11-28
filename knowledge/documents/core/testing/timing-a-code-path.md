@@ -46,7 +46,7 @@ public function probe(): void
 can. The call before the loop is the warm-up. The first call pays for the
 container, the TCA and every cache the path fills. None of that is the path. The
 division gives one number a reader can compare. The count is high enough that
-the loop outweighs the clock.
+the loop takes much longer than one read of the clock.
 
 `echo` from the test body prints it, and the core's functional PHPUnit
 configuration lets it through. `core/testing/proving-a-rendering` says why, and
@@ -87,7 +87,8 @@ because a time is one machine's view of it.
   its numbers. Where it names none, measure on SQLite and on MariaDB and report
   both. A number from another database does not refute the claim.
 - **Give each cause its share.** A patch that changes two things gets each one
-  turned off once. The report then says what each part bought.
+  turned off once. Then the report says how much of the difference each part
+  causes.
 
 ## A Command the Test Setup Runs
 
@@ -99,8 +100,8 @@ lines is what the command between them cost.
 
 ## What the Number Leaves Out
 
-The number is one process on one machine against one database. Each of those is
-a caveat the report carries.
+The number is one process on one machine against one database. State each of
+them as a caveat in the report.
 
 - **The database is SQLite unless `-d` says otherwise.** A query costs something
   else there than on MariaDB. Where the path's cost is a query, measure with

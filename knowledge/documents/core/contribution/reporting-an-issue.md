@@ -13,8 +13,8 @@ Source: https://forge.typo3.org/projects/typo3cms-core
 To write a new issue, or to prepare one for somebody else to file, call
 `typo3_issue_report_guide`. It drafts the report this page describes and checks
 it. It searches for duplicates and returns a link to the tracker's form with
-every field filled in. Forge calls a ticket an issue. Filing it stays yours, because the form needs an account. This
-page says why each field is what it is.
+every field filled in. Forge calls a ticket an issue. Filing it stays yours,
+because the form needs an account. This page says why each field is what it is.
 
 You file a core issue on the Redmine at forge.typo3.org, in the TYPO3 Core
 project. You need an account, and the form is behind the login. So this page
@@ -40,12 +40,12 @@ The day is the earliest anybody could have reported the defect. That is when the
 code that carries it shipped, or when you first saw it.
 
 `total` says whether that was the whole set or a page of it. Where it is larger
-than the rows, move `createdSince` later until the two agree. What a page of
-that end left out is older than its last row.
+than the rows, move `createdSince` later until the two agree. The rows a page
+leaves out are older than its last row.
 
 `category` narrows it further where the area is certain. An issue filed under no
-Category is in no area at all, and thousands of the open bugs carry none. So the
-day narrows the search to those, and the area does not.
+Category is in no area at all, and thousands of the open bugs carry none. So a
+search by day still finds those issues, and a search by area misses them.
 
 ## What a Report Carries
 
@@ -88,8 +88,8 @@ words named. The field takes that spelling. A word that names several areas gets
 all of them in the answer. So you tell two candidates apart rather than pick
 between them. `category="*"` asks for the whole list without a subject.
 
-A word that names no area gets an answer that says so. That is a statement about
-the word rather than about the project.
+A word that names no area gets an answer that says so. Then the word matches no
+area. The project can still have an area for your subject.
 
 ## The Target Version
 

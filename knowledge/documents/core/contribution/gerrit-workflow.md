@@ -44,10 +44,10 @@ Without the hook, Gerrit rejects the first push because the commit has no
 
 ## Where This Checkout Pushes
 
-The command above is the write side. Where a checkout already points is four
-questions of its own. Neither the directory name nor the URL it fetches from
-answers them. GitLab hosts the sources and mirrors them to GitHub, which is what
-a clone usually fetches. Gerrit couples to GitLab.
+The command above sets where a push goes. To find out where a checkout points
+now, answer the four questions below. Neither the directory name nor the URL it
+fetches from answers them. GitLab hosts the sources and mirrors them to GitHub,
+which is what a clone usually fetches. Gerrit couples to GitLab.
 
 ```bash
 git remote -v
@@ -101,10 +101,10 @@ server. Measured on 2026-08-05: `refs/changes/02/95102/2` resolved over the
 Gerrit URL and returned nothing at all over the GitHub one.
 
 A fetched patch set is somebody else's commit and is on no branch. When you
-detach onto `FETCH_HEAD`, the checkout says that. That keeps a local branch from
-a quiet acquisition of a commit that belongs to a review. It holds while the
-checkout is on the fetched commit and no longer. A replay onto other code
-produces a commit made here, which is the next section.
+detach onto `FETCH_HEAD`, the checkout shows that. It also keeps the commit of
+the review off every local branch. That protection lasts only while the checkout
+stays on the fetched commit. A replay onto other code creates a new local
+commit, and the next section covers that.
 
 ## Carry a Change Onto Current Code
 
@@ -158,8 +158,8 @@ git push origin HEAD:refs/for/main
 `refs/for/<branch>` is Gerrit's magic ref. It opens a review instead of a write
 to the branch. A plain push like this one publishes the change to everyone who
 can read the project. It puts the change in front of reviewers. The next section
-has the two forms that do not. Which of the three a change wants is the author's
-to say.
+has the two forms that do not. The author decides which of the three forms a
+change uses.
 
 ## Push a Private or Work in Progress Change
 
@@ -218,14 +218,15 @@ and the hooks live in the one git directory every worktree of a clone shares. So
 worktree. It writes its `Change-Id` there. `git rev-parse --git-path hooks`
 names the directory git takes it from.
 
-The branch point decides the push, not the worktree. What goes up is `HEAD` and
-every ancestor the target branch does not already have. A worktree branched off
-an up-to-date `origin/main` sends one commit.
+The commit the branch starts from decides what the push sends. The worktree does
+not. What goes up is `HEAD` and every ancestor the target branch does not
+already have. A worktree branched off an up-to-date `origin/main` sends one
+commit.
 
 One branched off a local `main` that is behind sends what lies between as well.
-`git log --oneline origin/main..HEAD` says which of the two this is. Where a
-worktree does change the answer is the checks. A suite that takes its file list
-from git can report success in one after it inspected nothing.
+`git log --oneline origin/main..HEAD` says which of the two this is. A worktree
+does change the result of the checks. A suite that takes its file list from git
+can report success in one after it inspected nothing.
 
 ## Update an Existing Patch
 
@@ -321,12 +322,12 @@ people's patches - always make sure to ask first, before you do that."
 
 The review server asks for nothing. Gerrit grants `Add Patch Set` to registered
 users on `refs/for/*` by default. So Gerrit cannot tell the owner's push from
-anybody else's. The ask is what stands between them.
+anybody else's. Only your question to the owner separates the two.
 
-Nor is it a last resort. The guide asks a reviewer to fix a coding guidelines
-violation and push a new set rather than vote -1. It says that "voting -1
-because of simple CGL violations can easily scare away people and kill
-motivation".
+A patch set on somebody else's change is also no last resort. The guide asks a
+reviewer to fix a coding guidelines violation and push a new set rather than
+vote -1. It says that "voting -1 because of simple CGL violations can easily
+scare away people and kill motivation".
 
 You amend the commit exactly as above, and the amend keeps the change its
 author's:
@@ -354,19 +355,19 @@ unchanged. It moved the committer to the local identity. It kept the one
 `Change-Id` with it. So a patch carried onto current code is a rebase of that
 change. A push of it opens a patch set on it rather than a review of your own.
 
-What the upload owes the author is a comment on the change. The diff between two
+After the upload, leave the author a comment on the change. The diff between two
 patch sets says what moved and never why. So say there anything you decided on
 the author's behalf: another anchor, a reworded body, a different `Releases:`
 line. The guide's own model is a reviewer who writes "Just pushed a new version
 fixing minor CGL stuff. Would be cool if you read through my changes compared to
 your version".
 
-A comment is the whole answer where what would change is the author's to decide.
-The guide votes -1 on a change that "is broken, does not fix the issue, is
-bogus, architecturally wrong or collides with other goals". None of those is a
-correction somebody else writes into the patch. What comes out is a change its
-author did not propose, under their name. The same holds while the author has
-not answered the ask.
+Where the author has to decide the change, write only a comment and push no
+patch set. The guide votes -1 on a change that "is broken, does not fix the
+issue, is bogus, architecturally wrong or collides with other goals". None of
+those is a correction somebody else writes into the patch. A patch set there
+puts a change the author did not propose under their name. Also write only a
+comment while the author has not answered your question.
 
 ## The Forge Issue a Change Hangs Off
 
@@ -383,15 +384,14 @@ the tracker's own workflow. Nothing here establishes it.
 
 Forge closes a report for five reasons. It went stale, or nobody can reproduce
 it. It lies outside the project's goals, it got no feedback, or somebody
-abandoned its patch. A change that hangs off one asks whoever looks at it to
-reverse a decision the issue already records. It says so nowhere in the change
-itself.
+abandoned its patch. A change against a closed issue asks every reader to
+reverse the decision the issue records. The change itself does not say so.
 
 So settle the closure before the push rather than after it. Reopen the issue
 where the reason no longer holds, which is the tracker's step and may need
 whoever closed it. Or answer on the change why it stands anyway. No rule
-requires the reopen; anyone may contribute a patch to any issue. What a skipped
-reopen costs is the first question anybody who reads the change asks.
+requires the reopen; anyone may contribute a patch to any issue. Otherwise every
+reader of the change first asks why somebody closed the issue.
 
 ## Release Branches and Backports
 
@@ -404,10 +404,10 @@ the normal case the patch targets `main`, and the core team member who merges
 takes care of the backport. The `Releases:` line in the commit message names the
 branches the change is meant for.
 
-How far back that goes is not "everywhere the defect is". A bug fix and a task
-go to `main` and to the one line back from it. An older maintained line takes
-priority bug fixes and grave or security-relevant defects. So when you name one,
-you claim something about the severity and not only about where the defect is.
+Do not name every branch where the defect is. A bug fix and a task go to `main`
+and to the one line back from it. An older maintained line takes priority bug
+fixes and grave or security-relevant defects. So when you name one, you claim
+something about the severity and not only about where the defect is.
 
 Whether a change reaches each branch its `Releases:` line names is one git call
 per branch. It writes nothing into the checkout. With the patch set fetched:
@@ -429,10 +429,10 @@ remove everything below the `Change-Id` line: `Reviewed-by:`, `Tested-by:`, and
 the blank lines. You adjust the code to the older branch where it no longer
 applies cleanly.
 
-A generated file is where "adjust" is not what happens to it. The JavaScript and
-CSS committed beside a `Build/Sources/` change conflict whenever the two
-branches' sources diverged in the same module. Neither side of that conflict is
-a resolution. `typo3_rule_lookup` with
-`documentId="core/contribution/committed-build-output"` has what is. Gerrit's
-"Cherry pick" action commits the conflict markers rather than refuse. So search
-a backport made that way for them before anything else.
+Do not adjust a generated file by hand. The JavaScript and CSS committed beside
+a `Build/Sources/` change conflict whenever the two branches' sources diverged
+in the same module. Neither side of that conflict is a resolution.
+`typo3_rule_lookup` with `documentId="core/contribution/committed-build-output"`
+has the resolution. Gerrit's "Cherry pick" action commits the conflict markers
+rather than refuse. So search a backport made that way for them before anything
+else.

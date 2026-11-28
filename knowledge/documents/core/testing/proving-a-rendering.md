@@ -17,8 +17,8 @@ came out. A TypoScript change is one subject, and a PHP change to the request
 pipeline is the same one. In both the value is the unknown rather than the
 expectation.
 
-This page is the harness. The probe exists to show what `lib.parseFunc_RTE` does
-to a snippet, and nothing here states that.
+This page gives the test setup only. The example probe shows what
+`lib.parseFunc_RTE` does to a snippet. This page does not state the result.
 
 ## The Probe
 
@@ -123,7 +123,7 @@ fails.
 
 A sentinel assertion — `self::assertSame('PROBE', $body)` — prints the whole
 body as the failure diff. It is the fallback where something does swallow
-output. It costs a red run whose failure means nothing.
+output. The run then fails, and that failure means nothing.
 
 ## Saying Which Part of the Response Changed
 

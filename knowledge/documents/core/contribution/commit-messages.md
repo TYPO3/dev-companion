@@ -79,8 +79,8 @@ Guide.
   the others.
 
 The four rules above go further than the official appendix. They are this
-server's rules for every core body, and `typo3_commit_message_guide` reports a
-list and a path.
+server's rules for every core body. `typo3_commit_message_guide` reports a body
+that has a list or a path.
 
 Rejected, from a body of five paragraphs:
 
@@ -146,13 +146,13 @@ the shortest line that matches.
   `typo3_commit_message_guide` names them where you leave the trailer out. It
   reports a branch that is out of regular support as an error.
 - A line out of regular support still has releases, and the ELTS partners make
-  them. A patch pushed to Gerrit is not one of them.
+  them. A patch you push to Gerrit does not reach those releases.
 - The branch list in a checkout does not answer this. `git branch -r` reaches
   back to `TYPO3_3-6`. A count of `Releases:` trailers on recent commits samples
   what other changes needed rather than what this one does.
 - Which of the maintained lines a change reaches is your judgement of where the
-  defect is. The trailer is the claim you verified it there, when you read the
-  changed file on each branch you name.
+  defect is. The trailer claims that you verified the defect there. You verify
+  it when you read the changed file on each branch you name.
 - A feature, a deprecation and a breaking change go to `main`. A backport of one
   happens, and it is the release managers' call. `origin/main..origin/13.4`
   carries three `[FEATURE]` commits against 969 `[BUGFIX]` ones, and
@@ -162,15 +162,16 @@ the shortest line that matches.
   trailer. The older lines take priority bug fixes and grave or
   security-relevant defects. When you name one for an ordinary fix, you ask a
   merger to cherry-pick onto the wrong line.
-- So the trailer is two judgements rather than one. Where the defect is, on each
-  line, is the first. Whether its severity earns an older line is the second.
-  You state that judgement rather than derive it from the first.
-- What a release branch carries since its cut is `origin/main..origin/14.3`. A
-  plain log on that branch, or a `--since` window over it, answers about the
-  history it shares with `main`. It reports every change made before the branch
-  existed as if the branch had taken it. The same count is 0 one way and 188 the
-  other. The two differ by one operator and give opposite answers about whether
-  features reach a release line.
+- So decide the trailer in two steps. First, find on which lines the defect is.
+  Second, decide whether its severity justifies an older line. The second step
+  does not follow from the first, so state it yourself.
+- To list what a release branch got since its cut, use
+  `origin/main..origin/14.3`. A plain log on that branch, or a `--since` window
+  over it, also lists the history it shares with `main`. It reports every change
+  made before the branch existed as if the branch had taken it. The `[FEATURE]`
+  count on 14.3 is 0 with the range and 188 with the plain log. The two commands
+  differ by one operator and give opposite answers about whether features reach
+  a release line.
 
 ## The Trailers A Core Commit Carries
 
@@ -190,23 +191,23 @@ no trailer beyond those five.
   2026-07-20 recommends the certificate. The board put it as a recommendation to
   consider, and this project does not require it.
 - A core patch carries no `Co-Authored-By:`, `Assisted-by:` or `Generated-by:`.
-  It carries no trailer that names the agent or the session it came from. Who
-  held the keyboard is the author field and the review, not a line in the
-  message.
+  It carries no trailer that names the agent or the session it came from. The
+  author field and the review say who wrote the change. No line in the message
+  says it.
 - Not every contributor works by this rule. Merged commits on `main` carry
   `Co-authored-by:` now and then. That is no precedent for a patch you write. In
   a review of somebody else's patch, name the trailer as a finding.
-- A change to any of this is the maintainer's call. A session that believes it
-  owes a trailer asks before it writes one. It does not read the answer out of
-  whichever file it happens to hold.
+- Only the maintainer can change these rules. If you believe a trailer is
+  necessary, ask before you write it. Do not take the answer from whichever file
+  you happen to read.
 - The checkout asks for the trailer in one place and checks it nowhere. The
   core's `AGENTS.md` says to sign off every commit and names the certificate.
   The one line in `Build/git-hooks/commit-msg` that names `Signed-off-by:`
   deletes it. The official Contribution Guide's appendix lists the trailers and
   stops before it, and `CONTRIBUTING.md` is silent.
-- The merged history turned when the core's `AGENTS.md` reached `main` on
-  2026-08-23. The sign-off went from two commits in a hundred to about half, on
-  2026-10-05.
+- The merged history changed when the core's `AGENTS.md` reached `main` on
+  2026-08-23. The share of commits with a sign-off rose from two in a hundred to
+  about half by 2026-10-05.
   `git log --since=2026-08-23 --format=%b origin/main | grep -c '^Signed-off-by:'`
   against `git rev-list --count --since=2026-08-23 origin/main` measures it. No
   check rejects a patch without one.
@@ -240,23 +241,25 @@ copy of the message to decide whether to.
   - `PropertyPublicMatcher.php` — a removed public property.
   - `PropertyProtectedMatcher.php` — a public property that became protected.
   - `ClassNameMatcher.php` — a whole class or interface.
-- Visibility routes a property and never a method. The method matchers are a
-  weak match on the method name where code uses it. They do not resolve the
-  class, so they cannot see visibility, and a protected method goes with a
-  public one. `RendererRegistry->getRendererInstances` went from public to
-  protected in `Breaking-110277`, and it stands in `MethodCallMatcher.php`. The
-  list above has no row for a protected method because it needs none. That
-  absence says nothing about whether the change owes an entry.
+- Visibility decides the matcher file for a property, never for a method. The
+  method matchers are a weak match on the method name where code uses it. They
+  do not resolve the class, so they cannot see visibility, and a protected
+  method goes with a public one. `RendererRegistry->getRendererInstances` went
+  from public to protected in `Breaking-110277`, and it stands in
+  `MethodCallMatcher.php`. The list above has no row for a protected method
+  because it needs none. That absence says nothing about whether the change owes
+  an entry.
 - The fully qualified name with `->` or `::` keys an entry. The entry carries
   `restFiles`, which names the changelog file that removed the member. The
   method matchers add `numberOfMandatoryArguments` and
   `maximumNumberOfArguments`. A member deprecated before its removal lists both
   changelog files.
 - Every Breaking and Deprecation entry carries exactly one of `NotScanned`,
-  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. That tag is
-  the claim those entries have to back. `FullyScanned` says the scanner finds
-  every item the changelog entry names. The scanner reads PHP. So what an entry
-  changes in TypoScript, TCA, YAML or JavaScript leaves it partially scanned.
+  `PartiallyScanned` and `FullyScanned` in its `.. index::` line. The tag is a
+  claim about the scanner, and the matchers must make it true. `FullyScanned`
+  says the scanner finds every item the changelog entry names. The scanner reads
+  PHP. So what an entry changes in TypoScript, TCA, YAML or JavaScript leaves it
+  partially scanned.
 - `./Build/Scripts/runTests.sh -s checkExtensionScannerRst` checks that the
   changelog files the matchers name exist. Nothing checks the other direction. A
   missing entry surfaces when somebody audits the matcher files against the
@@ -269,10 +272,10 @@ An added parameter is one, an optional parameter included. A public or protected
 method on a class that is not final is an override point. Every subclass that
 declares the old signature fatals as it loads.
 
-- The obligation follows from the member being overridable, not from an override
-  anybody found. `Breaking-101133` files a changed parameter of
-  `IconFactory->getIcon()` against "custom extensions extending the method".
-  `Breaking-110218` declares `LogRecord` final and calls the affected
+- The obligation exists because a subclass can override the member. It holds
+  even where nobody has found an override. `Breaking-101133` files a changed
+  parameter of `IconFactory->getIcon()` against "custom extensions extending the
+  method". `Breaking-110218` declares `LogRecord` final and calls the affected
   installations very unlikely.
 - A member marked `@internal` takes an `Important` instead. `Important-107342`
   extended `FormPersistenceManagerInterface::listForms()` by two optional
@@ -282,20 +285,20 @@ declares the old signature fatals as it loads.
 - Neither owes a matcher, and both are `NotScanned`. A matcher keys on where
   code calls a member. An override is not a call, and an added optional
   parameter leaves every existing call site valid.
-- So it decides the target branch before anything else. A maintained release
-  line takes no breaking change. So a fix you owe to one cannot carry the
-  signature change at all. The shape that reaches it is the additive one. That
-  is a method of its own, or the state on something the callee already receives.
-  To declare the class or the method final first is no cheaper, because that is
-  itself a breaking change.
+- So a signature change decides the target branch first. A maintained release
+  line takes no breaking change. So a fix for a release line cannot change the
+  signature at all. Only an additive fix reaches that line. That is a method of
+  its own, or state on an object the callee already receives. Do not first
+  declare the class or the method final. That is itself a `[!!!]` change, which
+  a release line does not take either.
 - Nothing in a core checkout reports any of this. No core class has to override
   the method. So the unit, functional, coding-guidelines and static-analysis
   runs are all green on the change.
 - A member promoted from protected to public is not a signature change and owes
   none of it. The core promotes one in a plain `[TASK]` or `[BUGFIX]` commit
   that carries no changelog file. Such a patch reaches a maintained release
-  line, which a breaking change cannot. The changelog holds the move in the
-  other direction only: `Deprecation-86047` narrows public members of
+  line, which a breaking change cannot. The changelog records only the opposite
+  move: `Deprecation-86047` narrows public members of
   `TypoScriptFrontendController` to protected. A subclass that re-declares the
   member as protected fatals with "Access level … must be public". The core
   files nothing for that either.
@@ -325,5 +328,5 @@ declares the old signature fatals as it loads.
   that is wrong. That is `typo3_rule_lookup` with
   `documentId="core/contribution/changelog"`, which also stands as
   `typo3://guides/core/contribution/changelog`.
-- The `Releases:` trailer and that directory are one judgement. The oldest
-  branch the trailer names is the release whose directory the file goes into.
+- The `Releases:` trailer decides that directory. The oldest branch the trailer
+  names is the release whose directory the file goes into.

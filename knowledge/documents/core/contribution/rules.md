@@ -65,18 +65,19 @@ policy.
   Those are TYPO3 Explained, TypoScript Explained, the TCA Reference and the
   Fluid ViewHelper Reference. The TYPO3-Documentation GitHub organisation
   maintains them, and a pull request there changes them, never the patch.
-- What the patch owes those manuals is the changelog entry.
+- For those manuals, the patch supplies the changelog entry.
   `Documentation/Changelog/Howto.rst` names the documentation team as one of the
   readers the changelog exists for. It points at the workflow that carries the
-  entries over. A change nobody wrote an entry for reaches them through nothing.
-- So a page outside the core repository is not a reason that the patch owes no
-  documentation change. It is the reason the change is a follow-up somewhere
-  else. A review that finds the page the patch makes false names it, so somebody
-  can make that change.
+  entries over. Without an entry, the documentation team does not learn of the
+  change.
+- So a page outside the core repository does not free the patch from a
+  documentation change. The change becomes a follow-up in that other repository.
+  A review that finds the page the patch makes false names it, so somebody can
+  make that change.
 - A bug fix that makes a documented sentence false is not the casual one that
   owes no entry. The casual bug fix is the one nothing outside the code has to
-  learn about. `Important` is the type that carries the rest on a release line
-  the other three may not reach.
+  learn about. For such a fix, use `Important`, because the other three types
+  cannot reach a release line.
 
 ## Review Readiness
 

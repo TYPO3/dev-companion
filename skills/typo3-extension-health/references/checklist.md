@@ -126,11 +126,12 @@ A wrong dismissal costs the maintainer exactly the reading the review skipped.
 
 ## When a candidate may be dropped
 
-An audit drops more than it reports, and nothing records the drop. Name each
-candidate you raised while you read and then let go, with what let it go. That
-is the setting that was the core default after all, or the guard that was there.
-It is the rule that does not govern this package, or the class you read. One
-sentence each, beside the findings.
+While you read, you suspect problems that turn out to be none. Each such
+suspicion is a candidate. The report does not show a dropped candidate unless
+you list it. So list each one beside the findings, with the reason you dropped
+it, in one sentence. A reason can be a core default the setting already has, or
+a guard that exists after all. It can be a rule that does not govern this
+package, or the class you read.
 
 A subsystem the package does not ship never enters this list. Answer it on the
 coverage list as not applicable, where it costs one line. What belongs here is

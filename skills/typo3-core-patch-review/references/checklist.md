@@ -5,13 +5,13 @@ Answer each one in the report: assessed, unassessed, or not applicable to this
 diff. A surface this patch does not touch costs one line. A surface nobody
 looked at reads as clean unless you name it.
 
-A review disposes of a thing in three ways: it reports it, it drops it, or it
-declares it clean. All three are claims about a reading the author has to take
-on trust. So all three carry what backs them. That is the file you opened, the
-call site you followed, the command you ran, the lookup that answered.
+A review ends each point in one of three ways. It reports a problem, drops a
+suspicion, or calls a surface clean. The author cannot see what you read, so
+each one names its source. That is the file you opened, the call site you
+followed, the command you ran, or the lookup that answered.
 
-Assessed with nothing under it is the cheapest sentence in a review, and the one
-a reader cannot check. So where the reading did not happen, write unassessed.
+A surface marked "assessed" with no source under it is easy to write, and nobody
+can check it. Where you did not read a surface, mark it unassessed.
 
 ## Review surfaces
 
@@ -120,11 +120,12 @@ review did not have.
 
 ## What a dropped candidate owes
 
-A review drops more than it reports, and nothing records the drop. Name each
-candidate you raised while you read and then let go, with what let it go. That
-is the guard that was there after all, its caller, or the rule that does not
-apply. One sentence each. It tells the reader that a quiet surface went quiet
-after the reading rather than before it.
+While you read, you suspect problems that turn out to be none. Each such
+suspicion is a candidate. The report does not show a dropped candidate unless
+you list it. So list each one with the reason you dropped it, in one sentence. A
+reason can be a guard that exists after all. It can be a caller that rules the
+case out, or a rule that does not apply. Then the reader knows that you read a
+quiet surface and did not skip it.
 
 The two directions do not meet the same bar. To raise a candidate costs a
 reading. To drop one costs the author a finding, silently, and nothing

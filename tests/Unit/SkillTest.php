@@ -1695,7 +1695,7 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString('## What a dropped candidate owes', $checklist);
-        self::assertStringContainsString('nothing records the drop', $checklist);
+        self::assertStringContainsString('The report does not show a dropped candidate unless you list it', $checklist);
         // The asymmetry is the whole of it: raising a candidate costs a reading,
         // dropping one costs the author a finding and announces nothing.
         self::assertStringContainsString('only where something concretely disproves it', $checklist);
@@ -1722,7 +1722,7 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString('## When a candidate may be dropped', $audit);
-        self::assertStringContainsString('nothing records the drop', $audit);
+        self::assertStringContainsString('The report does not show a dropped candidate unless you list it', $audit);
         self::assertStringContainsString('only where something concretely disproves it', $audit);
         self::assertStringContainsString('neither establish nor disprove as open', $audit);
         self::assertStringContainsString('Read the implementation it describes', $audit);
@@ -2698,11 +2698,11 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/references/checklist.md',
         ));
 
-        self::assertStringContainsString('A review disposes of a thing in three ways', $checklist);
-        self::assertStringContainsString('all three carry what backs them', $checklist);
+        self::assertStringContainsString('A review ends each point in one of three ways', $checklist);
+        self::assertStringContainsString('each one names its source', $checklist);
         // Unassessed is the cheaper honest answer and costs the same line,
         // which is what keeps a fabricated answer away from the demand.
-        self::assertStringContainsString('where the reading did not happen, write unassessed', $checklist);
+        self::assertStringContainsString('Where you did not read a surface, mark it unassessed', $checklist);
         // The clean verdict in the rubric stands under the same bar as a
         // finding, and says so where a reader who ranks one would look.
         self::assertStringContainsString(

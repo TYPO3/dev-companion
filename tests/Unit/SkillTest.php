@@ -1694,7 +1694,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/references/checklist.md',
         ));
 
-        self::assertStringContainsString('## What a dropped candidate owes', $checklist);
+        self::assertStringContainsString('## What a dropped candidate names', $checklist);
         self::assertStringContainsString('The report does not show a dropped candidate unless you list it', $checklist);
         // The asymmetry is the whole of it: raising a candidate costs a reading,
         // dropping one costs the author a finding and announces nothing.
@@ -1818,10 +1818,10 @@ final class SkillTest extends TestCase
         );
         // The consequence names what the omission does to the reader, which the
         // banned sentence never said.
-        self::assertStringContainsString('read as a finished verification', $skill);
+        self::assertStringContainsString('look like a complete verification', $skill);
         // And it ties the omission to the claim the reader already rejects.
         self::assertStringContainsString(
-            'an unnamed suite is the same sentence with the words taken out',
+            'A suite you leave unnamed tells the reader the same thing without the words',
             $skill,
         );
 
@@ -1913,7 +1913,7 @@ final class SkillTest extends TestCase
         $skill = (string) preg_replace('/\s+/', ' ', (string) file_get_contents(
             Paths::root() . '/skills/typo3-core-patch-review/SKILL.md',
         ));
-        self::assertStringContainsString('**A skip for speed never takes the test a High or blocking finding rests on.**', $skill);
+        self::assertStringContainsString('**Never skip for speed the test under a High finding or a finding that blocks submission.**', $skill);
         self::assertStringContainsString('in the targeted form `typo3_test_run_guide` returns for its suite', $skill);
     }
 
@@ -2030,7 +2030,7 @@ final class SkillTest extends TestCase
         // assumption does not hold and its third **Wrong if** is what the step
         // now says.
         self::assertStringContainsString(
-            '**What kind of change an entry came out of is two readings rather than one.**',
+            '**Two sources say what kind of change an entry came from, and they can disagree.**',
             $skill,
         );
         self::assertStringContainsString('The two disagree in both directions', $skill);
@@ -2075,10 +2075,10 @@ final class SkillTest extends TestCase
         // Why the base's own step does not reach it, said where a reviewer who
         // has just read the base would otherwise apply it anyway.
         self::assertStringContainsString(
-            'starts at the class that implements a behaviour. This question has none',
+            'tells you to read the class that implements a behaviour. An idiom has no such class',
             $skill,
         );
-        self::assertStringContainsString('PHP source as code is outside what this server reads', $skill);
+        self::assertStringContainsString('this server does not read PHP source as code', $skill);
         // What the answer is, so that "I checked" is not the report.
         self::assertStringContainsString('the call sites at their paths and lines', $skill);
         self::assertStringContainsString(
@@ -2160,7 +2160,7 @@ final class SkillTest extends TestCase
         // report `answered` and neither payload says the number was the other
         // one's. So a review can read a 2021 change in the belief that it read
         // this one.
-        self::assertStringContainsString('Both arguments come out of the commit message', $skill);
+        self::assertStringContainsString('Take both arguments from the commit message', $skill);
         self::assertStringContainsString(
             'The answer has the subject of the commit under review, or the number was wrong',
             $skill,
@@ -2739,11 +2739,11 @@ final class SkillTest extends TestCase
         );
         // What the shipped claim got wrong, in the words that answer it.
         self::assertStringContainsString(
-            'Outside is where the follow-up goes, not a reason the patch owes none',
+            'report the follow-up change it needs. Do not skip the finding because the page is outside',
             $checklist,
         );
         self::assertStringContainsString(
-            'A review said the wording lived elsewhere and concluded that the patch owed no documentation change',
+            'A review said the text lived elsewhere and concluded that the patch needed no documentation change',
             $skill,
         );
         // The obligation itself stays with the document that owns it, so the
@@ -2763,13 +2763,13 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-patch-review/references/checklist.md',
         ));
 
-        self::assertStringContainsString('Every finding carries five things', $checklist);
+        self::assertStringContainsString('Every finding names five things', $checklist);
         self::assertStringContainsString('**whether this patch introduced it**', $checklist);
         self::assertStringContainsString('Report what the patch did not introduce in those words', $checklist);
         // The other half of a finding's attribution. A diff is the weakest
         // evidence there is about who reaches a path, so what it shows may
         // raise a rank and never lower one.
-        self::assertStringContainsString('raises a rank and never lowers one', $checklist);
+        self::assertStringContainsString('may raise a rank. It never lowers one', $checklist);
 
         // A patch that is one of a set reads against the end of the set. The
         // session opens the later patch rather than believes a message about

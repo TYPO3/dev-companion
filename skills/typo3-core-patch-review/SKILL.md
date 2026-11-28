@@ -75,9 +75,10 @@ for that one change.** Say in the report which ref it fetched. You need the
 patch on disk to read the hunks, because the lookup returns the paths and not
 the diff. You also need it to run a suite against the patch.
 
-You do not need it to choose which of several changes to read. The paths, the
-size and the votes decide that. A ref fetched for that choice later looks like
-the reader's own work. One session fetched eight before its user stopped it.
+Do not fetch a change only to choose which of several changes to read. The
+paths, the size and the votes decide that. A ref you fetch stays in the
+checkout, and later it looks like the user's own work. One session fetched eight
+before its user stopped it.
 
 ## 2. What the project already says about this patch
 
@@ -100,15 +101,17 @@ change. Read both before you read the code a second time.
   you as a commit, its `Change-Id` is the argument. A commit hash from the
   checkout gets the same answer.
 
-**Both arguments come out of the commit message, and that makes them safe.**
+**Take both arguments from the commit message. There they belong to this
+patch.**
 
 - `Resolves:` is the Forge issue.
 - `Change-Id:` is the change, and it still names it after an amend.
 
-A number from anywhere else can be wrong without an error. Each lookup answers a
-number that belongs to the other one. It returns a real change or issue that has
-nothing to do with this patch. So check the subject. The answer has the subject
-of the commit under review, or the number was wrong rather than the patch.
+A number from anywhere else can be wrong, and no error shows it. Each lookup
+also accepts a number that belongs to the other one. Then it returns a real
+change or issue that has nothing to do with this patch. So check the subject.
+The answer has the subject of the commit under review, or the number was wrong
+rather than the patch.
 
 A patch nobody pushed yet has no change, and an answer of nothing is a result.
 Say so in the report rather than leave the surface empty.
@@ -157,11 +160,12 @@ Ask the lookup for each obligation. Do not recall it.
 
 4. **The manual.** Call `typo3_documentation_lookup` where the diff changes
    behaviour a manual describes. The manuals it searches are outside the core
-   repository. So the manual change is a follow-up, not part of this patch. The
-   follow-up is the finding, not a reason to skip it.
+   repository. So the manual change is a follow-up outside this patch. Report
+   that follow-up as a finding. Do not skip the finding because the manual is
+   elsewhere.
 
-   A review said the wording lived elsewhere and concluded that the patch owed
-   no documentation change. The patch had made the documented sentence about
+   A review said the text lived elsewhere and concluded that the patch needed no
+   documentation change. The patch had made the documented sentence about
    `stdWrap.override` false. Whether the patch needs a manual change at all is
    `typo3_rule_lookup` asked for `documentation`. A system extension's own
    `Documentation/` is in the checkout, and the patch itself changes it.
@@ -171,11 +175,11 @@ Ask the lookup for each obligation. Do not recall it.
    needs precedent rather than taste. This server does not know how common an
    idiom is in the core.
 
-   The base's step after the lookups starts at the class that implements a
-   behaviour. This question has none, and PHP source as code is outside what
-   this server reads. The checkout answers it with the call sites at their paths
-   and lines. Say how many: one is a coincidence and a spread across system
-   extensions is a convention.
+   The base section "When the lookups run out" tells you to read the class that
+   implements a behaviour. An idiom has no such class, and this server does not
+   read PHP source as code. So search the checkout, and list the call sites at
+   their paths and lines. Say how many: one is a coincidence and a spread across
+   system extensions is a convention.
 
 6. **The prose.** Call `typo3_rule_lookup` with
    `documentId="any/writing/the-prose-a-patch-carries"` for the **Prose**
@@ -207,10 +211,10 @@ evidence about your machine.
 
 A review may run anything that cannot change the code. It says what it ran and
 what that printed. **It then writes out, by name, the suites on that list it did
-not run.** Without them, four green suites read as a finished verification. A
-review can support that claim least of all. "The tests would presumably still
-pass" is not a review sentence. And an unnamed suite is the same sentence with
-the words taken out.
+not run.** Without them, four green suites look like a complete verification,
+and the review cannot support that claim. Do not write "The tests would
+presumably still pass". A suite you leave unnamed tells the reader the same
+thing without the words.
 
 The list is the guide's `verifying`: every entry it marks `verifies`, by name.
 Every name on it appears on a `Ran:` line or a `Not run:` line. So the
@@ -227,13 +231,13 @@ line names the reason.**
    scope the session chose are this reason too, and the line says so.
 
 **Where a worktree holds the patch, the third reason is false.** A suite left
-unrun there takes the fourth.
+unrun there has the fourth reason.
 
-**A skip for speed never takes the test a High or blocking finding rests on.**
-Run that test alone, in the targeted form `typo3_test_run_guide` returns for its
-suite. Use the database the failure was seen on, in place of the `-d` of that
-form. Its `Ran:` line names the test. The `Not run:` line of the suite names the
-rest.
+**Never skip for speed the test under a High finding or a finding that blocks
+submission.** Run that test alone, in the targeted form `typo3_test_run_guide`
+returns for its suite. Use the database the failure was seen on, in place of the
+`-d` of that form. Its `Ran:` line names the test. The `Not run:` line of the
+suite names the rest.
 
 ### Run the suites in a worktree
 
@@ -368,16 +372,15 @@ this list does not include. An edit is an act you notice yourself. A scratch
 probe is not that edit: you put it back and it leaves no diff. Step 4 draws that
 boundary.
 
-**Three calls take an argument this review has just established. So the order
-starts again rather than repeats.**
+**When you switch to the change, start the base order again. Three calls now
+take an argument this review has established.**
 
 - `typo3_task_guide` with the change type you are about to write.
 - `typo3_hint_lookup` with the paths you will edit.
 - `typo3_changelog_lookup` with `type: deprecation`, the deprecation sweep. A
   review skips that sweep, and a change does not.
 
-You walked the base once at the start of this review, against files nobody would
-write.
+Your first pass through the base ran for a review, and a review writes no file.
 
 **A remark about the weight of a finding is not that instruction.** "That is a
 reason to reject it", "I think the tests should show that", "that one blocks

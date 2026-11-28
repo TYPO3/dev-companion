@@ -2,8 +2,8 @@
 
 Write the surfaces below down whole before you read the diff a second time.
 Answer each one in the report: assessed, unassessed, or not applicable to this
-diff. A surface this patch does not touch costs one line. A surface nobody
-looked at reads as clean unless you name it.
+diff. For a surface this patch does not touch, write one line. A surface you do
+not name in the report looks clean to the reader, even if nobody read it.
 
 A review ends each point in one of three ways. It reports a problem, drops a
 suspicion, or calls a surface clean. The author cannot see what you read, so
@@ -40,15 +40,16 @@ can check it. Where you did not read a surface, mark it unassessed.
   test is worth. One that pins behaviour the next change rewrites is churn. One
   that covers what the follow-up leaves alone lasts.
 - **Documentation and changelog.** What the diff obliges: the entry, its
-  directory, its file name, its cross-references. Equally, whether the patch
-  owes an entry at all. A demand for one where the rules do not is a review
-  defect.
+  directory, its file name, its cross-references. Also check whether the rules
+  require an entry at all. A review that demands an entry the rules do not
+  require is itself wrong.
 
   The manual is the surface's other half, and it sits in two places. A system
   extension's own `Documentation/` is in this checkout and changes in the patch.
   The books `typo3_documentation_lookup` searches are outside the repository. A
-  page the diff makes false is a finding wherever it lives. Outside is where the
-  follow-up goes, not a reason the patch owes none.
+  page the diff makes false is a finding wherever it lives. For a page outside
+  the repository, report the follow-up change it needs. Do not skip the finding
+  because the page is outside.
 - **Commit shape.** Subject, body, issue reference, target branch line, and the
   markers the change type requires.
 - **Prose.** The comments, the docblocks, the test names and the commit message,
@@ -92,9 +93,9 @@ can check it. Where you did not read a surface, mark it unassessed.
   commit. It ships with the patch if anybody stages it carelessly, and it is not
   part of the change.
 
-## What a finding owes
+## What a finding names
 
-Every finding carries five things, and two of them are the ones reviews skip:
+Every finding names five things, and two of them are the ones reviews skip:
 
 1. the changed path, at its line;
 2. what the patch does there;
@@ -103,10 +104,10 @@ Every finding carries five things, and two of them are the ones reviews skip:
 5. **whether this patch introduced it**. The line the diff wrote and the line it
    only moved past are two different requests to the author.
 
-A finding without the fourth is a preference. A finding whose rule came from
-recall rather than from a lookup is a preference with a citation. A finding
-without the fifth sends the author to repair something they did not change.
-Nothing in the report says you did not mean that.
+A finding without the fourth is only your preference. So is a finding whose rule
+came from memory rather than from a lookup, even with a citation. A finding
+without the fifth asks the author to repair something they did not change. The
+reader cannot tell that you did not mean to ask that.
 
 Report what the patch did not introduce in those words. It stays in the review
 where it blocks submission on its own, and goes to the issue tracker otherwise.
@@ -118,7 +119,7 @@ installed code, a command's output, and a reading of the diff weigh differently.
 A report that does not separate them hands the reader a uniform confidence the
 review did not have.
 
-## What a dropped candidate owes
+## What a dropped candidate names
 
 While you read, you suspect problems that turn out to be none. Each such
 suspicion is a candidate. The report does not show a dropped candidate unless
@@ -127,11 +128,11 @@ reason can be a guard that exists after all. It can be a caller that rules the
 case out, or a rule that does not apply. Then the reader knows that you read a
 quiet surface and did not skip it.
 
-The two directions do not meet the same bar. To raise a candidate costs a
-reading. To drop one costs the author a finding, silently, and nothing
-afterwards says it happened. So drop a candidate only where something concretely
-disproves it. Report one you can neither establish nor disprove as open, with
-the reading that would settle it named beside it.
+To drop a candidate needs more evidence than to raise one. A wrong drop loses
+the author a real finding, and nothing in the report shows the loss. So drop a
+candidate only where something concretely disproves it. Report one you can
+neither establish nor disprove as open, with the reading that would settle it
+named beside it.
 
 Two dismissals go wrong reliably:
 
@@ -143,15 +144,15 @@ Two dismissals go wrong reliably:
   disproves a path is what makes it impossible. That is a guard nobody can pass
   or a caller that cannot exist, at a line.
 
-Before you report a finding, make the author's case against it. That is the
+Before you report a finding, argue against it as the author would. Look for the
 caller they know holds the guard, the subsystem's invariant, and the choice the
-commit message already states. It is the change stacked on this one that a shape
-here may prepare.
+commit message already states. Look also for a change stacked on this one that
+the code here may prepare.
 
 You still rate the patch on its own. Report what the follow-up explains as a
-question rather than as an oversight. Report what survives that together with
-what it survived. What does not survive is a dropped candidate, with the same
-evidence written down.
+question rather than as an oversight. Where a finding still holds after those
+arguments, report it with the arguments it held against. Where it does not hold,
+list it as a dropped candidate, with the same evidence written down.
 
 ## Severity
 
@@ -171,7 +172,7 @@ Rank by what stops the patch first and by consequence second. A cosmetic finding
 above a behavioural one costs the review its credibility for the rest of the
 list.
 
-Who can reach the path raises a rank and never lowers one. A diff is the weakest
-evidence there is about reachability. A real finding ranked down because it
-looked hard to reach is the mistake this rubric cannot recover from. Where you
-could not establish the path, rank on consequence and say so.
+What you know about who can reach the path may raise a rank. It never lowers
+one. A diff alone shows very little about who can reach a path. Never rank a
+real finding down because its path looked hard to reach. Where you could not
+establish the path, rank on consequence and say so.

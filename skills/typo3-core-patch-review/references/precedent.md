@@ -7,10 +7,10 @@ how to ask it.
 ## List the kind first
 
 **List the kind before you search for words: `type` and `version`, and no query
-at all.** An earlier change is a precedent because of its shape, and a shape has
-no words of its own. The entry that settles a finding often shares no noun with
-the diff. Two reviews missed their precedent with a query and found it by hand
-afterwards.
+at all.** An earlier change is a precedent because it is the same kind, not
+because it shares words. The entry that settles a finding often shares no noun
+with the diff. Two reviews missed their precedent with a query and found it by
+hand afterwards.
 
 - `type` is the obligation the finding is about.
 - `version` is the line the precedent would sit on. That is a released line the
@@ -39,7 +39,8 @@ which of the two answered.
 
 ## Read what kind of change an entry came from
 
-**What kind of change an entry came out of is two readings rather than one.**
+**Two sources say what kind of change an entry came from, and they can
+disagree.**
 
 - `typo3_forge_lookup` with its issue number says what the reporter filed the
   issue as.

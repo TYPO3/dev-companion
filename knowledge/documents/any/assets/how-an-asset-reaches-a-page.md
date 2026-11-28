@@ -2,7 +2,7 @@
 description: >-
   Every route a package's own CSS and JavaScript takes into a rendered page, backend and frontend, and how you check each one after a rebuild.
 whenToUse: >-
-  After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still carries. A broken route raises nothing in PHP and shows as a page without its styles.
+  After a build wrote different files than it did before — renamed, split, hashed or moved — and before you change where a build writes. It names the route each output file takes and what proves the route still works. A broken route raises nothing in PHP and shows as a page without its styles.
 hints:
   - public-assets
   - extension-asset-build
@@ -13,8 +13,8 @@ hints:
 
 A file below `Resources/Public/` does not load because it is there. Every route
 is a declaration somewhere else. A build that renames or moves an output breaks
-the declaration, and nothing fails in PHP. This page lists the routes and what
-proves each one still carries.
+the declaration, and nothing fails in PHP. This page lists the routes and how
+you check that each one still works.
 
 Two things run underneath all of them, and this page does not repeat them. The
 package has to publish the file into the document root, which `public-assets`
@@ -67,7 +67,7 @@ times contribute one tag.
 **Where the call sits decides whether it runs at all.** A call outside the
 section Fluid renders registers nothing. It leaves the file published and
 unasked for, and it produces no request and so no 404 to find.
-`fluid-layouts-sections` carries that trap.
+`fluid-layouts-sections` describes that trap.
 
 ## The Asset Collector's Later Arrivals
 

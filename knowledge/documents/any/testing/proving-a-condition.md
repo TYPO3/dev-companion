@@ -29,25 +29,25 @@ puts it into the page cache identifier, and renders it nowhere.
 ## The Marker Only the Branch Produces
 
 A marker proves the verdict when the guarded branch is the only thing that can
-produce it. So you derive one from a diff of the two branches. What the two
-share is what a marker may not rest on.
+produce it. So you derive one from a diff of the two branches. Do not use as a
+marker anything the two branches share.
 
 Where the branch swaps a Fluid template (`page.10.templateName` from one name to
 another), the two usually share the wrapper markup. Two templates under one
 `templateRootPaths` normally use the same layout and the same partials. So
 everything those render is identical on both sides, and only what the templates
 themselves add differs. A container class from the template the condition
-selects is in the output either way, and a find proves nothing. That is the
-trap, because the wrapper is what the markup offers first.
+selects is in the output either way, and a find proves nothing. The wrapper is
+the first markup you see, so it is the usual wrong choice.
 
 Where the branch assigns a value in place, the marker is that value in the
 output, under the same rule. Take the one the other branch cannot render.
 
 ## A Marker You Put There on Purpose
 
-Where you may edit the TypoScript, stop the derivation. Copy the condition line
-verbatim below the block under test, into the same setup file. Have it render
-something the installation has nowhere else:
+Where you may edit the TypoScript, you need not derive a marker. Copy the
+condition line verbatim below the block under test, into the same setup file.
+Have it render something the installation has nowhere else:
 
 ```typoscript
 [blog.isPost()]
@@ -77,11 +77,11 @@ are two different requests. Only one of them is what a visitor gets.
 ## The Negative Control
 
 A page that carries the marker is also what a condition that matches everything
-would produce. The evidence is the pair. The page the condition must match
-carries the marker, and a page it must not match does not. Where the question is
-a repair rather than a rule, the pair is the same URL before and after. The
-marker is first absent and then present. One green run on its own establishes
-nothing.
+would produce. Only the pair of results is evidence. The page the condition must
+match carries the marker, and a page it must not match does not. Where the
+question is a repair rather than a rule, the pair is the same URL before and
+after. The marker is first absent and then present. One green run on its own
+establishes nothing.
 
 ## What Stands Between Two Runs
 
@@ -99,8 +99,9 @@ exactly that case. Two ways out:
 - `&no_cache=1` on the request. It disables the page cache and the TypoScript
   cache together. TYPO3 hands the cache to the TypoScript factory only while it
   allows a cache. So TYPO3 rebuilds the include tree from the files. Such a
-  request also writes no page cache entry, so it cannot poison the next one.
-  TYPO3 ignores it where `FE/disableNoCacheParameter` is on. It is off as
-  shipped, and `config/system/` is where an installation turns it on.
-- `typo3 cache:flush --group=pages`. That is the step where that parameter is
-  on. It is also the step where the run has to be the one a visitor gets.
+  request also writes no page cache entry, so it cannot leave a stale entry for
+  the next request. TYPO3 ignores it where `FE/disableNoCacheParameter` is on.
+  It is off as shipped, and `config/system/` is where an installation turns it
+  on.
+- `typo3 cache:flush --group=pages`. Use it where that parameter is on. Use it
+  also where the run must be the request a visitor gets.

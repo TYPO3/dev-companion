@@ -2,7 +2,7 @@
 description: >-
   How a code comment, a docblock, a test name and a changelog entry in a patch have to read, with the rejected sentence and its replacement for each rule.
 whenToUse: >-
-  Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is owed at all, which is the codebase's own rule.
+  Before you write the comments and docblocks of a patch somebody else reviews, and again before you hand the patch over. Also when you review the prose of somebody else's patch: its comments, its docblocks and its commit message. It is about the wording rather than about whether the comment is necessary at all, which is the codebase's own rule.
 hints: []
 ---
 
@@ -17,9 +17,9 @@ after one round and rejected its comments twice. The rules on terms and on the
 whole text come from a second patch. Its review found the gap late. Each rule
 carries a rejected sentence and the sentence that replaced it.
 
-Nothing here says whether you owe a comment. That is the codebase's own rule.
-The TYPO3 core asks for a comment only where it adds meaning. This page is about
-the ones you keep.
+Nothing here says whether a comment is necessary. That is the codebase's own
+rule. The TYPO3 core asks for a comment only where it adds meaning. This page is
+about the ones you keep.
 
 ## Say What Is
 
@@ -138,15 +138,15 @@ drift apart on the next change.
 
 ## Say Why
 
-A comment carries what the code cannot: the reason, the constraint, the trap,
-what breaks if somebody changes it back. Where you can delete the comment and
-lose nothing, delete it.
+A comment says what the code cannot: the reason, the constraint, the trap, what
+breaks if somebody changes it back. Where you can delete the comment and lose
+nothing, delete it.
 
 ## Length Is a Ceiling
 
 Two lines for an inline comment. A class docblock over three short paragraphs
-describes a design. A design belongs in the changelog entry the patch owes, not
-in the class.
+describes a design. A design belongs in the changelog entry of the patch, not in
+the class.
 
 ## The Check Before You Hand It Over
 

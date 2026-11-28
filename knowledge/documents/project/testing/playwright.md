@@ -12,9 +12,9 @@ hints:
 # Setting Up Playwright in a TYPO3 Project
 
 This page is one step of a larger workflow. Where you set up a browser harness
-rather than repair a spec, `typo3-extension-testing` orders that work. A look at
-a change rather than a spec for it is a different act at a different moment.
-`any/testing/browser-check` is that one.
+rather than repair a spec, `typo3-extension-testing` orders that work. To look
+at a change in a browser rather than write a spec for it, read
+`any/testing/browser-check`.
 
 The suite belongs to what you deploy rather than to a package. The specs need a
 served site and a real URL. It runs in three projects. Those are the frontend as
@@ -204,8 +204,8 @@ element, rename the identifier. Run it and watch it go red. Restore, and watch
 it go green. Both directions, because an assertion that fails for an unrelated
 reason proves as little as one that cannot fail.
 
-It matters more here than in a unit suite. Three shapes pass without a word in a
-browser, and all three read as a test that passes:
+It matters more here than in a unit suite. Three kinds of assertion pass in a
+browser without any error, and all three look like a test that passes:
 
 - **A locator that matches nothing.** An assertion on an empty locator set, a
   filter that took everything out, a loop over an empty list. Assert the count
@@ -217,7 +217,7 @@ browser, and all three read as a test that passes:
   The backend answers with another module, whose chrome then matches the
   substring above. Assert on a marker the intended route owns.
 
-The third one is the reason you read a module path rather than recall it. A
+The third case is the reason you look up a module path rather than recall it. A
 backend module has its own path, and an alias keeps its identifier. So a spec
 carried over from an older project can name a path that has moved.
 `typo3_backend_module_lookup` answers what the path is in the installation the
@@ -265,7 +265,7 @@ of that list and nothing else.
 The setup logs in once, and every other project depends on it. So the suite
 writes the authenticated state once and reuses it. That is not only about speed.
 The backend rate-limits failed logins per client, and a suite that logs in per
-spec spends that budget on itself. A run that has tripped it answers "your login
+spec uses up that limit itself. A run that has tripped it answers "your login
 attempt did not succeed" to correct credentials. That lasts until the limiter's
 window passes or you empty `var/cache/data/ratelimiter/`.
 

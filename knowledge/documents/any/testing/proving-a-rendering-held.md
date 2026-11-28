@@ -19,16 +19,16 @@ installation over HTTP.
 The question is whether the site still renders what it rendered before. You ask
 it of every element on the site rather than of one page. The claim is negative —
 *nothing else moved* — so the method is subtraction. Capture, change, capture
-again, and account for every line that differs. A frontend that renders is not a
-frontend that renders the same.
+again, and account for every line that differs. A frontend that renders can
+still render something different.
 
 ## What to Capture, and Why Not the Templates
 
 The content that exists decides which pages you capture, not what the templates
 allow. A template root of thirty files says thirty elements could render, and
-the rows say which of them do. A capture chosen from the first list spends most
-of its pages on markup this site never emits. It misses the element that appears
-once.
+the rows say which of them do. If you choose pages from the template list, most
+of them show markup this site never emits. You also miss the element that
+appears once.
 
 `typo3_record_lookup` with `table="tt_content"` and `groupBy="CType"` is that
 list in one call. It names every element type in use and how many rows carry it.
@@ -38,8 +38,8 @@ Group by the columns the change reads as well. A frame that branches on
 `frame_class`, `header_layout` or `layout` renders a different document per
 value. The answer names the uid and pid of the rows that depart from the
 column's TCA default. **Capture those pages first.** A value one row in a
-hundred carries is invisible in a distribution. It is the row a branch written
-for the majority drops.
+hundred carries is invisible in a distribution. A branch written for the common
+value is the code most likely to drop that row.
 
 Which URL a page id becomes is the same question the condition page answers,
 under the same rule. Request without a backend session, because a preview with a
@@ -52,8 +52,8 @@ that differs between them is noise the real diff shows as well.
 
 So capture the baseline twice first, into two directories, and diff it against
 itself. What comes out is the site's own per-request variation. Subtract it from
-every later diff. A list of what varies would go stale; the site answers it in
-one extra capture.
+every later diff. Do not keep a list of what varies, because it goes stale. One
+extra capture gives the current answer.
 
 Two sources account for most of it. A site with
 `security.frontend.enforceContentSecurityPolicy` on emits a nonce per request.

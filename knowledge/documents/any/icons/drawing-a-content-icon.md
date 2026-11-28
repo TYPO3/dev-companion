@@ -11,7 +11,8 @@ hints:
 
 An icon is what an editor picks an element by. The element wizard and the record
 list render it at 16 pixels. At that size a reader recognises a picture or does
-not. A label beside it is the fallback rather than the mechanism.
+not. Do not rely on the label beside it, because the picture is what the editor
+reads.
 
 ## What the Box Fixes
 
@@ -47,13 +48,14 @@ A set drawn one icon at a time, each correct against the rules above, still
 fails as a set. Seven framed rectangles that differ by two or three internal
 lines are one picture at 16 pixels.
 
-The check is cheap, and it is the only one that answers. Render the set at 16
-pixels side by side. Name each one without its label. Whatever you cannot name
-needs its own silhouette or its own colour, not another line inside the same
-frame.
+The check is quick, and no other check answers this question. Render the set at
+16 pixels side by side. Name each one without its label. Whatever you cannot
+name needs its own silhouette or its own colour, not another line inside the
+same frame.
 
-Look at the core's set before you draw, not only at the rules. A uniform set
-satisfies the rules, and uniformity is how a careful reader fails.
+Look at the core's set before you draw, not only at the rules. A set of icons
+that all look alike can satisfy every rule on this page. An author who follows
+only the rules draws such a set.
 
 ## What Belongs Where
 

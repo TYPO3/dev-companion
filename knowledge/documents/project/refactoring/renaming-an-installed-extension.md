@@ -10,10 +10,10 @@ hints:
 
 # Renaming an Extension That Already Holds Content
 
-A rename is a data migration in a substitution's clothes. A search and replace
-finishes the directories, the namespaces, the extension keys and the file paths.
-The other half is every place TYPO3 stored one of those names as a value.
-Nothing on the code side reports it.
+A rename looks like a search and replace, but it is a data migration. A search
+and replace finishes the directories, the namespaces, the extension keys and the
+file paths. The other half is every place TYPO3 stored one of those names as a
+value. Nothing on the code side reports it.
 
 ## What Moves Itself and What Does Not
 
@@ -28,13 +28,14 @@ install tool's database analyzer.
 maps by position, and two tables from the same TCA need not have the same column
 order. TYPO3 derives the columns it adds itself, and their order depends on what
 each `ext_tables.sql` declared and when. Where the shifted columns disagree, the
-failure is a type error. Where they happen to line up, it is silence, which is
-the expensive case. Write the column list out on both sides.
+failure is a type error. Where the types happen to match, nothing fails and the
+rows land in the wrong columns. That is the worse case. Write the column list
+out on both sides.
 
 ## Where TYPO3 Stores an Identifier as a Value
 
 Each of these is a name in the database rather than in a file. A rename that
-does not carry them leaves records that point at something nothing declares:
+does not update them leaves records that point at something nothing declares:
 
 - `tt_content.CType`, one row per content element. A value nothing declares any
   more shows in the backend as an invalid-value badge. In the frontend it
@@ -59,18 +60,18 @@ does not carry them leaves records that point at something nothing declares:
 
 ## The Trap That Is Not a Substitution
 
-**A command that seeds, imports or reconciles content composes identifiers as
-readily as it spells them.** A migration that builds a CType from a prefix and a
-suffix survives a rename of every literal. The next run writes the old values
-back over the ones you corrected. Read every such command for concatenation
-before you run it again. Search for the old prefix in a string the code
-assembles, not only in a string literal. The substitution looks finished when
-you have replaced the literals.
+**A command that seeds, imports or reconciles content can build an identifier
+from parts as well as spell it out.** A migration that builds a CType from a
+prefix and a suffix survives a rename of every literal. The next run writes the
+old values back over the ones you corrected. Read every such command for
+concatenation before you run it again. Search for the old prefix in a string the
+code assembles, not only in a string literal. After you replace the literals,
+the rename looks finished, but such a command still writes the old values.
 
 ## What Proves It
 
 A test suite that passes proves its assertions. What proves a rename is a query
-for the old prefix over the columns that carry a name as data. Those are
+for the old prefix over the columns that store a name as data. Those are
 `CType`, `backend_layout`, `tablenames` and `ref_table`. A clean reference index
 proves the rest, and a read of the backend afterwards proves it once more. The
 record list and the page module are where TYPO3 draws an invalid value. A

@@ -26,16 +26,16 @@ runs.
 The environment configuration file carries the lifecycle whole. A start of the
 environment runs it whether or not you read it.
 
-Where that lifecycle exists, it is the procedure rather than a description of
-one. A command you type beside it boots something the repository does not
-describe. Read the repository's own instructions next to it. You cannot derive
-from the code which data an installation here is meant to hold.
+Where that lifecycle exists, follow it as the procedure. A command you run
+outside it boots an installation the repository does not describe. Read the
+repository's own instructions next to it. You cannot derive from the code which
+data an installation here is meant to hold.
 
 ## The Order the Steps Go In
 
-1. Start the environment the repository declares. It carries the interpreter and
-   the database every later command runs against, so nothing before it is a
-   step.
+1. Start the environment the repository declares. It provides the interpreter
+   and the database that every later command runs against. So no step comes
+   before it.
 2. Install the dependencies inside that environment.
 3. Start it a second time, because the first start ran before there was an
    installation for it to find.
@@ -50,8 +50,8 @@ from the code which data an installation here is meant to hold.
 
 Steps 1 to 3 are the environment. Steps 4 to 6 are console commands inside it.
 Steps 7 and 8 say whether the boot worked. None of them changes anything that
-already works. A boot is not a repair. Where a declared step fails, the finding
-is which one failed and on what.
+already works. Do not repair anything during a boot. Where a declared step
+fails, report which step failed and on what.
 
 ## Why You Start the Environment Twice
 
@@ -86,12 +86,12 @@ files are gone.
 Where it declares none, the install is how the installation comes into
 existence. You run it once and unattended. `typo3 setup` refuses an existing
 `config/system/settings.php` with exception 1669747685. It refuses a database
-that already holds tables with exception 1669747200. So the guard a script needs
-is that file rather than an exit code.
+that already holds tables with exception 1669747200. So a script checks for that
+file, not for an exit code.
 
-Under DDEV the variables ride in on the command line.
+Under DDEV you pass the variables on the command line.
 `ddev exec bash -c '<assignments> vendor/bin/typo3 setup --no-interaction'` is
-the form that carries every one of them. `typo3_hint_lookup` with the id
+the form that passes all of them. `typo3_hint_lookup` with the id
 `installation-setup` says what the command takes and what each value becomes in
 the file it writes. It says which options are inert on which major.
 
@@ -109,7 +109,7 @@ suggestions only. It drops nothing and renames nothing.
  core's command. A repository whose hooks call it has `typo3-console` required
  beside the core.
 
-`typo3 cache:flush` is the second, and you owe it because the dump carries
+`typo3 cache:flush` is the second, and you need it because the dump contains
 caches. The hash, pages and rootline caches use the database backend by default.
 So the imported tables hold another installation's cached pages, hashes and
 rootlines. The command empties those and the file-backed ones below `var/` with

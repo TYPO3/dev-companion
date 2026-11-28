@@ -62,8 +62,8 @@ Then narrow it:
 - **`offset`**, to page through a set larger than 50.
 
 Compare the count in the answer with the number of entries. A page is not the
-whole set. A triage that takes thirty of two thousand for the backlog has
-measured the page limit.
+whole set. Where the count is larger, page through the rest with `offset`. Do
+not report thirty entries of two thousand as the backlog.
 
 **Nothing in that list is a finding yet.** Age makes an issue a candidate. It
 says nothing about whether the report is right. A report from 2011 can describe
@@ -92,10 +92,11 @@ user choose.
 models it.** Age does not decide it, and the subject does not either. Read these
 in order, and stop at the first that decides:
 
-1. **What already happened to it.** A change on the review server is the
-   cheapest description of a fix. An abandoned change is a verdict somebody
-   wrote down. A relation to an epic or to an accepted parent makes the report
-   one part of larger work. The decision about that larger work is not yours.
+1. **What already happened to it.** A change on the review server describes a
+   fix, and you can read it fast. An abandoned change records that somebody
+   already decided against a fix. A relation to an epic or to an accepted parent
+   makes the report one part of larger work. The decision about that larger work
+   is not yours.
 
 2. **Whether the code it names is still there.** Every row lists the classes,
    methods and core files its text cites. Each comes with where it is in the
@@ -168,11 +169,11 @@ reporter uses the same words for all three.
 
 Make these two calls before you open the checkout:
 
-1. **`typo3_gerrit_lookup` with the issue number.** Its cheapest result ends the
-   work: somebody has a patch up. Then the triage is that the issue is under
-   review. An empty answer is a result, but a narrow one. The server reads the
-   review server without a login. So it shows only that nothing public names the
-   issue, not that nobody fixed it.
+1. **`typo3_gerrit_lookup` with the issue number.** Its answer can end the work
+   in one call: somebody has a patch up. Then the triage is that the issue is
+   under review. An empty answer is a result, but a narrow one. The server reads
+   the review server without a login. So it shows only that nothing public names
+   the issue, not that nobody fixed it.
 
 2. **`typo3_changelog_lookup` with the words the report uses.** It says whether
    the core deprecated, removed or reworked the area since the report. After a
@@ -270,9 +271,9 @@ two at its start:
   `typo3_project_describe` says whether this checkout has one and what the
   command is. Take it from there, not from what worked in another repository.
 
-- **A green that ran over no files is not a green.** Where a suite reports
-  success, confirm it inspected something — the count of tests or files it
-  names. Do that before you read it as proof that the behaviour is gone. A
+- **A suite that reports success over no files proves nothing.** Where a suite
+  reports success, confirm it inspected something — the count of tests or files
+  it names. Do that before you read it as proof that the behaviour is gone. A
   triage is most exposed to this failure. Its verdict is about to rest on "the
   suite passes".
 

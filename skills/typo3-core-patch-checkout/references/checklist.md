@@ -96,7 +96,7 @@ and the diff between two patch sets does not show it.
 ## After any resolution
 
 - The build and the suites that cover the touched paths say whether the
-  resolution works. A rebase nobody ran is not a rebase that worked.
+  resolution works. Until you run them, you do not know that the rebase worked.
 - Say that the checkout holds the patch on other code and is no longer the
   revision under review. Every result from it is about the commit you made and
   not about the patch set the reviewers see. To report one as the other is the

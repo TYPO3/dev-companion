@@ -2241,8 +2241,9 @@ final class SkillTest extends TestCase
 
         // The general form, which is the part that transfers off this issue.
         self::assertStringContainsString(
-            'A reverted core fix becomes re-attemptable when somebody has rebuilt the shared consumer that made it '
-                . 'expensive. It also does when the caller set has shrunk to the one site the fix needs',
+            'You can attempt a reverted core fix again when somebody has rebuilt the shared caller where the fix '
+                . 'caused problems. You can also attempt it again when only the one call site the fix needs still '
+                . 'calls the method',
             $attempt,
         );
         // The trigger, read off the answer rather than out of the reading. It
@@ -2294,7 +2295,7 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString('Watch it fail before you believe it', $skill);
-        self::assertStringContainsString('A green that ran over no files is not a green.', $skill);
+        self::assertStringContainsString('A suite that reports success over no files proves nothing.', $skill);
         self::assertStringContainsString(
             'confirm it inspected something — the count of tests or files it names',
             $skill,
@@ -2443,7 +2444,7 @@ final class SkillTest extends TestCase
             Paths::root() . '/skills/typo3-core-issue-triage/references/checklist.md',
         ));
         self::assertStringContainsString('## A security defect', $checklist);
-        self::assertStringContainsString('Ask the seventh before the other six', $checklist);
+        self::assertStringContainsString('Ask one question before you choose among the other six verdicts', $checklist);
         self::assertStringContainsString(
             'decides where the answer goes rather than what it says',
             $checklist,

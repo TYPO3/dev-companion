@@ -5,9 +5,10 @@ finding. Each one names a different thing that is true, and each one needs
 different evidence. Pick the verdict first, and you see which evidence is
 missing.
 
-Ask the seventh before the other six, of every finding rather than of the ones
-that look alarming. It decides where the answer goes rather than what it says:
-is what you established a security defect?
+Ask one question before you choose among the other six verdicts: is what you
+established a security defect? The seventh verdict, "A security defect", answers
+it. Ask it of every finding, also of one that looks harmless. This question
+decides where the answer goes rather than what it says.
 
 ## Still happens
 
@@ -66,8 +67,8 @@ intent.
 
 Needs: where the intent is written down. That is the documentation, the
 docblock, the test that pins the behaviour, or the changelog entry that
-introduced it. "Works as designed" without a source is an opinion in a
-maintainer's voice.
+introduced it. Do not write "works as designed" without a source. Without one,
+it is only your opinion.
 
 The need behind the report stays. Say what it would take as a feature, and that
 the argument for a feature is a different one. A bugfix needs an inconsistency
@@ -85,8 +86,8 @@ database that behaves differently, or a browser. It can be the reporter's
 configuration, or a version nobody supports any more. Also say what would settle
 it, so the next person starts where you stopped.
 
-This verdict is legitimate and underused. It is the honest end of a triage whose
-reading ran out before the evidence did.
+Use this verdict where it applies. It is the correct end where you stopped
+before you had the evidence.
 
 ## A security defect
 
@@ -99,13 +100,12 @@ needs the report the security team receives. Step 5 of the skill says what that
 report is and which lookup gives the address.
 
 Whichever of the other six is also true stays true. You write it for that report
-rather than for the issue. A defect that still happens and is exploitable is not
-a "still happens" with a note attached. The note changes who may read the
-answer.
+rather than for the issue. Do not write an exploitable defect as "still happens"
+with a security note. A security defect changes who may read the answer.
 
 Do not wait until you are sure. A finding that might be exploitable is one the
-team rates. A question to them costs an email. A wrong decision here costs a
-public exploit against installations with no fix available.
+team rates. To ask them takes one email. A wrong decision here can make an
+exploit public while no fix exists for the installations.
 
 # Before you write any of them
 
@@ -121,30 +121,32 @@ public exploit against installations with no fix available.
   shell are two different PHP versions and two different databases. An old
   report can depend on either. Where you leave this out, it stays open.
 
-- **Whether a suite that reported success inspected anything.** A green over no
-  files turns "not reproducible as written" into "gone", and nobody notices.
+- **Whether a suite that reported success inspected anything.** Where it
+  inspected no files, you write "gone" and the correct verdict is "not
+  reproducible as written". Nothing in the output shows the error.
 
-- **Whether you asked the review server.** The cheapest result is there, and it
-  costs one call.
+- **Whether you asked the review server.** One call there can end the triage,
+  because somebody may have a patch up.
 
 - **What you did not establish.** The part you skipped is the next person's
   whole task. A verdict that reads as complete hides it.
 
 - **Whether the verdict ends the issue.** Three of them do, and each comes with
-  the comment that closes it, in the next section. To close, reassign and reopen
-  are the maintainer's acts. The text is part of the triage.
+  the comment that closes it, in the next section. The maintainer closes,
+  reassigns or reopens the issue. You write the text of the comment as part of
+  the triage.
 
 # The comment that closes it
 
 **Gone**, **Superseded** and **Not a defect** end the issue, and each comes with
-the comment that closes it. A verdict that leaves the reason to somebody else
-stops one step short of what it established.
+the comment that closes it. Write the reason into the comment yourself. You
+established it, so do not leave it to somebody else.
 
 The other three come with no comment. **Not reproducible as written** and
-**Cannot be settled here** ask the reporter a question instead. To write either
-one up as a closure is the trap the Gone verdict names. **A security defect**
-gives the tracker nothing. A closing comment is exactly the public step that
-verdict prevents.
+**Cannot be settled here** ask the reporter a question instead. Do not write
+either one as a closure. The section "Not reproducible as written" says why. **A
+security defect** gives the tracker nothing. A comment that closes the issue is
+a public step, and that verdict allows no public step.
 
 Forge has no resolution field. The status is all it records, and the reason goes
 in the comment. So the comment says what the status cannot:

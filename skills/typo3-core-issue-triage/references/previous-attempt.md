@@ -5,16 +5,16 @@ reverted. A relation marked `precedes` or `duplicates` comes with its subject,
 and `reviews` names every change the journal mentions. So this history shows
 before you open the checkout.
 
-Then "still happens" is not the answer people wait for. "It still happens" and
-"somebody tried and reverted it" can be the same verdict about opposite
-situations. Two questions tell them apart: why did somebody revert the fix, and
-does that reason still hold?
+Then a plain "still happens" is not enough. The verdict "still happens" can
+describe two opposite situations: the reason for the revert is gone, or it still
+holds. Two questions tell them apart: why did somebody revert the fix, and does
+that reason still hold?
 
 ## What to read
 
 - **The related issue the revert was filed under.** Only that issue gives the
-  reason. The revert commit says what it reverted. The issue says what the fix
-  cost.
+  reason. The revert commit says what it reverted. The issue says which problem
+  the fix caused.
 
 - **The attempt itself.** No lookup here returns it. The issue answer has the
   change numbers, and the Gerrit search by issue number has their state. What
@@ -25,10 +25,10 @@ does that reason still hold?
   `typo3_rule_lookup` with `documentId="core/contribution/gerrit-workflow"`. It
   is also served as `typo3://guides/core/contribution/gerrit-workflow`.
 
-  An abandoned change is a verdict somebody wrote down. Its diff is the cheapest
-  description of a fix against a current core. Read the patch set, but put it
-  onto no branch. A rebase of an abandoned attempt writes the patch instead of
-  judging the issue.
+  An abandoned change records that somebody already decided against that fix.
+  Its diff describes a fix against a current core, and you can read it fast.
+  Read the patch set, but put it onto no branch. If you rebase an abandoned
+  attempt, you write the patch and no longer judge the issue.
 
 - **A `reviews` entry the issue search left out.** Call `typo3_gerrit_lookup`
   with its change number. The issue search finds a change whose commit message
@@ -44,10 +44,10 @@ does that reason still hold?
 
 ## The general rule
 
-**A reverted core fix becomes re-attemptable when somebody has rebuilt the
-shared consumer that made it expensive. It also does when the caller set has
-shrunk to the one site the fix needs.** Neither half shows on the issue. Each is
-one grep and one file in the checkout.
+**You can attempt a reverted core fix again when somebody has rebuilt the shared
+caller where the fix caused problems. You can also attempt it again when only
+the one call site the fix needs still calls the method.** The issue shows
+neither case. You check each one with one grep and one file in the checkout.
 
 ## What to report
 

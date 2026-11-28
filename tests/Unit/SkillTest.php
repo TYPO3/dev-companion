@@ -2504,12 +2504,12 @@ final class SkillTest extends TestCase
 
         // The three rungs. Each one changed what the session that filed it
         // concluded, and the order the skill had before carries none.
-        self::assertStringContainsString('Check that blocker against what the branch has today', $skill);
+        self::assertStringContainsString('check that blocker against what the branch has today', $skill);
         self::assertStringContainsString(
             'The argument for a bugfix is an inconsistency inside one version',
             $skill,
         );
-        self::assertStringContainsString('Establish the blast radius here rather than meet it while you work', $skill);
+        self::assertStringContainsString('Establish the blast radius here, before you start the work', $skill);
         // It is an assessment step because it decides the change type, which
         // everything downstream stands on.
         self::assertStringContainsString('a change that has to announce itself, or a breaking one', $skill);
@@ -4561,7 +4561,7 @@ final class SkillTest extends TestCase
             $flat,
         );
         self::assertStringContainsString('Git may ignore every path it wrote', $flat);
-        self::assertStringContainsString('the report names the two and says why', $flat);
+        self::assertStringContainsString('name the two steps and say why you skipped them', $flat);
 
         // Both directions of the crossing, because the feedback asked for both.
         // The exit stands at the moment it happens rather than in the last
@@ -4583,11 +4583,12 @@ final class SkillTest extends TestCase
         // What `074606` paid a wrong turn for. It read the exception route as
         // one that covers a served 404 and found a log of zero bytes. The one
         // line that decided the diagnosis was in the page it had the order not
-        // to fetch. So what the site threw bounds the detour, and the empty log
-        // stands as the finding rather than as an absent file.
-        self::assertStringContainsString('the detour this replaces wherever something threw', $flat);
+        // to fetch. So the log replaces the page fetch only where the site
+        // threw, and the empty log stands as the finding rather than as an
+        // absent file.
+        self::assertStringContainsString('Where something threw, read the log instead of the rendered error page', $flat);
         self::assertStringContainsString('A log that stayed empty is itself the finding', $flat);
-        self::assertStringContainsString('Its fetch is right here where it was the detour above', $flat);
+        self::assertStringContainsString('So fetch the page here, although step 5 says to read the log instead', $flat);
 
         // The bullet above separates a request that matched a site from one
         // that matched none, and only the second half had a lookup. The first
@@ -4626,7 +4627,7 @@ final class SkillTest extends TestCase
         ));
 
         self::assertStringContainsString('`documentId="project/installation/booting-a-clone"`', $skill);
-        self::assertStringContainsString('carries the order the steps go in', $skill);
+        self::assertStringContainsString('gives the order the steps go in', $skill);
 
         // A named id that stopped resolving is a step routing to nothing.
         $document = Registry::call('typo3_rule_lookup', ['documentId' => 'project/installation/booting-a-clone'])->data;

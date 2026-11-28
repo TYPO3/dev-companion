@@ -104,12 +104,12 @@ them here goes out of date in somebody else's checkout, and nothing reports it.
    Code that enforces a rule, a warning that a form is fragile, and advice in
    prose are three different strengths. Two APIs side by side often differ in
    this. Repeat the rule at the strength its own source gives it. "May change in
-   a future version" is not "must not". An assessment that reads it so argues
-   the patch away on nothing.
+   a future version" is not "must not". Do not reject the patch because you read
+   the first as the second.
 
 6. **Reproduce against the branch you fix**, not against the version in the
-   report. Often half of what a stale issue describes is gone. The half that
-   remains is the patch.
+   report. Often half of what a stale issue describes is gone. The patch fixes
+   the half that remains.
 
    Call `typo3_test_run_guide` with the paths you are about to change. It names
    the suites that can fail on them. A change to backend markup, a build step or
@@ -123,11 +123,11 @@ them here goes out of date in somebody else's checkout, and nothing reports it.
      what you saw, because a reviewer repeats them. A claim nobody can reproduce
      sends a patch back, whether or not it is right.
 
-7. **Check that blocker against what the branch has today**, where the issue
-   defers the work. Examples are "it needs an event that does not exist" or
-   "there is no API for this yet". The reason for a deferral has a date, and the
-   branch may have changed since. An expired objection reads exactly like one
-   that is still valid.
+7. **Where the issue defers the work because something is missing, check that
+   blocker against what the branch has today.** Examples are "it needs an event
+   that does not exist" or "there is no API for this yet". The reason was true
+   on the day somebody wrote it. The branch may have changed since. The issue
+   text looks the same whether the reason still holds or not.
 
 ## Decide what kind of change this is
 
@@ -141,12 +141,12 @@ one, the wish becomes a bugfix. If you find none, that is also an answer. The
 change is a feature, and step 2 of the issue section already told you what a
 feature must include.
 
-**Establish the blast radius here rather than meet it while you work.** Count
-how much behaviour that the suites already test has to change with the patch.
-That decides the kind of change. It is a quiet bugfix, a change that has to
-announce itself, or a breaking one. The kind decides the target branch, the
-commit subject and the changelog entry. If you find it step by step, you find it
-after you described the change. Then you must take that description back.
+**Establish the blast radius here, before you start the work.** The blast radius
+is how much behaviour that the suites already test has to change with the patch.
+Count it. That decides the kind of change. It is a quiet bugfix, a change that
+has to announce itself, or a breaking one. The kind decides the target branch,
+the commit subject and the changelog entry. If you count it only while you work,
+you have already described the change. Then you must correct that description.
 
 **Then establish who may already extend what you are about to edit.** No suite
 in the checkout answers that. A green run says that no core class overrides the
@@ -241,10 +241,10 @@ Two rules decide whether a run means anything:
 - **Run through the project's own runner.** A suite run through the host's PHP
   or a globally installed binary is a result nobody can reproduce.
 
-- **A green that ran over no files is not a green.** Where a check reports
+- **A check that passed on no files proves nothing.** Where a check reports
   success, confirm that it inspected something. Look for the count of files,
-  tests or fixtures it names. A check that silently found nothing to check is
-  the failure that passes review.
+  tests or fixtures it names. A check that found nothing to check reports
+  success, and a reviewer does not notice the failure.
 
 ## Write the changelog entry
 
@@ -277,8 +277,8 @@ own, which needs neither the Forge issue nor the `Releases:` trailer.
 The rules behind it are one page: `typo3_rule_lookup` with
 `documentId="core/contribution/commit-messages"`. The server also serves it as
 `typo3://guides/core/contribution/commit-messages`. It gives the subject, the
-trailers and the release targets. One read of it is cheaper than learning each
-rule from a separate check.
+trailers and the release targets. Read it once, rather than learn each rule from
+a separate failed check.
 
 **Read the pre-commit hook's output before you amend because of it.**
 `git commit` runs the core's pre-commit hook on the host. The hook reads the

@@ -120,7 +120,7 @@ is unavoidable, write that down in the package, where people read it.
 
 The installation the export came from cannot prove anything. The import runs
 only once there, and the installation remembers that. So a second import there
-proves nothing. A read of the export file is an argument, not a proof. Call
+proves nothing. A read of the export file does not prove the import either. Call
 `typo3_hint_lookup` with `id=initial-content-import-once`. It says why, and it
 gives a cheaper form of the same proof.
 

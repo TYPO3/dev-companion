@@ -83,7 +83,7 @@ before any of it exists. Then choose the case:
 ## 3. Boot what the repository declares
 
 1. **Read the guide before you run anything.** Call `typo3_rule_lookup` with
-   `documentId="project/installation/booting-a-clone"`. It carries the order the
+   `documentId="project/installation/booting-a-clone"`. It gives the order the
    steps go in, and why you start the environment twice. It says where the data
    comes from when the repository declares no import. It says what shows that
    the boot worked, beyond a command that exited. Read it first, not after a
@@ -113,10 +113,10 @@ before any of it exists. Then choose the case:
 
 5. **Check the versions that file pins** against the release current on the day.
    Those are the versions of the container, the database and Node. Take the
-   release from where its publisher announces it. Report one that is behind as a
-   finding that carries the raise. Name the newer version, and do not raise it
-   here. A boot is not an upgrade, and what the installed TYPO3 requires often
-   speaks against one.
+   release from where its publisher announces it. Report each version that is
+   behind as a finding that proposes the raise. Name the newer version, and do
+   not raise it here. A boot is not an upgrade, and what the installed TYPO3
+   requires often speaks against one.
 
 6. **Read the repository's own instructions.** A project with a boot procedure
    usually says which data the installation must hold. The code does not show
@@ -166,9 +166,9 @@ environment does not provide, read
 
    Then check two things:
 
-   - **The environment fails its start when a provisioning task fails.** An
-     install that failed behind a successful start is the expensive failure of
-     this step.
+   - **The environment fails its start when a provisioning task fails.**
+     Otherwise the install can fail while the start reports success, and nobody
+     notices the failure.
 
    - **A command that rewrites the environment configuration kept your manual
      settings.** Read the file again after such a command.
@@ -264,10 +264,10 @@ the error page it rendered. `typo3_hint_lookup` with
 exception. It names the codes it shows and never writes at all. It says what
 decides whether the page shows the message.
 
-The fetch of a rendered error page is the detour this replaces wherever
-something threw. It puts the whole page into the context. It still holds nothing
-where TYPO3 hid the message. A side that answers wrong without an error logged
-nothing. Step 6 covers that case.
+Where something threw, read the log instead of the rendered error page. A fetch
+of that page puts the whole page into the context. Where TYPO3 hid the message,
+the page does not contain it either. A side that answers wrong without an error
+logged nothing. Step 6 covers that case.
 
 **Report the result.** Give the exact commands you ran and what each printed.
 Then say what the installation is now:
@@ -284,8 +284,8 @@ What else the work needs follows from what the install wrote into the
 repository. Read that from the ignore rules, not from your memory of the
 session. Git may ignore every path it wrote: the document root, the
 configuration, the writable state. Then a clone has nothing to run, and a commit
-has nothing to describe. Skip both steps below, and the report names the two and
-says why.
+has nothing to describe. Skip both steps below. In the report, name the two
+steps and say why you skipped them.
 
 Where the repository now holds new files, do both:
 
@@ -318,9 +318,10 @@ read what the installation answered, then what it logged about it.
      names them.
 
 2. **Fetch the page.** With an empty log, the rendered page is the only evidence
-   the installation holds. Its fetch is right here where it was the detour
-   above. The page names the stage the answer came from. That shows whether the
-   request matched a site and failed inside it, or matched no site at all.
+   the installation holds. So fetch the page here, although step 5 says to read
+   the log instead. The page names the stage the answer came from. That shows
+   whether the request matched a site and failed inside it, or matched no site
+   at all.
 
 3. **Where the request reached a site and the page did not come, look at the
    page.** Do not look at the site configuration yet. `typo3_hint_lookup` with
@@ -383,11 +384,12 @@ document root, the console, the URL that answered, and the database. Hand over
 the defect the diagnosis found, too. `R-SKL-018` says why this is a step and not
 a note at the end.
 
-These sentences are about proof, and they turn the task over: "There is no test
-for it", "prove it", "add a functional test". That is true whether or not the
-installation work is complete. These stay here: "the frontend is still a 404",
-"the backend does not come up", "which site did it reach". A read of a log is
-not a test suite.
+Some requests ask for proof, and they move the task to
+`typo3-extension-testing`: "There is no test for it", "prove it", "add a
+functional test". That is true whether or not the installation work is complete.
+These requests stay in this skill: "the frontend is still a 404", "the backend
+does not come up", "which site did it reach". A read of a log is not a test
+suite.
 
 ## Where this skill stops
 

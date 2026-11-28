@@ -72,13 +72,13 @@ Settle four things together before the first file:
 - what data it keeps.
 
 Each one limits the next, so it is one decision and not four. `typo3_task_guide`
-says what each one costs to get wrong. Take them from what this installation
-already registers, not from the extension you copy.
+says what goes wrong when you get each one wrong. Take them from what this
+installation already registers, not from the extension you copy.
 
 Ask the user which parent an editor should find the module under, and whom it is
 for. No lookup answers that. Ask before you register the module, not after. A
 module keeps its place as long as it exists. A later rename needs a change to
-the registration and does not undo the first one.
+the registration, and it does not undo the first registration.
 
 ## 3. Implement and check
 

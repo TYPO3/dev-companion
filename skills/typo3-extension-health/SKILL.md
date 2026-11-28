@@ -74,7 +74,7 @@ report. A request for a review ends there.
    rest **not requested** on that same list. The request narrows the reading,
    never the list.
 
-   An entry nobody asked about costs one line. That line says what a review of
+   An entry nobody asked about takes one line. That line says what a review of
    the surface would read: the lookups and the files. Without the entry, the
    reader cannot ask for the rest. A request that names no surface is not a
    focused one, and you read every entry.
@@ -108,8 +108,9 @@ have. Make these calls for each surface in scope:
   what the Extension Repository has published. The package itself cannot answer
   that. `ext_emconf.php` names the version under release and keeps that name
   after the release. So a published checkout reads exactly like an unpublished
-  one. A key with no publication is an answer, not a finding. An extension that
-  ships only through Composer has no entry there.
+  one. Where the Extension Repository has no entry for the key, report that as
+  the answer. It is not a finding. An extension that ships only through Composer
+  has no entry there.
 
 Read the checkout for what none of those can know. That is the files, the
 registrations, the tests, the documentation and the conventions the project
@@ -159,14 +160,16 @@ Two procedures close the gap. This skill does not repeat them:
   anything. It also says how a separate Composer root sets up the other major.
 
 A declared major above the installed one needs its breaking changes read first.
-The exemption of the sweep does not cover them. The review brief names that call
-in `owed`, with the package's PHP as its paths. Check each entry it returns
-against the files that entry names. A check that runs on the installed major
-clears none of these entries, because its analysis reads the installed core.
-Read each file an entry names, or report the entry under **Open**.
+A review may skip the deprecation sweep of the base. It may not skip these. The
+review brief names that call in `owed`, with the package's PHP as its paths.
+Check each entry it returns against the files that entry names. A check that
+runs on the installed major clears none of these entries, because its analysis
+reads the installed core. Read each file an entry names, or report the entry
+under **Open**.
 
-An audit that runs neither procedure reports the gap, not the range. The finding
-holds where you established it. Name the majors you did not establish it on.
+Where you run neither procedure, report the gap. Do not claim the finding for
+the whole declared range. The finding holds where you established it. Name the
+majors you did not establish it on.
 
 ## Report
 
@@ -198,8 +201,8 @@ two audits compare section by section.
   is what the request left out. Say which of the two per entry, and let neither
   read as clean.
 
-Without the list, a thorough report and a narrow one look alike. The cheapest
-way to look thorough is to examine less.
+Without the list, a thorough report and a narrow one look alike. A report that
+reads fewer surfaces finds fewer defects, and then it looks as thorough.
 
 ### The form of the report
 
@@ -229,7 +232,7 @@ report.
 breaking", "why is that one high" and "are you sure" ask for evidence, not for a
 change. Where a sentence could be either, ask which the user meant.
 
-Stopping at findings is not stopping at reading. The commands
+A review that changes nothing still runs the checks. The commands
 `typo3_project_describe` marks as checks leave the code as it was. So an audit
 told not to change files runs them. It reports what they printed under
 **Verification**.
@@ -253,9 +256,9 @@ told not to change files runs them. It reports what they printed under
    branch reads like one nobody touched. Then only the maintainer can tell the
    two apart.
 
-   The surface is wider than the open pull requests: branches pushed without
+   Read more than the open pull requests. Also read the branches pushed without
    one, and the maintained release lines. A branch without a pull request is the
-   one that gets missed. It is where a maintainer's unfinished work sits.
+   one a reader misses. It is where a maintainer's unfinished work sits.
 
    Beside its own state, each item gets one of three marks:
 
@@ -268,8 +271,8 @@ told not to change files runs them. It reports what they printed under
 
 7. Show that list whole. Let the maintainer cut items, reorder them or stop
    before you make a single change. Do not start the work while you show the
-   list. This is the one step nothing later can recover. A list that arrives
-   together with its changes is one nobody could disagree with.
+   list. No later step can repair a skip of this one. Where the list arrives
+   together with its changes, the maintainer had no chance to disagree.
 
 8. Keep the list in the session, not in the repository. Report the state of each
    item as the work goes. A worklist committed into somebody's history is a file
@@ -289,13 +292,12 @@ answer for a state that has moved.
 1. `git diff --name-only <base>...<branch>` names the files the branch touches.
    A branch that names none holds nothing the base does not already have.
 
-2. Then run `git diff <base> <branch> -- <those files>`. Its empty answer
-   settles one reading: **the base already holds what the branch has in those
-   files**.
+2. Then run `git diff <base> <branch> -- <those files>`. An empty diff means one
+   thing: **the base already holds what the branch has in those files**.
 
-3. Non-empty is not the opposite of that, and that is where a reader goes wrong.
-   A fix that landed and a file the base edited later give the same non-empty
-   diff. So read the diff against the finding. Do not count it.
+3. A non-empty diff does not mean that the branch holds something new. A fix
+   that landed and a file the base edited later give the same non-empty diff. So
+   read the diff against the finding. Do not count it.
 
 Two shortcuts do not answer this question:
 
@@ -312,19 +314,19 @@ report the branches as the whole surface.
 
 An addressed item stays on the list. An unmerged branch holds a claim about the
 finding rather than the fix. So read it against the finding, the way you read
-the checkout. It leaves the list only when it clears the bar in the checklist
-section *When a candidate may be dropped*.
+the checkout. Remove it from the list only where the checklist section *When a
+candidate may be dropped* permits the drop.
 
 ## Work the list off item by item
 
 9. Take the items in the order of the list, grouped by the skill that covers
-   them. One activation for all the items of a skill costs less than one per
-   finding. That skill decides how its own area changes.
+   them. Activate each skill once for all its items, not once per finding. That
+   skill decides how its own area changes.
 
-   Where the list came from a review, the sweep of the base was exempt while you
-   wrote nothing. Run it now, before the first item. That is one call per
-   declared major, over the paths the items name. A session that comes back here
-   with the base already read is the one that leaves it unrun.
+   Where the list came from a review, you skipped the deprecation sweep of the
+   base, because you wrote nothing. Run it now, before the first item. That is
+   one call per declared major, over the paths the items name. A session that
+   comes back here with the base already read often forgets the sweep.
 
 10. **Invoke the skill that covers them.** Hand over only the scope and the
     verified behaviour it needs: the finding, its evidence and the paths. Stop
@@ -335,8 +337,8 @@ section *When a candidate may be dropped*.
 11. Where no skill covers an item, work it here only where the project's own
     checks prove the change. Change nothing wider than the finding, and run the
     check that covers it. An item nothing here can prove goes back unassigned in
-    the final report. A finding no skill covers and no check proves is a gap in
-    the map. A change made on judgement hides that gap.
+    the final report. Such a finding shows an area that no skill covers yet. A
+    change you make on your own judgement hides that area.
 
 12. Settle where the change lands before the first commit:
 
@@ -363,8 +365,8 @@ section *When a candidate may be dropped*.
 
 14. Run the audit again on the worked list. Do not only read the files it
     changed. The environment that writes a file can still rewrite one that reads
-    correctly. The difference shows only once that environment runs again. Work
-    that grades itself by its own diff has no evidence that the finding is gone.
+    correctly. The difference shows only once that environment runs again. A
+    read of your own diff does not show that the finding is gone.
 
 15. Report what remains:
 
@@ -374,19 +376,19 @@ section *When a candidate may be dropped*.
     - every finding the audit left open or unassessed that this work did not
       settle.
 
-    A finished list and an abandoned one read alike in a summary.
+    In a summary, a reader cannot tell a finished list from an abandoned one.
 
 ## Where this skill stops
 
 - **A change in the area of another skill** goes to that skill. Those are
   `typo3-extension-testing`, `typo3-extension-documentation`,
   `typo3-backend-module-development`, `typo3-content-element-development` and
-  `typo3-extension-upgrade`. This skill hands over the item and not the work.
+  `typo3-extension-upgrade`. Give that skill the item, and let it do the work.
 
 - **The result of the sweep.** What the sweep returned goes to
   `typo3-extension-upgrade` whole. That skill covers the move of the package to
-  another supported range. A handover of one deprecation at a time would decide
-  the order that skill exists to set.
+  another supported range. It also sets the order of the deprecations. Where you
+  give it one deprecation at a time, you set that order instead.
 
 - **One change proposed against the package**, such as a pull request, a patch
   or a branch, is `typo3-extension-patch-review`. You judge it against its diff,

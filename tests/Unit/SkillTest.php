@@ -1463,7 +1463,7 @@ final class SkillTest extends TestCase
         // that closes the exemption is in the paragraph that grants it
         // (`D-SKL-085`).
         self::assertStringContainsString(
-            'was exempt while you wrote nothing. Run it now',
+            'you skipped the deprecation sweep of the base, because you wrote nothing. Run it now',
             self::flat($skill),
         );
         self::assertStringNotContainsString('A changelog records change events', $skill);
@@ -4829,7 +4829,7 @@ final class SkillTest extends TestCase
         // "Do not change files" had read as "run nothing": the audit branch
         // named no command at all, and only the improvement branch did.
         self::assertMatchesRegularExpression(
-            '/Stopping at findings is not stopping at reading/',
+            '/A review that changes nothing still runs the checks/',
             $skill,
         );
         self::assertStringContainsString(
@@ -4931,7 +4931,7 @@ final class SkillTest extends TestCase
 
         // The surface, because the obvious reading is a third of it. The branch
         // with no pull request is the one the audit missed.
-        self::assertStringContainsString('wider than the open pull requests', $flat);
+        self::assertStringContainsString('Read more than the open pull requests', $flat);
         self::assertStringContainsString('branches pushed without one, and the maintained release lines', $flat);
 
         // One answer per item, beside the state step 5 already gives it.
@@ -4948,7 +4948,7 @@ final class SkillTest extends TestCase
         self::assertStringContainsString('git diff --name-only <base>...<branch>', $skill);
         self::assertStringContainsString('git diff <base> <branch> -- <those files>', $skill);
         self::assertStringContainsString('the base already holds what the branch has in those files', $flat);
-        self::assertStringContainsString('Non-empty is not the opposite of that', $flat);
+        self::assertStringContainsString('A non-empty diff does not mean that the branch holds something new', $flat);
         self::assertStringContainsString(
             '`git cherry` compares patch ids and calls a squash-merged branch fully outstanding',
             $flat,

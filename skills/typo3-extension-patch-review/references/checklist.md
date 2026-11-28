@@ -86,20 +86,22 @@ break is a different request, and the author may decline it.
 
 Where nobody here can run a version, and so nobody can settle a claim about it,
 the finding says so. It names the reading or the run that would settle it.
-Unverified is a result. A confident sentence in its place is not.
+Report the finding as unverified. Do not write a confident sentence in its
+place.
 
 ## What a dropped candidate needs
 
-A review drops more candidates than it reports, and nothing records a drop. So
-name each candidate you raised while you read and then dropped, with what
-dropped it. Examples are a guard that was there after all, a default of the
-core, or a class you read. Give one sentence each, beside the findings.
+While you read, you suspect problems that turn out to be none. Each such
+suspicion is a candidate. The report does not show a dropped candidate unless
+you list it. So list each one with the reason you dropped it, in one sentence,
+beside the findings. A reason can be a guard you found, a default of the core,
+or a class you read.
 
-The two directions have different costs. To raise a candidate costs one reading.
-To drop one costs the maintainer a finding, and nobody sees the loss. So drop a
-candidate only where something concretely disproves it. Report a candidate you
-can neither establish nor disprove as open, and name the reading that would
-settle it.
+A wrong raise and a wrong drop do not weigh the same. A candidate you raise
+wrongly means one more file for you to read. A candidate you drop wrongly hides
+a real finding from the maintainer, and nobody notices. So drop a candidate only
+where something concretely disproves it. Report a candidate you can neither
+establish nor disprove as open, and name the reading that would settle it.
 
 Two reasons to drop a candidate are often wrong:
 

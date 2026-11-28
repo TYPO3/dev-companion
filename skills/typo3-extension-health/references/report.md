@@ -122,8 +122,8 @@ not read. The **Surfaces** table is the list step 3 wrote, one row per entry and
 in its order.
 
 A **not requested** row names in **Backed by** what a review of it would read:
-the lookups and the files. That is the cost of the rest, and the reader asks for
-it off that row.
+the lookups and the files. So the reader sees what the rest would take, and can
+ask for it from that row.
 
 The answer stands as the example below stands, cut here to one finding. The
 **Rule** line ends on its call, and the last line after the fence is the work

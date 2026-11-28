@@ -55,9 +55,10 @@ When the user asks you to change the package, follow "Where the review ends".
 
 The package declares a constraint on the TYPO3 version, and every answer in this
 review depends on it. The base's first step discharges `typo3_project_describe`.
-Its answer already gives that constraint and the commands the repository
-declares. The installation you run against is one version inside that
-constraint. A finding you establish there holds for that version.
+That step already makes the call, so do not make it again. Its answer already
+gives that constraint and the commands the repository declares. The installation
+you run against is one version inside that constraint. A finding you establish
+there holds for that version.
 
 ## 2. Whether the change is right where it lands
 
@@ -126,7 +127,7 @@ Two things settle the rest. Neither is something you remember:
 - **Search the package and the installed core for call sites before you propose
   an alternative.** Whether an idiom is established is a count, not a taste, and
   no lookup holds that count. Give the call sites with their paths and lines.
-  One call site alone is a coincidence.
+  One call site alone does not establish an idiom.
 
 - **Call `typo3_system_extension_lookup` before you recommend an API from
   another extension.** It says whether that extension is part of the core on the

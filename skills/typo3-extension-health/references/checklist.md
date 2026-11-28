@@ -121,8 +121,9 @@ into the installed package that emits or executes it. Where you can render or
 run the path, let the repository's own test settle it. Otherwise report the
 finding as unverified and say which class you did not read.
 
-A security verdict is expensive to get wrong. Disprove it before you dismiss it.
-A wrong dismissal costs the maintainer exactly the reading the review skipped.
+A wrong security verdict does real harm. Disprove a security candidate before
+you dismiss it. After a wrong dismissal, the maintainer has to read what the
+review skipped.
 
 ## When a candidate may be dropped
 

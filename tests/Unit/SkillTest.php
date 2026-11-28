@@ -4339,8 +4339,8 @@ final class SkillTest extends TestCase
         // The decision the review already made correctly. That is why it stands
         // here as the boundary of the work rather than as a judgement to arrive
         // at.
-        self::assertStringContainsString('lowest declared major decides every shape', self::flat($skill));
-        self::assertStringContainsString('not debt to clean up', $skill);
+        self::assertStringContainsString('lowest declared major decides which form of each API', self::flat($skill));
+        self::assertStringContainsString('do not remove it as a cleanup', self::flat($skill));
 
         // The solver resolves a range. A matrix cell that nobody ran or that
         // will not resolve is a result rather than a gap in the report.

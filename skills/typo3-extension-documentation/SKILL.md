@@ -108,7 +108,7 @@ an internal detail as stable public API.
 2. Check every docs.typo3.org link on the page with `typo3_permalink_lookup`.
    Give it the identifiers and the URLs together. It says what each one reaches.
    A link the host redirects still opens in a browser. But it can point at
-   another branch than the page says. So a look at the page is not the check.
+   another branch than the page says. So do not check a link only in a browser.
 
 3. Run documentation, lint and test commands only where the project declares
    them or the task names them.
@@ -123,13 +123,13 @@ an internal detail as stable public API.
 ## Where this skill stops
 
 **When a page would claim behaviour the code does not have, invoke the skill
-that covers that code first.** This is a step, not a note. Load the skill by
-name and work from it. The finding at that moment is that the behaviour is
-missing, not the manual. If you write the page anyway, the manual promises more
-than the package does.
+that covers that code first.** Do this before you write the page. Load the skill
+by name and work from it. At that point, report the behaviour as missing from
+the code, not from the manual. If you write the page anyway, the manual promises
+more than the package does.
 
-Hand over the surface, the behaviour the page would claim, and its source files.
-Then write the page from what comes back verified.
+Give that skill the part of the package, the behaviour the page would claim, and
+its source files. Then write the page from what that skill verified.
 
 - **Tests** are `typo3-extension-testing`.
 - **A conformance assessment** is `typo3-extension-health`.

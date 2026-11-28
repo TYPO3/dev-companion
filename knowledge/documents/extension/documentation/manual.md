@@ -133,5 +133,5 @@ command also takes `--no-progress`. `--minimal-test` renders a single page where
 the check only has to establish that the tree builds.
 
 Expect that include to fail first. `Index.rst` opens with
-`.. include:: /Includes.rst.txt` in every manual worth a copy, and the extension
-has to carry the file it names itself.
+`.. include:: /Includes.rst.txt` in every manual you would copy from, and the
+extension has to ship the file it names itself.

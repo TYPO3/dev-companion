@@ -12,11 +12,12 @@ site loads the package. It stops before content elements, which
 `typo3-content-element-development` covers. It also stops before an asset build
 and before the installation itself.
 
-**The work ends on a frontend that renders, one page for each page layout.** A
-list of questions is not that result. Where the request leaves a choice open,
-take the default this skill names and go on. In the report, name each default,
-the alternative and what the alternative costs. Ask only for what neither the
-request nor the project answers. The design is the one exception, in step 2.
+**The work ends on a frontend that renders, one page for each page layout.** Do
+not end the work with a list of questions. Where the request leaves a choice
+open, take the default this skill names and go on. In the report, name each
+default, the alternative and what the alternative costs. Ask only for what
+neither the request nor the project answers. The design is the one exception, in
+step 2.
 
 Keep this skill as routing and order: it says which tool to ask and when. The
 tree, the TypoScript and the rules for page layouts come from the lookups. A
@@ -201,8 +202,8 @@ The files alone do not prove the package. A request to each page does.
    same way. Delete it the same way afterwards.
 
 4. Count the tags in each response. Each page holds one `<html>`, one `<head>`
-   and one `<body>`. A second set passes every other check. Remove it from the
-   templates, and keep the page object. Never meet the count with
+   and one `<body>`. A second set of these tags passes every other check. Remove
+   it from the templates, and keep the page object. Never meet the count with
    `config.disableAllHeaderCode`. That setting drops every asset the page object
    includes.
 

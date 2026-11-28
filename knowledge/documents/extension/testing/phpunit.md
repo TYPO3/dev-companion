@@ -2,7 +2,7 @@
 description: >-
   The PHPUnit configuration files a package writes into Build/, whole, and what each one needs after you write it out.
 whenToUse: >-
-  When a package has no test harness yet, or you have to repair its configuration. The hints below carry the conventions you write the tests themselves by.
+  When a package has no test harness yet, or you have to repair its configuration. The hints below give the conventions for the tests themselves.
 hints:
   - project-extension-tests
   - unit-test-doubles
@@ -185,7 +185,7 @@ page answers on its own.
 
 `typo3/testing-framework` ships both configurations under
 `Resources/Core/Build/`. Their own headers say an extension should copy them
-rather than point at them. The testsuite directory they carry resolves into the
+rather than point at them. The testsuite directory they name resolves into the
 core mono repository. A copy has to correct two attributes.
 
 The testsuite directory becomes this package's own `Tests/Unit/` or
@@ -195,12 +195,12 @@ somewhere else.
 
 The `bootstrap` attribute points into the installed package instead. The two
 bootstraps hold nothing an extension configures — a `Testbase`, `ORIGINAL_ROOT`
-and two directories below `typo3temp/var/`. So a copy of them is a file nobody
-updates afterwards. The path above assumes `vendor/` beside `Build/`, which is
-the ordinary layout of a package installed as the Composer root.
+and two directories below `typo3temp/var/`. So do not copy them, because nobody
+updates the copy afterwards. The path above assumes `vendor/` beside `Build/`,
+which is the ordinary layout of a package installed as the Composer root.
 
-Which of the two variants above belongs to a package is not a choice. The
-PHPUnit a `typo3/testing-framework` release admits decides it. A configuration
+You do not choose between the two variants above. The PHPUnit version that the
+package's `typo3/testing-framework` release allows decides it. A configuration
 that names a schema that release does not ship is a validation error before a
 test runs.
 
@@ -221,8 +221,8 @@ layouts, and the project decides which:
   directories up rather than one.
 
 Neither is more correct. Take the one the repository already uses for its other
-checks. What is not a variant is to leave the paths as written above, because
-neither mistake is loud. PHPUnit reports a directory that is not there as
+checks. Do not leave the paths as written above in either layout. PHPUnit does
+not fail on either mistake. PHPUnit reports a directory that is not there as
 `Test directory "…" not found`. It reports a directory with no tests as
 `No tests executed!`. It exits 0 on both. Measured on PHPUnit 12.5.34.
 
@@ -265,9 +265,9 @@ finished suite leaves one database per test class that ran, and one
 
 The test classes bound the set, and it does not grow with every run. The hash
 comes from the class name and not from the run. Nothing reads any of it again,
-so a drop of all of them costs the next run nothing.
+so you can drop all of them and the next run loses nothing.
 
-The `_ft<hash>` suffix is the whole of what tells a leftover from the live
+Only the `_ft<hash>` suffix tells a leftover database apart from the live
 database. It exists only under a server driver. Under `pdo_sqlite` the per-class
 database is a file below `typo3temp/var/tests/functional-sqlite-dbs/`. Delete
 that directory to clean up.

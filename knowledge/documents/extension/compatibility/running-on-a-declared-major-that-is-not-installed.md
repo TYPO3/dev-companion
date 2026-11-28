@@ -8,18 +8,18 @@ hints: []
 
 # Running a Package on a Declared Major That Is Not Installed
 
-A claim about a major is worth what you ran it on. What runs it is the package's
-own suite resolved against that major, in a Composer root of its own. That root
-stands beside the installation rather than in place of it. Nobody repins the
-installation the developer works in. It is the one thing in the room nobody can
-rebuild from the repository.
+Claim only what you ran on a major. Run the package's own suite, resolved
+against that major, in a Composer root of its own. Put that root beside the
+installation, and keep the installation as it is. Do not change the pins of the
+installation the developer works in. Nobody can rebuild that installation from
+the repository.
 
-Whether a symbol is there on that major is the next question, and a read of the
-branch settles it. This page begins where that one stops, at the run.
+To learn whether a symbol is there on that major, read the branch. This page
+covers the next step, the run.
 
 Where the installation runs in a container, every command below runs inside it.
 The interpreter, the extensions and the database service are the container's. A
-run on the host proves a cell nobody has.
+run on the host tests a combination that no developer or server uses.
 
 ## Ask What CI Already Covers, Before You Install Anything
 
@@ -29,9 +29,9 @@ need the rest of this page at all. That file is `.github/workflows/`,
 majors the matrix resolves and which commands it runs per cell. A matrix that
 installs a major and then runs one linter has not run the suite there.
 
-A push of the branch proves a covered cell, and that is the cheaper answer. It
-proves the commit rather than the tree, so a claim about uncommitted changes
-still needs the local run.
+For a cell the CI covers, push the branch. That is less work than a local run.
+The push tests the commit, not the working tree. So a claim about uncommitted
+changes still needs the local run.
 
 Nothing here reads that file for you. `typo3_project_describe` reports what the
 repository declares as its own commands, which is what a cell should run. You
@@ -42,8 +42,8 @@ read the workflow files from the checkout.
 The second root is a directory with its own `composer.json`. Place it inside the
 project so a container reaches it, and outside the document root so nothing
 serves it. `var/` is both, and TYPO3's own base distribution already ignores
-everything below it. A project whose ignore list differs is worth one look. A
-vendor tree staged by accident is a large commit.
+everything below it. Where the project's ignore list differs, check that it
+ignores the directory. Otherwise you can commit a whole vendor tree by accident.
 
 ```json
 {
@@ -77,40 +77,41 @@ package that is its own repository root is the same arrangement without the
 copy. The second root requires the package from its own checkout.
 
 The root requires the other major, so the solver resolves the package's declared
-range to that side. A range that does not resolve is the result rather than a
-setback. It says the declaration is a claim nobody has installed.
+range to that side. Where the range does not resolve, report that as the result.
+It shows that nobody has installed the package on that declared major.
 
-The price is one core download and the disk that core takes. It buys a tree you
-throw away with the directory. That is why it is cheaper than the pin the
-question usually starts as.
+This needs one core download and the disk space for that core. You delete the
+whole tree with the directory. That is less work than a change of the pin in the
+installation, which is often the first idea.
 
 ## What It Writes, and What the Installation Keeps
 
 Nothing of the installation moves. On the run this page came from,
 `composer.json` and `composer.lock` were byte-identical afterwards. The
 installed core answered the same version to its own console, and the frontend
-answered as before. There is nothing to restore, because the run took nothing.
+answered as before. There is nothing to restore, because the run changed
+nothing.
 
 The two roots share the container and the database service. The resolve writes
 neither.
 
 ## What the Second Root Resolves Differently
 
-The platform pin does not carry over. An installation may pin the interpreter it
-resolves against in `config.platform.php`. A fresh root has no such pin, so it
-resolves against whatever PHP the container runs. Carry the pin over where the
-cell is meant to be about that PHP. Otherwise the pin is a fact of the first
-root alone.
+The second root does not copy the platform pin. An installation may pin the
+interpreter it resolves against in `config.platform.php`. A fresh root has no
+such pin, so it resolves against whatever PHP the container runs. Copy the pin
+into the second root where the cell must test that PHP version. Otherwise the
+pin applies to the first root alone.
 
-The development tooling floats. The second root's solver takes the newest
-release its constraints admit. So the test runner there can be a major above the
-one the installation has. The same configuration file then goes through a
-stricter reader in one cell than in the other. A warning only one cell prints is
-about the runner rather than about the core.
+The second root does not pin the development tools. The second root's solver
+takes the newest release its constraints admit. So the test runner there can be
+a major above the one the installation has. The same configuration file then
+goes through a stricter reader in one cell than in the other. If only one cell
+warns, the cause is the test runner, not the core.
 
 ## Whether the Database Survives
 
-It does, and it is not the expensive half. A functional run never uses the
+The database survives, and it needs little work. A functional run never uses the
 configured database itself. Each test class gets one derived from that name, and
 the live one stays as it was. `typo3://guides/extension/testing/phpunit` says
 what credentials it reads and what a finished run leaves behind. This page does
@@ -119,10 +120,10 @@ not repeat that.
 So the second root needs no database of its own. Point it at the same service as
 the installation, and that is the whole setup.
 
-Both roots share that derivation. The name comes from the test class, so one
-suite run in two roots claims one database name. The runs are serial; two at
-once are one run that tears down the other's. The instance directory is per root
-and collides with nothing.
+Both roots derive the database names the same way. The name comes from the test
+class, so one suite run in two roots uses one database name. So run the two
+suites one after the other. Two runs at the same time tear down each other's
+databases. The instance directory is per root and collides with nothing.
 
 ## Which Checks Are Worth a Second Run There
 
@@ -134,8 +135,8 @@ roots, and you run it once. That is the formatter and the syntax check.
 A cell that cannot fail proves nothing. A fresh root has several ways to skip
 what you think it runs. Make it red before you believe it green. Assert
 something only one of the majors has, and watch the cell that should fail, fail.
-That is one throwaway test. It is the difference between a proof and a directory
-that produced the word `OK`.
+That is one throwaway test. Without it, an `OK` can come from a directory that
+tested nothing.
 
 ## What the Second Root Does Not Give
 
@@ -143,7 +144,7 @@ It is a resolved dependency tree, not an installation. It has no settings file,
 no site configuration and no content, so nothing there serves a page. Its
 console lists its commands and states the version it is. A command that reaches
 the database stops on the connection named `Default`, which nobody has
-configured. That reads like a broken setup, and it is the second root at work as
+configured. That looks like a broken setup, but the second root works as
 intended.
 
 So this does not prove a claim about what renders on the other major. That needs
@@ -158,6 +159,6 @@ functional runs created stay until somebody drops them. That is the same set the
 installed cell leaves, and `typo3://guides/extension/testing/phpunit` deals with
 it.
 
-Name the second root in the report by what it resolved rather than by where it
-sat. The directory is gone by then. What stands is which major and which release
-the suite ran against.
+Name the second root in the report by what it resolved, not by its directory.
+The directory is gone by then. Name the major and the release the suite ran
+against.

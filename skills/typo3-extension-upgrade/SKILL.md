@@ -14,8 +14,8 @@ anything outside the upgrade: other defects, missing tests and the manual. Step
 3 names the skill for each.
 
 **Find what breaks before you choose the range.** What breaks decides whether
-the package can reach a range at all. So each step decides what the next one is
-worth.
+the package can reach a range at all. So finish each step before you start the
+next one.
 
 **An upgrade changes only what the work list justifies.** It is not a
 modernization, a cleanup or a rewrite.
@@ -41,8 +41,9 @@ starts from the result of that sweep and does not restate it.
 Then add two more sources. Each one finds call sites the others cannot find.
 
 - **The changelog**, as the base sweeps it. Call `typo3_changelog_lookup` again
-  with `type: breaking`, for the same majors, still without a query or a tag. A
-  review asks what will break. An upgrade also asks what already broke.
+  with `type: breaking`, for the same majors, still without a query or a tag.
+  The base sweep finds what will break later. This call also finds what already
+  broke.
 
 - **The Extension Scanner**, in the Upgrade module of the installation. It needs
   a backend you can reach and an administrator account. It reads the installed
@@ -77,8 +78,8 @@ Write the work list before you change a file. Give it one entry per call site:
 - the declared major that deprecates or removes it;
 - the source that found it.
 
-Also list each source that found nothing, with the majors it covered. The work
-list is the work, and the report closes on it.
+Also list each source that found nothing, with the majors it covered. Do the
+work from this list, and end the report with it.
 
 ## 2. Settle the range
 
@@ -96,13 +97,13 @@ fix must work on. The other three items decide a change of the range.
 - **Check each required system extension.** Ask `typo3_system_extension_lookup`
   whether the target still ships it. It answers by extension key and package
   name, also for an extension that is not installed. A system extension the core
-  no longer ships is a requirement that cannot resolve. Its replacement is a
-  decision, not a rename.
+  no longer ships is a requirement that cannot resolve. Choose its replacement
+  as a decision of its own, and do not treat it as a rename.
 
-- **Let the dependency solver answer, and quote what it printed.** "This
-  constraint should work" and "the solver accepts this constraint" are different
-  claims. A third-party dependency without a release for the target shows up as
-  a conflict. That dependency then decides when the upgrade can happen.
+- **Let the dependency solver answer, and quote what it printed.** Do not claim
+  that a constraint works before the solver accepts it. A third-party dependency
+  without a release for the target shows up as a conflict. That dependency then
+  decides when the upgrade can happen.
 
 - **Only the user drops a major.** Never drop one to make the code simpler. When
   you add a major, keep every major the package declares today, unless the
@@ -110,12 +111,13 @@ fix must work on. The other three items decide a change of the range.
 
 ## 3. Change what the work list justifies
 
-**The lowest declared major decides every shape in the package.** A later major
-can introduce a new registration form, attribute or API. The new form cannot
-replace the old one while the lowest major still needs the old one. So a runtime
-check of the major, or a registration in the older form, is what the declared
-range requires. It is not debt to clean up. Say so where the code already does
-it. Otherwise the upgrade breaks the version it had to keep.
+**The lowest declared major decides which form of each API the package uses.** A
+later major can introduce a new registration form, attribute or API. The new
+form cannot replace the old one while the lowest major still needs the old one.
+So keep a runtime check of the major, or a registration in the older form. The
+declared range requires it, so do not remove it as a cleanup. If you remove it,
+the upgrade breaks the lowest declared major. Where the code already does this,
+say why it stays.
 
 Before you write a replacement in a subsystem outside the base's scope, ask for
 its conventions:
@@ -125,8 +127,8 @@ its conventions:
   decides the shape.
 
 If nothing in the declared range replaces a removed API, say so. One version of
-the package cannot then serve both majors. If you choose silently, a supported
-version breaks and nobody notices.
+the package cannot then serve both majors. Tell the user before you choose one
+of the majors. Otherwise a supported version breaks and nobody notices.
 
 **If a change in front of you is not on the work list, invoke the skill that
 covers it.** Do not make the change here. Load that skill by name and work from
@@ -156,9 +158,9 @@ point the upgrade reached, and do not edit its files from here.
    The installation gives you one cell. For every other cell, call
    `typo3_rule_lookup` with
    `documentId="extension/compatibility/running-on-a-declared-major-that-is-not-installed"`.
-   It says how to set up that cell beside the installation, and what that costs
-   the installation. It also says how to tell a cell that could fail from a cell
-   that could not.
+   It says how to set up that cell beside the installation, and what that
+   changes in the installation. It also says how to tell a cell that could fail
+   from a cell that could not.
 
 4. **Report the result.** The report contains:
 
